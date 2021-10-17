@@ -1,0 +1,135 @@
+# Default values for keydb.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: eqalpha/keydb
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+keydb:
+  password: ~
+  threads: 2
+
+  activeReplica: "yes"
+  multiMaster: "yes"
+
+tlsCerts:
+  create: false
+
+backup:
+  enabled: false
+  image:
+    repository: eqalpha/keydb
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+
+  walg: ~
+
+  schedule: "15 4 * * *"
+  cleanPolicy: "retain FULL 3"
+
+  resources:
+    # limits:
+    #   cpu: 2
+    #   memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podLabels: {}
+podAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 999
+  runAsGroup: 1000
+  fsGroup: 1000
+  fsGroupChangePolicy: "OnRootMismatch"
+
+securityContext:
+  seccompProfile:
+    type: RuntimeDefault
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+priorityClassName: ~
+
+terminationGracePeriodSeconds: 15
+
+
+# livenessProbe: {}
+#   initialDelaySeconds: 10
+#   timeoutSeconds: 1
+#   successThreshold: 1
+#   periodSeconds: 60
+
+readinessProbe:
+  initialDelaySeconds: 1
+  timeoutSeconds: 1
+  successThreshold: 1
+  periodSeconds: 60
+
+startupProbe:
+  initialDelaySeconds: 10
+  failureThreshold: 10
+  successThreshold: 1
+  periodSeconds: 10
+
+service:
+  type: ClusterIP
+
+resources:
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  requests:
+    cpu: 10m
+    memory: 64Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+updateStrategy:
+  type: RollingUpdate
+
+persistence:
+  enabled: false
+  ## A manually managed Persistent Volume and Claim
+  ## If defined, PVC must be created manually before volume will be bound
+  # existingClaim:
+  # storageClass: "-"
+  accessModes:
+    - ReadWriteOnce
+  size: 10Gi
+  annotations: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

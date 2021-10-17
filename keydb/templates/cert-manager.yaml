@@ -1,0 +1,83 @@
+{{- if .Values.tlsCerts.create }}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "keydb.fullname" . }}-issuer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "keydb.fullname" . }}-tls
+spec:
+  secretName: {{ include "keydb.fullname" . }}-tls
+  issuerRef:
+    name: {{ include "keydb.fullname" . }}-issuer
+    kind: Issuer
+  commonName: {{ include "keydb.fullname" . }}
+  duration: 8760h # 12m
+  renewBefore: 4380h # 6m
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - server auth
+    - client auth
+  isCA: true
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "keydb.fullname" . }}-ca-issuer
+spec:
+  ca:
+    secretName: {{ include "keydb.fullname" . }}-tls
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "keydb.fullname" . }}-server
+spec:
+  secretName: {{ include "keydb.fullname" . }}-server-tls
+  commonName: {{ include "keydb.fullname" . }}-server
+  duration: 8760h # 12m
+  renewBefore: 4380h # 6m
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - server auth
+    - client auth
+  isCA: false
+  ipAddresses:
+    - 127.0.0.1
+  dnsNames:
+    - {{ include "keydb.fullname" . }}
+    - {{ include "keydb.fullname" . }}.{{ .Release.Namespace }}
+    - {{ include "keydb.fullname" . }}.{{ .Release.Namespace }}.svc
+  issuerRef:
+    name: {{ include "keydb.fullname" . }}-ca-issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "keydb.fullname" . }}-client
+spec:
+  secretName: {{ include "keydb.fullname" . }}-client-tls
+  commonName: {{ include "keydb.fullname" . }}-client
+  duration: 4380h # 6m
+  renewBefore: 2190h # 3m
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - client auth
+  isCA: false
+  ipAddresses:
+    - 127.0.0.1
+  dnsNames:
+    - {{ include "keydb.fullname" . }}
+  issuerRef:
+    name: {{ include "keydb.fullname" . }}-ca-issuer
+{{- end }}

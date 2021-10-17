@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "keydb.fullname" . }}
+  labels:
+    {{- include "keydb.labels" . | nindent 4 }}
+data:
+  init.sh: |
+    #!/bin/sh
+    set -e
+
+    install -m 0660 -c /etc/keydb-common-config/common.conf /etc/keydb/keydb.conf
+    echo >> /etc/keydb/keydb.conf
+    echo "maxmemory ${MEMORY_LIMIT}b" >> /etc/keydb/keydb.conf
+
+  {{ if eq .Values.keydb.multiMaster "yes" }}
+  {{- $name := include "keydb.fullname" . }}
+  {{- $port := include "keydb.port" . }}
+    echo "# replicas">> /etc/keydb/keydb.conf
+    for node in {{ range $i := until (int .Values.replicaCount) }} {{ $i }}{{ end }}; do
+      if [ "${HOSTNAME}" != "keydb-${node}" ]; then
+          echo "replicaof {{ include "keydb.fullname" . }}-${node}.{{ include "keydb.fullname" . }}-headless {{ $port }}" >> /etc/keydb/keydb.conf
+      fi
+    done
+  {{- end }}
+
+  backup.sh: |
+    #!/bin/sh
+    set -e
+
+    wal-g --config /etc/walg/walg.yaml backup-push
+    wal-g --config /etc/walg/walg.yaml backup-list --detail
+    wal-g --config /etc/walg/walg.yaml delete {{ .Values.backup.cleanPolicy }} --confirm ||:
+
+  redis-cli.sh: |
+    #!/usr/bin/env bash
+
+    FILENAME=$(mktemp -p /data --suffix=redis-cli-stderr)
+    redis-cli $@ --rdb - 2>$FILENAME
+    exit_code=$?
+    cat $FILENAME >&2
+    grep "Fail to fsync" $FILENAME | grep -q "Invalid argument"
+    FAILED=$?
+    rm $FILENAME;
+    if [[ $exit_code -ne 0 ]] ; then
+        test 0 -eq $FAILED || exit $exit_code
+    fi
+    exit 0

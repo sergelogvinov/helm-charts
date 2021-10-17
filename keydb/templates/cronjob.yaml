@@ -1,0 +1,91 @@
+{{- if .Values.backup.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "keydb.fullname" . }}
+  labels:
+    {{- include "keydb.crontab.labels" . | nindent 4 }}
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  schedule: "{{ .Values.backup.schedule }}"
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 3600 # 1h
+      backoffLimit: 1
+      template:
+        metadata:
+          name: {{ include "keydb.fullname" . }}
+          labels:
+            {{- include "keydb.crontab.labels" . | nindent 12 }}
+        spec:
+          restartPolicy: Never
+          enableServiceLinks: false
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "keydb.serviceAccountName" . }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          containers:
+            - name: {{ .Chart.Name }}
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              image: "{{ .Values.backup.image.repository }}:{{ .Values.backup.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.backup.image.pullPolicy }}
+              command: ["/entrypoint.d/backup.sh"]
+              # command: ["sleep","6000"]
+              volumeMounts:
+                - name: command
+                  mountPath: /entrypoint.d
+                - name: config
+                  mountPath: /etc/walg
+              {{- if or .Values.tlsCerts.create }}
+                - name: tlscerts
+                  mountPath: /etc/ssl/tlscerts
+              {{- end }}
+              resources:
+                {{- toYaml .Values.backup.resources | nindent 16 }}
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app.kubernetes.io/name
+                        operator: In
+                        values:
+                          - {{ include "keydb.name" . }}
+                      - key: app.kubernetes.io/instance
+                        operator: In
+                        values:
+                          - {{ .Release.Name }}
+                  topologyKey: kubernetes.io/hostname
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumes:
+            - name: command
+              configMap:
+                name: {{ include "keydb.fullname" . }}
+                defaultMode: 360
+            - name: config
+              secret:
+                secretName:  {{ include "keydb.fullname" . }}
+                defaultMode: 256
+                items:
+                  - key: walg.yaml
+                    path: walg.yaml
+          {{- if .Values.tlsCerts.create }}
+            - name: tlscerts
+              secret:
+                secretName: {{ include "keydb.fullname" . }}-server-tls
+                defaultMode: 256
+          {{- end }}
+{{- end }}
