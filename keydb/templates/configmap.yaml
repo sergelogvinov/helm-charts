@@ -5,24 +5,33 @@ metadata:
   labels:
     {{- include "keydb.labels" . | nindent 4 }}
 data:
+  {{- $name := include "keydb.fullname" . }}
+  {{- $port := include "keydb.port" . }}
+
   init.sh: |
     #!/bin/sh
     set -e
 
-    install -m 0660 -c /etc/keydb-common-config/common.conf /etc/keydb/keydb.conf
+    install -m 0660 -c /etc/keydb-common-config/keydb.conf /etc/keydb/keydb.conf
     echo >> /etc/keydb/keydb.conf
     echo "maxmemory ${MEMORY_LIMIT}b" >> /etc/keydb/keydb.conf
 
   {{ if eq .Values.keydb.multiMaster "yes" }}
-  {{- $name := include "keydb.fullname" . }}
-  {{- $port := include "keydb.port" . }}
     echo "# replicas">> /etc/keydb/keydb.conf
     for node in {{ range $i := until (int .Values.replicaCount) }} {{ $i }}{{ end }}; do
       if [ "${HOSTNAME}" != "keydb-${node}" ]; then
-          echo "replicaof {{ include "keydb.fullname" . }}-${node}.{{ include "keydb.fullname" . }}-headless {{ $port }}" >> /etc/keydb/keydb.conf
+          echo "replicaof {{ $name }}-${node}.{{ $name }}-headless {{ $port }}" >> /etc/keydb/keydb.conf
       fi
     done
   {{- end }}
+
+  haproxy.sh: |
+    #!/bin/sh
+    set -e
+
+    umask 177
+    touch /run/haproxy_state
+    cat /etc/ssl/tlscerts/tls.crt /etc/ssl/tlscerts/tls.key /etc/ssl/tlscerts/ca.crt > /run/server.pem
 
   backup.sh: |
     #!/bin/sh

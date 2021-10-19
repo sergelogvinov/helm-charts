@@ -13,6 +13,7 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+clusterDomain: cluster.local
 
 keydb:
   password: ~
@@ -23,6 +24,38 @@ keydb:
 
 tlsCerts:
   create: false
+
+loadbalancer:
+  enabled: false
+
+  replicaCount: 1
+
+  image:
+    repository: haproxy
+    pullPolicy: IfNotPresent
+    tag: 2.4.7
+
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 99
+    runAsGroup: 99
+    fsGroup: 99
+
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 10m
+      memory: 64Mi
+
+  livenessProbe:
+    initialDelaySeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    periodSeconds: 60
+
+  readinessProbe: {}
 
 backup:
   enabled: false
@@ -68,17 +101,16 @@ securityContext:
   seccompProfile:
     type: RuntimeDefault
   allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: true
+  # readOnlyRootFilesystem: true
   # capabilities:
   #   drop:
   #   - ALL
 
 priorityClassName: ~
 
-terminationGracePeriodSeconds: 15
+terminationGracePeriodSeconds: 30
 
-
-# livenessProbe: {}
+livenessProbe: {}
 #   initialDelaySeconds: 10
 #   timeoutSeconds: 1
 #   successThreshold: 1

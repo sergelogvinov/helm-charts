@@ -41,3 +41,27 @@ spec:
     {{- end}}
   selector:
     {{- include "keydb.selectorLabels" . | nindent 4 }}
+{{- if .Values.loadbalancer.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "keydb.fullname" . }}-loadbalancer
+  labels:
+    {{- include "keydb.loadbalancer.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: 6379
+      targetPort: 6379
+      protocol: TCP
+      name: keydb
+    {{- if .Values.tlsCerts.create }}
+    - port: 6380
+      targetPort: 6380
+      protocol: TCP
+      name: keydb-tls
+    {{- end}}
+  selector:
+    {{- include "keydb.loadbalancer.selectorLabels" . | nindent 4 }}
+{{- end }}
