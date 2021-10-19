@@ -101,7 +101,7 @@ securityContext:
   seccompProfile:
     type: RuntimeDefault
   allowPrivilegeEscalation: false
-  # readOnlyRootFilesystem: true
+  readOnlyRootFilesystem: true
   # capabilities:
   #   drop:
   #   - ALL
@@ -133,18 +133,11 @@ service:
 
 resources:
   # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
+  #   cpu: 1
+  #   memory: 512Mi
   requests:
     cpu: 10m
     memory: 64Mi
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
 
 updateStrategy:
   type: RollingUpdate
@@ -164,4 +157,6 @@ nodeSelector: {}
 
 tolerations: []
 
+# soft/hard
+podAntiAffinityPreset: soft
 affinity: {}

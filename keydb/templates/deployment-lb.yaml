@@ -6,9 +6,7 @@ metadata:
   labels:
     {{- include "keydb.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.loadbalancer.replicaCount }}
-  {{- end }}
   strategy:
     type: {{ .Values.updateStrategy.type }}
   selector:

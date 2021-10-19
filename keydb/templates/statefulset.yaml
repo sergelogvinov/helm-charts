@@ -6,9 +6,7 @@ metadata:
     {{- include "keydb.labels" . | nindent 4 }}
 spec:
   serviceName: {{ include "keydb.fullname" . }}-headless
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
   selector:
@@ -109,8 +107,9 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
       affinity:
+        podAntiAffinity: {{- include "affinities.pods" . | nindent 10 }}
+      {{- with .Values.affinity }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
