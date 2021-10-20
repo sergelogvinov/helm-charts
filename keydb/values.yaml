@@ -44,10 +44,10 @@ loadbalancer:
   resources:
     limits:
       cpu: 100m
-      memory: 128Mi
-    requests:
-      cpu: 10m
       memory: 64Mi
+    requests:
+      cpu: 50m
+      memory: 32Mi
 
   livenessProbe:
     initialDelaySeconds: 10
@@ -56,6 +56,9 @@ loadbalancer:
     periodSeconds: 60
 
   readinessProbe: {}
+
+  # soft/hard
+  podAntiAffinityPreset: soft
 
 backup:
   enabled: false

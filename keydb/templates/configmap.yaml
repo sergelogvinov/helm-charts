@@ -19,7 +19,7 @@ data:
   {{ if eq .Values.keydb.multiMaster "yes" }}
     echo "# replicas">> /etc/keydb/keydb.conf
     for node in {{ range $i := until (int .Values.replicaCount) }} {{ $i }}{{ end }}; do
-      if [ "${HOSTNAME}" != "keydb-${node}" ]; then
+      if [ "${HOSTNAME}" != "{{ $name }}-${node}" ]; then
           echo "replicaof {{ $name }}-${node}.{{ $name }}-headless {{ $port }}" >> /etc/keydb/keydb.conf
       fi
     done

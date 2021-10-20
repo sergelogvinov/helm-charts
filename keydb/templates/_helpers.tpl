@@ -117,11 +117,11 @@ Common config
 {{- define "keydb.commonConfig" -}}
 bind 0.0.0.0 -::
 port 6379
+
 {{- if .Values.tlsCerts.create }}
 tls-port 6380
 tls-replication yes
 tls-cluster yes
-
 tls-cert-file /etc/ssl/tlscerts/tls.crt
 tls-key-file /etc/ssl/tlscerts/tls.key
 tls-ca-cert-file /etc/ssl/tlscerts/ca.crt
@@ -130,9 +130,9 @@ tls-ciphers "DEFAULT:!MEDIUM"
 tls-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
 tls-prefer-server-ciphers yes
 
-cluster-announce-port 6379
 cluster-announce-tls-port 6380
 {{- end }}
+cluster-announce-port 6379
 
 tcp-backlog 511
 tcp-keepalive 300
@@ -313,5 +313,61 @@ Return a podAffinity/podAntiAffinity definition
     {{- include "affinities.pods.soft" . -}}
   {{- else if eq .Values.podAntiAffinityPreset "hard" }}
     {{- include "affinities.pods.hard" . -}}
+  {{- end -}}
+{{- end -}}
+
+
+{{/*
+Return a soft podAffinity/podAntiAffinity definition
+*/}}
+{{- define "affinities.loadbalancer.pods.soft" -}}
+podAntiAffinity:
+  preferredDuringSchedulingIgnoredDuringExecution:
+    - podAffinityTerm:
+        labelSelector:
+          matchLabels: {{- (include "keydb.loadbalancer.selectorLabels" .) | nindent 12 }}
+        namespaces:
+          - {{ .Release.Namespace | quote }}
+        topologyKey: kubernetes.io/hostname
+      weight: 1
+podAffinity:
+  requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchLabels: {{- (include "keydb.selectorLabels" .) | nindent 10 }}
+      namespaces:
+        - {{ .Release.Namespace | quote }}
+      topologyKey: kubernetes.io/hostname
+{{- end -}}
+
+
+{{/*
+Return a hard podAffinity/podAntiAffinity definition
+*/}}
+{{- define "affinities.loadbalancer.pods.hard" -}}
+podAntiAffinity:
+  requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchLabels: {{- (include "keydb.loadbalancer.selectorLabels" .) | nindent 10 }}
+      namespaces:
+        - {{ .Release.Namespace | quote }}
+      topologyKey: kubernetes.io/hostname
+podAffinity:
+  requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchLabels: {{- (include "keydb.selectorLabels" .) | nindent 10 }}
+      namespaces:
+        - {{ .Release.Namespace | quote }}
+      topologyKey: kubernetes.io/hostname
+{{- end -}}
+
+
+{{/*
+Return a podAffinity/podAntiAffinity definition
+*/}}
+{{- define "affinities.loadbalancer.pods" -}}
+  {{- if eq .Values.loadbalancer.podAntiAffinityPreset "soft" }}
+    {{- include "affinities.loadbalancer.pods.soft" . -}}
+  {{- else if eq .Values.loadbalancer.podAntiAffinityPreset "hard" }}
+    {{- include "affinities.loadbalancer.pods.hard" . -}}
   {{- end -}}
 {{- end -}}

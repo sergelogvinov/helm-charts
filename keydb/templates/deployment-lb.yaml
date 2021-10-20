@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: {{ include "keydb.fullname" . }}-loadbalancer
   labels:
-    {{- include "keydb.labels" . | nindent 4 }}
+    {{- include "keydb.loadbalancer.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.loadbalancer.replicaCount }}
   strategy:
@@ -21,7 +21,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "keydb.loadbalancer.selectorLabels" . | nindent 8 }}
+        {{- include "keydb.loadbalancer.labels" . | nindent 8 }}
     spec:
       enableServiceLinks: false
       setHostnameAsFQDN: true
@@ -97,14 +97,12 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.loadbalancer.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.loadbalancer.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
       affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- include "affinities.loadbalancer.pods" . | nindent 8 }}
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
