@@ -81,6 +81,13 @@ backup:
       cpu: 100m
       memory: 128Mi
 
+metrics:
+  enabled: false
+  image:
+    repository: oliver006/redis_exporter
+    pullPolicy: IfNotPresent
+    tag: v1.29.0
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
