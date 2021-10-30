@@ -1,0 +1,83 @@
+{{- if .Values.tlsCerts.create }}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}-issuer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}-tls
+spec:
+  secretName: {{ include "postgresql-single.fullname" . }}-tls
+  issuerRef:
+    name: {{ include "postgresql-single.fullname" . }}-issuer
+    kind: Issuer
+  commonName: {{ include "postgresql-single.fullname" . }}
+  duration: 8760h # 12m
+  renewBefore: 4380h # 6m
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - server auth
+    - client auth
+  isCA: true
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}-ca-issuer
+spec:
+  ca:
+    secretName: {{ include "postgresql-single.fullname" . }}-tls
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}-server
+spec:
+  secretName: {{ include "postgresql-single.fullname" . }}-server-tls
+  commonName: {{ include "postgresql-single.fullname" . }}-server
+  duration: 8760h # 12m
+  renewBefore: 4380h # 6m
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - server auth
+    - client auth
+  isCA: false
+  ipAddresses:
+    - 127.0.0.1
+  dnsNames:
+    - {{ include "postgresql-single.fullname" . }}
+    - {{ include "postgresql-single.fullname" . }}.{{ .Release.Namespace }}
+    - {{ include "postgresql-single.fullname" . }}.{{ .Release.Namespace }}.svc
+  issuerRef:
+    name: {{ include "postgresql-single.fullname" . }}-ca-issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}-client
+spec:
+  secretName: {{ include "postgresql-single.fullname" . }}-client-tls
+  commonName: {{ include "postgresql-single.fullname" . }}-client
+  duration: 4380h # 6m
+  renewBefore: 2190h # 3m
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - client auth
+  isCA: false
+  ipAddresses:
+    - 127.0.0.1
+  dnsNames:
+    - {{ include "postgresql-single.fullname" . }}
+  issuerRef:
+    name: {{ include "postgresql-single.fullname" . }}-ca-issuer
+{{- end }}

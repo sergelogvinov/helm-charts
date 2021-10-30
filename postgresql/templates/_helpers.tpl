@@ -1,0 +1,214 @@
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "postgresql-single.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "postgresql-single.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "postgresql-single.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Common labels
+*/}}
+{{- define "postgresql-single.labels" -}}
+helm.sh/chart: {{ include "postgresql-single.chart" . }}
+{{ include "postgresql-single.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{- define "postgresql-single.crontab.labels" -}}
+helm.sh/chart: {{ include "postgresql-single.chart" . }}
+{{ include "postgresql-single.crontab.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "postgresql-single.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "postgresql-single.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "postgresql-single.crontab.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "postgresql-single.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}-crontab
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "postgresql-single.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "postgresql-single.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create the postgresqlPassword
+*/}}
+{{- define "postgresql-single.postgresqlPassword" -}}
+{{- $sname := include "postgresql-single.fullname" . }}
+{{- $previous := lookup "v1" "Secret" .Release.Namespace $sname }}
+{{- if .Values.postgresqlPassword }}
+{{- .Values.postgresqlPassword }}
+{{- else if $previous }}
+{{- default (randAlphaNum 16) ($previous.data.postgresqlPassword | b64dec ) }}
+{{- else }}
+{{- randAlphaNum 16 }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create the postgresqlConfiguration
+*/}}
+{{- define "postgresql-single.postgresqlConfiguration" -}}
+{{- if not .Values.postgresqlConfiguration }}
+listen_addresses = '*'
+
+lc_messages = 'en_US.UTF-8'
+lc_monetary = 'en_US.UTF-8'
+lc_numeric = 'en_US.UTF-8'
+lc_time = 'en_US.UTF-8'
+log_timezone = 'UTC'
+
+# Connectivity
+max_connections = 100
+superuser_reserved_connections = 3
+
+ssl = on
+ssl_ciphers = 'HIGH:MEDIUM:+3DES:!aNULL'
+ssl_prefer_server_ciphers = True
+ssl_ecdh_curve = 'prime256v1'
+{{- if or .Values.tlsCerts.create }}
+ssl_cert_file = '/etc/ssl/tlscerts/tls.crt'
+ssl_key_file = '/etc/ssl/tlscerts/tls.key'
+ssl_ca_file = '/etc/ssl/tlscerts/ca.crt'
+ssl_crl_file = ''
+{{- else }}
+ssl_cert_file = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
+ssl_key_file = '/etc/ssl/private/ssl-cert-snakeoil.key'
+ssl_ca_file = ''
+ssl_crl_file = ''
+{{- end }}
+
+shared_preload_libraries = 'pg_stat_statements'
+pg_stat_statements.max = 10000
+pg_stat_statements.track = all
+
+full_page_writes = on
+wal_level = replica
+wal_keep_segments = 256
+wal_compression = on
+wal_buffers = -1
+wal_writer_delay = 200ms
+wal_writer_flush_after = 1MB
+
+max_replication_slots = 8
+max_wal_senders = 8
+max_wal_size = 1024MB
+min_wal_size = 512MB
+
+# Checkpointing:
+checkpoint_timeout  = 15min
+checkpoint_completion_target = 0.9
+
+# Background writer
+bgwriter_delay = 200ms
+bgwriter_lru_maxpages = 100
+bgwriter_lru_multiplier = 2.0
+bgwriter_flush_after = 0
+
+hot_standby = on
+archive_mode = on
+{{- if .Values.backup.enabled }}
+archive_command = '/usr/bin/wal-g --config /etc/walg/walg.yaml wal-push %p'
+{{- else }}
+archive_command = '/bin/true'
+{{- end }}
+
+{{- else }}
+{{ .Values.postgresqlConfiguration }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create the postgresqlConfigurationLogs
+*/}}
+{{- define "postgresql-single.postgresqlConfigurationLogs" -}}
+{{- if not .Values.postgresqlConfigurationLogs }}
+log_checkpoints = on
+log_connections = off
+log_disconnections = off
+log_duration = off
+log_error_verbosity = default
+log_hostname = off
+log_line_prefix = '%t [%p]: user=%u,db=%d,app=%a '
+log_lock_waits = on
+log_statement = 'none'
+log_temp_files = -1
+log_min_duration_statement = 10000
+log_autovacuum_min_duration = 1000
+
+logging_collector = off
+log_destination = 'stderr'
+log_directory = '{{ .Values.persistence.mountPath }}'
+log_filename = 'postgresql-%a.log'
+log_truncate_on_rotation = on
+log_rotation_age = 1440
+log_rotation_size = 0
+{{- else }}
+{{ .Values.postgresqlConfigurationLogs }}
+{{- end }}
+{{- end }}
+
+{{/*
+Set DATA_SOURCE_URI environment variable
+*/}}
+{{- define "postgresql-single.data_source_uri" -}}
+{{ printf "127.0.0.1:5432/%s?sslmode=disable" .Values.metrics.database | quote }}
+{{- end }}
+
+{{/*
+Create the walg configuration
+*/}}
+{{- define "postgresql-single.walg" -}}
+{{- if not .Values.backup.walg }}
+WALG_COMPRESSION_METHOD: brotli
+WALG_DELTA_MAX_STEPS: 4
+WALG_FILE_PREFIX: {{ .Values.persistence.mountPath }}/backup
+{{- else }}
+{{ .Values.backup.walg }}
+{{- end }}
+{{- end }}

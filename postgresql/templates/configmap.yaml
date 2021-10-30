@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}
+  labels:
+    {{- include "postgresql-single.labels" . | nindent 4 }}
+data:
+  postgresql.conf: |
+    {{- include "postgresql-single.postgresqlConfiguration" . | nindent 4 }}
+    {{- include "postgresql-single.postgresqlConfigurationLogs" . | nindent 4 }}
+
+  {{- if gt (int .Values.postgresqlServerMemory) (int "511") }}
+    # auto generated
+    shared_buffers = {{ div .Values.postgresqlServerMemory 4 }}MB
+    work_mem = {{ div .Values.postgresqlServerMemory 32 }}MB
+    maintenance_work_mem = {{ div .Values.postgresqlServerMemory 4 }}MB
+    effective_cache_size = {{ div .Values.postgresqlServerMemory 2 }}MB
+    huge_pages = off
+  {{- end }}
+
+    include_if_exists '{{ .Values.persistence.mountPath }}/postgresql-local.conf'
+
+  pg_hba.conf: |
+    {{ .Values.pgHbaConfiguration | nindent 4 }}
+
+  queries.yaml: |
+    {{ .Values.metrics.queries | nindent 4 }}
+
+  metrics.sql: |
+    CREATE EXTENSION pg_stat_statements;
+
+{{- if .Values.backup.enabled }}
+  backup.sh: |
+    #!/bin/sh
+    set -e
+
+    /usr/bin/wal-g --config /etc/walg/walg.yaml backup-push
+    /usr/bin/wal-g --config /etc/walg/walg.yaml backup-list --pretty --detail
+    /usr/bin/wal-g --config /etc/walg/walg.yaml delete {{ .Values.backup.cleanPolicy }} --confirm ||:
+
+  restore.sh: |
+    #!/bin/sh
+    set -e
+
+    echo "*** Star recovery from wal-g"
+    start=`date +%s`
+    pg_ctl -D "$PGDATA" -m fast -w stop >/dev/null 2>/dev/null
+
+    rm -rf {{ .Values.persistence.mountPath }}/data
+
+    touch {{ .Values.persistence.mountPath }}/postgresql-local.conf
+    mkdir -p {{ .Values.persistence.mountPath }}/data
+    /usr/bin/wal-g --config /etc/walg/walg.yaml backup-fetch {{ .Values.persistence.mountPath }}/data LATEST
+
+    echo "#" >> $PGDATA/postgresql.auto.conf
+    echo "archive_command = '/bin/true'" >> $PGDATA/postgresql.auto.conf
+    echo "restore_command = '/usr/bin/wal-g --config /etc/walg/walg.yaml wal-fetch %f %p'" >> $PGDATA/postgresql.auto.conf
+
+    touch {{ .Values.persistence.mountPath }}/data/recovery.signal
+    # touch {{ .Values.persistence.mountPath }}/data/standby.signal
+    chmod 0750 {{ .Values.persistence.mountPath }}/data
+
+    pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -w start
+    sleep 10
+
+    TRIES=30
+    while [ "$TRIES" != "0" ]
+    do
+        echo "* Trying to connect... #$TRIES"
+        psql -U postgres postgres -tAc "SELECT pg_is_in_recovery();" >/dev/null 2>/dev/null && break || sleep 60 && TRIES=`expr "$TRIES" - 1`
+    done
+
+    end=`date +%s`
+    runtime=$((end-start))
+    echo "*** Recovery time - $runtime"
+{{- end }}

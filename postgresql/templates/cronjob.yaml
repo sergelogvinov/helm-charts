@@ -1,0 +1,132 @@
+{{- if .Values.backup.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}-cronjob
+  labels:
+    {{- include "postgresql-single.crontab.labels" . | nindent 4 }}
+    {{- with .Values.podlabels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  schedule: "{{ .Values.backup.schedule }}"
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 43200 # 12h
+      backoffLimit: 1
+      template:
+        metadata:
+          name: {{ include "postgresql-single.fullname" . }}-cronjob
+          labels:
+            {{- include "postgresql-single.crontab.labels" . | nindent 12 }}
+            {{- with .Values.podlabels }}
+            {{ toYaml . | nindent 12 }}
+            {{- end }}
+        spec:
+          restartPolicy: Never
+          enableServiceLinks: false
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "postgresql-single.serviceAccountName" . }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          containers:
+            - name: {{ .Chart.Name }}
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              image: "{{ .Values.backup.image.repository }}:{{ .Values.backup.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command: ["/bin/sh","-e","/usr/backup/backup.sh"]
+              # command: ["sleep","6000"]
+              env:
+                - name: PGAPPNAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: PGUSER
+                  value: "{{ .Values.postgresqlUsername }}"
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "postgresql-single.fullname" . }}
+                      key: postgresqlPassword
+                - name: PGHOST
+                  value: "{{ include "postgresql-single.fullname" . }}"
+                - name: PGPORT
+                  value: "{{ .Values.service.port }}"
+                - name: PGDATA
+                  value: "{{ .Values.persistence.mountPath }}/data"
+              volumeMounts:
+                - name: postgresql-config
+                  mountPath: /usr/backup/backup.sh
+                  subPath: backup.sh
+                - name: config
+                  mountPath: /etc/walg
+                - name: data
+                  mountPath: {{ .Values.persistence.mountPath }}
+              {{- if .Values.extraVolumeMounts }}
+                {{ toYaml .Values.extraVolumeMounts | nindent 16 }}
+              {{- end }}
+              resources:
+                {{- toYaml .Values.backup.resources | nindent 16 }}
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app.kubernetes.io/name
+                        operator: In
+                        values:
+                          - {{ include "postgresql-single.name" . }}
+                      - key: app.kubernetes.io/instance
+                        operator: In
+                        values:
+                          - {{ .Release.Name }}
+                  topologyKey: kubernetes.io/hostname
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumes:
+            - name: postgresql-config
+              configMap:
+                name: {{ include "postgresql-single.fullname" . }}
+                defaultMode: 493
+            - name: config
+              secret:
+                secretName:  {{ include "postgresql-single.fullname" . }}
+                defaultMode: 256
+                items:
+                  - key: walg.yaml
+                    path: walg.yaml
+          {{- if .Values.extraVolumes -}}
+            {{ toYaml .Values.extraVolumes | nindent 12 }}
+          {{- end -}}
+          {{- if .Values.tlsCerts.create }}
+            - name: tlscerts
+              secret:
+                secretName: {{ include "postgresql-single.fullname" . }}-server-tls
+                defaultMode: 256
+          {{- end }}
+          {{- if not .Values.persistence.enabled }}
+            - name: data
+              emptyDir: {}
+          {{- else if .Values.persistence.existingClaim }}
+            - name: data
+              persistentVolumeClaim:
+                claimName: {{ .Values.persistence.existingClaim }}
+          {{- else }}
+            - name: data
+              persistentVolumeClaim:
+                claimName: data-{{ include "postgresql-single.fullname" . }}-0
+          {{- end }}
+{{- end }}
