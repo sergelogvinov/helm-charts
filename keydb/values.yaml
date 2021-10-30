@@ -103,8 +103,8 @@ podAnnotations: {}
 podSecurityContext:
   runAsNonRoot: true
   runAsUser: 999
-  runAsGroup: 1000
-  fsGroup: 1000
+  runAsGroup: 999
+  fsGroup: 999
   fsGroupChangePolicy: "OnRootMismatch"
 
 securityContext:
@@ -151,6 +151,16 @@ resources:
 
 updateStrategy:
   type: RollingUpdate
+
+# extraVolumes:
+#   - name: gcp-certs
+#     secret:
+#       defaultMode: 420
+#       secretName: backup-gcp
+# extraVolumeMounts:
+#   - name: gcp-certs
+#     mountPath: /etc/gcp
+#     readOnly: true
 
 persistence:
   enabled: false

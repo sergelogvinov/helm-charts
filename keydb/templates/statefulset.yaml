@@ -62,13 +62,22 @@ spec:
             - name: command
               mountPath: /entrypoint.d
               readOnly: true
+          {{- if .Values.backup.enabled }}
+            - name: walg
+              mountPath: /etc/walg
+          {{- end }}
+          {{- if .Values.extraVolumeMounts }}
+            {{ toYaml .Values.extraVolumeMounts | nindent 12 }}
+          {{- end }}
+            - name: data
+              mountPath: /data
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          # command: ["sleep","6000"]
+          command: ["/usr/bin/keydb-server","/etc/keydb/keydb.conf"]
           ports:
             - name: keydb
               containerPort: 6379
@@ -164,6 +173,18 @@ spec:
         - name: config
           emptyDir:
             medium: Memory
+      {{- if .Values.backup.enabled }}
+        - name: walg
+          secret:
+            secretName:  {{ include "keydb.fullname" . }}
+            defaultMode: 256
+            items:
+              - key: walg.yaml
+                path: walg.yaml
+      {{- end }}
+      {{- if .Values.extraVolumes }}
+        {{ toYaml .Values.extraVolumes | nindent 8 }}
+      {{- end }}
       {{- if .Values.tlsCerts.create }}
         - name: tlscerts
           secret:

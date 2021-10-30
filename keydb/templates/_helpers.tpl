@@ -262,15 +262,15 @@ backend keydb_master
 Backup wal-g config
 */}}
 {{- define "keydb.walgYaml" -}}
-{{- if not .Values.backup.walg }}
 WALG_COMPRESSION_METHOD: brotli
 WALG_DELTA_MAX_STEPS: 4
-WALG_FILE_PREFIX: /data
-WALG_STREAM_CREATE_COMMAND: "/usr/local/bin/redis-cli -h {{ include "keydb.fullname" . }} --rdb -"
+WALG_STREAM_CREATE_COMMAND: "redis-cli -h {{ include "keydb.fullname" . }} --rdb -"
 WALG_STREAM_RESTORE_COMMAND: "cat > /data/dump.rdb"
 {{- if .Values.keydb.password }}
 WALG_REDIS_PASSWORD: "{{ .Values.keydb.password  }}"
 {{- end }}
+{{- if not .Values.backup.walg }}
+WALG_FILE_PREFIX: /data
 {{- else }}
 {{ .Values.backup.walg }}
 {{- end }}

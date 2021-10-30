@@ -25,6 +25,10 @@ data:
     done
   {{- end }}
 
+  {{- if and .Values.backup.enabled .Values.backup.recovery }}
+    [ -f /data/keydb.rdb ] || /entrypoint.d/restore.sh
+  {{- end }}
+
   haproxy.sh: |
     #!/bin/sh
     set -e
@@ -39,7 +43,14 @@ data:
 
     wal-g --config /etc/walg/walg.yaml backup-push
     wal-g --config /etc/walg/walg.yaml backup-list --detail
-    wal-g --config /etc/walg/walg.yaml delete {{ .Values.backup.cleanPolicy }} --confirm ||:
+    # wal-g --config /etc/walg/walg.yaml delete {{ .Values.backup.cleanPolicy }} --confirm ||:
+
+  restore.sh: |
+    #!/bin/sh
+    set -e
+
+    wal-g --config /etc/walg/walg.yaml backup-fetch LATEST
+    mv /data/dump.rdb /data/keydb.rdb
 
   redis-cli.sh: |
     #!/usr/bin/env bash
