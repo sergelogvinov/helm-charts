@@ -135,6 +135,7 @@ backup:
     pullPolicy: IfNotPresent
     tag: 12.4-v0.2.15-2
 
+  walpush: false
   walg: ~
 
   schedule: "15 4 * * *"

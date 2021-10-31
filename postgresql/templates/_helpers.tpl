@@ -153,7 +153,12 @@ bgwriter_flush_after = 0
 hot_standby = on
 archive_mode = on
 {{- if .Values.backup.enabled }}
+{{- if .Values.backup.walpush }}
 archive_command = '/usr/bin/wal-g --config /etc/walg/walg.yaml wal-push %p'
+{{- else }}
+archive_command = '/bin/true'
+{{- end }}
+restore_command = '/usr/bin/wal-g --config /etc/walg/walg.yaml wal-fetch %f %p'
 {{- else }}
 archive_command = '/bin/true'
 {{- end }}

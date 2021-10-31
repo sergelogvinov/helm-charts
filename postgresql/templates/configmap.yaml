@@ -36,13 +36,14 @@ data:
 
     /usr/bin/wal-g --config /etc/walg/walg.yaml backup-push
     /usr/bin/wal-g --config /etc/walg/walg.yaml backup-list --pretty --detail
-    /usr/bin/wal-g --config /etc/walg/walg.yaml delete {{ .Values.backup.cleanPolicy }} --confirm ||:
+    /usr/bin/wal-g --config /etc/walg/walg.yaml wal-show
+    # /usr/bin/wal-g --config /etc/walg/walg.yaml delete {{ .Values.backup.cleanPolicy }} --confirm ||:
 
   restore.sh: |
     #!/bin/sh
     set -e
 
-    echo "*** Star recovery from wal-g"
+    echo "*** Star recovery from wal-g backup"
     start=`date +%s`
     pg_ctl -D "$PGDATA" -m fast -w stop >/dev/null 2>/dev/null
 
@@ -52,10 +53,10 @@ data:
     mkdir -p {{ .Values.persistence.mountPath }}/data
     /usr/bin/wal-g --config /etc/walg/walg.yaml backup-fetch {{ .Values.persistence.mountPath }}/data LATEST
 
-    echo "#" >> $PGDATA/postgresql.auto.conf
+    echo "# bootstrap addons" >> $PGDATA/postgresql.auto.conf
     echo "archive_command = '/bin/true'" >> $PGDATA/postgresql.auto.conf
-    echo "restore_command = '/usr/bin/wal-g --config /etc/walg/walg.yaml wal-fetch %f %p'" >> $PGDATA/postgresql.auto.conf
 
+    touch {{ .Values.persistence.mountPath }}/postgresql-local.conf
     touch {{ .Values.persistence.mountPath }}/data/recovery.signal
     # touch {{ .Values.persistence.mountPath }}/data/standby.signal
     chmod 0750 {{ .Values.persistence.mountPath }}/data
