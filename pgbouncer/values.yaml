@@ -1,0 +1,109 @@
+# Default values for pgbouncer.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: bitnami/pgbouncer
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+databases: {}
+  # name:
+  #   host: host
+  #   port: 5432
+  #   user: user
+  #   dbname: dbname
+  #   poolmode: session
+
+users: {}
+  # name:
+  #   poolmode: transaction
+  #   connections: 100
+
+# "username" "password"
+# "md5" + "md5(password + username)" // echo -n '1234admin' | md5 -> md545f2603610af569b6155c45067268c6b
+userlist:
+  pgbouncer: pgbouncer
+
+pgHbaConfiguration: |-
+  # host  database    user                  address        auth-method
+  host    all         all                   10.0.0.0/8     md5
+  hostssl all         all                   0.0.0.0/0      md5
+
+customSettings: {}
+
+serverSslMode: allow
+clientSslMode: allow
+
+podLabels: {}
+podAnnotations: {}
+
+podSecurityContext:
+  runAsUser: 999
+  runAsGroup: 999
+  fsGroup: 999
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+  # clusterIP: 10.10.10.10
+  # nodePort: 5432
+
+resources:
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+useDaemonSet: false
+
+updateStrategy:
+  type: RollingUpdate
+
+# priorityClassName:
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+metrics:
+  enabled: false
+
+  image:
+    repository: jbub/pgbouncer_exporter
+    tag: v0.13.0
+    pullPolicy: IfNotPresent
+
+  resources:
+    limits:
+      cpu: 20m
+      memory: 32Mi
+    requests:
+      cpu: 10m
+      memory: 8Mi

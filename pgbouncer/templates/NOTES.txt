@@ -1,0 +1,10 @@
+1. Get the application URL by running these commands:
+
+{{- if contains "NodePort" .Values.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "pgbouncer.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  psql -h $NODE_IP -p $NODE_PORT -U pgbouncer pgbouncer
+{{- else if contains "ClusterIP" .Values.service.type }}
+  kubectl port-forward svc/{{ include "pgbouncer.fullname" . }} 5432:5432
+  psql -h 127.0.0.1 -U pgbouncer pgbouncer
+{{- end }}
