@@ -1,0 +1,92 @@
+{{- if semverCompare ">=1.22" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: batch/v1
+{{- else -}}
+apiVersion: batch/v1beta1
+{{- end }}
+kind: CronJob
+metadata:
+  name: {{ include "mongodb-backup.fullname" . }}
+  labels:
+    {{- include "mongodb-backup.labels" . | nindent 4 }}
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  schedule: "{{ .Values.schedule }}"
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: {{ .Values.activeDeadlineSeconds }}
+      backoffLimit: 1
+      template:
+        metadata:
+          name: {{ include "mongodb-backup.fullname" . }}
+          labels:
+            {{- include "mongodb-backup.selectorLabels" . | nindent 12 }}
+        spec:
+          restartPolicy: Never
+          enableServiceLinks: false
+          {{- if .Values.priorityClassName }}
+          priorityClassName: {{ .Values.priorityClassName }}
+          {{- end }}
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "mongodb-backup.serviceAccountName" . }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          containers:
+            - name: {{ .Chart.Name }}
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command: ["/entrypoint.d/backup.sh"]
+              volumeMounts:
+                - name: command
+                  mountPath: /entrypoint.d
+                - name: walg
+                  mountPath: /etc/walg
+                  readOnly: true
+              {{- if .Values.extraVolumeMounts }}
+                {{ toYaml .Values.extraVolumeMounts | nindent 16 }}
+              {{- end }}
+              {{- if .Values.persistence.enabled }}
+                - name: backup
+                  mountPath: /backup
+              {{- end }}
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumes:
+            - name: command
+              configMap:
+                name: {{ include "mongodb-backup.fullname" . }}
+                defaultMode: 360
+            - name: walg
+              secret:
+                secretName:  {{ include "mongodb-backup.fullname" . }}
+                defaultMode: 256
+          {{- if .Values.extraVolumes }}
+            {{ toYaml .Values.extraVolumes | nindent 12 }}
+          {{- end }}
+{{- if .Values.persistence.enabled }}
+            - name: backup
+              persistentVolumeClaim:
+{{- if .Values.persistence.existingClaim }}
+                claimName: {{ .Values.persistence.existingClaim }}
+{{- else }}
+                claimName: datadir-{{ include "mongodb-backup.fullname" . }}
+{{- end }}
+{{- end }}

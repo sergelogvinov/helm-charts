@@ -37,6 +37,7 @@ data:
     /usr/bin/wal-g --config /etc/walg/walg.yaml backup-push
     /usr/bin/wal-g --config /etc/walg/walg.yaml backup-list --pretty --detail
     /usr/bin/wal-g --config /etc/walg/walg.yaml wal-show
+    # /usr/bin/wal-g --config /etc/walg/walg.yaml wal-verify integrity
     # /usr/bin/wal-g --config /etc/walg/walg.yaml delete {{ .Values.backup.cleanPolicy }} --confirm ||:
 
   restore.sh: |
