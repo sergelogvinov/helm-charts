@@ -67,10 +67,13 @@ Create the pgmetricsPassword
 {{- end }}
 
 {{/*
-Create the pgmetricsUrl
+Create config file userlist.txt
 */}}
-{{- define "pgbouncer.pgmetricsUrl" -}}
-postgres://pgmetrics:{{ include "pgbouncer.pgmetricsPassword" . }}@127.0.0.1:5432/pgbouncer
+{{ define "userlist.txt" }}
+"pgmetrics" {{ .pgmetricsPassword | quote }}
+{{- range $k, $v := .userlist }}
+{{ $k | quote }} {{ $v | quote }}
+{{- end }}
 {{- end }}
 
 {{/*
@@ -148,14 +151,4 @@ tcp_keepalive = 1
 {{ $k }} = {{ $v }}
 {{- end }}
 
-{{- end }}
-
-{{/*
-Create config file userlist.txt
-*/}}
-{{ define "userlist.txt" }}
-"pgmetrics" {{ include "pgbouncer.pgmetricsPassword" . | quote }}
-{{- range $k, $v := .Values.userlist }}
-{{ $k | quote }} {{ $v | quote }}
-{{- end }}
 {{- end }}
