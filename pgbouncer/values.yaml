@@ -60,14 +60,14 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 5432
   # clusterIP: 10.10.10.10
   # nodePort: 5432
 
 resources:
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
+  limits:
+    # cpu: 100m
+    memory: 128Mi
   requests:
     cpu: 100m
     memory: 64Mi
