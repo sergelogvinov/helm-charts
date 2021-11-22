@@ -44,15 +44,17 @@ data:
     #!/bin/sh
     set -e
 
-    echo "*** Star recovery from wal-g backup"
+    [ -z "$VERSION" ] && export VERSION=LATEST
+
+    echo "*** Star recovery from wal-g backup ($VERSION)"
     start=`date +%s`
-    pg_ctl -D "$PGDATA" -m fast -w stop >/dev/null 2>/dev/null
+    pg_ctl -D "$PGDATA" -m fast -w stop >/dev/null 2>/dev/null ||:
 
     rm -rf {{ .Values.persistence.mountPath }}/data
 
     touch {{ .Values.persistence.mountPath }}/postgresql-local.conf
     mkdir -p {{ .Values.persistence.mountPath }}/data
-    /usr/bin/wal-g --config /etc/walg/walg.yaml backup-fetch {{ .Values.persistence.mountPath }}/data LATEST
+    /usr/bin/wal-g --config /etc/walg/walg.yaml backup-fetch {{ .Values.persistence.mountPath }}/data $VERSION
 
     echo "# bootstrap addons" >> $PGDATA/postgresql.auto.conf
     echo "archive_command = '/bin/true'" >> $PGDATA/postgresql.auto.conf
