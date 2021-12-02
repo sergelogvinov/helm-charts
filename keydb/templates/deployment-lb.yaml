@@ -8,7 +8,10 @@ metadata:
 spec:
   replicas: {{ .Values.loadbalancer.replicaCount }}
   strategy:
-    type: {{ .Values.updateStrategy.type }}
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
   selector:
     matchLabels:
       {{- include "keydb.loadbalancer.selectorLabels" . | nindent 6 }}
