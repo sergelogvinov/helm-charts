@@ -1,0 +1,6 @@
+
+{{- if or .Values.tlsCerts.create }}
+# Download client cert
+kubectl -n {{ .Release.Namespace }} get secrets {{ include "mongosqld.fullname" . }}-client-tls -o jsonpath="{.data.tls\.crt}" | base64 --decode > tls.crt
+kubectl -n {{ .Release.Namespace }} get secrets {{ include "mongosqld.fullname" . }}-client-tls -o jsonpath="{.data.tls\.key}" | base64 --decode > tls.key
+{{- end }}

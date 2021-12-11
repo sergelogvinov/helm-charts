@@ -1,0 +1,83 @@
+{{- if .Values.tlsCerts.create }}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "mongosqld.fullname" . }}-issuer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "mongosqld.fullname" . }}-tls
+spec:
+  secretName: {{ include "mongosqld.fullname" . }}-tls
+  issuerRef:
+    name: {{ include "mongosqld.fullname" . }}-issuer
+    kind: Issuer
+  commonName: {{ include "mongosqld.fullname" . }}
+  duration: 8760h # 12m
+  renewBefore: 4380h # 6m
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - server auth
+    - client auth
+  isCA: true
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "mongosqld.fullname" . }}-ca-issuer
+spec:
+  ca:
+    secretName: {{ include "mongosqld.fullname" . }}-tls
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "mongosqld.fullname" . }}-server
+spec:
+  secretName: {{ include "mongosqld.fullname" . }}-server-tls
+  commonName: {{ include "mongosqld.fullname" . }}-server
+  duration: 8760h # 12m
+  renewBefore: 4380h # 6m
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - server auth
+    - client auth
+  isCA: false
+  ipAddresses:
+    - 127.0.0.1
+  dnsNames:
+    - {{ include "mongosqld.fullname" . }}
+    - {{ include "mongosqld.fullname" . }}.{{ .Release.Namespace }}
+    - {{ include "mongosqld.fullname" . }}.{{ .Release.Namespace }}.svc
+  issuerRef:
+    name: {{ include "mongosqld.fullname" . }}-ca-issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "mongosqld.fullname" . }}-client
+spec:
+  secretName: {{ include "mongosqld.fullname" . }}-client-tls
+  commonName: {{ include "mongosqld.fullname" . }}-client
+  duration: 8760h # 12m
+  renewBefore: 4380h # 6m
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - client auth
+  isCA: false
+  ipAddresses:
+    - 127.0.0.1
+  dnsNames:
+    - {{ include "mongosqld.fullname" . }}
+  issuerRef:
+    name: {{ include "mongosqld.fullname" . }}-ca-issuer
+{{- end }}

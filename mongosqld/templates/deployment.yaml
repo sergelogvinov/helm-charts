@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mongosqld.fullname" . }}
+  labels:
+    {{- include "mongosqld.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "mongosqld.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "mongosqld.selectorLabels" . | nindent 8 }}
+    spec:
+      enableServiceLinks: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "mongosqld.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.tlsCerts.create }}
+      initContainers:
+        - name: tls
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /bin/sh
+            - -c
+            - "cat /etc/ssl/tlscerts/tls.crt /etc/ssl/tlscerts/tls.key /etc/ssl/tlscerts/ca.crt > /run/server.pem"
+          volumeMounts:
+            - name: run
+              mountPath: /run
+            - name: tlscerts
+              mountPath: /etc/ssl/tlscerts
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # command: ["sleep","6000"]
+          args: ["--config=/etc/mongosqld/mongosqld.conf"]
+          ports:
+            - name: mysql
+              containerPort: 3306
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: run
+              mountPath: /run
+            - name: config
+              mountPath: /etc/mongosqld
+              readOnly: true
+          {{- if or .Values.tlsCerts.create }}
+            - name: tlscerts
+              mountPath: /etc/ssl/tlscerts
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: run
+          emptyDir:
+            medium: Memory
+            sizeLimit: "64Mi"
+        - name: config
+          secret:
+            secretName: {{ include "mongosqld.fullname" . }}
+            defaultMode: 256
+      {{- if .Values.tlsCerts.create }}
+        - name: tlscerts
+          secret:
+            secretName: {{ include "mongosqld.fullname" . }}-server-tls
+            defaultMode: 256
+      {{- end }}
