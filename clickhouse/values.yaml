@@ -1,0 +1,93 @@
+# Default values for clickhouse.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: yandex/clickhouse-server
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 999
+  runAsGroup: 999
+  fsGroup: 999
+  fsGroupChangePolicy: "OnRootMismatch"
+
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+    add:
+    - SYS_NICE
+    - IPC_LOCK
+  # readOnlyRootFilesystem: true
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths: ['/clickhouse']
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+metrics:
+  enabled: true
+
+#
+# clickhouse specific
+#
+
+files: {}
+
+config: ~
+
+clickhouse:
+  users:
+    - name: logger
+      profile: default
+      quota: default
+      password: 2686af9f25e1a64f5e9f7290c7e457aa06b616fb31d2b4331ff6fa0857661cd5 # echo -n "logger" | shasum -a 256
+    - name: reader
+      profile: default
+      quota: default
+      password: 3d0941964aa3ebdcb00ccef58b1bb399f9f898465e9886d5aec7f31090a0fb30 # echo -n "reader" | shasum -a 256
