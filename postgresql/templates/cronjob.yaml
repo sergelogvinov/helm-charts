@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "postgresql-single.fullname" . }}-cronjob
+  name: {{ include "postgresql-single.fullname" . }}
   labels:
     {{- include "postgresql-single.crontab.labels" . | nindent 4 }}
     {{- with .Values.podlabels }}
@@ -19,7 +19,7 @@ spec:
       backoffLimit: 1
       template:
         metadata:
-          name: {{ include "postgresql-single.fullname" . }}-cronjob
+          name: {{ include "postgresql-single.fullname" . }}
           labels:
             {{- include "postgresql-single.crontab.labels" . | nindent 12 }}
             {{- with .Values.podlabels }}
