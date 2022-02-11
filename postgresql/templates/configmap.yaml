@@ -29,7 +29,7 @@ data:
   metrics.sql: |
     CREATE EXTENSION pg_stat_statements;
 
-{{- if .Values.backup.enabled }}
+{{- if or .Values.backup.enabled .Values.backup.recovery }}
   backup.sh: |
     #!/bin/sh
     set -e
@@ -77,5 +77,45 @@ data:
 
     end=`date +%s`
     runtime=$((end-start))
-    echo "*** Recovery time - $runtime"
+    echo "*** Recovery time - ${runtime}s"
+
+  restore-checker.sh: |
+    #!/bin/sh
+    set -e
+
+    export VERSION=LATEST
+
+    echo "*** Star recovery from wal-g backup ($VERSION)"
+    start=`date +%s`
+
+    rm -rf {{ .Values.persistence.mountPath }}/data
+
+    touch {{ .Values.persistence.mountPath }}/postgresql-local.conf
+    mkdir -p {{ .Values.persistence.mountPath }}/data
+    /usr/bin/wal-g --config /etc/walg/walg.yaml backup-fetch {{ .Values.persistence.mountPath }}/data $VERSION
+
+    echo "# bootstrap addons" > $PGDATA/postgresql.auto.conf
+    echo "archive_command = '/bin/true'" >> $PGDATA/postgresql.auto.conf
+
+    touch {{ .Values.persistence.mountPath }}/postgresql-local.conf
+    touch {{ .Values.persistence.mountPath }}/data/recovery.signal
+    chmod 0750 {{ .Values.persistence.mountPath }}/data
+
+    pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -w start
+    sleep 10
+
+    TRIES=30
+    while [ "$TRIES" != "0" ]
+    do
+        echo "* Trying to connect... #$TRIES"
+        psql -U postgres postgres -tAc "SELECT pg_is_in_recovery();" >/dev/null 2>/dev/null && break || sleep 60 && TRIES=`expr "$TRIES" - 1`
+    done
+
+    end=`date +%s`
+    runtime=$((end-start))
+    echo "*** Recovery time - ${runtime}s"
+
+    pg_dumpall -U postgres >/dev/null
+    pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -w stop
+
 {{- end }}

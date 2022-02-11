@@ -88,19 +88,18 @@ spec:
               mountPath: {{ .Values.persistence.mountPath }}
             - name: dshm
               mountPath: /dev/shm
-          {{- if or .Values.postgresqlConfiguration .Values.pgHbaConfiguration }}
             - name: postgresql-config
               mountPath: /postgresql/conf
-          {{- end }}
           {{- if .Values.extraVolumeMounts }}
             {{ toYaml .Values.extraVolumeMounts | nindent 12 }}
           {{- end }}
-          {{- if .Values.backup.enabled }}
+          {{- if or .Values.backup.enabled .Values.backup.recovery }}
             - name: config
               mountPath: /etc/walg
+          {{- if .Values.backup.recovery }}
             - name: recovery
               mountPath: /docker-entrypoint-initdb.d
-          {{- end }}
+          {{- end }}{{- end }}
           {{- if or .Values.tlsCerts.create }}
             - name: tlscerts
               mountPath: /etc/ssl/tlscerts
@@ -148,16 +147,16 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        - name: postgresql-config
-          configMap:
-            name: {{ include "postgresql-single.fullname" . }}
         - name: dshm
           emptyDir:
             medium: Memory
+        - name: postgresql-config
+          configMap:
+            name: {{ include "postgresql-single.fullname" . }}
       {{- if .Values.extraVolumes }}
         {{ toYaml .Values.extraVolumes | nindent 8 }}
       {{- end }}
-      {{- if .Values.backup.enabled }}
+      {{- if or .Values.backup.enabled .Values.backup.recovery }}
         - name: config
           secret:
             secretName:  {{ include "postgresql-single.fullname" . }}
