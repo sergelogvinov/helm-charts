@@ -165,6 +165,10 @@ backupCheck:
       cpu: 100m
       memory: 512Mi
 
+  persistence: {}
+    ## A manually managed Persistent Volume and Claim
+    # existingClaim:
+
   nodeSelector: {}
 
   tolerations: []

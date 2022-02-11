@@ -79,12 +79,16 @@ spec:
                 {{ toYaml .Values.extraVolumeMounts | nindent 16 }}
               {{- end }}
               resources:
-                {{- toYaml .Values.backup.resources | nindent 16 }}
-          {{- with .Values.nodeSelector }}
+                {{- toYaml .Values.backupCheck.resources | nindent 16 }}
+          {{- with .Values.backupCheck.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.tolerations }}
+          {{- with .Values.backupCheck.affinity }}
+          affinity:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.backupCheck.tolerations }}
           tolerations:
             {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -119,10 +123,10 @@ spec:
                 secretName: {{ include "postgresql-single.fullname" . }}-server-tls
                 defaultMode: 256
           {{- end }}
-          {{- if .Values.persistence.existingClaim }}
+          {{- if .Values.backupCheck.persistence.existingClaim }}
             - name: data
               persistentVolumeClaim:
-                claimName: {{ .Values.persistence.existingClaim }}
+                claimName: {{ .Values.backupCheck.persistence.existingClaim }}
           {{- else }}
             - name: data
               emptyDir: {}
