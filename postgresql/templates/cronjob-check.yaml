@@ -1,4 +1,4 @@
-{{- if and .Values.backup.enabled (ne .Values.backup.schedule "") }}
+{{- if and .Values.backupCheck.enabled (ne .Values.backupCheck.schedule "") }}
 {{- if semverCompare ">=1.22" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
 {{- else -}}
@@ -6,22 +6,22 @@ apiVersion: batch/v1beta1
 {{- end }}
 kind: CronJob
 metadata:
-  name: {{ include "postgresql-single.fullname" . }}
+  name: {{ include "postgresql-single.fullname" . }}-check
   labels:
     {{- with .Values.podlabels }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
     {{- include "postgresql-single.crontab.labels" . | nindent 4 }}
-    app.kubernetes.io/component: backup
+    app.kubernetes.io/component: checker
 spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 1
-  schedule: "{{ .Values.backup.schedule }}"
+  schedule: "{{ .Values.backupCheck.schedule }}"
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
       activeDeadlineSeconds: 43200 # 12h
-      backoffLimit: 1
+      backoffLimit: 0
       template:
         metadata:
           name: {{ include "postgresql-single.fullname" . }}
@@ -30,7 +30,7 @@ spec:
             {{ toYaml . | nindent 12 }}
             {{- end }}
             {{- include "postgresql-single.crontab.labels" . | nindent 12 }}
-            app.kubernetes.io/component: backup
+            app.kubernetes.io/component: checker
         spec:
           restartPolicy: Never
           enableServiceLinks: false
@@ -45,64 +45,57 @@ spec:
             - name: {{ .Chart.Name }}
               securityContext:
                 {{- toYaml .Values.securityContext | nindent 16 }}
-              image: "{{ .Values.backup.image.repository }}:{{ .Values.backup.image.tag | default .Chart.AppVersion }}"
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
-              command: ["/bin/sh","-e","/usr/backup/backup.sh"]
-              # command: ["sleep","6000"]
+              command: ["/bin/sh","-e","/usr/backup/restore-checker.sh"]
               env:
+                - name: POSTGRES_INITDB_ARGS
+                  value: --data-checksums --auth-host=scram-sha-256
                 - name: PGAPPNAME
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.name
-                - name: PGUSER
-                  value: "{{ .Values.postgresqlUsername }}"
-                - name: PGPASSWORD
+                - name: PGDATA
+                  value: {{ .Values.persistence.mountPath }}/data
+                - name: POSTGRES_USER
+                  value: {{ .Values.postgresqlUsername | quote }}
+                - name: POSTGRES_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: {{ include "postgresql-single.fullname" . }}
                       key: postgresqlPassword
-                - name: PGHOST
-                  value: "{{ include "postgresql-single.fullname" . }}"
-                - name: PGPORT
-                  value: "{{ .Values.service.port }}"
-                - name: PGDATA
-                  value: "{{ .Values.persistence.mountPath }}/data"
               volumeMounts:
-                - name: postgresql-config
-                  mountPath: /usr/backup/backup.sh
-                  subPath: backup.sh
-                - name: config
-                  mountPath: /etc/walg
                 - name: data
                   mountPath: {{ .Values.persistence.mountPath }}
+                - name: dshm
+                  mountPath: /dev/shm
+                - name: postgresql-config
+                  mountPath: /postgresql/conf
+                - name: config
+                  mountPath: /etc/walg
+                - name: recovery
+                  mountPath: /usr/backup
               {{- if .Values.extraVolumeMounts }}
                 {{ toYaml .Values.extraVolumeMounts | nindent 16 }}
               {{- end }}
               resources:
-                {{- toYaml .Values.backup.resources | nindent 16 }}
-          {{- with .Values.nodeSelector }}
+                {{- toYaml .Values.backupCheck.resources | nindent 16 }}
+          {{- with .Values.backupCheck.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- with .Values.backupCheck.affinity }}
           affinity:
-            podAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchExpressions:
-                      - key: app.kubernetes.io/name
-                        operator: In
-                        values:
-                          - {{ include "postgresql-single.name" . }}
-                      - key: app.kubernetes.io/instance
-                        operator: In
-                        values:
-                          - {{ .Release.Name }}
-                  topologyKey: kubernetes.io/hostname
-          {{- with .Values.tolerations }}
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.backupCheck.tolerations }}
           tolerations:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           volumes:
+            - name: dshm
+              emptyDir:
+                medium: Memory
             - name: postgresql-config
               configMap:
                 name: {{ include "postgresql-single.fullname" . }}
@@ -114,6 +107,13 @@ spec:
                 items:
                   - key: walg.yaml
                     path: walg.yaml
+            - name: recovery
+              configMap:
+                name: {{ include "postgresql-single.fullname" . }}
+                defaultMode: 493
+                items:
+                  - key: restore-checker.sh
+                    path: restore-checker.sh
           {{- if .Values.extraVolumes -}}
             {{ toYaml .Values.extraVolumes | nindent 12 }}
           {{- end -}}
@@ -123,16 +123,12 @@ spec:
                 secretName: {{ include "postgresql-single.fullname" . }}-server-tls
                 defaultMode: 256
           {{- end }}
-          {{- if not .Values.persistence.enabled }}
-            - name: data
-              emptyDir: {}
-          {{- else if .Values.persistence.existingClaim }}
+          {{- if .Values.backupCheck.persistence.existingClaim }}
             - name: data
               persistentVolumeClaim:
-                claimName: {{ .Values.persistence.existingClaim }}
+                claimName: {{ .Values.backupCheck.persistence.existingClaim }}
           {{- else }}
             - name: data
-              persistentVolumeClaim:
-                claimName: data-{{ include "postgresql-single.fullname" . }}-0
+              emptyDir: {}
           {{- end }}
 {{- end }}

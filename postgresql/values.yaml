@@ -130,6 +130,8 @@ updateStrategy:
 
 backup:
   enabled: false
+  recovery: false
+
   image:
     repository: koehn/postgres-wal-g
     pullPolicy: IfNotPresent
@@ -138,8 +140,10 @@ backup:
   walpush: false
   walg: ~
 
-  schedule: "15 4 * * *"
   cleanPolicy: "retain FULL 3"
+
+  # set value "" to disable cron backup
+  schedule: "15 4 * * *"
 
   resources:
     limits:
@@ -148,6 +152,28 @@ backup:
     requests:
       cpu: 100m
       memory: 512Mi
+
+backupCheck:
+  enabled: false
+  schedule: "15 8 * * *"
+
+  resources:
+    limits:
+      cpu: 2
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 512Mi
+
+  persistence: {}
+    ## A manually managed Persistent Volume and Claim
+    # existingClaim:
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
 
 metrics:
   enabled: false

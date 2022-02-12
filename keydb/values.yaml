@@ -62,6 +62,8 @@ loadbalancer:
 
 backup:
   enabled: false
+  recovery: false
+
   image:
     repository: eqalpha/keydb
     pullPolicy: IfNotPresent
@@ -70,7 +72,9 @@ backup:
 
   walg: ~
 
+  # schedule: "" to disable cron backup
   schedule: "15 4 * * *"
+
   cleanPolicy: "retain FULL 3"
 
   resources:

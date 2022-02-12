@@ -1,4 +1,4 @@
-{{- if .Values.backup.enabled }}
+{{- if and .Values.backup.enabled (ne .Values.backup.schedule "") }}
 {{- if semverCompare ">=1.22" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
 {{- else -}}
