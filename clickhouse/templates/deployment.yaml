@@ -95,3 +95,10 @@ spec:
             items:
               - key: dictionaries.xml
                 path: dictionaries.xml
+        - name: data
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ default (include "clickhouse.fullname" .) .Values.persistence.existingClaim }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}

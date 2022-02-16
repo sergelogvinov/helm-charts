@@ -64,6 +64,14 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+persistence:
+  enabled: true
+  storageClass: local-path
+  accessModes:
+    - ReadWriteOnce
+  size: 64Gi
+  annotations: {}
+
 nodeSelector: {}
 
 tolerations: []
@@ -71,7 +79,7 @@ tolerations: []
 affinity: {}
 
 metrics:
-  enabled: true
+  enabled: false
 
 #
 # clickhouse specific

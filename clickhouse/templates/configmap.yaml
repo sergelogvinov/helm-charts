@@ -33,7 +33,7 @@ data:
             </default>
         </quotas>
         {{- range .Values.clickhouse.users }}
-        <users incl="users" replace="replace">
+        <users replace="replace">
             <{{ .name }}>
                 <password_sha256_hex>{{ .password }}</password_sha256_hex>
                 <profile>{{ .profile | default "default" }}</profile>
