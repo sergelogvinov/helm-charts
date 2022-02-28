@@ -37,7 +37,7 @@ data:
     /usr/bin/wal-g --config /etc/walg/walg.yaml backup-push
     /usr/bin/wal-g --config /etc/walg/walg.yaml backup-list --pretty --detail
     /usr/bin/wal-g --config /etc/walg/walg.yaml wal-show ||:
-    # /usr/bin/wal-g --config /etc/walg/walg.yaml wal-verify integrity
+    /usr/bin/wal-g --config /etc/walg/walg.yaml wal-verify integrity ||:
     # /usr/bin/wal-g --config /etc/walg/walg.yaml delete {{ .Values.backup.cleanPolicy }} --confirm ||:
 
   restore.sh: |
@@ -102,7 +102,7 @@ data:
     chmod 0750 {{ .Values.persistence.mountPath }}/data
 
     pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -w start
-    sleep 10
+    sleep 60
 
     TRIES=30
     while [ "$TRIES" != "0" ]
@@ -110,12 +110,13 @@ data:
         echo "* Trying to connect... #$TRIES"
         psql -U postgres postgres -tAc "SELECT pg_is_in_recovery();" >/dev/null 2>/dev/null && break || sleep 60 && TRIES=`expr "$TRIES" - 1`
     done
+    psql -U postgres postgres -tAc "SELECT pg_promote()" ||:
 
     end=`date +%s`
     runtime=$((end-start))
     echo "*** Recovery time - ${runtime}s"
 
     pg_dumpall -U postgres >/dev/null
-    pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -w stop
+    pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -w stop
 
 {{- end }}

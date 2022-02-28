@@ -90,6 +90,8 @@ nodeSelector: {}
 
 tolerations: []
 
+# soft/hard
+podAntiAffinityPreset: soft
 affinity: {}
 
 metrics:

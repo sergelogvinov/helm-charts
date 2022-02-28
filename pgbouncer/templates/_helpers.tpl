@@ -54,6 +54,45 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Return a podAffinity/podAntiAffinity definition
+*/}}
+{{- define "affinities.pods" -}}
+  {{- if eq .Values.podAntiAffinityPreset "soft" }}
+    {{- include "affinities.pods.soft" . -}}
+  {{- else if eq .Values.podAntiAffinityPreset "hard" }}
+    {{- include "affinities.pods.hard" . -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Return a soft podAntiAffinity definition
+*/}}
+{{- define "affinities.pods.soft" -}}
+podAntiAffinity:
+  preferredDuringSchedulingIgnoredDuringExecution:
+    - podAffinityTerm:
+        labelSelector:
+          matchLabels: {{- (include "pgbouncer.selectorLabels" .) | nindent 12 }}
+        namespaces:
+          - {{ .Release.Namespace | quote }}
+        topologyKey: kubernetes.io/hostname
+      weight: 1
+{{- end -}}
+
+{{/*
+Return a hard podAntiAffinity definition
+*/}}
+{{- define "affinities.pods.hard" -}}
+podAntiAffinity:
+  requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchLabels: {{- (include "pgbouncer.selectorLabels" .) | nindent 10 }}
+      namespaces:
+        - {{ .Release.Namespace | quote }}
+      topologyKey: kubernetes.io/hostname
+{{- end -}}
+
+{{/*
 Create the pgmetricsPassword
 */}}
 {{- define "pgbouncer.pgmetricsPassword" -}}
