@@ -165,9 +165,15 @@ backupCheck:
       cpu: 100m
       memory: 512Mi
 
-  persistence: {}
+  persistence:
     ## A manually managed Persistent Volume and Claim
     # existingClaim:
+    #
+    # storageClass: "-"
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+    annotations: {}
 
   nodeSelector: {}
 
