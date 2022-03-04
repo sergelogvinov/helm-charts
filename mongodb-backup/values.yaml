@@ -22,6 +22,10 @@ auth:
   username: root
   password: root
 
+env:
+  - name: HOME
+    value: /var/backups
+
 # walg: |
 #   GOOGLE_APPLICATION_CREDENTIALS: /etc/gcp/backup.json
 

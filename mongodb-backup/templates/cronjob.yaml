@@ -43,9 +43,10 @@ spec:
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               command: ["/entrypoint.d/backup.sh"]
               # command: ["sleep","6000000"]
+              {{- if .Values.env }}
               env:
-                - name: HOME
-                  value: /var/backups
+                {{- toYaml .Values.env | nindent 16 }}
+              {{- end }}
               volumeMounts:
                 - name: command
                   mountPath: /entrypoint.d
@@ -53,7 +54,7 @@ spec:
                   mountPath: /etc/walg
                   readOnly: true
               {{- if .Values.extraVolumeMounts }}
-                {{ toYaml .Values.extraVolumeMounts | nindent 16 }}
+                {{- toYaml .Values.extraVolumeMounts | nindent 16 }}
               {{- end }}
               {{- if .Values.persistence.enabled }}
                 - name: backup
