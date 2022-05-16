@@ -6,7 +6,7 @@ apiVersion: batch/v1beta1
 {{- end }}
 kind: CronJob
 metadata:
-  name: {{ include "postgresql-single.fullname" . }}-check
+  name: {{ include "postgresql-single.fullname" . }}-backup-check
   labels:
     {{- with .Values.podlabels }}
     {{ toYaml . | nindent 4 }}

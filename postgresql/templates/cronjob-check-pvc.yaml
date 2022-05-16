@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: data-{{ include "postgresql-single.fullname" . }}-check
+  name: data-{{ include "postgresql-single.fullname" . }}-backup-check
   labels:
     {{- with .Values.podlabels }}
     {{ toYaml . | nindent 4 }}
