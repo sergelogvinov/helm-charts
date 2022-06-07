@@ -158,7 +158,9 @@ archive_command = '/usr/bin/wal-g --config /etc/walg/walg.yaml wal-push %p'
 {{- else }}
 archive_command = '/bin/true'
 {{- end }}
+{{- if .Values.backup.recovery }}
 restore_command = '/usr/bin/wal-g --config /etc/walg/walg.yaml wal-fetch %f %p'
+{{- end }}
 {{- else }}
 archive_command = '/bin/true'
 {{- end }}
