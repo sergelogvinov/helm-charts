@@ -210,7 +210,9 @@ Create the walg configuration
 */}}
 {{- define "postgresql-single.walg" -}}
 {{- if not .Values.backup.walg }}
-WALG_TAR_SIZE_THRESHOLD: 21474836480
+WALG_TAR_SIZE_THRESHOLD: 274877906944
+WALG_TAR_DISABLE_FSYNC: true
+WALG_UPLOAD_WAL_METADATA: INDIVIDUAL
 WALG_COMPRESSION_METHOD: brotli
 WALG_DELTA_MAX_STEPS: 4
 WALG_FILE_PREFIX: {{ .Values.persistence.mountPath }}/backup

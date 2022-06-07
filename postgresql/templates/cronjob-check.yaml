@@ -130,7 +130,7 @@ spec:
           {{- else if .Values.backupCheck.persistence.storageClass }}
             - name: data
               persistentVolumeClaim:
-                claimName: data-{{ include "postgresql-single.fullname" . }}-check
+                claimName: data-{{ include "postgresql-single.fullname" . }}-backup-check
           {{- else }}
             - name: data
               emptyDir: {}
