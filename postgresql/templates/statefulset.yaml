@@ -54,7 +54,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          # command: ["sleep","6000"]
+          # command: ["sleep","600000"]
           args:
             - postgres
             - -c
@@ -66,12 +66,6 @@ spec:
           env:
             - name: POSTGRES_INITDB_ARGS
               value: --data-checksums --auth-host=scram-sha-256
-            - name: PGAPPNAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: PGDATA
-              value: {{ .Values.persistence.mountPath }}/data
             - name: POSTGRES_USER
               value: {{ .Values.postgresqlUsername | quote }}
             - name: POSTGRES_PASSWORD
@@ -79,6 +73,14 @@ spec:
                 secretKeyRef:
                   name: {{ include "postgresql-single.fullname" . }}
                   key: postgresqlPassword
+            - name: PGAPPNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: PGUSER
+              value: {{ .Values.postgresqlUsername | quote }}
+            - name: PGDATA
+              value: {{ .Values.persistence.mountPath }}/data
           ports:
             - name: postgresql
               containerPort: 5432
@@ -100,7 +102,7 @@ spec:
             - name: recovery
               mountPath: /docker-entrypoint-initdb.d
           {{- end }}{{- end }}
-          {{- if or .Values.tlsCerts.create }}
+          {{- if .Values.tlsCerts.create }}
             - name: tlscerts
               mountPath: /etc/ssl/tlscerts
           {{- end }}
@@ -115,13 +117,13 @@ spec:
               value: metrics
             - name: DATA_SOURCE_URI
               value: {{ template "postgresql-single.data_source_uri" . }}
+            - name: DATA_SOURCE_USER
+              value: {{ .Values.metrics.username }}
             - name: DATA_SOURCE_PASS
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql-single.fullname" . }}
                   key: postgresqlPassword
-            - name: DATA_SOURCE_USER
-              value: {{ .Values.postgresqlUsername }}
             - name: PG_EXPORTER_EXTEND_QUERY_PATH
               value: /etc/exporter/queries.yaml
           volumeMounts:

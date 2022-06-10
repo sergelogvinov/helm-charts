@@ -21,7 +21,7 @@ spec:
   jobTemplate:
     spec:
       activeDeadlineSeconds: 43200 # 12h
-      backoffLimit: 1
+      backoffLimit: 0
       template:
         metadata:
           name: {{ include "postgresql-single.fullname" . }}

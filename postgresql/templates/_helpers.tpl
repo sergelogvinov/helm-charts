@@ -137,7 +137,7 @@ wal_writer_flush_after = 1MB
 
 max_replication_slots = 8
 max_wal_senders = 8
-max_wal_size = 1024MB
+max_wal_size = 10240MB
 min_wal_size = 512MB
 
 # Checkpointing:

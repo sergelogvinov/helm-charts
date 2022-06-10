@@ -10,6 +10,7 @@ data:
     {{- include "postgresql-single.postgresqlConfigurationLogs" . | nindent 4 }}
 
   {{- if gt (int .Values.postgresqlServerMemory) (int "511") }}
+
     # auto generated
     shared_buffers = {{ div .Values.postgresqlServerMemory 4 }}MB
     work_mem = {{ div .Values.postgresqlServerMemory 32 }}MB
@@ -58,12 +59,16 @@ data:
 
     echo "# bootstrap addons" > $PGDATA/postgresql.auto.conf
     echo "archive_command = '/bin/true'" >> $PGDATA/postgresql.auto.conf
-    # echo "primary_conninfo = 'host=postgres user=replication password=replication'" >> $PGDATA/postgresql.auto.conf
+
+  {{- if .Values.postgresqlConninfo }}
+    echo "primary_conninfo = '{{ .Values.postgresqlConninfo }}'" >> $PGDATA/postgresql.auto.conf
+    touch {{ .Values.persistence.mountPath }}/data/standby.signal
+    touch {{ .Values.persistence.mountPath }}/data/recovery.signal
+  {{- end }}
 
     touch {{ .Values.persistence.mountPath }}/postgresql-local.conf
     touch {{ .Values.persistence.mountPath }}/data/recovery.signal
-    # touch {{ .Values.persistence.mountPath }}/data/standby.signal
-    chmod 0750 {{ .Values.persistence.mountPath }}/data
+    chmod 0700 {{ .Values.persistence.mountPath }}/data
 
     pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -w start
     sleep 10
@@ -99,7 +104,7 @@ data:
 
     touch {{ .Values.persistence.mountPath }}/postgresql-local.conf
     touch {{ .Values.persistence.mountPath }}/data/recovery.signal
-    chmod 0750 {{ .Values.persistence.mountPath }}/data
+    chmod 0700 {{ .Values.persistence.mountPath }}/data
 
     pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -w start
     sleep 60
@@ -117,6 +122,5 @@ data:
     echo "*** Recovery time - ${runtime}s"
 
     pg_dumpall -U postgres >/dev/null
-    pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -w stop
-
+    pg_ctl -D "$PGDATA" -w stop
 {{- end }}

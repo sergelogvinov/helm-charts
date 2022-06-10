@@ -31,6 +31,8 @@ postgresqlUsername: postgres
 # postgresqlConfiguration:
 # postgresqlConfigurationLogs:
 
+# postgresqlConninfo: host=postgres user=postgres
+
 pgHbaConfiguration: |-
   # host  database    user                  address       auth-method
   #
@@ -150,7 +152,7 @@ backup:
       cpu: 2
       memory: 1Gi
     requests:
-      cpu: 100m
+      cpu: 1500m
       memory: 512Mi
 
 backupCheck:
@@ -189,6 +191,7 @@ metrics:
     tag: v0.9.0
 
   database: postgres
+  username: postgres
 
   queries: |-
     pg_replication:
