@@ -100,7 +100,8 @@ data:
     /usr/bin/wal-g --config /etc/walg/walg.yaml backup-fetch {{ .Values.persistence.mountPath }}/data $VERSION
 
     echo "# bootstrap addons" > $PGDATA/postgresql.auto.conf
-    echo "archive_command = '/bin/true'" >> $PGDATA/postgresql.auto.conf
+    echo "archive_command = '/bin/true'"                                                   >> $PGDATA/postgresql.auto.conf
+    echo "restore_command = '/usr/bin/wal-g --config /etc/walg/walg.yaml wal-fetch %f %p'" >> $PGDATA/postgresql.auto.conf
 
     touch {{ .Values.persistence.mountPath }}/postgresql-local.conf
     touch {{ .Values.persistence.mountPath }}/data/recovery.signal
@@ -123,4 +124,6 @@ data:
 
     pg_dumpall -U postgres >/dev/null
     pg_ctl -D "$PGDATA" -w stop
+
+    rm -rf {{ .Values.persistence.mountPath }}/data
 {{- end }}

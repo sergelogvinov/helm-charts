@@ -119,17 +119,16 @@ spec:
               value: {{ template "postgresql-single.data_source_uri" . }}
             - name: DATA_SOURCE_USER
               value: {{ .Values.metrics.username }}
-            - name: DATA_SOURCE_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "postgresql-single.fullname" . }}
-                  key: postgresqlPassword
+            - name: DATA_SOURCE_PASS_FILE
+              value: /etc/pg/.pgpass
             - name: PG_EXPORTER_EXTEND_QUERY_PATH
               value: /etc/exporter/queries.yaml
           volumeMounts:
             - name: postgresql-config
               mountPath: /etc/exporter/queries.yaml
               subPath: queries.yaml
+            - name: pgpass
+              mountPath: /etc/pg
           ports:
             - name: metrics
               containerPort: 9187
@@ -178,6 +177,15 @@ spec:
         - name: tlscerts
           secret:
             secretName: {{ include "postgresql-single.fullname" . }}-server-tls
+            defaultMode: 256
+      {{- end }}
+      {{- if .Values.metrics.enabled }}
+        - name: pgpass
+          secret:
+            secretName: {{ include "postgresql-single.fullname" . }}
+            items:
+              - key: postgresqlPassword
+                path: .pgpass
             defaultMode: 256
       {{- end }}
 {{- if not .Values.persistence.enabled }}
