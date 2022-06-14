@@ -11,3 +11,6 @@ data:
 
     wal-g --config /etc/walg/walg.yaml backup-push
     wal-g --config /etc/walg/walg.yaml backup-list
+    {{- if .Values.cleanPolicy }}
+    wal-g --config /etc/walg/walg.yaml delete {{ .Values.cleanPolicy }} --confirm ||:
+    {{- end }}

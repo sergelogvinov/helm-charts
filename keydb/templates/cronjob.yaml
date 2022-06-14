@@ -6,7 +6,7 @@ apiVersion: batch/v1beta1
 {{- end }}
 kind: CronJob
 metadata:
-  name: {{ include "keydb.fullname" . }}
+  name: {{ include "keydb.fullname" . }}-backup
   labels:
     {{- include "keydb.crontab.labels" . | nindent 4 }}
 spec:

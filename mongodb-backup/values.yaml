@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: mongodb:4.4.10
+  repository: mongodb
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -15,6 +15,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 schedule: "0 1 * * *"
+cleanPolicy: "retain 3 --retain-count 3"
 activeDeadlineSeconds: 3600 # 1h
 
 auth:

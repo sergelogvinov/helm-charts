@@ -252,9 +252,7 @@ backend keydb_master
 {{- end }}
 
   server RS {{ printf "%s.%s:%s" $name $domain $port }} backup no-check resolvers clusterdns
-{{- range $i := until (int .Values.replicaCount) }}
-  server {{ printf "R%d %s-%d.%s-headless.%s:%s" $i $name $i $name $domain $port }} resolvers clusterdns
-{{- end }}
+  server-template R {{if le (int .Values.replicaCount) 3}}3{{else}}{{ .Values.replicaCount }}{{end}} {{ printf "%s-headless.%s:%s" $name $domain $port }} resolvers clusterdns
 {{ end }}
 
 
