@@ -116,7 +116,7 @@ data:
         echo "* Trying to connect... #$TRIES"
         psql -U postgres postgres -tAc "SELECT pg_is_in_recovery();" >/dev/null 2>/dev/null && break || sleep 60 && TRIES=`expr "$TRIES" - 1`
     done
-    psql -U postgres postgres -tAc "SELECT pg_promote()" ||:
+    pg_ctl -D "$PGDATA" -w -t 600 promote ||:
 
     end=`date +%s`
     runtime=$((end-start))
