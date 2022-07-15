@@ -19,20 +19,19 @@ spec:
       {{- include "postgresql-single.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.metrics.enabled }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9187"
+      {{- end}}
       labels:
         {{- include "postgresql-single.selectorLabels" . | nindent 8 }}
         {{- with .Values.podlabels }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
-      {{- if .Values.metrics.enabled }}
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "9187"
-      {{- end}}
     spec:
       enableServiceLinks: false
       {{- if .Values.priorityClassName }}
