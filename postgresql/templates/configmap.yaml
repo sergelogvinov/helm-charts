@@ -85,13 +85,15 @@ data:
     echo "*** Recovery time - ${runtime}s"
 
   restore-checker.sh: |
-    #!/bin/sh
+    #!/bin/sh -e
     set -e
 
     export VERSION=LATEST
 
     echo "*** Star recovery from wal-g backup ($VERSION)"
     start=`date +%s`
+
+    trap 'rm -rf {{ .Values.persistence.mountPath }}/data; exit 1' 9 15
 
     rm -rf {{ .Values.persistence.mountPath }}/data
 
