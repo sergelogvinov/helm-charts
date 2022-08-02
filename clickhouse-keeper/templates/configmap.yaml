@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "clickhouse-keeper.fullname" . }}
+  labels:
+    {{- include "clickhouse-keeper.labels" . | nindent 4 }}
+data:
+  keeper-config.xml: |
+    <clickhouse>
+        <logger>
+            <level>trace</level>
+            <console>true</console>
+        </logger>
+        <listen_host>0.0.0.0</listen_host>
+        <keeper_server>
+            <path>/var/lib/clickhouse-keeper</path>
+            <tcp_port>2181</tcp_port>
+            <four_letter_word_white_list>*</four_letter_word_white_list>
+            <coordination_settings>
+                <raft_logs_level>information</raft_logs_level>
+            </coordination_settings>
+
+            <server_id>0</server_id>
+            <raft_configuration>
+                <server>
+                    <id>0</id>
+                    <hostname>{{ include "clickhouse-keeper.fullname" . }}-0</hostname>
+                    <port>9444</port>
+                </server>
+            </raft_configuration>
+
+        </keeper_server>
+    </clickhouse>
