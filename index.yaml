@@ -1,0 +1,69 @@
+apiVersion: v1
+entries:
+  clickhouse:
+  - apiVersion: v2
+    appVersion: 21.11.6
+    created: "2022-08-12T14:48:17.221313388Z"
+    description: A Helm chart for Kubernetes
+    digest: d69e0da2585b20640c13d70d4042b2f88a04285ebe0dcd4882261abda68f9f66
+    name: clickhouse
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-0.1.0/clickhouse-0.1.0.tgz
+    version: 0.1.0
+  clickhouse-keeper:
+  - apiVersion: v2
+    appVersion: 22.6.4.35-alpine
+    created: "2022-08-12T14:48:17.48890411Z"
+    description: A Helm chart for Kubernetes
+    digest: dc2791ad5e0806db4eef18b1fdeef6b3978cd082f25ed993d3d426e8542af527
+    name: clickhouse-keeper
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-keeper-0.1.0/clickhouse-keeper-0.1.0.tgz
+    version: 0.1.0
+  keydb:
+  - apiVersion: v2
+    appVersion: x86_64_v6.2.0
+    created: "2022-08-12T14:48:17.746653948Z"
+    description: A Helm chart for Kubernetes
+    digest: 4067e8afd4836a7a99a173bd4d8c7d321475ce7392f376a35d3a931686a70ca8
+    name: keydb
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.2.3/keydb-0.2.3.tgz
+    version: 0.2.3
+  mongodb-backup:
+  - apiVersion: v2
+    appVersion: 4.4.14
+    created: "2022-08-12T14:48:18.031016375Z"
+    description: A Helm chart for Kubernetes
+    digest: 5f26c5246d78487f54840b443ab61e03a52ecd3ee5b7e3886b99b11a0f780166
+    name: mongodb-backup
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongodb-backup-0.1.0/mongodb-backup-0.1.0.tgz
+    version: 0.1.0
+  mongosqld:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-08-12T14:48:18.287346887Z"
+    description: A Helm chart for Kubernetes
+    digest: 1eac552e4910548da25119634bd3f9a9efe237af804b37289f3546bf886797f7
+    name: mongosqld
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongosqld-0.1.0/mongosqld-0.1.0.tgz
+    version: 0.1.0
+  pgbouncer:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-08-12T14:48:18.559735139Z"
+    description: A Helm chart for Kubernetes
+    digest: 9065b0da99d312b03bffef4c91f9e3c7b6ad675f574e30c25545bea5d7f08e16
+    name: pgbouncer
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.0/pgbouncer-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-08-12T14:48:18.55974564Z"
