@@ -32,18 +32,19 @@ data:
                 </interval>
             </default>
         </quotas>
-        {{- range .Values.clickhouse.users }}
         <users replace="replace">
+        {{- range .Values.clickhouse.users }}
             <{{ .name }}>
                 <password_sha256_hex>{{ .password }}</password_sha256_hex>
                 <profile>{{ .profile | default "default" }}</profile>
                 <quota>{{ .quota | default "default" }}</quota>
                 <networks>
                     <ip>::/0</ip>
+                    <ip>0.0.0.0/0</ip>
                 </networks>
             </{{ .name }}>
-        </users>
         {{- end }}
+        </users>
     </yandex>
 
   dictionaries.xml: |-

@@ -14,6 +14,9 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+updateStrategy:
+  type: RollingUpdate
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -33,12 +36,15 @@ podSecurityContext:
   fsGroupChangePolicy: "OnRootMismatch"
 
 securityContext:
+  seccompProfile:
+    type: RuntimeDefault
+  allowPrivilegeEscalation: false
   capabilities:
     drop:
     - ALL
-    add:
-    - SYS_NICE
-    - IPC_LOCK
+    # add:
+    # - SYS_NICE
+    # - IPC_LOCK
   # readOnlyRootFilesystem: true
 
 service:
