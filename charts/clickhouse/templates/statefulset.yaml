@@ -55,7 +55,7 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 10
             timeoutSeconds: 5
-            failureThreshold: 30
+            failureThreshold: 600
             periodSeconds: 10
           # livenessProbe:
           #   httpGet:
@@ -71,6 +71,8 @@ spec:
               mountPath: /etc/clickhouse-server/users.d
             - name: dictionaries
               mountPath: /etc/clickhouse-server/dictionaries.d
+            - name: config
+              mountPath: /etc/clickhouse-server/config.d
             - name: data
               mountPath: /var/lib/clickhouse/
           resources:
@@ -100,6 +102,14 @@ spec:
             items:
               - key: dictionaries.xml
                 path: dictionaries.xml
+        - name: config
+          configMap:
+            name: {{ include "clickhouse.fullname" . }}
+            items:
+              - key: config.xml
+                path: config.xml
+              - key: storage.xml
+                path: storage.xml
 {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: data
           persistentVolumeClaim:

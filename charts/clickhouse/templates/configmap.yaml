@@ -6,7 +6,7 @@ metadata:
     {{- include "clickhouse.labels" . | nindent 4 }}
 data:
   users.xml: |-
-    <yandex>
+    <clickhouse>
         <profiles>
             <default>
                 <max_memory_usage>10000000000</max_memory_usage>
@@ -45,8 +45,55 @@ data:
             </{{ .name }}>
         {{- end }}
         </users>
-    </yandex>
+    </clickhouse>
 
   dictionaries.xml: |-
     <dictionaries>
     </dictionaries>
+
+  config.xml: |-
+    <clickhouse>
+        <listen_host>::</listen_host>
+        <listen_host>0.0.0.0</listen_host>
+        <listen_try>1</listen_try>
+
+        <logger>
+            <level>debug</level>
+            <console>1</console>
+            <size>1000M</size>
+            <count>2</count>
+        </logger>
+
+        {{ default "" .Values.config | nindent 8 }}
+    </clickhouse>
+
+  storage.xml: |-
+    <clickhouse>
+        <storage_configuration>
+            <disks>
+                {{- range $key, $val := .Values.storage.disks }}
+                <{{ $key }}>
+                    {{- range $k, $v := $val }}
+                    <{{ $k }}>{{ $v }}</{{ $k }}>
+                    {{- end }}
+                </{{ $key }}>
+                {{- end }}
+            </disks>
+            <policies>
+                {{- range $key, $val := .Values.storage.policies }}
+                <{{ $key }}>
+                    <volumes>
+                        <default>
+                            <disk>default</disk>
+                        </default>
+                        <{{ $key }}>
+                            {{- range $k, $v := $val }}
+                            <{{ $k }}>{{ $v }}</{{ $k }}>
+                            {{- end }}
+                        </{{ $key }}>
+                    </volumes>
+                </{{ $key }}>
+                {{- end }}
+            </policies>
+        </storage_configuration>
+    </clickhouse>
