@@ -109,6 +109,12 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- if .Values.metrics.enabled }}
         - name: metrics
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
           image: "{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}"
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           env:

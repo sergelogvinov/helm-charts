@@ -63,6 +63,16 @@ data:
             <size>1000M</size>
             <count>2</count>
         </logger>
+        {{- if .Values.metrics.enabled }}
+        <prometheus>
+            <endpoint>/metrics</endpoint>
+            <port>9363</port>
+            <metrics>true</metrics>
+            <events>true</events>
+            <asynchronous_metrics>false</asynchronous_metrics>
+            <status_info>true</status_info>
+        </prometheus>
+        {{- end }}
 
         {{ default "" .Values.config | nindent 8 }}
     </clickhouse>
