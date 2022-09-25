@@ -1,3 +1,4 @@
+{{- if and .Values.backupCheck.enabled (ne .Values.backupCheck.schedule "") }}
 {{- if semverCompare ">=1.22" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
 {{- else -}}
@@ -5,21 +6,22 @@ apiVersion: batch/v1beta1
 {{- end }}
 kind: CronJob
 metadata:
-  name: {{ include "mongodb-backup.fullname" . }}
+  name: {{ include "mongodb-backup.fullname" . }}-check
   labels:
     {{- with .Values.podlabels }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
     {{- include "mongodb-backup.labels" . | nindent 4 }}
+    app.kubernetes.io/component: checker
 spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 1
-  schedule: "{{ .Values.schedule }}"
+  schedule: "{{ .Values.backupCheck.schedule }}"
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
-      activeDeadlineSeconds: {{ .Values.activeDeadlineSeconds }}
-      backoffLimit: 1
+      activeDeadlineSeconds: 43200
+      backoffLimit: 0
       template:
         metadata:
           name: {{ include "mongodb-backup.fullname" . }}
@@ -28,6 +30,7 @@ spec:
             {{ toYaml . | nindent 12 }}
             {{- end }}
             {{- include "mongodb-backup.selectorLabels" . | nindent 12 }}
+            app.kubernetes.io/component: checker
         spec:
           restartPolicy: Never
           enableServiceLinks: false
@@ -40,43 +43,46 @@ spec:
           {{- end }}
           serviceAccountName: {{ include "mongodb-backup.serviceAccountName" . }}
           securityContext:
-            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+            {{- toYaml .Values.backupCheck.podSecurityContext | nindent 12 }}
           containers:
             - name: {{ .Chart.Name }}
               securityContext:
-                {{- toYaml .Values.securityContext | nindent 16 }}
+                {{- toYaml .Values.backupCheck.securityContext | nindent 16 }}
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
-              command: ["/docker-entrypoint-initdb.d/backup.sh"]
-              # command: ["sleep","6000000"]
-              {{- if .Values.env }}
+              # command: ["sleep","6000"]
+              args: ["/opt/bitnami/scripts/mongodb/setup.sh"]
               env:
-                {{- toYaml .Values.env | nindent 16 }}
-              {{- end }}
+                - name: MONGODB_REPLICA_SET_MODE
+                  value: primary
+                - name: MONGODB_ROOT_USER
+                  value: {{ .Values.auth.username }}
+                - name: MONGODB_ROOT_PASSWORD
+                  value: {{ .Values.auth.password }}
+                - name: MONGODB_REPLICA_SET_KEY
+                  value: {{ .Values.auth.password }}
               volumeMounts:
                 - name: command
                   mountPath: /docker-entrypoint-initdb.d
                 - name: walg
                   mountPath: /etc/walg
                   readOnly: true
+                - name: data
+                  mountPath: /bitnami/mongodb
               {{- if .Values.extraVolumeMounts }}
                 {{- toYaml .Values.extraVolumeMounts | nindent 16 }}
               {{- end }}
-              {{- if .Values.persistence.enabled }}
-                - name: backup
-                  mountPath: /backup
-              {{- end }}
               resources:
-                {{- toYaml .Values.resources | nindent 16 }}
-          {{- with .Values.nodeSelector }}
+                {{- toYaml .Values.backupCheck.resources | nindent 16 }}
+          {{- with .Values.backupCheck.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.affinity }}
+          {{- with .Values.backupCheck.affinity }}
           affinity:
-            {{- toYaml . | nindent 12 }}
+            {{- toYaml . | nindent 8 }}
           {{- end }}
-          {{- with .Values.tolerations }}
+          {{- with .Values.backupCheck.tolerations }}
           tolerations:
             {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -85,19 +91,26 @@ spec:
               configMap:
                 name: {{ include "mongodb-backup.fullname" . }}
                 defaultMode: 360
+                items:
+                  - key: restore.sh
+                    path: restore.sh
             - name: walg
               secret:
                 secretName:  {{ include "mongodb-backup.fullname" . }}
-                defaultMode: 256
-          {{- if .Values.extraVolumes }}
+                defaultMode: 288
+          {{- if .Values.extraVolumes -}}
             {{ toYaml .Values.extraVolumes | nindent 12 }}
-          {{- end }}
-{{- if .Values.persistence.enabled }}
-            - name: backup
+          {{- end -}}
+          {{- if .Values.backupCheck.persistence.existingClaim }}
+            - name: data
               persistentVolumeClaim:
-{{- if .Values.persistence.existingClaim }}
-                claimName: {{ .Values.persistence.existingClaim }}
-{{- else }}
-                claimName: datadir-{{ include "mongodb-backup.fullname" . }}
-{{- end }}
+                claimName: {{ .Values.backupCheck.persistence.existingClaim }}
+          {{- else if .Values.backupCheck.persistence.storageClass }}
+            - name: data
+              persistentVolumeClaim:
+                claimName: data-{{ include "mongodb-backup.fullname" . }}-check
+          {{- else }}
+            - name: data
+              emptyDir: {}
+          {{- end }}
 {{- end }}

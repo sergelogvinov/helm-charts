@@ -18,6 +18,34 @@ schedule: "0 1 * * *"
 cleanPolicy: "retain 3 --retain-count 3"
 activeDeadlineSeconds: 3600 # 1h
 
+backupCheck:
+  enabled: false
+  schedule: "15 8 * * *"
+
+  resources:
+    limits:
+      cpu: 2
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 512Mi
+
+  persistence:
+    ## A manually managed Persistent Volume and Claim
+    # existingClaim:
+    #
+    # storageClass: "-"
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+    annotations: {}
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
 auth:
   host: mongo-headless:27017/?authSource=admin
   username: root

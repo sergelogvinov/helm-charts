@@ -72,6 +72,13 @@ mongodb://{{ .Values.auth.username }}:{{ .Values.auth.password }}@{{ .Values.aut
 {{- end }}
 
 {{/*
+Create the mongodb connection configuration
+*/}}
+{{- define "mongodb-backup-localhost.mongodb" -}}
+mongodb://{{ .Values.auth.username }}:{{ .Values.auth.password }}@localhost
+{{- end }}
+
+{{/*
 Create the walg configuration
 */}}
 {{- define "mongodb-backup.walg" -}}
@@ -85,5 +92,22 @@ WALG_FILE_PREFIX: /backup
 
 MONGODB_URI:                 '{{ include "mongodb-backup.mongodb" . }}'
 WALG_STREAM_CREATE_COMMAND:  'mongodump --archive --oplog --uri="{{ include "mongodb-backup.mongodb" . }}"'
-WALG_STREAM_RESTORE_COMMAND: 'mongorestore --archive --oplogReplay --uri="{{ include "mongodb-backup.mongodb" . }}"'
+WALG_STREAM_RESTORE_COMMAND: 'mongorestore --archive --oplogReplay --uri="{{ include "mongodb-backup-localhost.mongodb" . }}"'
+{{- end }}
+
+{{/*
+Create the walg backup-check configuration
+*/}}
+{{- define "mongodb-backup-check.walg" -}}
+WALG_COMPRESSION_METHOD: brotli
+
+{{- if not .Values.walg }}
+WALG_FILE_PREFIX: /backup
+{{- else }}
+{{ .Values.walg }}
+{{- end }}
+
+MONGODB_URI:                 '{{ include "mongodb-backup-localhost.mongodb" . }}'
+WALG_STREAM_CREATE_COMMAND:  'mongodump --archive --oplog --uri="{{ include "mongodb-backup.mongodb" . }}"'
+WALG_STREAM_RESTORE_COMMAND: 'mongorestore --archive --oplogReplay --uri="{{ include "mongodb-backup-localhost.mongodb" . }}"'
 {{- end }}
