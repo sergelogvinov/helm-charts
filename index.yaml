@@ -46,6 +46,16 @@ entries:
   mongodb-backup:
   - apiVersion: v2
     appVersion: 4.4.14
+    created: "2022-09-25T10:09:58.134389074Z"
+    description: A Helm chart for Kubernetes
+    digest: 6801de9653a738ce0b59bafbf4265bb2f8d144f7547a4e6c72879d5300b44737
+    name: mongodb-backup
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongodb-backup-0.2.0/mongodb-backup-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 4.4.14
     created: "2022-08-12T14:48:18.031016375Z"
     description: A Helm chart for Kubernetes
     digest: 5f26c5246d78487f54840b443ab61e03a52ecd3ee5b7e3886b99b11a0f780166
@@ -87,4 +97,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.3.6/postgresql-single-0.3.6.tgz
     version: 0.3.6
-generated: "2022-09-17T05:04:36.450115943Z"
+generated: "2022-09-25T10:09:58.134399174Z"
