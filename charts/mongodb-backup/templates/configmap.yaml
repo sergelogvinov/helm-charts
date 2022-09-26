@@ -15,8 +15,16 @@ data:
     wal-g --config /etc/walg/walg.yaml delete {{ .Values.cleanPolicy }} --confirm ||:
     {{- end }}
 
+  restore-init.sh: |
+    #!/bin/sh
+    set -e
+
+    rm -rf /bitnami/mongodb/data/db
+
   restore.sh: |
     #!/bin/sh
     set -e
+
+    export HOME=/var/backups
 
     wal-g --config=/etc/walg/walg-check.yaml backup-fetch LATEST

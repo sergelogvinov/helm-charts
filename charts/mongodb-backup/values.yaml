@@ -27,7 +27,7 @@ backupCheck:
       cpu: 2
       memory: 1Gi
     requests:
-      cpu: 100m
+      cpu: 2
       memory: 512Mi
 
   persistence:
@@ -51,9 +51,7 @@ auth:
   username: root
   password: root
 
-env:
-  - name: HOME
-    value: /var/backups
+env: []
 
 # walg: |
 #   GOOGLE_APPLICATION_CREDENTIALS: /etc/gcp/backup.json
@@ -70,18 +68,18 @@ serviceAccount:
 podLabels: {}
 podAnnotations: {}
 
-podSecurityContext:
-  runAsNonRoot: true
-  runAsUser: 1001
-  runAsGroup: 1001
-  fsGroup: 1001
-  fsGroupChangePolicy: "OnRootMismatch"
+podSecurityContext: {}
+  # runAsNonRoot: true
+  # runAsUser: 1001
+  # runAsGroup: 0
+  # fsGroup: 1001
+  # fsGroupChangePolicy: "OnRootMismatch"
 
-securityContext:
-  seccompProfile:
-    type: RuntimeDefault
-  allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: true
+securityContext: {}
+  # seccompProfile:
+  #   type: RuntimeDefault
+  # allowPrivilegeEscalation: false
+  # readOnlyRootFilesystem: true
   # capabilities:
   #   drop:
   #   - ALL
