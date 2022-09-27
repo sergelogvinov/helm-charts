@@ -9,6 +9,8 @@ data:
     #!/bin/sh
     set -e
 
+    export HOME=/var/backups
+
     wal-g --config /etc/walg/walg.yaml backup-push
     wal-g --config /etc/walg/walg.yaml backup-list
     {{- if .Values.cleanPolicy }}

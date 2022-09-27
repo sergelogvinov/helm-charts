@@ -19,7 +19,7 @@ spec:
   jobTemplate:
     spec:
       activeDeadlineSeconds: {{ .Values.activeDeadlineSeconds }}
-      backoffLimit: 1
+      backoffLimit: 0
       template:
         metadata:
           name: {{ include "mongodb-backup.fullname" . }}
