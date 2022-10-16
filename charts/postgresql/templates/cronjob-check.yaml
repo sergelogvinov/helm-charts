@@ -20,6 +20,7 @@ spec:
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
+      ttlSecondsAfterFinished: 3600 # 1h
       activeDeadlineSeconds: 43200 # 12h
       backoffLimit: 0
       template:
@@ -123,14 +124,43 @@ spec:
                 secretName: {{ include "postgresql-single.fullname" . }}-server-tls
                 defaultMode: 256
           {{- end }}
+
           {{- if .Values.backupCheck.persistence.existingClaim }}
             - name: data
               persistentVolumeClaim:
                 claimName: {{ .Values.backupCheck.persistence.existingClaim }}
           {{- else if .Values.backupCheck.persistence.storageClass }}
             - name: data
-              persistentVolumeClaim:
-                claimName: data-{{ include "postgresql-single.fullname" . }}-backup-check
+              ephemeral:
+                volumeClaimTemplate:
+                  metadata:
+                    labels:
+                      {{- with .Values.podlabels }}
+                      {{ toYaml . | nindent 22 }}
+                      {{- end }}
+                      {{- include "postgresql-single.crontab.labels" . | nindent 22 }}
+                      app.kubernetes.io/component: checker
+                  {{- with .Values.backupCheck.persistence.annotations }}
+                    annotations:
+                    {{- range $key, $value := . }}
+                      {{ $key }}: {{ $value }}
+                    {{- end }}
+                  {{- end }}
+                  spec:
+                    accessModes:
+                    {{- range .Values.backupCheck.persistence.accessModes }}
+                      - {{ . | quote }}
+                    {{- end }}
+                    resources:
+                      requests:
+                        storage: {{ .Values.backupCheck.persistence.size | quote }}
+                  {{- if .Values.backupCheck.persistence.storageClass }}
+                  {{- if (eq "-" .Values.backupCheck.persistence.storageClass) }}
+                    storageClassName: ""
+                  {{- else }}
+                    storageClassName: "{{ .Values.backupCheck.persistence.storageClass }}"
+                  {{- end }}
+                  {{- end }}
           {{- else }}
             - name: data
               emptyDir: {}

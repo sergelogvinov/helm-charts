@@ -56,12 +56,12 @@ data:
         <listen_host>::</listen_host>
         <listen_host>0.0.0.0</listen_host>
         <listen_try>1</listen_try>
-
         <logger>
-            <level>debug</level>
+            <level>information</level>
             <console>1</console>
             <size>1000M</size>
             <count>2</count>
+            <log>/var/log/clickhouse/clickhouse-server.log</log>
         </logger>
         {{- if .Values.metrics.enabled }}
         <prometheus>
@@ -73,8 +73,7 @@ data:
             <status_info>true</status_info>
         </prometheus>
         {{- end }}
-
-        {{ default "" .Values.config | nindent 8 }}
+        {{- default "" .Values.config | nindent 8 }}
     </clickhouse>
 
   storage.xml: |-
@@ -98,10 +97,13 @@ data:
                         </default>
                         <{{ $key }}>
                             {{- range $k, $v := $val }}
+                            {{- if ne $k "move_factor" }}
                             <{{ $k }}>{{ $v }}</{{ $k }}>
+                            {{- end }}
                             {{- end }}
                         </{{ $key }}>
                     </volumes>
+                    <move_factor>{{ default "0.1" (get $val "move_factor") }}</move_factor>
                 </{{ $key }}>
                 {{- end }}
             </policies>

@@ -38,6 +38,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # command: ["sleep","600000"]
           env:
             - name: HOME
               value: /tmp
@@ -73,8 +74,10 @@ spec:
               mountPath: /etc/clickhouse-server/dictionaries.d
             - name: config
               mountPath: /etc/clickhouse-server/config.d
+            - name: logs
+              mountPath: /var/log/clickhouse
             - name: data
-              mountPath: /var/lib/clickhouse/
+              mountPath: /var/lib/clickhouse
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
@@ -110,6 +113,8 @@ spec:
                 path: config.xml
               - key: storage.xml
                 path: storage.xml
+        - name: logs
+          emptyDir: {}
 {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: data
           persistentVolumeClaim:
