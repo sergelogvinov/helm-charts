@@ -129,6 +129,16 @@ entries:
   postgresql-single:
   - apiVersion: v2
     appVersion: "12.12"
+    created: "2022-10-21T16:37:30.964153951Z"
+    description: A Helm chart for Kubernetes
+    digest: c089985688c9912c397660c869408ab1ce5caed8bcf2012f2a8c2f6df4800066
+    name: postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.3.8/postgresql-single-0.3.8.tgz
+    version: 0.3.8
+  - apiVersion: v2
+    appVersion: "12.12"
     created: "2022-10-16T11:46:39.295943545Z"
     description: A Helm chart for Kubernetes
     digest: 338428e5238d5d756e66847e10f61ca5550fbc3cd3a50eac1802f41bdbcab029
@@ -147,4 +157,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.3.6/postgresql-single-0.3.6.tgz
     version: 0.3.6
-generated: "2022-10-16T11:46:39.295971945Z"
+generated: "2022-10-21T16:37:30.964180951Z"
