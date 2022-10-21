@@ -134,11 +134,6 @@ backup:
   enabled: false
   recovery: false
 
-  image:
-    repository: koehn/postgres-wal-g
-    pullPolicy: IfNotPresent
-    tag: 12.4-v0.2.15-2
-
   walpush: false
   walg: ~
 
