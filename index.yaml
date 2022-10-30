@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   clickhouse:
   - apiVersion: v2
+    appVersion: 22.10.1.1877
+    created: "2022-10-30T09:29:16.853487746Z"
+    description: Clickhouse chart for Kubernetes
+    digest: f74541a866dd297a64a2bf7c35f29d55a46e2d69d754ce5df5190ec7e2381df5
+    name: clickhouse
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-0.1.4/clickhouse-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
     appVersion: 22.9.3
     created: "2022-10-16T11:46:39.013399322Z"
     description: Clickhouse chart for Kubernetes
@@ -157,4 +167,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.3.6/postgresql-single-0.3.6.tgz
     version: 0.3.6
-generated: "2022-10-21T16:37:30.964180951Z"
+generated: "2022-10-30T09:29:16.853509646Z"
