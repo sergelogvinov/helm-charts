@@ -54,8 +54,11 @@ data:
   config.xml: |-
     <clickhouse>
         <listen_host>::</listen_host>
-        <listen_host>0.0.0.0</listen_host>
         <listen_try>1</listen_try>
+
+        <mysql_port></mysql_port>
+        <postgresql_port></postgresql_port>
+
         <logger>
             <level>information</level>
             <console>1</console>
