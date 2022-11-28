@@ -66,6 +66,8 @@ data:
             <count>2</count>
             <log>/var/log/clickhouse/clickhouse-server.log</log>
         </logger>
+        <errorlog>/var/log/clickhouse/clickhouse-server.err.log</errorlog>
+
         {{- if .Values.metrics.enabled }}
         <prometheus>
             <endpoint>/metrics</endpoint>
@@ -93,21 +95,25 @@ data:
             </disks>
             <policies>
                 {{- range $key, $val := .Values.storage.policies }}
-                <{{ $key }}>
+                <{{ $key }}_policy>
                     <volumes>
                         <default>
-                            <disk>default</disk>
+                            <disk>{{ default "default" (get (default (dict) $val) "default_disk") }}</disk>
                         </default>
+                        {{- if $val }}
                         <{{ $key }}>
                             {{- range $k, $v := $val }}
-                            {{- if ne $k "move_factor" }}
+                            {{- if not (has $k (list "move_factor" "default_disk")) }}
                             <{{ $k }}>{{ $v }}</{{ $k }}>
                             {{- end }}
                             {{- end }}
                         </{{ $key }}>
+                        {{- end }}
                     </volumes>
+                    {{- if $val }}
                     <move_factor>{{ default "0.1" (get $val "move_factor") }}</move_factor>
-                </{{ $key }}>
+                    {{- end }}
+                </{{ $key }}_policy>
                 {{- end }}
             </policies>
         </storage_configuration>
