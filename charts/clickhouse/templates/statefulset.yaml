@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "clickhouse.labels" . | nindent 4 }}
 spec:
+  serviceName: {{ include "clickhouse.fullname" . }}-headless
   replicas: {{ .Values.replicaCount }}
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
