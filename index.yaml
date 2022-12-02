@@ -72,6 +72,17 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-keeper-0.1.0/clickhouse-keeper-0.1.0.tgz
     version: 0.1.0
+  fluentd:
+  - apiVersion: v2
+    appVersion: v1.15-1
+    created: "2022-12-02T16:06:10.44621869Z"
+    description: A Helm chart for Kubernetes
+    digest: 3d7f3b9a721b360b36db2b0be4c43cf87be15a6559d14b6ea3453913af604ce1
+    name: fluentd
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/fluentd-0.0.1/fluentd-0.0.1.tgz
+    version: 0.0.1
   keydb:
   - apiVersion: v2
     appVersion: x86_64_v6.2.0
@@ -198,4 +209,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tabix-0.1.0/tabix-0.1.0.tgz
     version: 0.1.0
-generated: "2022-12-01T07:29:43.117527386Z"
+generated: "2022-12-02T16:06:10.44624779Z"
