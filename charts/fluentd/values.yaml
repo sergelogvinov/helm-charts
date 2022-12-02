@@ -1,0 +1,107 @@
+# Default values for fluentd.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: fluent/fluentd
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+  # fluentbit.io/exclude: 'true'
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 100
+  runAsGroup: 101
+  fsGroup: 101
+  fsGroupChangePolicy: "OnRootMismatch"
+
+securityContext:
+  seccompProfile:
+    type: RuntimeDefault
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  # readOnlyRootFilesystem: true
+
+service:
+  type: ClusterIP
+  ports:
+    - name: "fluentd"
+      protocol: TCP
+      containerPort: 24224
+    - name: "heartbeat"
+      protocol: UDP
+      containerPort: 24224
+
+envs: {}
+  # FLUENTD_CONF: /fluentd/etc/fluent.conf
+
+configMaps:
+  forward-input.conf: |
+    <source>
+      @type forward
+      port 24224
+      bind 0.0.0.0
+    </source>
+  output.conf: |
+    <match **>
+      @type stdout
+    </match>
+
+metrics:
+  enabled: false
+
+resources:
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+useDaemonSet: false
+
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+
+extraVolumes: []
+  # - name: fluent-tls
+  #   secret:
+  #     secretName: fluent-client-tls
+
+extraVolumeMounts: []
+  # - name: fluent-tls
+  #   mountPath: /etc/ssl/fluent-bit
+
+# priorityClassName:
+
+nodeSelector: {}
+
+tolerations: []
+  # - operator: Exists
+  #   effect: NoSchedule
+
+# soft/hard
+podAntiAffinityPreset: soft
+affinity: {}
