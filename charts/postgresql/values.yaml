@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: postgres
+  repository: ghcr.io/sergelogvinov/postgresql
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -345,7 +345,7 @@ metrics:
     #         usage: "COUNTER"
     #         description: "Number of buffer hits in this table's TOAST table indexes (if any)"
     pg_stat_slow_queries:
-      query: SELECT pg_get_userbyid(userid) as rolname,t3.datname,queryid,calls,max_time / 1000 as max_time_seconds,REGEXP_REPLACE(substring(query,1,100),'["\n\s]','','g') as sql FROM pg_stat_statements t1 JOIN pg_database t3 ON (t1.dbid=t3.oid) WHERE rows != 0 AND max_time > 1000 ORDER BY max_time DESC LIMIT 10
+      query: SELECT pg_get_userbyid(userid) as rolname,t3.datname,queryid,calls,max_exec_time / 1000 as max_time_seconds,REGEXP_REPLACE(substring(query,1,100),'["\n\s]','','g') as sql FROM pg_stat_statements t1 JOIN pg_database t3 ON (t1.dbid=t3.oid) WHERE rows != 0 AND max_exec_time > 1000 ORDER BY max_exec_time DESC LIMIT 10
       metrics:
         - rolname:
             usage: "LABEL"

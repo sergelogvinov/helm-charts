@@ -129,7 +129,6 @@ pg_stat_statements.track = all
 
 full_page_writes = on
 wal_level = replica
-wal_keep_segments = 256
 wal_compression = on
 wal_buffers = -1
 wal_writer_delay = 200ms
