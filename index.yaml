@@ -169,6 +169,16 @@ entries:
     version: 0.1.0
   postgresql-single:
   - apiVersion: v2
+    appVersion: "14.6"
+    created: "2022-12-06T19:04:43.466926702Z"
+    description: A Helm chart for Kubernetes
+    digest: 3a0711631286cccdf32fc2d43529e15e3d4b889cfa38776b1ec4dd3217780b88
+    name: postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.4.0/postgresql-single-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
     appVersion: "12.12"
     created: "2022-10-21T16:37:30.964153951Z"
     description: A Helm chart for Kubernetes
@@ -209,4 +219,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tabix-0.1.0/tabix-0.1.0.tgz
     version: 0.1.0
-generated: "2022-12-02T16:06:10.44624779Z"
+generated: "2022-12-06T19:04:43.466955701Z"
