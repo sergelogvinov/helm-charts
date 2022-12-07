@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: eqalpha/keydb
+  repository: ghcr.io/sergelogvinov/keydb
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -65,7 +65,7 @@ backup:
   recovery: false
 
   image:
-    repository: eqalpha/keydb
+    repository: ghcr.io/sergelogvinov/keydb
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
