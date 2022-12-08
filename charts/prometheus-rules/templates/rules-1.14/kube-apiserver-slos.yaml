@@ -1,0 +1,76 @@
+{{- /*
+Generated from 'kube-apiserver-slos' group from https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/kubernetesControlPlane-prometheusRule.yaml
+Do not change in-place! In order to change this file first read following link:
+https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack/hack
+*/ -}}
+{{- define "kube-apiserver-slos" }}
+{{- $kubeTargetVersion := default .Capabilities.KubeVersion.GitVersion .Values.kubeTargetVersionOverride }}
+{{- if and (semverCompare ">=1.14.0-0" $kubeTargetVersion) (semverCompare "<9.9.9-9" $kubeTargetVersion) .Values.defaultRules.create .Values.defaultRules.rules.kubeApiserverSlos }}
+  - name: kube-apiserver-slos
+    rules:
+{{- if not (.Values.defaultRules.disabled.KubeAPIErrorBudgetBurn | default false) }}
+    - alert: KubeAPIErrorBudgetBurn
+      annotations:
+        description: The API server is burning too much error budget.
+        runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeapierrorbudgetburn
+        summary: The API server is burning too much error budget.
+      expr: |-
+        sum(apiserver_request:burnrate1h) > (14.40 * 0.01000)
+        and
+        sum(apiserver_request:burnrate5m) > (14.40 * 0.01000)
+      for: 2m
+      labels:
+        long: 1h
+        severity: critical
+        short: 5m
+{{- end }}
+{{- if not (.Values.defaultRules.disabled.KubeAPIErrorBudgetBurn | default false) }}
+    - alert: KubeAPIErrorBudgetBurn
+      annotations:
+        description: The API server is burning too much error budget.
+        runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeapierrorbudgetburn
+        summary: The API server is burning too much error budget.
+      expr: |-
+        sum(apiserver_request:burnrate6h) > (6.00 * 0.01000)
+        and
+        sum(apiserver_request:burnrate30m) > (6.00 * 0.01000)
+      for: 15m
+      labels:
+        long: 6h
+        severity: critical
+        short: 30m
+{{- end }}
+{{- if not (.Values.defaultRules.disabled.KubeAPIErrorBudgetBurn | default false) }}
+    - alert: KubeAPIErrorBudgetBurn
+      annotations:
+        description: The API server is burning too much error budget.
+        runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeapierrorbudgetburn
+        summary: The API server is burning too much error budget.
+      expr: |-
+        sum(apiserver_request:burnrate1d) > (3.00 * 0.01000)
+        and
+        sum(apiserver_request:burnrate2h) > (3.00 * 0.01000)
+      for: 1h
+      labels:
+        long: 1d
+        severity: warning
+        short: 2h
+{{- end }}
+{{- if not (.Values.defaultRules.disabled.KubeAPIErrorBudgetBurn | default false) }}
+    - alert: KubeAPIErrorBudgetBurn
+      annotations:
+        description: The API server is burning too much error budget.
+        runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeapierrorbudgetburn
+        summary: The API server is burning too much error budget.
+      expr: |-
+        sum(apiserver_request:burnrate3d) > (1.00 * 0.01000)
+        and
+        sum(apiserver_request:burnrate6h) > (1.00 * 0.01000)
+      for: 3h
+      labels:
+        long: 3d
+        severity: warning
+        short: 6h
+{{- end }}
+{{- end }}
+{{- end }}
