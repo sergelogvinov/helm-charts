@@ -147,6 +147,16 @@ entries:
     version: 0.1.0
   mongosqld:
   - apiVersion: v2
+    appVersion: 2.14.5
+    created: "2022-12-08T08:14:38.39666897Z"
+    description: A Helm chart for Kubernetes
+    digest: 75396ecf321bcdf7c1508ae6461bf0364bb49dfa00f95608fe81ae6d861e250c
+    name: mongosqld
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongosqld-0.1.1/mongosqld-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2022-08-12T14:48:18.287346887Z"
     description: A Helm chart for Kubernetes
@@ -168,6 +178,16 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.0/pgbouncer-0.1.0.tgz
     version: 0.1.0
   postgresql-single:
+  - apiVersion: v2
+    appVersion: "14.6"
+    created: "2022-12-08T08:14:38.653836319Z"
+    description: A Helm chart for Kubernetes
+    digest: 685d599d508f7c1aaa473bc1a79e6c823c4e20dd567d6dc2461dd02217dbdbf2
+    name: postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.4.1/postgresql-single-0.4.1.tgz
+    version: 0.4.1
   - apiVersion: v2
     appVersion: "14.6"
     created: "2022-12-06T19:04:43.466926702Z"
@@ -219,4 +239,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tabix-0.1.0/tabix-0.1.0.tgz
     version: 0.1.0
-generated: "2022-12-06T19:04:43.466955701Z"
+generated: "2022-12-08T08:14:38.653882419Z"
