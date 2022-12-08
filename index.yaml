@@ -228,6 +228,17 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.3.6/postgresql-single-0.3.6.tgz
     version: 0.3.6
+  prometheus-rules:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2022-12-08T21:57:42.545816549Z"
+    description: A Helm chart for Kubernetes
+    digest: 0bbefc902d0448b23f28a61d0dc047be76616375d6dc477e6fb7fa0a9cbb1650
+    name: prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.0/prometheus-rules-0.1.0.tgz
+    version: 0.1.0
   tabix:
   - apiVersion: v2
     appVersion: 18.07.1
@@ -239,4 +250,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tabix-0.1.0/tabix-0.1.0.tgz
     version: 0.1.0
-generated: "2022-12-08T08:14:38.653882419Z"
+generated: "2022-12-08T21:57:42.545848643Z"
