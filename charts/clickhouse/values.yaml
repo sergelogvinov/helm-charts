@@ -17,6 +17,9 @@ fullnameOverride: ""
 updateStrategy:
   type: RollingUpdate
 
+tlsCerts:
+  create: false
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true

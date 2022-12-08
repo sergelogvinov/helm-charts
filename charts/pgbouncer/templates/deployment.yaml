@@ -72,6 +72,8 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}"
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy }}
           env:

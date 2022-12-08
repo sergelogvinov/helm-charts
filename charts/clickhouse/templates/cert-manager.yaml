@@ -1,0 +1,83 @@
+{{- if .Values.tlsCerts.create }}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "clickhouse.fullname" . }}-issuer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "clickhouse.fullname" . }}-tls
+spec:
+  secretName: {{ include "clickhouse.fullname" . }}-tls
+  issuerRef:
+    name: {{ include "clickhouse.fullname" . }}-issuer
+    kind: Issuer
+  commonName: {{ include "clickhouse.fullname" . }}
+  duration: 8760h # 12m
+  renewBefore: 4380h # 6m
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - server auth
+    - client auth
+  isCA: true
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "clickhouse.fullname" . }}-ca-issuer
+spec:
+  ca:
+    secretName: {{ include "clickhouse.fullname" . }}-tls
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "clickhouse.fullname" . }}-server
+spec:
+  secretName: {{ include "clickhouse.fullname" . }}-server-tls
+  commonName: {{ include "clickhouse.fullname" . }}-server
+  duration: 8760h # 12m
+  renewBefore: 4380h # 6m
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - server auth
+    - client auth
+  isCA: false
+  ipAddresses:
+    - 127.0.0.1
+  dnsNames:
+    - {{ include "clickhouse.fullname" . }}
+    - {{ include "clickhouse.fullname" . }}.{{ .Release.Namespace }}
+    - {{ include "clickhouse.fullname" . }}.{{ .Release.Namespace }}.svc
+    - {{ include "clickhouse.fullname" . }}-headless
+    - {{ include "clickhouse.fullname" . }}-0
+    - {{ include "clickhouse.fullname" . }}-1
+    - {{ include "clickhouse.fullname" . }}-2
+  issuerRef:
+    name: {{ include "clickhouse.fullname" . }}-ca-issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "clickhouse.fullname" . }}-client
+spec:
+  secretName: {{ include "clickhouse.fullname" . }}-client-tls
+  commonName: {{ include "clickhouse.fullname" . }}-client
+  duration: 4380h # 6m
+  renewBefore: 2190h # 3m
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - client auth
+  isCA: false
+  issuerRef:
+    name: {{ include "clickhouse.fullname" . }}-ca-issuer
+{{- end }}

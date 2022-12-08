@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: bitnami/pgbouncer
+  repository: ghcr.io/sergelogvinov/pgbouncer
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -46,17 +46,20 @@ podLabels: {}
 podAnnotations: {}
 
 podSecurityContext:
+  runAsNonRoot: true
   runAsUser: 999
   runAsGroup: 999
   fsGroup: 999
+  fsGroupChangePolicy: "OnRootMismatch"
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
+securityContext:
+  seccompProfile:
+    type: RuntimeDefault
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
   # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
 
 service:
   type: ClusterIP
@@ -83,6 +86,8 @@ useDaemonSet: false
 
 updateStrategy:
   type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
 
 # priorityClassName:
 

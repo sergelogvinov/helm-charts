@@ -35,7 +35,12 @@ data:
         <users replace="replace">
         {{- range .Values.clickhouse.users }}
             <{{ .name }}>
+                {{- if .password_plain }}
+                <password>{{ .password_plain }}</password>
+                {{- end }}
+                {{- if .password }}
                 <password_sha256_hex>{{ .password }}</password_sha256_hex>
+                {{- end }}
                 <profile>{{ .profile | default "default" }}</profile>
                 <quota>{{ .quota | default "default" }}</quota>
                 <networks>
@@ -53,11 +58,49 @@ data:
 
   config.xml: |-
     <clickhouse>
+        <display_name>{{ include "clickhouse.fullname" . }}</display_name>
         <listen_host>::</listen_host>
         <listen_try>1</listen_try>
 
+        <http_port>8123</http_port>
+        <tcp_port>9000</tcp_port>
+
+        {{- if .Values.tlsCerts.create }}
+        <https_port>8443</https_port>
+        <tcp_port_secure>9440</tcp_port_secure>
+        <!--
+        <interserver_http_port></interserver_http_port>
+        <interserver_https_port>9010</interserver_https_port>
+        -->
+        {{- end }}
+
         <mysql_port></mysql_port>
-        <postgresql_port></postgresql_port>
+        <postgresql_port>5432</postgresql_port>
+
+        {{- if .Values.tlsCerts.create }}
+        <openSSL>
+            <server>
+                <caConfig>/etc/ssl/tlscerts/ca.crt</caConfig>
+                <certificateFile>/etc/ssl/tlscerts/tls.crt</certificateFile>
+                <privateKeyFile>/etc/ssl/tlscerts/tls.key</privateKeyFile>
+                <verificationMode>none</verificationMode>
+                <cacheSessions>true</cacheSessions>
+                <disableProtocols>sslv2,sslv3</disableProtocols>
+                <preferServerCiphers>true</preferServerCiphers>
+            </server>
+            <client>
+                <loadDefaultCAFile>false</loadDefaultCAFile>
+                <caConfig>/etc/ssl/tlscerts/marsnet_ca.crt</caConfig>
+                <cacheSessions>true</cacheSessions>
+                <disableProtocols>sslv2,sslv3</disableProtocols>
+                <preferServerCiphers>true</preferServerCiphers>
+                <verificationMode>none</verificationMode>
+                <invalidCertificateHandler>
+                    <name>RejectCertificateHandler</name>
+                </invalidCertificateHandler>
+            </client>
+        </openSSL>
+        {{- end }}
 
         <logger>
             <level>information</level>

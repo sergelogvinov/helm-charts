@@ -48,8 +48,15 @@ spec:
               containerPort: 8123
             - name: native
               containerPort: 9000
+            {{- if .Values.tlsCerts.create }}
+            - name: nativetls
+              containerPort: 9440
+            - name: interserver
+              containerPort: 9010
+            {{- else }}
             - name: interserver
               containerPort: 9009
+            {{- end }}
           startupProbe:
             httpGet:
               path: /ping
@@ -79,6 +86,10 @@ spec:
               mountPath: /var/log/clickhouse
             - name: data
               mountPath: /var/lib/clickhouse
+          {{- if .Values.tlsCerts.create }}
+            - name: tlscerts
+              mountPath: /etc/ssl/tlscerts
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
@@ -116,6 +127,12 @@ spec:
                 path: storage.xml
         - name: logs
           emptyDir: {}
+      {{- if .Values.tlsCerts.create }}
+        - name: tlscerts
+          secret:
+            secretName: {{ include "clickhouse.fullname" . }}-server-tls
+            defaultMode: 256
+      {{- end }}
 {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: data
           persistentVolumeClaim:

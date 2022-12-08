@@ -99,7 +99,7 @@ Create the pgmetricsPassword
 {{- $sname := include "pgbouncer.fullname" . }}
 {{- $previous := lookup "v1" "Secret" .Release.Namespace $sname }}
 {{- if $previous }}
-{{- default (randAlphaNum 16) ($previous.data.pgmetricsPassword ) }}
+{{- default (randAlphaNum 16) ($previous.data.pgmetricsPassword | b64dec) }}
 {{- else }}
 {{- randAlphaNum 16 }}
 {{- end }}
@@ -126,7 +126,7 @@ Create config file pgbouncer.ini
 [databases]
 {{- range $k, $v := .Values.databases }}
 {{- $requiredMsg := printf ".Values.databases.%v needs to include .dbname" $k }}
-{{ $k }} = host={{ $v.host }} port={{ $v.port }} {{ if $v.user }}user={{ $v.user }}{{end}} dbname={{ $v.dbname }}{{ if $v.poolmode }} pool_mode={{ $v.poolmode }}{{end}}
+{{ $k }} = host={{ $v.host }} port={{ $v.port }} {{ if $v.user }}user={{ $v.user }}{{end}} {{ if $v.password }}password={{ $v.password }}{{end}} dbname={{ $v.dbname }}{{ if $v.poolmode }} pool_mode={{ $v.poolmode }}{{end}}
 {{- end }}
 
 [users]

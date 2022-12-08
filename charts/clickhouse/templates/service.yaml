@@ -7,6 +7,10 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
+    - name: postgresql
+      port: 5432
+      targetPort: 5432
+      protocol: TCP
     - name: http
       port: 8123
       targetPort: 8123
@@ -15,6 +19,12 @@ spec:
       port: 9000
       targetPort: 9000
       protocol: TCP
+    {{- if .Values.tlsCerts.create }}
+    - name: nativetls
+      port: 9440
+      targetPort: 9440
+      protocol: TCP
+    {{- end }}
   selector:
     {{- include "clickhouse.selectorLabels" . | nindent 4 }}
 ---
