@@ -73,8 +73,10 @@ spec:
                   subPath: backup.sh
                 - name: config
                   mountPath: /etc/walg
+              {{- if eq .Values.backup.podAffinityPreset "hard" }}
                 - name: data
                   mountPath: {{ .Values.persistence.mountPath }}
+              {{- end }}
               {{- if .Values.extraVolumeMounts }}
                 {{ toYaml .Values.extraVolumeMounts | nindent 16 }}
               {{- end }}
@@ -86,18 +88,21 @@ spec:
           {{- end }}
           affinity:
             podAffinity:
+            {{- if eq .Values.backup.podAffinityPreset "hard" }}
               requiredDuringSchedulingIgnoredDuringExecution:
                 - labelSelector:
-                    matchExpressions:
-                      - key: app.kubernetes.io/name
-                        operator: In
-                        values:
-                          - {{ include "postgresql-single.name" . }}
-                      - key: app.kubernetes.io/instance
-                        operator: In
-                        values:
-                          - {{ .Release.Name }}
+                    matchLabels:
+                      {{- include "postgresql-single.selectorLabels" . | nindent 22 }}
                   topologyKey: kubernetes.io/hostname
+            {{- else }}
+              preferredDuringSchedulingIgnoredDuringExecution:
+                - podAffinityTerm:
+                    labelSelector:
+                      matchLabels:
+                        {{- include "postgresql-single.selectorLabels" . | nindent 24 }}
+                    topologyKey: kubernetes.io/hostname
+                  weight: 1
+            {{- end }}
           {{- with .Values.tolerations }}
           tolerations:
             {{- toYaml . | nindent 12 }}
@@ -123,14 +128,7 @@ spec:
                 secretName: {{ include "postgresql-single.fullname" . }}-server-tls
                 defaultMode: 256
           {{- end }}
-          {{- if not .Values.persistence.enabled }}
-            - name: data
-              emptyDir: {}
-          {{- else if .Values.persistence.existingClaim }}
-            - name: data
-              persistentVolumeClaim:
-                claimName: {{ .Values.persistence.existingClaim }}
-          {{- else }}
+          {{- if eq .Values.backup.podAffinityPreset "hard" }}
             - name: data
               persistentVolumeClaim:
                 claimName: data-{{ include "postgresql-single.fullname" . }}-0

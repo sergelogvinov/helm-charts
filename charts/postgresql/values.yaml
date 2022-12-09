@@ -150,6 +150,9 @@ backup:
       cpu: 1500m
       memory: 512Mi
 
+  # AffinityPreset with statefulset pods
+  podAffinityPreset: hard
+
 backupCheck:
   enabled: false
   schedule: "15 8 * * *"
