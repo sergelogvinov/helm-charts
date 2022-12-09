@@ -9,10 +9,13 @@ fullnameOverride: ""
 ##
 defaultRules:
   create: true
+
+  runbookUrl: "https://runbooks.prometheus-operator.dev/runbooks"
+
   rules:
     alertmanager: true
     etcd: false
-    configReloaders: true
+    configReloaders: false
     general: true
     k8s: true
     kubeApiserverAvailability: true

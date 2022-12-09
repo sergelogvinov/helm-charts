@@ -15,9 +15,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kube-state-metrics/kubestatemetricslisterrors
         summary: kube-state-metrics is experiencing errors in list operations.
       expr: |-
-        (sum(rate(kube_state_metrics_list_total{job="kube-state-metrics",result="error"}[5m]))
+        (sum(rate(kube_state_metrics_list_total{job="kubernetes-service-endpoints",result="error"}[5m]))
           /
-        sum(rate(kube_state_metrics_list_total{job="kube-state-metrics"}[5m])))
+        sum(rate(kube_state_metrics_list_total{job="kubernetes-service-endpoints"}[5m])))
         > 0.01
       for: 15m
       labels:
@@ -30,9 +30,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kube-state-metrics/kubestatemetricswatcherrors
         summary: kube-state-metrics is experiencing errors in watch operations.
       expr: |-
-        (sum(rate(kube_state_metrics_watch_total{job="kube-state-metrics",result="error"}[5m]))
+        (sum(rate(kube_state_metrics_watch_total{job="kubernetes-service-endpoints",result="error"}[5m]))
           /
-        sum(rate(kube_state_metrics_watch_total{job="kube-state-metrics"}[5m])))
+        sum(rate(kube_state_metrics_watch_total{job="kubernetes-service-endpoints"}[5m])))
         > 0.01
       for: 15m
       labels:
@@ -44,7 +44,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: kube-state-metrics pods are running with different --total-shards configuration, some Kubernetes objects may be exposed multiple times or not exposed at all.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kube-state-metrics/kubestatemetricsshardingmismatch
         summary: kube-state-metrics sharding is misconfigured.
-      expr: stdvar (kube_state_metrics_total_shards{job="kube-state-metrics"}) != 0
+      expr: stdvar (kube_state_metrics_total_shards{job="kubernetes-service-endpoints"}) != 0
       for: 15m
       labels:
         severity: critical
@@ -56,9 +56,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kube-state-metrics/kubestatemetricsshardsmissing
         summary: kube-state-metrics shards are missing.
       expr: |-
-        2^max(kube_state_metrics_total_shards{job="kube-state-metrics"}) - 1
+        2^max(kube_state_metrics_total_shards{job="kubernetes-service-endpoints"}) - 1
           -
-        sum( 2 ^ max by (shard_ordinal) (kube_state_metrics_shard_ordinal{job="kube-state-metrics"}) )
+        sum( 2 ^ max by (shard_ordinal) (kube_state_metrics_shard_ordinal{job="kubernetes-service-endpoints"}) )
         != 0
       for: 15m
       labels:

@@ -43,9 +43,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubecpuquotaovercommit
         summary: Cluster has overcommitted CPU resource requests.
       expr: |-
-        sum(min without(resource) (kube_resourcequota{job="kube-state-metrics", type="hard", resource=~"(cpu|requests.cpu)"}))
+        sum(min without(resource) (kube_resourcequota{job="kubernetes-service-endpoints", type="hard", resource=~"(cpu|requests.cpu)"}))
           /
-        sum(kube_node_status_allocatable{resource="cpu", job="kube-state-metrics"})
+        sum(kube_node_status_allocatable{resource="cpu", job="kubernetes-service-endpoints"})
           > 1.5
       for: 5m
       labels:
@@ -58,9 +58,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubememoryquotaovercommit
         summary: Cluster has overcommitted memory resource requests.
       expr: |-
-        sum(min without(resource) (kube_resourcequota{job="kube-state-metrics", type="hard", resource=~"(memory|requests.memory)"}))
+        sum(min without(resource) (kube_resourcequota{job="kubernetes-service-endpoints", type="hard", resource=~"(memory|requests.memory)"}))
           /
-        sum(kube_node_status_allocatable{resource="memory", job="kube-state-metrics"})
+        sum(kube_node_status_allocatable{resource="memory", job="kubernetes-service-endpoints"})
           > 1.5
       for: 5m
       labels:
@@ -73,9 +73,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubequotaalmostfull
         summary: Namespace quota is going to be full.
       expr: |-
-        kube_resourcequota{job="kube-state-metrics", type="used"}
+        kube_resourcequota{job="kubernetes-service-endpoints", type="used"}
           / ignoring(instance, job, type)
-        (kube_resourcequota{job="kube-state-metrics", type="hard"} > 0)
+        (kube_resourcequota{job="kubernetes-service-endpoints", type="hard"} > 0)
           > 0.9 < 1
       for: 15m
       labels:
@@ -88,9 +88,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubequotafullyused
         summary: Namespace quota is fully used.
       expr: |-
-        kube_resourcequota{job="kube-state-metrics", type="used"}
+        kube_resourcequota{job="kubernetes-service-endpoints", type="used"}
           / ignoring(instance, job, type)
-        (kube_resourcequota{job="kube-state-metrics", type="hard"} > 0)
+        (kube_resourcequota{job="kubernetes-service-endpoints", type="hard"} > 0)
           == 1
       for: 15m
       labels:
@@ -103,9 +103,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubequotaexceeded
         summary: Namespace quota has exceeded the limits.
       expr: |-
-        kube_resourcequota{job="kube-state-metrics", type="used"}
+        kube_resourcequota{job="kubernetes-service-endpoints", type="used"}
           / ignoring(instance, job, type)
-        (kube_resourcequota{job="kube-state-metrics", type="hard"} > 0)
+        (kube_resourcequota{job="kubernetes-service-endpoints", type="hard"} > 0)
           > 1
       for: 15m
       labels:

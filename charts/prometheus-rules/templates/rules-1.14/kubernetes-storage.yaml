@@ -16,12 +16,12 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         summary: PersistentVolume is filling up.
       expr: |-
         (
-          kubelet_volume_stats_available_bytes{job="kubelet", metrics_path="/metrics"}
+          kubelet_volume_stats_available_bytes{job="kubernetes-nodes", metrics_path="/metrics"}
             /
-          kubelet_volume_stats_capacity_bytes{job="kubelet", metrics_path="/metrics"}
+          kubelet_volume_stats_capacity_bytes{job="kubernetes-nodes", metrics_path="/metrics"}
         ) < 0.03
         and
-        kubelet_volume_stats_used_bytes{job="kubelet", metrics_path="/metrics"} > 0
+        kubelet_volume_stats_used_bytes{job="kubernetes-nodes", metrics_path="/metrics"} > 0
         unless on(namespace, persistentvolumeclaim)
         kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1
         unless on(namespace, persistentvolumeclaim)
@@ -38,14 +38,14 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         summary: PersistentVolume is filling up.
       expr: |-
         (
-          kubelet_volume_stats_available_bytes{job="kubelet", metrics_path="/metrics"}
+          kubelet_volume_stats_available_bytes{job="kubernetes-nodes", metrics_path="/metrics"}
             /
-          kubelet_volume_stats_capacity_bytes{job="kubelet", metrics_path="/metrics"}
+          kubelet_volume_stats_capacity_bytes{job="kubernetes-nodes", metrics_path="/metrics"}
         ) < 0.15
         and
-        kubelet_volume_stats_used_bytes{job="kubelet", metrics_path="/metrics"} > 0
+        kubelet_volume_stats_used_bytes{job="kubernetes-nodes", metrics_path="/metrics"} > 0
         and
-        predict_linear(kubelet_volume_stats_available_bytes{job="kubelet", metrics_path="/metrics"}[6h], 4 * 24 * 3600) < 0
+        predict_linear(kubelet_volume_stats_available_bytes{job="kubernetes-nodes", metrics_path="/metrics"}[6h], 4 * 24 * 3600) < 0
         unless on(namespace, persistentvolumeclaim)
         kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1
         unless on(namespace, persistentvolumeclaim)
@@ -62,12 +62,12 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         summary: PersistentVolumeInodes are filling up.
       expr: |-
         (
-          kubelet_volume_stats_inodes_free{job="kubelet", metrics_path="/metrics"}
+          kubelet_volume_stats_inodes_free{job="kubernetes-nodes", metrics_path="/metrics"}
             /
-          kubelet_volume_stats_inodes{job="kubelet", metrics_path="/metrics"}
+          kubelet_volume_stats_inodes{job="kubernetes-nodes", metrics_path="/metrics"}
         ) < 0.03
         and
-        kubelet_volume_stats_inodes_used{job="kubelet", metrics_path="/metrics"} > 0
+        kubelet_volume_stats_inodes_used{job="kubernetes-nodes", metrics_path="/metrics"} > 0
         unless on(namespace, persistentvolumeclaim)
         kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1
         unless on(namespace, persistentvolumeclaim)
@@ -84,14 +84,14 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         summary: PersistentVolumeInodes are filling up.
       expr: |-
         (
-          kubelet_volume_stats_inodes_free{job="kubelet", metrics_path="/metrics"}
+          kubelet_volume_stats_inodes_free{job="kubernetes-nodes", metrics_path="/metrics"}
             /
-          kubelet_volume_stats_inodes{job="kubelet", metrics_path="/metrics"}
+          kubelet_volume_stats_inodes{job="kubernetes-nodes", metrics_path="/metrics"}
         ) < 0.15
         and
-        kubelet_volume_stats_inodes_used{job="kubelet", metrics_path="/metrics"} > 0
+        kubelet_volume_stats_inodes_used{job="kubernetes-nodes", metrics_path="/metrics"} > 0
         and
-        predict_linear(kubelet_volume_stats_inodes_free{job="kubelet", metrics_path="/metrics"}[6h], 4 * 24 * 3600) < 0
+        predict_linear(kubelet_volume_stats_inodes_free{job="kubernetes-nodes", metrics_path="/metrics"}[6h], 4 * 24 * 3600) < 0
         unless on(namespace, persistentvolumeclaim)
         kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1
         unless on(namespace, persistentvolumeclaim)
@@ -106,7 +106,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: The persistent volume {{`{{`}} $labels.persistentvolume {{`}}`}} has status {{`{{`}} $labels.phase {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubepersistentvolumeerrors
         summary: PersistentVolume is having issues with provisioning.
-      expr: kube_persistentvolume_status_phase{phase=~"Failed|Pending",job="kube-state-metrics"} > 0
+      expr: kube_persistentvolume_status_phase{phase=~"Failed|Pending",job="kubernetes-service-endpoints"} > 0
       for: 5m
       labels:
         severity: critical

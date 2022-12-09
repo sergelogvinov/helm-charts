@@ -17,7 +17,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
       expr: |-
         # Without max_over_time, failed scrapes could create false negatives, see
         # https://www.robustperception.io/alerting-on-gauges-in-prometheus-2-0 for details.
-        max_over_time(prometheus_config_last_reload_successful{job="prometheus-k8s",namespace="monitoring"}[5m]) == 0
+        max_over_time(prometheus_config_last_reload_successful{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) == 0
       for: 10m
       labels:
         severity: critical
@@ -32,9 +32,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         # Without min_over_time, failed scrapes could create false negatives, see
         # https://www.robustperception.io/alerting-on-gauges-in-prometheus-2-0 for details.
         (
-          predict_linear(prometheus_notifications_queue_length{job="prometheus-k8s",namespace="monitoring"}[5m], 60 * 30)
+          predict_linear(prometheus_notifications_queue_length{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m], 60 * 30)
         >
-          min_over_time(prometheus_notifications_queue_capacity{job="prometheus-k8s",namespace="monitoring"}[5m])
+          min_over_time(prometheus_notifications_queue_capacity{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m])
         )
       for: 15m
       labels:
@@ -48,9 +48,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         summary: Prometheus has encountered more than 1% errors sending alerts to a specific Alertmanager.
       expr: |-
         (
-          rate(prometheus_notifications_errors_total{job="prometheus-k8s",namespace="monitoring"}[5m])
+          rate(prometheus_notifications_errors_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m])
         /
-          rate(prometheus_notifications_sent_total{job="prometheus-k8s",namespace="monitoring"}[5m])
+          rate(prometheus_notifications_sent_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m])
         )
         * 100
         > 1
@@ -67,7 +67,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
       expr: |-
         # Without max_over_time, failed scrapes could create false negatives, see
         # https://www.robustperception.io/alerting-on-gauges-in-prometheus-2-0 for details.
-        max_over_time(prometheus_notifications_alertmanagers_discovered{job="prometheus-k8s",namespace="monitoring"}[5m]) < 1
+        max_over_time(prometheus_notifications_alertmanagers_discovered{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) < 1
       for: 10m
       labels:
         severity: warning
@@ -78,7 +78,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} has detected {{`{{`}}$value | humanize{{`}}`}} reload failures over the last 3h.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus/prometheustsdbreloadsfailing
         summary: Prometheus has issues reloading blocks from disk.
-      expr: increase(prometheus_tsdb_reloads_failures_total{job="prometheus-k8s",namespace="monitoring"}[3h]) > 0
+      expr: increase(prometheus_tsdb_reloads_failures_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[3h]) > 0
       for: 4h
       labels:
         severity: warning
@@ -89,7 +89,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} has detected {{`{{`}}$value | humanize{{`}}`}} compaction failures over the last 3h.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus/prometheustsdbcompactionsfailing
         summary: Prometheus has issues compacting blocks.
-      expr: increase(prometheus_tsdb_compactions_failed_total{job="prometheus-k8s",namespace="monitoring"}[3h]) > 0
+      expr: increase(prometheus_tsdb_compactions_failed_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[3h]) > 0
       for: 4h
       labels:
         severity: warning
@@ -102,12 +102,12 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         summary: Prometheus is not ingesting samples.
       expr: |-
         (
-          rate(prometheus_tsdb_head_samples_appended_total{job="prometheus-k8s",namespace="monitoring"}[5m]) <= 0
+          rate(prometheus_tsdb_head_samples_appended_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) <= 0
         and
           (
-            sum without(scrape_job) (prometheus_target_metadata_cache_entries{job="prometheus-k8s",namespace="monitoring"}) > 0
+            sum without(scrape_job) (prometheus_target_metadata_cache_entries{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}) > 0
           or
-            sum without(rule_group) (prometheus_rule_group_rules{job="prometheus-k8s",namespace="monitoring"}) > 0
+            sum without(rule_group) (prometheus_rule_group_rules{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}) > 0
           )
         )
       for: 10m
@@ -120,7 +120,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} is dropping {{`{{`}} printf "%.4g" $value  {{`}}`}} samples/s with different values but duplicated timestamp.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus/prometheusduplicatetimestamps
         summary: Prometheus is dropping samples with duplicate timestamps.
-      expr: rate(prometheus_target_scrapes_sample_duplicate_timestamp_total{job="prometheus-k8s",namespace="monitoring"}[5m]) > 0
+      expr: rate(prometheus_target_scrapes_sample_duplicate_timestamp_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) > 0
       for: 10m
       labels:
         severity: warning
@@ -131,7 +131,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} is dropping {{`{{`}} printf "%.4g" $value  {{`}}`}} samples/s with timestamps arriving out of order.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus/prometheusoutofordertimestamps
         summary: Prometheus drops samples with out-of-order timestamps.
-      expr: rate(prometheus_target_scrapes_sample_out_of_order_total{job="prometheus-k8s",namespace="monitoring"}[5m]) > 0
+      expr: rate(prometheus_target_scrapes_sample_out_of_order_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) > 0
       for: 10m
       labels:
         severity: warning
@@ -144,12 +144,12 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         summary: Prometheus fails to send samples to remote storage.
       expr: |-
         (
-          (rate(prometheus_remote_storage_failed_samples_total{job="prometheus-k8s",namespace="monitoring"}[5m]) or rate(prometheus_remote_storage_samples_failed_total{job="prometheus-k8s",namespace="monitoring"}[5m]))
+          (rate(prometheus_remote_storage_failed_samples_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) or rate(prometheus_remote_storage_samples_failed_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]))
         /
           (
-            (rate(prometheus_remote_storage_failed_samples_total{job="prometheus-k8s",namespace="monitoring"}[5m]) or rate(prometheus_remote_storage_samples_failed_total{job="prometheus-k8s",namespace="monitoring"}[5m]))
+            (rate(prometheus_remote_storage_failed_samples_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) or rate(prometheus_remote_storage_samples_failed_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]))
           +
-            (rate(prometheus_remote_storage_succeeded_samples_total{job="prometheus-k8s",namespace="monitoring"}[5m]) or rate(prometheus_remote_storage_samples_total{job="prometheus-k8s",namespace="monitoring"}[5m]))
+            (rate(prometheus_remote_storage_succeeded_samples_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) or rate(prometheus_remote_storage_samples_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]))
           )
         )
         * 100
@@ -168,9 +168,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         # Without max_over_time, failed scrapes could create false negatives, see
         # https://www.robustperception.io/alerting-on-gauges-in-prometheus-2-0 for details.
         (
-          max_over_time(prometheus_remote_storage_highest_timestamp_in_seconds{job="prometheus-k8s",namespace="monitoring"}[5m])
+          max_over_time(prometheus_remote_storage_highest_timestamp_in_seconds{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m])
         - ignoring(remote_name, url) group_right
-          max_over_time(prometheus_remote_storage_queue_highest_sent_timestamp_seconds{job="prometheus-k8s",namespace="monitoring"}[5m])
+          max_over_time(prometheus_remote_storage_queue_highest_sent_timestamp_seconds{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m])
         )
         > 120
       for: 15m
@@ -180,16 +180,16 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.PrometheusRemoteWriteDesiredShards | default false) }}
     - alert: PrometheusRemoteWriteDesiredShards
       annotations:
-        description: Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} remote write desired shards calculation wants to run {{`{{`}} $value {{`}}`}} shards for queue {{`{{`}} $labels.remote_name{{`}}`}}:{{`{{`}} $labels.url {{`}}`}}, which is more than the max of {{`{{`}} printf `prometheus_remote_storage_shards_max{instance="%s",job="prometheus-k8s",namespace="monitoring"}` $labels.instance | query | first | value {{`}}`}}.
+        description: Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} remote write desired shards calculation wants to run {{`{{`}} $value {{`}}`}} shards for queue {{`{{`}} $labels.remote_name{{`}}`}}:{{`{{`}} $labels.url {{`}}`}}, which is more than the max of {{`{{`}} printf `prometheus_remote_storage_shards_max{instance="%s",job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}` $labels.instance | query | first | value {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus/prometheusremotewritedesiredshards
         summary: Prometheus remote write desired shards calculation wants to run more than configured max shards.
       expr: |-
         # Without max_over_time, failed scrapes could create false negatives, see
         # https://www.robustperception.io/alerting-on-gauges-in-prometheus-2-0 for details.
         (
-          max_over_time(prometheus_remote_storage_shards_desired{job="prometheus-k8s",namespace="monitoring"}[5m])
+          max_over_time(prometheus_remote_storage_shards_desired{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m])
         >
-          max_over_time(prometheus_remote_storage_shards_max{job="prometheus-k8s",namespace="monitoring"}[5m])
+          max_over_time(prometheus_remote_storage_shards_max{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m])
         )
       for: 15m
       labels:
@@ -201,7 +201,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} has failed to evaluate {{`{{`}} printf "%.0f" $value {{`}}`}} rules in the last 5m.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus/prometheusrulefailures
         summary: Prometheus is failing rule evaluations.
-      expr: increase(prometheus_rule_evaluation_failures_total{job="prometheus-k8s",namespace="monitoring"}[5m]) > 0
+      expr: increase(prometheus_rule_evaluation_failures_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) > 0
       for: 15m
       labels:
         severity: critical
@@ -212,7 +212,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} has missed {{`{{`}} printf "%.0f" $value {{`}}`}} rule group evaluations in the last 5m.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus/prometheusmissingruleevaluations
         summary: Prometheus is missing rule evaluations due to slow rule group evaluation.
-      expr: increase(prometheus_rule_group_iterations_missed_total{job="prometheus-k8s",namespace="monitoring"}[5m]) > 0
+      expr: increase(prometheus_rule_group_iterations_missed_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) > 0
       for: 15m
       labels:
         severity: warning
@@ -223,7 +223,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} has dropped {{`{{`}} printf "%.0f" $value {{`}}`}} targets because the number of targets exceeded the configured target_limit.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus/prometheustargetlimithit
         summary: Prometheus has dropped targets because some scrape configs have exceeded the targets limit.
-      expr: increase(prometheus_target_scrape_pool_exceeded_target_limit_total{job="prometheus-k8s",namespace="monitoring"}[5m]) > 0
+      expr: increase(prometheus_target_scrape_pool_exceeded_target_limit_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) > 0
       for: 15m
       labels:
         severity: warning
@@ -234,7 +234,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} has dropped {{`{{`}} printf "%.0f" $value {{`}}`}} targets because some samples exceeded the configured label_limit, label_name_length_limit or label_value_length_limit.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus/prometheuslabellimithit
         summary: Prometheus has dropped targets because some scrape configs have exceeded the labels limit.
-      expr: increase(prometheus_target_scrape_pool_exceeded_label_limits_total{job="prometheus-k8s",namespace="monitoring"}[5m]) > 0
+      expr: increase(prometheus_target_scrape_pool_exceeded_label_limits_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) > 0
       for: 15m
       labels:
         severity: warning
@@ -245,7 +245,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} has failed {{`{{`}} printf "%.0f" $value {{`}}`}} scrapes in the last 5m because some targets exceeded the configured body_size_limit.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus/prometheusscrapebodysizelimithit
         summary: Prometheus has dropped some targets that exceeded body size limit.
-      expr: increase(prometheus_target_scrapes_exceeded_body_size_limit_total{job="prometheus-k8s",namespace="monitoring"}[5m]) > 0
+      expr: increase(prometheus_target_scrapes_exceeded_body_size_limit_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) > 0
       for: 15m
       labels:
         severity: warning
@@ -256,7 +256,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} has failed {{`{{`}} printf "%.0f" $value {{`}}`}} scrapes in the last 5m because some targets exceeded the configured sample_limit.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus/prometheusscrapesamplelimithit
         summary: Prometheus has failed scrapes that have exceeded the configured sample limit.
-      expr: increase(prometheus_target_scrapes_exceeded_sample_limit_total{job="prometheus-k8s",namespace="monitoring"}[5m]) > 0
+      expr: increase(prometheus_target_scrapes_exceeded_sample_limit_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) > 0
       for: 15m
       labels:
         severity: warning
@@ -267,7 +267,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: '{{`{{`}} printf "%.0f" $value {{`}}`}} targets in Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} have failed to sync because invalid configuration was supplied.'
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus/prometheustargetsyncfailure
         summary: Prometheus has failed to sync targets.
-      expr: increase(prometheus_target_sync_failed_total{job="prometheus-k8s",namespace="monitoring"}[30m]) > 0
+      expr: increase(prometheus_target_sync_failed_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[30m]) > 0
       for: 5m
       labels:
         severity: critical
@@ -278,7 +278,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} query API has less than 20% available capacity in its query engine for the last 15 minutes.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus/prometheushighqueryload
         summary: Prometheus is reaching its maximum capacity serving concurrent requests.
-      expr: avg_over_time(prometheus_engine_queries{job="prometheus-k8s",namespace="monitoring"}[5m]) / max_over_time(prometheus_engine_queries_concurrent_max{job="prometheus-k8s",namespace="monitoring"}[5m]) > 0.8
+      expr: avg_over_time(prometheus_engine_queries{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) / max_over_time(prometheus_engine_queries_concurrent_max{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) > 0.8
       for: 15m
       labels:
         severity: warning
@@ -291,9 +291,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         summary: Prometheus encounters more than 3% errors sending alerts to any Alertmanager.
       expr: |-
         min without (alertmanager) (
-          rate(prometheus_notifications_errors_total{job="prometheus-k8s",namespace="monitoring",alertmanager!~``}[5m])
+          rate(prometheus_notifications_errors_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}",alertmanager!~``}[5m])
         /
-          rate(prometheus_notifications_sent_total{job="prometheus-k8s",namespace="monitoring",alertmanager!~``}[5m])
+          rate(prometheus_notifications_sent_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}",alertmanager!~``}[5m])
         )
         * 100
         > 3

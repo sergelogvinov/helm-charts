@@ -14,7 +14,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: '{{`{{`}} $labels.node {{`}}`}} has been unready for more than 15 minutes.'
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubenodenotready
         summary: Node is not ready.
-      expr: kube_node_status_condition{job="kube-state-metrics",condition="Ready",status="true"} == 0
+      expr: kube_node_status_condition{job="kubernetes-service-endpoints",condition="Ready",status="true"} == 0
       for: 15m
       labels:
         severity: warning
@@ -25,7 +25,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: '{{`{{`}} $labels.node {{`}}`}} is unreachable and some workloads may be rescheduled.'
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubenodeunreachable
         summary: Node is unreachable.
-      expr: (kube_node_spec_taint{job="kube-state-metrics",key="node.kubernetes.io/unreachable",effect="NoSchedule"} unless ignoring(key,value) kube_node_spec_taint{job="kube-state-metrics",key=~"ToBeDeletedByClusterAutoscaler|cloud.google.com/impending-node-termination|aws-node-termination-handler/spot-itn"}) == 1
+      expr: (kube_node_spec_taint{job="kubernetes-service-endpoints",key="node.kubernetes.io/unreachable",effect="NoSchedule"} unless ignoring(key,value) kube_node_spec_taint{job="kubernetes-service-endpoints",key=~"ToBeDeletedByClusterAutoscaler|cloud.google.com/impending-node-termination|aws-node-termination-handler/spot-itn"}) == 1
       for: 15m
       labels:
         severity: warning
@@ -38,11 +38,11 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         summary: Kubelet is running at capacity.
       expr: |-
         count by(cluster, node) (
-          (kube_pod_status_phase{job="kube-state-metrics",phase="Running"} == 1) * on(instance,pod,namespace,cluster) group_left(node) topk by(instance,pod,namespace,cluster) (1, kube_pod_info{job="kube-state-metrics"})
+          (kube_pod_status_phase{job="kubernetes-service-endpoints",phase="Running"} == 1) * on(instance,pod,namespace,cluster) group_left(node) topk by(instance,pod,namespace,cluster) (1, kube_pod_info{job="kubernetes-service-endpoints"})
         )
         /
         max by(cluster, node) (
-          kube_node_status_capacity{job="kube-state-metrics",resource="pods"} != 1
+          kube_node_status_capacity{job="kubernetes-service-endpoints",resource="pods"} != 1
         ) > 0.95
       for: 15m
       labels:
@@ -76,7 +76,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: Kubelet Pod startup 99th percentile latency is {{`{{`}} $value {{`}}`}} seconds on node {{`{{`}} $labels.node {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeletpodstartuplatencyhigh
         summary: Kubelet Pod startup latency is too high.
-      expr: histogram_quantile(0.99, sum(rate(kubelet_pod_worker_duration_seconds_bucket{job="kubelet", metrics_path="/metrics"}[5m])) by (cluster, instance, le)) * on(cluster, instance) group_left(node) kubelet_node_name{job="kubelet", metrics_path="/metrics"} > 60
+      expr: histogram_quantile(0.99, sum(rate(kubelet_pod_worker_duration_seconds_bucket{job="kubernetes-nodes", metrics_path="/metrics"}[5m])) by (cluster, instance, le)) * on(cluster, instance) group_left(node) kubelet_node_name{job="kubernetes-nodes", metrics_path="/metrics"} > 60
       for: 15m
       labels:
         severity: warning
@@ -149,7 +149,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: Kubelet has disappeared from Prometheus target discovery.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeletdown
         summary: Target disappeared from Prometheus target discovery.
-      expr: absent(up{job="kubelet", metrics_path="/metrics"} == 1)
+      expr: absent(up{job="kubernetes-nodes", metrics_path="/metrics"} == 1)
       for: 15m
       labels:
         severity: critical

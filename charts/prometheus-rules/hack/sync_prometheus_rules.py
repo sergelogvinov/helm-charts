@@ -117,29 +117,30 @@ alert_condition_map = {
 }
 
 replacement_map = {
+    'job="alertmanager-main"': {
+        'replacement': 'job="kubernetes-service-endpoints"',
+        'init': ''},
     # 'job="prometheus-operator"': {
     #     'replacement': 'job="{{ $operatorJob }}"',
     #     'init': '{{- $operatorJob := printf "%s-%s" (include "kube-prometheus-stack.fullname" .) "operator" }}'},
-    # 'job="prometheus-k8s"': {
-    #     'replacement': 'job="{{ $prometheusJob }}"',
-    #     'init': '{{- $prometheusJob := printf "%s-%s" (include "kube-prometheus-stack.fullname" .) "prometheus" }}'},
-    # 'job="alertmanager-main"': {
-    #     'replacement': 'job="{{ $alertmanagerJob }}"',
-    #     'init': '{{- $alertmanagerJob := printf "%s-%s" (include "kube-prometheus-stack.fullname" .) "alertmanager" }}'},
-    # 'namespace="monitoring"': {
-    #     'replacement': 'namespace="{{ $namespace }}"',
-    #     'init': '{{- $namespace := printf "%s" (include "kube-prometheus-stack.namespace" .) }}'},
-    # 'alertmanager-$1': {
-    #     'replacement': '$1',
-    #     'init': ''},
-    # 'job="kube-state-metrics"': {
-    #     'replacement': 'job="kube-state-metrics", namespace=~"{{ $targetNamespace }}"',
-    #     'limitGroup': ['kubernetes-apps'],
-    #     'init': '{{- $targetNamespace := .Values.defaultRules.appNamespacesTarget }}'},
-    # 'job="kubelet"': {
-    #     'replacement': 'job="kubelet", namespace=~"{{ $targetNamespace }}"',
-    #     'limitGroup': ['kubernetes-storage'],
-    #     'init': '{{- $targetNamespace := .Values.defaultRules.appNamespacesTarget }}'},
+    'job="prometheus-k8s"': {
+        'replacement': 'job="kubernetes-pods"',
+        'init': ''},
+    'namespace="monitoring"': {
+        'replacement': 'kubernetes_namespace="{{ .Release.Namespace }}"',
+        'init': ''},
+    'job="kube-state-metrics"': {
+        'replacement': 'job="kubernetes-service-endpoints"',
+        'init': ''},
+    'job="apiserver"': {
+        'replacement': 'job="kubernetes-apiservers"',
+        'init': ''},
+    'job="kubelet"': {
+        'replacement': 'job="kubernetes-nodes"',
+        'init': ''},
+    'job="node-exporter"': {
+        'replacement': 'job="prometheus-node-exporter"',
+        'init': ''},
     'runbook_url: https://runbooks.prometheus-operator.dev/runbooks/': {
         'replacement': 'runbook_url: {{ .Values.defaultRules.runbookUrl }}/',
         'init': ''}
