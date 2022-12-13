@@ -1,4 +1,7 @@
 
+prometheusConfig:
+  enabled: true
+
 defaultRules:
   create: true
   rules:

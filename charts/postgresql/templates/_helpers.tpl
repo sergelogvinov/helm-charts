@@ -123,6 +123,10 @@ ssl_ca_file = ''
 ssl_crl_file = ''
 {{- end }}
 
+tcp_keepalives_idle = 600
+tcp_keepalives_interval = 75
+tcp_keepalives_count = 10
+
 shared_preload_libraries = 'pg_stat_statements'
 pg_stat_statements.max = 10000
 pg_stat_statements.track = all

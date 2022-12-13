@@ -8,6 +8,8 @@ Base on projects:
 # prometheus-community/prometheus values
 
 server:
+  # configMapOverrideName: ""
+
   extraConfigmapMounts:
     - name: rules-configmap
       mountPath: /etc/prometheus-rules
