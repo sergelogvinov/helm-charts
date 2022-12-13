@@ -1,0 +1,37 @@
+- name: coredns-static.rules
+  rules:
+  - record: corednsrate
+    expr: sum(rate(coredns_dns_request_count_total[5m])) by (proto,instance,kubernetes_node)
+
+  - alert: CorednsRateRequests
+    expr: corednsrate > 100
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: Coredns high rate requests {{ $value }} on {{ $labels.kubernetes_node }}
+      summary: High dns rate requests
+  - alert: CorednsRateRequests
+    expr: delta(corednsrate[5m]) > 50
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      description: Coredns high growing rate requests {{ $value }} on {{ $labels.kubernetes_node }}
+      summary: High dns rate requests
+  - alert: CorednsPanicCount
+    expr: increase(coredns_panic_count_total[10m]) > 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      description: Number of CoreDNS panics encountered {{ $value }} on {{ $labels.kubernetes_node }}
+      summary: CoreDNS Panic Count
+  - alert: CorednsForwardErrors
+    expr: sum(increase(coredns_forward_healthcheck_failures_total[10m])) BY (kubernetes_node,kubernetes_pod_name,to) > 1
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: Number of CoreDNS forward errors {{ $value }} on {{ $labels.kubernetes_node }}/{{ $labels.kubernetes_pod_name }} to {{ $labels.to }}
+      summary: CoreDNS Forward Error Count

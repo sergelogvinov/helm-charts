@@ -24,13 +24,12 @@ defaultRules:
     kubeApiserverSlos: true
     kubeControllerManager: true
     kubelet: true
-    # kubeProxy: true
     kubePrometheusGeneral: true
     kubePrometheusNodeRecording: true
     kubernetesApps: true
     kubernetesResources: true
     kubernetesStorage: true
-    kubernetesSystem: false
+    kubernetesSystem: true
     kubeSchedulerAlerting: true
     kubeSchedulerRecording: true
     kubeStateMetrics: true

@@ -1,0 +1,10 @@
+- name: blackbox-static.rules
+  rules:
+  - alert: SSLCertExpiresSoon
+    expr: probe_ssl_earliest_cert_expiry{job="kubernetes-ingresses"} - time() < 7 * 24 * 3600
+    for: 30m
+    labels:
+      severity: warning
+    annotations:
+      description: SSL certificate at {{ $labels.kubernetes_namespace }} for {{ $labels.instance }} expires in {{ $value | humanizeDuration }}
+      summary: SSL certificate expires soon.

@@ -1,0 +1,10 @@
+- name: kubernetes-apps-static.rules
+  rules:
+  - alert: DeploymentReplicasNotUpdated
+    expr: (kube_deployment_status_replicas_unavailable{} > 0) unless (kube_deployment_spec_paused == 1)
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Replicas are not updated and unavailable for deployment {{$labels.namespace}}/{{$labels.deployment}}
+      summary: Deployment replicas are outdated

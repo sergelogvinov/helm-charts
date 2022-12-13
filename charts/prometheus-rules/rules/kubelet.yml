@@ -1,0 +1,27 @@
+- name: kubelet-static.rules
+  rules:
+  - alert: NodeKubeletLostApi
+    expr: sum(increase(rest_client_requests_total{code="<error>",job="kubernetes-nodes"}[3m])) without (method) > 5
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      description: Kubelet {{$labels.instance}} lost kube-apiserver
+      summary: Kubelet lost kube-apiserver
+  - alert: ManyNodesNotReady
+    expr: count(kube_node_status_condition{condition="Ready",status="true"} == 0) > 1
+      and (count(kube_node_status_condition{condition="Ready",status="true"} == 0) /
+      count(kube_node_status_condition{condition="Ready",status="true"})) > 0.2
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: '{{ $value }}% of Kubernetes nodes are not ready'
+  - alert: NodeKubeletLogSize
+    expr: sum(kubelet_container_log_filesystem_used_bytes) by (instance,namespace,pod) > 10*1024*1024*1024
+    for: 10m
+    labels:
+      severity: notice
+    annotations:
+      description: Kubelet {{$labels.instance}}/{{$labels.namespace}}/{{$labels.pod}} log size to large {{$value | humanize1024}}
+      summary: Kubelet log size

@@ -1,0 +1,10 @@
+- name: prometheus-static.rules
+  rules:
+  - alert: PrometheusTSDBWALCorruptions
+    expr: prometheus_tsdb_wal_corruptions_total > 0
+    for: 4h
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}  has a corrupted write-ahead log.
+      summary: Prometheus write-ahead log is corrupted

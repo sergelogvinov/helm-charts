@@ -8,3 +8,8 @@ data:
   rules.yml: |
     groups:
     {{- include "rules" . | nindent 4 }}
+
+{{- range $path, $bytes := .Files.Glob "rules/*.yml" }}
+      # {{ base $path }}
+{{ $.Files.Get $path | indent 6 }}
+{{- end }}

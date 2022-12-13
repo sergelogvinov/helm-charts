@@ -1,0 +1,10 @@
+- name: certmanager.rules
+  rules:
+  - alert: CertmanagerCertificateNotReady
+    expr: certmanager_certificate_ready_status{condition="False"} == 1
+    for: 1h
+    labels:
+      severity: warning
+    annotations:
+      description: Certificate for {{ $labels.namespace }}/{{ $labels.name }} is not ready
+      summary: CertmanagerCertificateNotReady

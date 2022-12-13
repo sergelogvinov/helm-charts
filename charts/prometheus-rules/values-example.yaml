@@ -4,7 +4,7 @@ defaultRules:
   rules:
     alertmanager: true
     etcd: false
-    configReloaders: true
+    configReloaders: false
     general: true
     k8s: true
     kubeApiserverAvailability: false

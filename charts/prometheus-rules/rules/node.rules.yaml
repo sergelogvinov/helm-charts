@@ -1,0 +1,23 @@
+- name: node-static.rules
+  rules:
+  - record: fd_utilization
+    expr: process_open_fds / process_max_fds
+
+  - alert: FdExhaustionClose
+    expr: predict_linear(fd_utilization[1h], 3600 * 4) > 1
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: '{{ $labels.job }}: {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} instance
+        will exhaust in file/socket descriptors within the next 4 hours'
+      summary: file descriptors soon exhausted
+  - alert: FdExhaustionClose
+    expr: predict_linear(fd_utilization[10m], 3600) > 1
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      description: '{{ $labels.job }}: {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} instance
+        will exhaust in file/socket descriptors within the next hour'
+      summary: file descriptors soon exhausted
