@@ -1,0 +1,42 @@
+- name: rabbitmq-static.rules
+  rules:
+  - alert: RabbitmqDead
+    expr: rabbitmq_up == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: RabbitMQ server {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} is dead
+      summary: RabbitMQ is dead
+  # - alert: RabbitmqNodeDead
+  #   expr: rabbitmq_running == 0
+  #   for: 1m
+  #   labels:
+  #     severity: critical
+  #   annotations:
+  #     description: RabbitMQ node {{ $labels.node }} on cluster {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_name}} is dead
+  #     summary: RabbitMQ node is dead
+  # - alert: RabbitmqPartitionsDetected
+  #   expr: rabbitmq_partitions > 0
+  #   for: 1m
+  #   labels:
+  #     severity: critical
+  #   annotations:
+  #     description: RabbitMQ partitions detected {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
+  #     summary: RabbitMQ split brain
+  - alert: RabbitmqDiskFree
+    expr: rabbitmq_alarms_free_disk_space_watermark > 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: RabbitMQ low disk space detected {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
+      summary: RabbitMQ disk free space is full
+  - alert: RabbitmqMemoryFree
+    expr: rabbitmq_alarms_memory_used_watermark > 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: RabbitMQ low memory detected {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
+      summary: RabbitMQ memory free is not enough

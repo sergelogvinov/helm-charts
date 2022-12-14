@@ -1,0 +1,10 @@
+- name: ingress-static.rules
+  rules:
+  - alert: SSLCertExpiresSoon
+    expr: nginx_ingress_controller_ssl_expire_time_seconds - time() < 4 * 24 * 3600
+    for: 30m
+    labels:
+      severity: warning
+    annotations:
+      description: SSL certificate for {{ $labels.host }} expires in {{ $value | humanizeDuration }}
+      summary: Check SSL for specified nodes and consider reissuing certificate.

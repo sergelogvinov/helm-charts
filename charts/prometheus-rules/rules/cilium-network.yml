@@ -1,0 +1,53 @@
+- name: cilium-network-static.rules
+  rules:
+  - alert: CiliumLostIcmpConnections
+    expr: cilium_unreachable_nodes > cilium_nodes_all_num - 2
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: The cilium health icmp on {{ $labels.kubernetes_node }} lost all hosts
+      summary: Network on node is not working, check icmp protocol
+  - alert: CiliumLostEndpointConnections
+    expr: cilium_unreachable_health_endpoints > cilium_nodes_all_num - 2
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: The cilium health endpoints on {{ $labels.kubernetes_node }} lost all hosts
+      summary: Network on node is not working, check port 4240 (tcp)
+
+  # - alert: CiliumLostIcmpConnections
+  #   expr: cilium_unreachable_nodes > 0
+  #   for: 5m
+  #   labels:
+  #     severity: warning
+  #   annotations:
+  #     description: The cilium health icmp on {{ $labels.kubernetes_node }} lost connections between {{ $value }} node(s)
+  #     summary: Network on node is not working, check icmp protocol
+  # - alert: CiliumLostEndpointConnections
+  #   expr: cilium_unreachable_health_endpoints > 0
+  #   for: 5m
+  #   labels:
+  #     severity: warning
+  #   annotations:
+  #     description: The cilium health endpoints on {{ $labels.kubernetes_node }} lost connections between {{ $value }} node(s)
+  #     summary: Network on node is not working, check port 4240 (tcp)
+
+  - alert: CiliumPortScan
+    expr: rate(cilium_drop_count_total{direction="INGRESS",reason="Policy denied"}[5m]) * 60 > 360
+    for: 3m
+    labels:
+      severity: notice
+    annotations:
+      description: Port scan on {{ $labels.kubernetes_node }} is comming, rate {{ $value | humanize }} per minute > 360
+      summary: Network driver reports drop packet rate
+
+  # - alert: CiliumPolicyImport
+  #   expr: delta(cilium_policy_import_errors_total[10m]) > 0
+  #   for: 1m
+  #   labels:
+  #     severity: notice
+  #   annotations:
+  #     description: Policy import error on {{ $labels.kubernetes_node }}
+  #     summary: Policy import error

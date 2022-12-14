@@ -1,0 +1,10 @@
+- name: barman-static.rules
+  rules:
+  - alert: BarmanLastBackup
+    expr: barman_last_backup_age_seconds > 3 * 3600 * 24
+    for: 1s
+    labels:
+      severity: warning
+    annotations:
+      description: Last full backup {{ $labels.server_name }} is old {{ $value | humanizeDuration }}
+      summary: Last barman backup is old

@@ -1,0 +1,61 @@
+- name: redis-static.rules
+  rules:
+  - alert: RedisMultiMaster
+    expr: count(redis_connected_slaves{role="master"}) by (kubernetes_namespace, project, name) > 1
+    for: 1s
+    labels:
+      severity: critical
+    annotations:
+      description: Redis multi master detected, {{ $labels.kubernetes_namespace }}/project={{ $labels.project }}/{{ $labels.name }}
+      summary: Redis cluster has more then one master
+  - alert: RedisLostMaster
+    expr: redis_master_link_up{role="slave"} != 1
+    for: 5s
+    labels:
+      severity: warning
+    annotations:
+      description: Redis slave cannot connect to master, {{ $labels.kubernetes_namespace }}/project={{ $labels.project }}
+      summary: Redis slave cannot connect to master
+  - alert: RedisReplicationBroken
+    expr: delta(redis_connected_slaves[3m]) < 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: Redis instance {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} lost a slave
+      summary: Replication broken lost a slave
+  - alert: RedisClientConnections
+    expr: redis_config_maxclients - redis_connected_clients < 10
+    for: 5s
+    labels:
+      severity: warning
+      source: application
+    annotations:
+      description: No more redis connections {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
+      summary: Redis connection less then 10
+  - alert: RejectedConnections
+    expr: increase(redis_rejected_connections_total[2m]) > 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: Some connections to Redis {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} has been rejected
+      summary: Rejected connections
+  - alert: RedisMemoryFull
+    expr: (redis_config_maxmemory > 0) and (redis_memory_used_bytes * 0.9 > redis_config_maxmemory)
+    for: 5s
+    labels:
+      severity: warning
+    annotations:
+      description: No more redis connections {{ $labels.kubernetes_namespace }} project={{ $labels.project
+        }} {{ $labels.kubernetes_pod_name }} - {{ $labels.redis_memory_used_bytes | humanize }}
+      summary: Free redis memory less then 10%
+  - alert: RedisMissingBackup
+    expr: time() - redis_rdb_last_save_timestamp_seconds > 60 * 60 * 24 * 7
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: Redis {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name
+        }} has not been backuped more then 7 days ({{ $value | humanizeDuration }})
+      summary: Missing backup

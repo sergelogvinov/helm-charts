@@ -1,0 +1,36 @@
+- name: fluentd-static.rules
+  rules:
+  - alert: FluentdBufferOverflowError
+    expr: fluentd_output_status_buffer_available_space_ratio == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: In the last 1 minute, fluentd has no free buffers {{ $value }}
+      summary: Fluentd BufferOverflowError
+
+  # - alert: FluentdQueueLength
+  #   expr: rate(fluentd_status_buffer_queue_length[5m]) > 0.3
+  #   for: 1m
+  #   labels:
+  #     severity: warning
+  #   annotations:
+  #     description: In the last 5 minutes, fluentd queues increased 30%. Current value is {{ $value }}
+  #     summary: Fluentd node are failing
+  # - alert: FluentdQueueLength
+  #   expr: rate(fluentd_status_buffer_queue_length[5m]) > 0.5
+  #   for: 1m
+  #   labels:
+  #     severity: critical
+  #   annotations:
+  #     description: In the last 5 minutes, fluentd queues increased 50%. Current value is {{ $value }}
+  #     summary: Fluentd node are critical
+
+  - alert: FluentdOutputErrors
+    expr: increase(fluentd_output_status_num_errors[10m]) > 5
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      description: In the last 10 minutes, fluentd output error more then 5. Current value is {{ $value }}
+      summary: Fluentd parser/send error

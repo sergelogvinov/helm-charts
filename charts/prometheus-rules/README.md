@@ -3,6 +3,7 @@ Static configmap.
 Base on projects:
 * [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts)
 * [prometheus-operator](https://github.com/prometheus-operator/kube-prometheus/tree/main/manifests)
+* https://github.com/roaldnefs/awesome-prometheus
 
 ```yaml
 # prometheus-community/prometheus values

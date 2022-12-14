@@ -1,0 +1,102 @@
+- name: postgresql-static.rules
+  rules:
+  - alert: PostgresInstanceDown
+    expr:  pg_up == 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      description: Postgres instance dead, {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} project={{ $labels.project }}
+      summary: Postgres instance dead
+  - alert: PostgresInstanceDown
+    expr:  pg_up{type="master"} == 0
+    for: 10s
+    labels:
+      severity: critical
+    annotations:
+      description: Postgres master instance dead, {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} project={{ $labels.project }}
+      summary: Postgres master instance dead
+  - alert: PostgresScrape
+    expr:  pg_exporter_last_scrape_error > 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Postgres instance scrape error, {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} project={{ $labels.project }}
+      summary: Postgres instance scrape error
+  - alert: PostgresExporterConfigReloadFailed
+    expr: pg_exporter_user_queries_load_error != 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Reloading Postgresql exporter configuration has failed for {{$labels.kubernetes_namespace}}/{{$labels.kubernetes_pod_name}}
+      summary: Reloading Postgresql exporter configuration failed
+
+  - alert: PostgresTraffic
+    expr: delta(pg_stat_database_tup_fetched[3m]) > 1024*1024*1024
+    for: 2m
+    labels:
+      severity: notice
+      source: application
+    annotations:
+      description: PostgreSQL to many fetch data {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}/{{ $labels.datname }} > 1Gi ({{ $value | humanize }})
+        within the next 5 minute
+      summary: PostgreSQL high Fetch data
+  - alert: PostgresQPS
+    expr: delta(pg_stat_database_xact_commit[1m]) > 24000
+    for: 5m
+    labels:
+      severity: notice
+      source: application
+    annotations:
+      description: PostgreSQL query per minute {{$labels.kubernetes_pod_name}}/{{$labels.datname}} > 24000
+        within the next 1 minute (namespace {{$labels.kubernetes_namespace}})
+      summary: PostgreSQL high QPS
+  - alert: PostgresDeadlocks
+    expr: rate(pg_stat_database_deadlocks{}[2m]) > 0
+    for: 5m
+    labels:
+      severity: warning
+      source: application
+    annotations:
+      description: PostgreSQL on {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} has dead-locks {{ $value }}
+      summary: PostgreSQL dead locks
+  - alert: PostgresTooManyConnections
+    expr: sum by (kubernetes_pod_name,kubernetes_namespace,instance) (pg_stat_activity_count{datname!~"template.*|postgres"}) > ON(kubernetes_pod_name,
+          kubernetes_namespace,instance) pg_settings_max_connections * 0.8
+    for: 5m
+    labels:
+      severity: warning
+      source: application
+    annotations:
+      description: PostgreSQL on {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} has too many connections {{ $value }}
+      summary: PostgreSQL connections is close to the maximum
+
+  - alert: PostgresReplicationLag
+    expr: pg_replication_lag > 2*60*60 and (pg_replication_is_replica == 1)
+    for: 5m
+    labels:
+      severity: critical
+      source: application
+    annotations:
+      description: PostgreSQL on {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} has replication lag {{ $value | humanizeDuration }}
+      summary: PostgreSQL replication lag is going up
+  - alert: PostgresReplicationLag
+    expr: pg_replication_lag > 15*60 and (pg_replication_is_replica == 1)
+    for: 5m
+    labels:
+      severity: warning
+      source: application
+    annotations:
+      description: PostgreSQL on {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} has replication lag {{ $value | humanizeDuration }}
+      summary: PostgreSQL replication lag is going up
+  - alert: PostgresUnusedReplicationSlot
+    expr: pg_replication_slots_active == 0
+    for: 60m
+    labels:
+      severity: warning
+      source: application
+    annotations:
+      description: PostgreSQL on {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} has unused {{ $labels.slot_type }} slot "{{ $labels.slot_name }}"
+      summary: PostgreSQL replication slots
