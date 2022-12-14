@@ -21,6 +21,9 @@ prometheusConfig:
 
     external_labels: {}
 
+  ruleFiles:
+    - /etc/prometheus-rules/*.yml
+
   ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write
   ##
   remoteWrite: []
@@ -74,5 +77,6 @@ defaultRules:
   ## Disabled PrometheusRule alerts
   disabled:
     Watchdog: true
+    InfoInhibitor: true
     # KubeAPIDown: true
     # NodeRAIDDegraded: true

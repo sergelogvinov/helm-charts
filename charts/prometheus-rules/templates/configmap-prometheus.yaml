@@ -19,6 +19,10 @@ data:
       evaluation_interval: {{ default "1m" .Values.prometheusConfig.global.evaluation_interval }}
       scrape_interval: {{ default "1m" .Values.prometheusConfig.global.scrape_interval }}
       scrape_timeout: {{ default "10s" .Values.prometheusConfig.global.scrape_timeout }}
+      {{- with .Values.prometheusConfig.global.external_labels }}
+      external_labels:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 
     {{- if .Values.prometheusConfig.remoteWrite }}
     remote_write:
@@ -54,7 +58,7 @@ data:
     rule_files:
       - /etc/config/recording_rules.yml
       - /etc/config/alerting_rules.yml
-      - /etc/prometheus-rules/*.yml
+      {{ .Values.prometheusConfig.ruleFiles | toYaml | nindent 6 }}
 
     scrape_configs:
       - job_name: 'kubernetes-apiservers'
