@@ -476,4 +476,8 @@ data:
             target_label: kubernetes_namespace
           - source_labels: [__meta_kubernetes_ingress_name]
             target_label: kubernetes_name
+
+      {{- if .Values.prometheusConfig.extraScrapeConfigs }}
+      {{ tpl .Values.prometheusConfig.extraScrapeConfigs . | nindent 6 }}
+      {{- end }}
 {{- end }}

@@ -39,6 +39,22 @@ prometheusConfig:
   ## Ref: https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/
   recordingRules: ~
 
+  extraScrapeConfigs: []
+    # - job_name: 'prometheus-blackbox-exporter'
+    #   metrics_path: /probe
+    #   params:
+    #     module: [http_2xx]
+    #   static_configs:
+    #     - targets:
+    #       - https://example.com
+    #   relabel_configs:
+    #     - source_labels: [__address__]
+    #       target_label: __param_target
+    #     - source_labels: [__param_target]
+    #       target_label: instance
+    #     - target_label: __address__
+    #       replacement: prometheus-blackbox-exporter:9115
+
 ## Create default rules for monitoring the cluster
 ##
 defaultRules:
