@@ -74,6 +74,16 @@ entries:
     version: 0.1.0
   fluentd:
   - apiVersion: v2
+    appVersion: 1.15.3
+    created: "2022-12-14T12:33:10.318024181Z"
+    description: A Helm chart for Kubernetes
+    digest: 59b0c4d7d741e76f5ff57a3f5ec573f929d6a44e16d710e2e687178ae052394d
+    name: fluentd
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/fluentd-0.0.3/fluentd-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
     appVersion: v1.15-1
     created: "2022-12-02T16:06:10.44621869Z"
     description: A Helm chart for Kubernetes
@@ -250,6 +260,16 @@ entries:
     version: 0.3.6
   prometheus-rules:
   - apiVersion: v2
+    appVersion: 0.0.4
+    created: "2022-12-14T12:33:10.482296253Z"
+    description: A Helm chart for Kubernetes
+    digest: 2467cd24cf1b00a5f2a1cdc6345910f3832a097eaefa2991483e79276e8ffa13
+    name: prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.4/prometheus-rules-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
     appVersion: 0.0.3
     created: "2022-12-13T18:07:24.317158806Z"
     description: A Helm chart for Kubernetes
@@ -300,4 +320,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tabix-0.1.0/tabix-0.1.0.tgz
     version: 0.1.0
-generated: "2022-12-13T18:07:24.317221308Z"
+generated: "2022-12-14T12:33:10.482353253Z"
