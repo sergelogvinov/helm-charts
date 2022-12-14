@@ -260,6 +260,16 @@ entries:
     version: 0.3.6
   prometheus-rules:
   - apiVersion: v2
+    appVersion: 2.40.0
+    created: "2022-12-14T16:29:09.742886353Z"
+    description: A Helm chart for Kubernetes
+    digest: ab8808b57e1d46aaf049f13675cdbf8a1f0fc4fa7da125dceb073c7fa96810bb
+    name: prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.6/prometheus-rules-0.1.6.tgz
+    version: 0.1.6
+  - apiVersion: v2
     appVersion: 0.0.4
     created: "2022-12-14T12:33:10.482296253Z"
     description: A Helm chart for Kubernetes
@@ -320,4 +330,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tabix-0.1.0/tabix-0.1.0.tgz
     version: 0.1.0
-generated: "2022-12-14T12:33:10.482353253Z"
+generated: "2022-12-14T16:29:09.743031366Z"
