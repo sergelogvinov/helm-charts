@@ -1,0 +1,52 @@
+- name: node-exporter-static.rules
+  rules:
+  - alert: RaidStatus
+    expr: node_md_blocks - node_md_blocks_synced > 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: The raid on {{ $labels.kubernetes_node_name }} {{ $labels.device }} is syncing {{ $labels.value }}
+      summary: MD-Raid on node is syncing
+  - alert: MD Raid not in Active state
+    expr: node_md_state{state!~"active"} == 1
+    for: 5h
+    labels:
+      severity: warning
+      infrastructure: true
+    annotations:
+      description: "MD Raid {{$labels.device}} is in {{$labels.state}} state on {{$labels.kubernetes_node_name}} node"
+
+  - alert: NVME disk is overheated
+    expr: node_hwmon_temp_celsius{chip=~"^0000.*",sensor=~"temp.+"} > 65
+    for: 20m
+    labels:
+      severity: warning
+      infrastructure: true
+    annotations:
+      description: "NVME disk (chip id {{$labels.chip}} on node {{$labels.kubernetes_node_name}} is overheated ({{$value}}'C)"
+
+  - alert: NodeUptime
+    expr: node_time_seconds - node_boot_time_seconds > 6*30*24*60*60
+    for: 1s
+    labels:
+      severity: warning
+    annotations:
+      description: The node {{ $labels.kubernetes_node_name }} needs maintenance work, uptime is {{ $value | humanizeDuration }}
+      summary: Node maintenance requared.
+  - alert: NodeUptime
+    expr: min by (kubernetes_node_name) (node_time_seconds - node_boot_time_seconds) < 60*60*2 unless count(up{job="prometheus-node-exporter"} offset 1h) by (kubernetes_node_name)
+    for: 1s
+    labels:
+      severity: warning
+    annotations:
+      description: The new node {{ $labels.kubernetes_node_name }} has appeared, uptime is {{ $value | humanizeDuration }}
+      summary: The new node has been added.
+  - alert: NodeUptime
+    expr: min by (kubernetes_node_name) (node_time_seconds - node_boot_time_seconds) < 60*60*2 and count(up{job="prometheus-node-exporter"} offset 6h) by (kubernetes_node_name)
+    for: 1s
+    labels:
+      severity: warning
+    annotations:
+      description: The node {{ $labels.kubernetes_node_name }} has been restarted, uptime is {{ $value | humanizeDuration }}
+      summary: Node has been restarted
