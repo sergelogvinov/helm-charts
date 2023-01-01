@@ -1,0 +1,11 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "tailscale.fullname" . }}
+  labels:
+    {{- include "tailscale.labels" . | nindent 4 }}
+rules:
+- apiGroups: [""]
+  resourceNames: [{{ printf "%s-state" (include "tailscale.fullname" .) | quote }}]
+  resources: ["secrets"]
+  verbs: ["get", "update", "patch"]
