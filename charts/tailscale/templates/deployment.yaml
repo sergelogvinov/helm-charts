@@ -54,6 +54,8 @@ spec:
               value: "false"
             - name: TS_STATE_DIR
               value: /tmp
+            - name: TS_TAILSCALED_EXTRA_ARGS
+              value: --state=mem
             - name: HOSTNAME
               valueFrom:
                 fieldRef:
