@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   clickhouse:
   - apiVersion: v2
+    appVersion: 22.12.1.1752
+    created: "2023-01-05T01:06:43.89619907Z"
+    description: Clickhouse chart for Kubernetes
+    digest: 9e2ba1901fbf71aacb8623a201b397a91cb40cc44218a565c92e957e999fc582
+    name: clickhouse
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-0.1.8/clickhouse-0.1.8.tgz
+    version: 0.1.8
+  - apiVersion: v2
     appVersion: 22.10.3.27
     created: "2022-12-01T04:11:09.55335423Z"
     description: Clickhouse chart for Kubernetes
@@ -62,6 +72,16 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-0.1.0/clickhouse-0.1.0.tgz
     version: 0.1.0
   clickhouse-keeper:
+  - apiVersion: v2
+    appVersion: 22.12.1.1752-alpine
+    created: "2023-01-05T01:06:44.049389571Z"
+    description: A Helm chart for Kubernetes
+    digest: bedabaa43e2f9074bac0205dd54f2d2d2bd2ca9e336337cf3a583026fbd8bb22
+    name: clickhouse-keeper
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-keeper-0.1.1/clickhouse-keeper-0.1.1.tgz
+    version: 0.1.1
   - apiVersion: v2
     appVersion: 22.6.4.35-alpine
     created: "2022-08-12T14:48:17.48890411Z"
@@ -361,4 +381,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-01-05T00:48:34.573526248Z"
+generated: "2023-01-05T01:06:44.049450071Z"
