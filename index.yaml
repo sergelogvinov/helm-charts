@@ -95,6 +95,16 @@ entries:
     version: 0.0.1
   keydb:
   - apiVersion: v2
+    appVersion: 6.3.1
+    created: "2023-01-05T00:48:34.080027047Z"
+    description: A Helm chart for Kubernetes
+    digest: 339746d450933042067922bc787e28d0956ab23c80ba8dcb5ba5f94937574bfc
+    name: keydb
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.2.5/keydb-0.2.5.tgz
+    version: 0.2.5
+  - apiVersion: v2
     appVersion: x86_64_v6.2.0
     created: "2022-08-12T14:48:17.746653948Z"
     description: A Helm chart for Kubernetes
@@ -261,6 +271,16 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2023-01-05T00:48:34.345080105Z"
+    description: A Helm chart for Kubernetes
+    digest: b7fa05a3dc503e4ea511f8007c3fe6b433cf308df02f450faa61e2e8acfd146f
+    name: prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.8/prometheus-rules-0.1.8.tgz
+    version: 0.1.8
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2022-12-14T16:29:09.742886353Z"
     description: A Helm chart for Kubernetes
     digest: ab8808b57e1d46aaf049f13675cdbf8a1f0fc4fa7da125dceb073c7fa96810bb
@@ -330,4 +350,15 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tabix-0.1.0/tabix-0.1.0.tgz
     version: 0.1.0
-generated: "2022-12-14T16:29:09.743031366Z"
+  tailscale:
+  - apiVersion: v2
+    appVersion: v1.34.1
+    created: "2023-01-05T00:48:34.573457647Z"
+    description: A Helm chart for Kubernetes
+    digest: d03bb6328c4dd4c0ae4ba84b9361a148dc92711f0fc6c9eb2165afb524c6ac7f
+    name: tailscale
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
+    version: 0.1.1
+generated: "2023-01-05T00:48:34.573526248Z"
