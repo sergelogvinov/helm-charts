@@ -208,6 +208,16 @@ entries:
     version: 0.1.0
   pgbouncer:
   - apiVersion: v2
+    appVersion: "12.13"
+    created: "2023-01-09T14:59:46.824451429Z"
+    description: A Helm chart for Kubernetes
+    digest: 1ecbd0da98dee49b0a35089808bedd26bb48d070a22143b1b1e264e0b00bd10b
+    name: pgbouncer
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.3/pgbouncer-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2022-08-12T14:48:18.559735139Z"
     description: A Helm chart for Kubernetes
@@ -381,4 +391,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-01-05T01:06:44.049450071Z"
+generated: "2023-01-09T14:59:46.824703638Z"
