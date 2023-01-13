@@ -41,6 +41,12 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
         - name: init
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+              - ALL
           image: alpine:3.16
           imagePullPolicy: IfNotPresent
           command: ["/start/init.sh"]
