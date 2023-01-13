@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "tailscale.fullname" . }}
+  labels:
+    {{- include "tailscale.labels" . | nindent 4 }}
+data:
+  entrypoint.sh: |
+    #!/bin/sh
+    set -e
+
+    source /tmp/labels
+    export TS_EXTRA_ARGS="--hostname=$NODE-$REGION -advertise-exit-node --advertise-tags=$TS_TAGS"
+    export TS_KUBE_SECRET=tailscale-$NODE-$REGION
+
+    /usr/local/bin/containerboot
+
+  init.sh: |
+    #!/bin/sh
+    set -e
+    apk add jq curl
+
+    TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+    CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+
+    curl --fail --silent --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" \
+        https://kubernetes.default.svc/api/v1/nodes/${NODE} | jq .metadata.labels > /tmp/labels.json
+
+    ZONE=$(jq '."topology.kubernetes.io/zone"' -r /tmp/labels.json)
+    REGION=$(jq '."topology.kubernetes.io/region"' -r /tmp/labels.json)
+
+    echo "export ZONE=${ZONE}"      > /tmp/labels
+    echo "export REGION=${REGION}" >> /tmp/labels

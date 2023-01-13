@@ -5,7 +5,18 @@ metadata:
   labels:
     {{- include "tailscale.labels" . | nindent 4 }}
 rules:
-- apiGroups: [""]
-  resourceNames: [{{ printf "%s-state" (include "tailscale.fullname" .) | quote }}]
-  resources: ["secrets"]
-  verbs: ["get", "update", "patch"]
+  - apiGroups: [""]
+    # resourceNames: [{{ printf "%s-state" (include "tailscale.fullname" .) | quote }}]
+    resources: ["secrets"]
+    verbs: ["create", "get", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "tailscale.fullname" . }}
+  labels:
+    {{- include "tailscale.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get"]
