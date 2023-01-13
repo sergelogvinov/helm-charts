@@ -423,6 +423,16 @@ entries:
   tailscale:
   - apiVersion: v2
     appVersion: v1.34.1
+    created: "2023-01-13T10:54:47.269531936Z"
+    description: A Helm chart for Kubernetes
+    digest: 863ea68ca3e5d9d04fa514b8f5bdf68ce28852e0027da8a37dea7f9ffa28d189
+    name: tailscale
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.2/tailscale-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: v1.34.1
     created: "2023-01-05T00:48:34.573457647Z"
     description: A Helm chart for Kubernetes
     digest: d03bb6328c4dd4c0ae4ba84b9361a148dc92711f0fc6c9eb2165afb524c6ac7f
@@ -431,4 +441,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-01-13T03:41:54.224539726Z"
+generated: "2023-01-13T10:54:47.269913135Z"
