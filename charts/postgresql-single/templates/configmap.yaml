@@ -25,7 +25,7 @@ data:
     {{ .Values.pgHbaConfiguration | nindent 4 }}
 
   queries.yaml: |
-    {{ .Values.metrics.queries | nindent 4 }}
+    {{ tpl .Values.metrics.queries . | nindent 4 }}
 
   metrics.sql: |
     CREATE EXTENSION pg_stat_statements;
