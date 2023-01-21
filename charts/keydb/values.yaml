@@ -64,12 +64,6 @@ backup:
   enabled: false
   recovery: false
 
-  image:
-    repository: ghcr.io/sergelogvinov/keydb
-    pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
-    tag: ""
-
   walg: ~
 
   # schedule: "" to disable cron backup
@@ -116,9 +110,9 @@ securityContext:
     type: RuntimeDefault
   allowPrivilegeEscalation: false
   readOnlyRootFilesystem: true
-  # capabilities:
-  #   drop:
-  #   - ALL
+  capabilities:
+    drop:
+    - ALL
 
 priorityClassName: ~
 
