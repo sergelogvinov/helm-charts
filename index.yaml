@@ -156,6 +156,16 @@ entries:
     version: 0.2.3
   mongodb-backup:
   - apiVersion: v2
+    appVersion: 6.0.3
+    created: "2023-01-30T17:57:45.985927003Z"
+    description: A Helm chart for Kubernetes
+    digest: 8c6099655478ebc2500b3b7c60ae2c598595abff09e2d63da75bc9015ac82aec
+    name: mongodb-backup
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongodb-backup-0.2.5/mongodb-backup-0.2.5.tgz
+    version: 0.2.5
+  - apiVersion: v2
     appVersion: 6.0.1
     created: "2022-09-27T13:31:17.765198688Z"
     description: A Helm chart for Kubernetes
@@ -471,4 +481,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-01-21T09:14:58.84581796Z"
+generated: "2023-01-30T17:57:45.986034506Z"
