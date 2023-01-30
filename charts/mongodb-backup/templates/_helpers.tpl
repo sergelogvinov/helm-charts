@@ -90,6 +90,9 @@ WALG_FILE_PREFIX: /backup
 {{ .Values.walg }}
 {{- end }}
 
+OPLOG_PITR_DISCOVERY_INTERVAL: '168h'
+OPLOG_PUSH_WAIT_FOR_BECOME_PRIMARY: 'true'
+
 MONGODB_URI:                 '{{ include "mongodb-backup.mongodb" . }}'
 WALG_STREAM_CREATE_COMMAND:  'mongodump --archive --oplog --uri="{{ include "mongodb-backup.mongodb" . }}"'
 WALG_STREAM_RESTORE_COMMAND: 'mongorestore --archive --oplogReplay --uri="{{ include "mongodb-backup-localhost.mongodb" . }}"'
