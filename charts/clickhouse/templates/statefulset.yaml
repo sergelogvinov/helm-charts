@@ -125,6 +125,8 @@ spec:
                 path: config.xml
               - key: storage.xml
                 path: storage.xml
+              - key: backups.xml
+                path: backups.xml
         - name: logs
           emptyDir: {}
       {{- if .Values.tlsCerts.create }}

@@ -90,6 +90,23 @@ affinity: {}
 metrics:
   enabled: false
 
+cronjobs: []
+  # - name: backup
+  #   schedule: "0 0 * * *"
+  #   command: |
+  #     #!/bin/sh
+  #   env: {}
+  #   resources:
+  #     # limits:
+  #     #   cpu: 100m
+  #     #   memory: 128Mi
+  #     requests:
+  #       cpu: 100m
+  #       memory: 64Mi
+  #   nodeSelector: {}
+  #   tolerations: []
+  #   affinity: {}
+
 #
 # clickhouse specific
 #

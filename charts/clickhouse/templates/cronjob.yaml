@@ -1,0 +1,77 @@
+{{- range $key, $val := .Values.cronjobs }}
+{{- if $val.envs }}
+{{- if semverCompare ">=1.22" $.Capabilities.KubeVersion.GitVersion -}}
+apiVersion: batch/v1
+{{- else -}}
+apiVersion: batch/v1beta1
+{{- end }}
+kind: CronJob
+metadata:
+  name: {{ include "clickhouse.fullname" $ }}-{{ $val.name }}
+  labels:
+    {{- include "clickhouse.labels" $ | nindent 4 }}
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  schedule: "{{ $val.schedule }}"
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: {{ default 3600 $val.activeDeadlineSeconds }}
+      backoffLimit: 0
+      template:
+        metadata:
+          name: {{ include "clickhouse.fullname" $ }}-{{ $val.name }}
+          labels:
+            {{- include "clickhouse.labels" $ | nindent 12 }}
+        spec:
+          restartPolicy: Never
+          enableServiceLinks: false
+          {{- with $.Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          securityContext:
+            {{- toYaml $.Values.podSecurityContext | nindent 12 }}
+          containers:
+            - name: {{ include "clickhouse.fullname" $ }}-{{ $val.name }}
+              securityContext:
+                {{- toYaml $.Values.securityContext | nindent 16 }}
+              image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+              imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              command: ["/entrypoint.d/command.sh"]
+              env:
+                - name: CLICKHOUSE_HOST
+                  value: {{ include "clickhouse.fullname" $ }}
+              envFrom:
+                {{- if ne (len $val.envs) 0 }}
+                - secretRef:
+                    name: {{ include "clickhouse.fullname" $ }}-{{ $val.name }}-envs
+                {{- end }}
+              volumeMounts:
+                  - name: command
+                    mountPath: /entrypoint.d
+              resources:
+                {{- toYaml $val.resources | nindent 16 }}
+          {{- with $val.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $val.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $val.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumes:
+            - name: command
+              configMap:
+                name: {{ include "clickhouse.fullname" $ }}
+                items:
+                  - key: command-{{ $val.name }}
+                    path: command.sh
+                defaultMode: 360
+{{- end }}
+{{- end }}

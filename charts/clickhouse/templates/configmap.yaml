@@ -131,7 +131,9 @@ data:
                 {{- range $key, $val := .Values.storage.disks }}
                 <{{ $key }}>
                     {{- range $k, $v := $val }}
+                    {{- if not (has $k (list "backup")) }}
                     <{{ $k }}>{{ $v }}</{{ $k }}>
+                    {{- end }}
                     {{- end }}
                 </{{ $key }}>
                 {{- end }}
@@ -146,7 +148,7 @@ data:
                         {{- if $val }}
                         <{{ $key }}>
                             {{- range $k, $v := $val }}
-                            {{- if not (has $k (list "move_factor" "default_disk")) }}
+                            {{- if not (has $k (list "move_factor" "default_disk" "backup")) }}
                             <{{ $k }}>{{ $v }}</{{ $k }}>
                             {{- end }}
                             {{- end }}
@@ -161,3 +163,18 @@ data:
             </policies>
         </storage_configuration>
     </clickhouse>
+
+  backups.xml: |-
+    <clickhouse>
+        <backups>
+            {{- range $key, $val := .Values.storage.disks }}{{ if $val.backup }}
+            <allowed_disk>{{ $key }}</allowed_disk>
+            {{- end }}{{- end }}
+            <allowed_path>/backups/</allowed_path>
+        </backups>
+    </clickhouse>
+
+{{ range $key, $val := .Values.cronjobs }}
+  command-{{ $val.name }}: |-
+    {{- $val.command | nindent 4 }}
+{{- end }}
