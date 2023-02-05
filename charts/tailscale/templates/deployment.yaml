@@ -40,7 +40,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
-        - name: init-{{ .Chart.Name }}
+        - name: {{ .Chart.Name }}-init-tailscale
           securityContext:
             seccompProfile:
               type: RuntimeDefault
@@ -58,7 +58,7 @@ spec:
           volumeMounts:
             - name: scripts
               mountPath: /start
-        - name: init
+        - name: {{ .Chart.Name }}-init
           securityContext:
             seccompProfile:
               type: RuntimeDefault
