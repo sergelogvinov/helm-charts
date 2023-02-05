@@ -381,6 +381,16 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2023-02-05T19:47:55.965748798Z"
+    description: A Helm chart for Kubernetes
+    digest: 625d190038726156d08e5263e8a39ec6b1385ac15334c3b26e6679925dd71e88
+    name: prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.9/prometheus-rules-0.1.9.tgz
+    version: 0.1.9
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2023-01-05T00:48:34.345080105Z"
     description: A Helm chart for Kubernetes
     digest: b7fa05a3dc503e4ea511f8007c3fe6b433cf308df02f450faa61e2e8acfd146f
@@ -462,6 +472,16 @@ entries:
     version: 0.1.0
   tailscale:
   - apiVersion: v2
+    appVersion: v1.36.0
+    created: "2023-02-05T19:47:56.101026672Z"
+    description: A Helm chart for Kubernetes
+    digest: 419654f87b25e91a84b96d1140b39c262c8bd0f028ee7c149d8716ead5304ab0
+    name: tailscale
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.5/tailscale-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
     appVersion: v1.34.1
     created: "2023-01-13T15:05:29.666155427Z"
     description: A Helm chart for Kubernetes
@@ -491,4 +511,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-02-02T17:40:22.797749753Z"
+generated: "2023-02-05T19:47:56.10122948Z"
