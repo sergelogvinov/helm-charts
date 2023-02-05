@@ -1,0 +1,5 @@
+1. Get the openvpn client config by running these commands:
+
+kubectl --namespace {{ .Release.Namespace }} get secret {{ include "openvpn.fullname" . }} -o jsonpath="{.data.ca\.crt}" | base64 --decode > ca.crt
+kubectl --namespace {{ .Release.Namespace }} get secret {{ include "openvpn.fullname" . }} -o jsonpath="{.data.client\.crt}" | base64 --decode > client.crt
+kubectl --namespace {{ .Release.Namespace }} get secret {{ include "openvpn.fullname" . }} -o jsonpath="{.data.client\.key}" | base64 --decode > client.key

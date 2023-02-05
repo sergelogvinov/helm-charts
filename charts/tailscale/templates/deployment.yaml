@@ -9,8 +9,8 @@ metadata:
   labels:
     {{- include "tailscale.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
   {{- if not .Values.useDaemonSet }}
+  replicas: {{ .Values.replicaCount }}
   strategy:
     type: {{ .Values.updateStrategy.type }}
     rollingUpdate:
@@ -40,13 +40,31 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
+        - name: init-{{ .Chart.Name }}
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              add:
+                - NET_ADMIN
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: false
+            runAsUser: 0
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/start/init-tailscale.sh"]
+          volumeMounts:
+            - name: scripts
+              mountPath: /start
         - name: init
           securityContext:
             seccompProfile:
               type: RuntimeDefault
             capabilities:
               drop:
-              - ALL
+                - ALL
           image: alpine:3.16
           imagePullPolicy: IfNotPresent
           command: ["/start/init.sh"]
@@ -75,8 +93,10 @@ spec:
               value: "false"
             # - name: TS_STATE_DIR
             #   value: /tmp
-            # - name: TS_TAILSCALED_EXTRA_ARGS
-            #   value: --state=mem
+            {{- if .Values.service.p2pPort }}
+            - name: TS_TAILSCALED_EXTRA_ARGS
+              value: -port={{ .Values.service.p2pPort }}
+            {{- end }}
             - name: NODE
               valueFrom:
                 fieldRef:
@@ -88,9 +108,11 @@ spec:
             - name: socks
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-            # - name: p2p
-            #   containerPort: {{ .Values.service.port }}
-            #   protocol: UDP
+            {{- if .Values.service.p2pPort }}
+            - name: p2p
+              containerPort: {{ .Values.service.p2pPort }}
+              protocol: UDP
+            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:

@@ -13,3 +13,24 @@ spec:
       name: socks
   selector:
     {{- include "tailscale.selectorLabels" . | nindent 4 }}
+{{- if .Values.service.p2pPort }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "tailscale.fullname" . }}-p2p
+  labels:
+    {{- include "tailscale.labels" . | nindent 4 }}
+spec:
+  type: NodePort
+  sessionAffinity: None
+  externalTrafficPolicy: Local
+  ports:
+    - port: {{ .Values.service.p2pPort }}
+      nodePort: {{ .Values.service.p2pPort }}
+      targetPort: p2p
+      protocol: UDP
+      name: p2p
+  selector:
+    {{- include "tailscale.selectorLabels" . | nindent 4 }}
+{{- end }}

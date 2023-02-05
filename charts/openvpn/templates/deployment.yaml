@@ -1,0 +1,126 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openvpn.fullname" . }}
+  labels:
+    {{- include "openvpn.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "openvpn.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "openvpn.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/entrypoint/start.sh"]
+          ports:
+            - name: openvpn
+              containerPort: {{ .Values.service.port }}
+              protocol: {{ .Values.service.proto }}
+          volumeMounts:
+            - name: scripts
+              mountPath: /entrypoint
+            - name: config
+              mountPath: /etc/openvpn/server
+            - name: users
+              mountPath: /etc/openvpn/users
+            - name: certs
+              mountPath: /etc/openvpn/certs
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        - name: {{ .Chart.Name }}-dns
+          image: coredns/coredns:1.10.0
+          imagePullPolicy: IfNotPresent
+          args: [ "-conf", "/etc/coredns/Corefile" ]
+          volumeMounts:
+            - name: coredns
+              mountPath: /etc/coredns
+              readOnly: true
+          resources:
+            limits:
+              memory: 170Mi
+            requests:
+              cpu: 100m
+              memory: 70Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              add:
+              - NET_BIND_SERVICE
+              drop:
+              - all
+            readOnlyRootFilesystem: true
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: scripts
+          configMap:
+            name: {{ include "openvpn.fullname" . }}
+            defaultMode: 493
+            items:
+              - key: start.sh
+                path: start.sh
+        - name: config
+          configMap:
+            name: {{ template "openvpn.fullname" . }}
+            defaultMode: 288
+            items:
+              - key: server.conf
+                path: server.conf
+        - name: users
+          configMap:
+            name: {{ template "openvpn.fullname" . }}-users
+            defaultMode: 288
+        - name: certs
+          secret:
+            secretName: {{ include "openvpn.fullname" . }}
+            defaultMode: 256
+        - name: coredns
+          configMap:
+            name: {{ template "openvpn.fullname" . }}
+            defaultMode: 256
+            items:
+              - key: corefile
+                path: Corefile

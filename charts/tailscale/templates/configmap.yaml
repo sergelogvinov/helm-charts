@@ -15,6 +15,11 @@ data:
 
     /usr/local/bin/containerboot
 
+  init-tailscale.sh: |
+    #!/bin/sh
+    ip6tables-save -t nat
+    ip6tables -A FORWARD -o eth0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1221:1600 -j TCPMSS --set-mss 1220
+
   init.sh: |
     #!/bin/sh
     set -e

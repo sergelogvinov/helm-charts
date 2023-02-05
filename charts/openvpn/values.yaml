@@ -1,0 +1,101 @@
+# Default values for openvpn.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/sergelogvinov/openvpn
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+strategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 1
+  type: RollingUpdate
+
+openvpn:
+  config: ~
+    # server 172.30.0.0 255.255.255.0
+    # topology p2p
+    # data-ciphers AES-256-GCM:AES-128-GCM
+    # data-ciphers-fallback AES-256-CBC
+
+    # push "dhcp-option DNS 172.30.0.1"
+
+    # max-clients 60
+    # # duplicate-cn
+    # # client-to-client
+
+  redirectGateway: false
+  defaultroutes: ~
+    # push "route 8.8.8.8   255.255.255.255"
+
+  ca: ~
+    # -----BEGIN CERTIFICATE-----
+    # -----END CERTIFICATE-----
+  cert: ~
+    # -----BEGIN CERTIFICATE-----
+    # -----END CERTIFICATE-----
+  key: ~
+    # -----BEGIN PRIVATE KEY-----
+    # -----END PRIVATE KEY-----
+
+  tlsauth: ~
+    #
+    # openvpn --genkey secret ta.key
+    #
+    # -----BEGIN OpenVPN Static key V1-----
+    # -----END OpenVPN Static key V1-----
+
+  dh: ~
+    #
+    # openssl dhparam -out dh2048.pem 2048
+    #
+    # -----BEGIN DH PARAMETERS-----
+    # -----END DH PARAMETERS-----
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 101
+  fsGroupChangePolicy: "OnRootMismatch"
+
+securityContext:
+  capabilities:
+    add:
+      - NET_ADMIN
+      - MKNOD
+      - SETUID
+      - SETGID
+    drop:
+      - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  runAsUser: 0
+
+service:
+  type: ClusterIP
+  proto: UDP
+  port: 1190
+  # nodePort: 1190
+
+resources:
+  limits:
+    cpu: 1
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 32Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

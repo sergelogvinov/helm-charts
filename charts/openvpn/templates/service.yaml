@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "openvpn.fullname" . }}
+  labels:
+    {{- include "openvpn.labels" . | nindent 4 }}
+spec:
+  sessionAffinity: ClientIP
+  type: {{ .Values.service.type }}
+{{- if eq .Values.service.type "NodePort" }}
+  externalTrafficPolicy: Local
+{{- end }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: openvpn
+      protocol: {{ .Values.service.proto | upper }}
+      name: openvpn
+{{- if eq "NodePort" .Values.service.type }}
+      nodePort: {{ default "30190" .Values.service.nodePort }}
+{{- end }}
+{{- with .Values.service.externalIPs  }}
+  externalIPs:
+{{ toYaml . | indent 4 }}
+{{- end }}
+  selector:
+    {{- include "openvpn.selectorLabels" . | nindent 4 }}

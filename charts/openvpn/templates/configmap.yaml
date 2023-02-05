@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "openvpn.fullname" . }}
+  labels:
+    {{- include "openvpn.labels" . | nindent 4 }}
+data:
+  corefile: |
+    # proxy/forward to Cloudflare DNS-over-TLS
+    .:53 {
+        errors
+        health {
+           lameduck 5s
+        }
+        forward . tls://1.1.1.1 tls://1.0.0.1 {
+            tls_servername cloudflare-dns.com
+            policy sequential
+            health_check 30s
+            expire 60s
+        }
+        cache 300
+        reload
+    }
+
+  start.sh: |-
+    #!/bin/sh
+    mkdir -p /dev/net
+    mknod /dev/net/tun c 10 200
+    exec openvpn --config /etc/openvpn/server/server.conf
+
+  server.conf: |-
+    #
+    port  {{ .Values.service.port }}
+    proto {{ .Values.service.proto | lower }}
+
+    dev tun
+    dev-type tun
+    mssfix 1280
+
+    keepalive 10 120
+    user openvpn
+    group openvpn
+    persist-key
+    persist-tun
+    verb 2
+    mute 20
+    status-version 2
+
+    {{- if .Values.openvpn.redirectGateway }}
+    redirect-gateway def1
+    {{- end }}
+
+    {{- if .Values.openvpn.config }}
+    {{- .Values.openvpn.config | nindent 4 }}
+    {{- else }}
+    server 172.30.0.0 255.255.255.0
+    topology p2p
+
+    data-ciphers AES-256-GCM:AES-128-GCM
+    data-ciphers-fallback AES-256-CBC
+
+    push "dhcp-option DNS 172.30.0.1"
+    {{- end }}
+    client-config-dir /etc/openvpn/users
+
+    ca   /etc/openvpn/certs/ca.crt
+    cert /etc/openvpn/certs/tls.crt
+    key  /etc/openvpn/certs/tls.key
+
+    {{- if .Values.openvpn.tlsauth }}
+    tls-auth /etc/openvpn/certs/tlsauth.key 0
+    {{- end }}
+    {{- if .Values.openvpn.dh }}
+    dh /etc/openvpn/certs/dh.pem
+    {{- else }}
+    dh none
+    {{- end }}
+
+    {{- if .Values.openvpn.revoke }}
+    <crl-verify>
+    {{ .Values.openvpn.revoke | nindent 4 }}
+    </crl-verify>
+    {{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "openvpn.fullname" . }}-users
+  labels:
+    {{- include "openvpn.labels" . | nindent 4 }}
+data:
+  DEFAULT: |-
+    {{- if .Values.openvpn.defaultroutes }}
+{{ indent 4 .Values.openvpn.defaultroutes }}
+    {{- end }}

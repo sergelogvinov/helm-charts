@@ -29,12 +29,12 @@ serviceAccount:
 
 podAnnotations: {}
 
-podSecurityContext:
-  sysctls:
-    # - name: net.ipv6.conf.all.forwarding
-    #   value: "1"
-    - name: net.ipv6.conf.all.disable_ipv6
-      value: "1"
+podSecurityContext: {}
+  # sysctls:
+  #   # - name: net.ipv6.conf.all.forwarding
+  #   #   value: "1"
+  #   - name: net.ipv6.conf.all.disable_ipv6
+  #     value: "1"
 
 securityContext:
   seccompProfile:
@@ -44,7 +44,7 @@ securityContext:
       - NET_ADMIN
       - NET_RAW
     drop:
-    - ALL
+      - ALL
   # readOnlyRootFilesystem: true
   runAsNonRoot: false
   runAsUser: 0
@@ -52,6 +52,7 @@ securityContext:
 service:
   type: ClusterIP
   port: 1055
+  p2pPort: 30025
 
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious

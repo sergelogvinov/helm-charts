@@ -1,0 +1,20 @@
+- name: kubernetes.rules
+  rules:
+  - alert: PodMemoryLimit
+    expr: irate(container_memory_failcnt{container_name!=""}[5m]) > 10
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Pod {{$labels.namespace}}/{{$labels.pod}} reached the memory limit.
+      summary: Memory limit reached
+
+  - alert: PodCPULimit
+    expr: (sum by (namespace,pod,container) (rate(container_cpu_usage_seconds_total{container!=""}[5m])) / sum by
+      (namespace,pod,container) (kube_pod_container_resource_limits{resource="cpu"})) > 0.9
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: Pod {{$labels.namespace}}/{{$labels.pod}} cpi limit/usage {{$value | humanize1024}}
+      summary: CPU limit reached
