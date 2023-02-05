@@ -1,0 +1,85 @@
+{{- if .Values.certManager.createCerts }}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "openvpn.fullname" . }}
+  labels:
+    {{- include "openvpn.labels" . | nindent 4 }}
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "openvpn.fullname" . }}-ca
+  labels:
+    {{- include "openvpn.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "openvpn.fullname" . }}-ca
+  secretTemplate:
+    labels:
+      {{- include "openvpn.labels" . | nindent 6 }}
+  issuerRef:
+    name: {{ include "openvpn.fullname" . }}
+    kind: Issuer
+  commonName: {{ include "openvpn.fullname" . }}
+  duration: 17520h # 24m
+  renewBefore: 4380h # 6m
+  usages:
+    - server auth
+    - client auth
+  isCA: true
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "openvpn.fullname" . }}-issuer
+  labels:
+    {{- include "openvpn.labels" . | nindent 4 }}
+spec:
+  ca:
+    secretName: {{ include "openvpn.fullname" . }}-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "openvpn.fullname" . }}
+  labels:
+    {{- include "openvpn.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "openvpn.fullname" . }}
+  secretTemplate:
+    labels:
+      {{- include "openvpn.labels" . | nindent 6 }}
+  commonName: {{ include "openvpn.fullname" . }}
+  duration: 17520h # 24m
+  renewBefore: 4380h # 6m
+  usages:
+    - server auth
+    - client auth
+  dnsNames:
+    - {{ include "openvpn.fullname" . }}
+  issuerRef:
+    name: {{ include "openvpn.fullname" . }}-issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "openvpn.fullname" . }}-client
+  labels:
+    {{- include "openvpn.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "openvpn.fullname" . }}-client
+  secretTemplate:
+    labels:
+      {{- include "openvpn.labels" . | nindent 6 }}
+  commonName: client
+  duration: 17520h # 24m
+  renewBefore: 2190h # 3m
+  usages:
+    - client auth
+  dnsNames:
+    - client
+  issuerRef:
+    name: {{ include "openvpn.fullname" . }}-issuer
+{{- end }}

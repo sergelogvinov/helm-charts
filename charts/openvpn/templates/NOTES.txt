@@ -1,5 +1,48 @@
-1. Get the openvpn client config by running these commands:
+{{ if not .Values.openvpn.tlsauth }}
+1. Do not forget to create tlsauth:
 
-kubectl --namespace {{ .Release.Namespace }} get secret {{ include "openvpn.fullname" . }} -o jsonpath="{.data.ca\.crt}" | base64 --decode > ca.crt
+openvpn --genkey secret tlsauth.key
+{{ end }}
+{{ if not .Values.openvpn.dh }}
+2. Do not forget to create Diffie-Hellman parameters:
+
+openssl dhparam -out dh.pem 2048
+{{ end }}
+3. Get the openvpn client config by running these commands
+{{ if not (or .Values.openvpn.ca .Values.certManager.createCerts) }}
+kubectl --namespace {{ .Release.Namespace }} get secret {{ include "openvpn.fullname" . }} -o jsonpath="{.data.ca\.crt}"     | base64 --decode > ca.crt
 kubectl --namespace {{ .Release.Namespace }} get secret {{ include "openvpn.fullname" . }} -o jsonpath="{.data.client\.crt}" | base64 --decode > client.crt
 kubectl --namespace {{ .Release.Namespace }} get secret {{ include "openvpn.fullname" . }} -o jsonpath="{.data.client\.key}" | base64 --decode > client.key
+{{- else if .Values.certManager.createCerts }}
+kubectl --namespace {{ .Release.Namespace }} get secret {{ include "openvpn.fullname" . }}-client -o jsonpath="{.data.ca\.crt}"  | base64 --decode > ca.crt
+kubectl --namespace {{ .Release.Namespace }} get secret {{ include "openvpn.fullname" . }}-client -o jsonpath="{.data.tls\.crt}" | base64 --decode > client.crt
+kubectl --namespace {{ .Release.Namespace }} get secret {{ include "openvpn.fullname" . }}-client -o jsonpath="{.data.tls\.key}" | base64 --decode > client.key
+{{- end }}
+
+4. Example client config:
+
+client
+dev tun
+proto {{ .Values.service.proto | lower }}
+remote server(ip/domain) {{ default "30190" .Values.service.nodePort }}
+ping 10
+ping-restart 120
+
+nobind
+persist-key
+persist-tun
+auth-nocache
+data-ciphers AES-256-GCM
+remote-cert-tls server
+
+{{- if .Values.openvpn.tlsauth }}
+tls-auth /etc/openvpn/certs/tlsauth.key 1
+{{- end }}
+ca   /etc/openvpn/certs/ca.crt
+cert /etc/openvpn/certs/client.crt
+key  /etc/openvpn/certs/client.key
+{{- if .Values.openvpn.dh }}
+dh   /etc/openvpn/certs/dh.pem
+{{- else }}
+dh   none
+{{- end }}

@@ -20,6 +20,9 @@ strategy:
     maxUnavailable: 1
   type: RollingUpdate
 
+certManager:
+  createCerts: false
+
 openvpn:
   config: ~
     # server 172.30.0.0 255.255.255.0
