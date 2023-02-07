@@ -39,6 +39,12 @@ spec:
       serviceAccountName: {{ include "tailscale.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      dnsConfig:
+        searches:
+          - cluster.local
+        options:
+          - name: ndots
+            value: "3"
       initContainers:
         - name: {{ .Chart.Name }}-init-tailscale
           securityContext:
@@ -47,9 +53,9 @@ spec:
             capabilities:
               add:
                 - NET_ADMIN
+                - NET_RAW
               drop:
                 - ALL
-            readOnlyRootFilesystem: true
             runAsNonRoot: false
             runAsUser: 0
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
