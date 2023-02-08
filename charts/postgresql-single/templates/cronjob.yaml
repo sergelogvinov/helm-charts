@@ -15,7 +15,7 @@ metadata:
     app.kubernetes.io/component: backup
 spec:
   concurrencyPolicy: Forbid
-  failedJobsHistoryLimit: 1
+  failedJobsHistoryLimit: {{ default 2 .Values.backup.history }}
   schedule: "{{ .Values.backup.schedule }}"
   successfulJobsHistoryLimit: 1
   jobTemplate:

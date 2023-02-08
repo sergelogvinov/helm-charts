@@ -51,10 +51,12 @@ spec:
   secretTemplate:
     labels:
       {{- include "openvpn.labels" . | nindent 6 }}
-  commonName: {{ include "openvpn.fullname" . }}
+  commonName: {{ include "openvpn.fullname" . }}-server
   duration: 17520h # 24m
   renewBefore: 4380h # 6m
   usages:
+    - digital signature
+    - key encipherment
     - server auth
     - client auth
   dnsNames:
@@ -77,6 +79,9 @@ spec:
   duration: 17520h # 24m
   renewBefore: 2190h # 3m
   usages:
+    - digital signature
+    - key encipherment
+    - server auth
     - client auth
   dnsNames:
     - client

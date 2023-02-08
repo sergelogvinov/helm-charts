@@ -10,6 +10,7 @@ spec:
 {{- if eq .Values.service.type "NodePort" }}
   externalTrafficPolicy: Local
 {{- end }}
+  ipFamilyPolicy: PreferDualStack
   ports:
     - port: {{ .Values.service.port }}
       targetPort: openvpn

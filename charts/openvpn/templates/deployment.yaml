@@ -1,18 +1,32 @@
 apiVersion: apps/v1
+{{- if .Values.useDaemonSet }}
+kind: DaemonSet
+{{- else }}
 kind: Deployment
+{{- end }}
 metadata:
   name: {{ include "openvpn.fullname" . }}
   labels:
     {{- include "openvpn.labels" . | nindent 4 }}
 spec:
+  {{- if not .Values.useDaemonSet }}
   replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: {{ .Values.updateStrategy.type }}
+    rollingUpdate:
+      {{- toYaml .Values.updateStrategy.rollingUpdate | nindent 6 }}
+  {{- else }}
+  updateStrategy:
+    type: {{ .Values.updateStrategy.type }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "openvpn.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        checksum/config: {{ .Values.openvpn.config | sha256sum }}
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -26,6 +40,25 @@ spec:
       enableServiceLinks: false
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: {{ .Chart.Name }}-init
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_RAW
+              drop:
+                - ALL
+            runAsNonRoot: false
+            runAsUser: 0
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/entrypoint/init.sh"]
+          volumeMounts:
+            - name: scripts
+              mountPath: /entrypoint
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -46,6 +79,8 @@ spec:
               mountPath: /etc/openvpn/users
             - name: certs
               mountPath: /etc/openvpn/certs
+            - name: auth
+              mountPath: /etc/openvpn/auth
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
         - name: {{ .Chart.Name }}-dns
@@ -100,6 +135,8 @@ spec:
             name: {{ include "openvpn.fullname" . }}
             defaultMode: 493
             items:
+              - key: init.sh
+                path: init.sh
               - key: start.sh
                 path: start.sh
         - name: config
@@ -117,6 +154,10 @@ spec:
           secret:
             secretName: {{ include "openvpn.fullname" . }}
             defaultMode: 256
+        - name: auth
+          secret:
+            secretName: {{ include "openvpn.fullname" . }}-auth
+            defaultMode: 288
         - name: coredns
           configMap:
             name: {{ template "openvpn.fullname" . }}

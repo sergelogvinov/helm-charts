@@ -22,6 +22,11 @@ data:
         reload
     }
 
+  init.sh: |-
+    #!/bin/sh
+    iptables  -t nat -I POSTROUTING -o eth0 -j MASQUERADE ||:
+    ip6tables -t nat -I POSTROUTING -o eth0 -j MASQUERADE ||:
+
   start.sh: |-
     #!/bin/sh
     mkdir -p /dev/net
@@ -31,11 +36,12 @@ data:
   server.conf: |-
     #
     port  {{ .Values.service.port }}
-    proto {{ .Values.service.proto | lower }}
+    proto {{ .Values.service.proto | lower }}4
+    proto {{ .Values.service.proto | lower }}6
 
     dev tun
     dev-type tun
-    mssfix 1280
+    mssfix 1220
 
     keepalive 10 120
     user openvpn
@@ -46,10 +52,8 @@ data:
     mute 20
     status-version 2
 
-    {{- if .Values.openvpn.redirectGateway }}
-    redirect-gateway def1
-    {{- end }}
-
+    mode server
+    tls-server
     {{- if .Values.openvpn.config }}
     {{- .Values.openvpn.config | nindent 4 }}
     {{- else }}
@@ -61,19 +65,22 @@ data:
 
     push "dhcp-option DNS 172.30.0.1"
     {{- end }}
+    {{- if .Values.openvpn.redirectGateway }}
+    push "redirect-gateway def1"
+    {{- end }}
+
     client-config-dir /etc/openvpn/users
 
     ca   /etc/openvpn/certs/ca.crt
     cert /etc/openvpn/certs/tls.crt
     key  /etc/openvpn/certs/tls.key
-
-    {{- if .Values.openvpn.tlsauth }}
-    tls-auth /etc/openvpn/certs/tlsauth.key 0
-    {{- end }}
     {{- if .Values.openvpn.dh }}
-    dh /etc/openvpn/certs/dh.pem
+    dh /etc/openvpn/auth/dh.pem
     {{- else }}
     dh none
+    {{- end }}
+    {{- if .Values.openvpn.tlsauth }}
+    tls-auth /etc/openvpn/auth/tlsauth.key 0
     {{- end }}
 
     {{- if .Values.openvpn.revoke }}
