@@ -6,7 +6,7 @@
     labels:
       severity: warning
     annotations:
-      description: In the last 5 minutes, fluent-bit ($labels.kubernetes_pod_name) output error increased. Current rate is {{ $value }}
+      description: In the last 5 minutes, fluent-bit ({{ $labels.kubernetes_node }}/{{ $labels.kubernetes_pod_name }}) output error increased. Current rate is {{ $value }}
       summary: FluentBit output are failing
   - alert: FluentBitRecordsDropped
     expr: rate(fluentbit_output_dropped_records_total{app_kubernetes_io_name="fluent-bit"}[5m]) > 0
@@ -14,5 +14,5 @@
     labels:
       severity: warning
     annotations:
-      description: In the last 5 minutes, fluent-bit ($labels.kubernetes_pod_name) output dropped increased. Current rate is {{ $value }}
+      description: In the last 5 minutes, fluent-bit ({{ $labels.kubernetes_node }}/{{ $labels.kubernetes_pod_name }}) output dropped increased. Current rate is {{ $value }}
       summary: FluentBit output are failing

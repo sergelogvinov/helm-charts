@@ -17,26 +17,26 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
       record: node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate
     - expr: |-
         container_memory_working_set_bytes{job="kubernetes-nodes", metrics_path="/metrics/cadvisor", image!=""}
-        * on (namespace, pod) group_left(node) topk by(namespace, pod) (1,
-          max by(namespace, pod, node) (kube_pod_info{node!=""})
+        * on (cluster, namespace, pod) group_left(node) topk by(cluster, namespace, pod) (1,
+          max by(cluster, namespace, pod, node) (kube_pod_info{node!=""})
         )
       record: node_namespace_pod_container:container_memory_working_set_bytes
     - expr: |-
         container_memory_rss{job="kubernetes-nodes", metrics_path="/metrics/cadvisor", image!=""}
-        * on (namespace, pod) group_left(node) topk by(namespace, pod) (1,
-          max by(namespace, pod, node) (kube_pod_info{node!=""})
+        * on (cluster, namespace, pod) group_left(node) topk by(cluster, namespace, pod) (1,
+          max by(cluster, namespace, pod, node) (kube_pod_info{node!=""})
         )
       record: node_namespace_pod_container:container_memory_rss
     - expr: |-
         container_memory_cache{job="kubernetes-nodes", metrics_path="/metrics/cadvisor", image!=""}
-        * on (namespace, pod) group_left(node) topk by(namespace, pod) (1,
-          max by(namespace, pod, node) (kube_pod_info{node!=""})
+        * on (cluster, namespace, pod) group_left(node) topk by(cluster, namespace, pod) (1,
+          max by(cluster, namespace, pod, node) (kube_pod_info{node!=""})
         )
       record: node_namespace_pod_container:container_memory_cache
     - expr: |-
         container_memory_swap{job="kubernetes-nodes", metrics_path="/metrics/cadvisor", image!=""}
-        * on (namespace, pod) group_left(node) topk by(namespace, pod) (1,
-          max by(namespace, pod, node) (kube_pod_info{node!=""})
+        * on (cluster, namespace, pod) group_left(node) topk by(cluster, namespace, pod) (1,
+          max by(cluster, namespace, pod, node) (kube_pod_info{node!=""})
         )
       record: node_namespace_pod_container:container_memory_swap
     - expr: |-

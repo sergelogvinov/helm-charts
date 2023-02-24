@@ -8,3 +8,12 @@
     annotations:
       description: Prometheus {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}  has a corrupted write-ahead log.
       summary: Prometheus write-ahead log is corrupted
+
+  - alert: PrometheusRemoteStorageFailures
+    for: 15m
+    labels:
+      severity: critical
+    expr: rate(prometheus_remote_storage_samples_retried_total[5m]) > 100
+    annotations:
+      description: Prometheus {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} failed to send to {{ $labels.remote_name }}:{{ $labels.url }}
+      summary: Prometheus fails to send samples to remote storage.
