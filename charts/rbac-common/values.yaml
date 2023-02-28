@@ -1,0 +1,14 @@
+# Default values for rbac-common.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+rbac:
+  create: true
+  singleNamespace: false
+
+developers: []
+  # - user1
+  # - user2
+
+clusterAdmins: []
+  # - root1
