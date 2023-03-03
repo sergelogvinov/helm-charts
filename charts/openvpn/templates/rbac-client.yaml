@@ -1,0 +1,39 @@
+{{- if .Values.certManager.clientConfigRBAC }}
+{{- range $k := .Values.certManager.clients }}
+{{- $client := ($k | trunc 63 | replace "@" "-" | replace "." "-" ) }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "openvpn.fullname" $ }}:client:{{ $client }}
+  labels:
+    {{- include "openvpn.labels" $ | nindent 4 }}
+  namespace: {{ $.Release.Namespace | quote }}
+rules:
+- apiGroups: [""]
+  resourceNames: [{{ include "openvpn.fullname" $ | quote }}]
+  resources: ["configmaps"]
+  verbs: ["get"]
+- apiGroups: [""]
+  resourceNames:
+    - {{ printf "%s-client-%s" (include "openvpn.fullname" $) $client | quote }}
+  resources: ["secrets"]
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "openvpn.fullname" $ }}:client:{{ $client }}
+  labels:
+    {{- include "openvpn.labels" $ | nindent 4 }}
+  namespace: {{ $.Release.Namespace | quote }}
+roleRef:
+  kind: Role
+  name: {{ include "openvpn.fullname" $ }}:client:{{ $client }}
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: {{ $k | quote }}
+---
+{{- end }}
+{{- end }}

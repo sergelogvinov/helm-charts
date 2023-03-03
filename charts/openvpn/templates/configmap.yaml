@@ -88,6 +88,39 @@ data:
     {{ .Values.openvpn.revoke | nindent 4 }}
     </crl-verify>
     {{- end }}
+
+  client.conf: |-
+    client
+    dev tun
+    proto {{ .Values.service.proto | lower }}
+    remote {{ .Values.openvpn.hostName }} {{ default "30190" .Values.service.nodePort }}
+    resolv-retry infinite
+    ping 10
+    ping-restart 120
+    mute 4
+    mute-replay-warnings
+
+    nobind
+    persist-key
+    persist-tun
+    auth-nocache
+    data-ciphers AES-256-GCM:AES-256-CBC
+    remote-cert-tls server
+
+    ca   ca.crt
+    cert client.crt
+    key  client.key
+    {{- if .Values.openvpn.dh }}
+    <dh>
+    {{- .Values.openvpn.dh | nindent 4 -}}
+    </dh>
+    {{- end }}
+    {{- if .Values.openvpn.tlsauth }}
+    key-direction 1
+    <tls-auth>
+    {{- .Values.openvpn.tlsauth | nindent 4 -}}
+    </tls-auth>
+    {{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap

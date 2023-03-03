@@ -4,6 +4,10 @@ metadata:
   name: {{ include "openvpn.fullname" . }}
   labels:
     {{- include "openvpn.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   sessionAffinity: ClientIP
   type: {{ .Values.service.type }}

@@ -23,7 +23,15 @@ strategy:
 certManager:
   createCerts: false
 
+  # If clientConfigRBAC = true, clients list is kubernetes username.
+  clientConfigRBAC: false
+  clients: []
+    # - user1@dmain.com
+    # - user2
+
 openvpn:
+  hostName: vpn.example.com
+
   config: ~
     # server 172.30.0.0 255.255.255.0
     # topology p2p
@@ -40,6 +48,7 @@ openvpn:
   defaultroutes: ~
     # push "route 8.8.8.8   255.255.255.255"
 
+  ### if createCerts==false
   ca: ~
     # -----BEGIN CERTIFICATE-----
     # -----END CERTIFICATE-----
@@ -49,6 +58,8 @@ openvpn:
   key: ~
     # -----BEGIN PRIVATE KEY-----
     # -----END PRIVATE KEY-----
+
+  revoke: ~
 
   tlsauth: ~
     #

@@ -63,6 +63,35 @@ spec:
     - {{ include "openvpn.fullname" . }}
   issuerRef:
     name: {{ include "openvpn.fullname" . }}-issuer
+{{- if .Values.certManager.clients }}
+{{- range $k := .Values.certManager.clients }}
+{{ $client := ($k | trunc 63 | replace "@" "-" | replace "." "-" ) }}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "openvpn.fullname" $ }}-client-{{ $client }}
+  labels:
+    {{- include "openvpn.labels" $ | nindent 4 }}
+spec:
+  secretName: {{ include "openvpn.fullname" $ }}-client-{{ $client }}
+  secretTemplate:
+    labels:
+      {{- include "openvpn.labels" $ | nindent 6 }}
+  commonName: {{ $k | trunc 63 | replace "@" "." }}
+  duration: 17520h # 24m
+  renewBefore: 2190h # 3m
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+    - client auth
+  dnsNames:
+    - {{ $k | trunc 63 | replace "@" "." }}
+  issuerRef:
+    name: {{ include "openvpn.fullname" $ }}-issuer
+{{- end }}
+{{- else }}
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -87,4 +116,6 @@ spec:
     - client
   issuerRef:
     name: {{ include "openvpn.fullname" . }}-issuer
+{{- end }}
+
 {{- end }}

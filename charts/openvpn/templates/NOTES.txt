@@ -19,12 +19,25 @@ kubectl --namespace {{ .Release.Namespace }} get secret {{ include "openvpn.full
 kubectl --namespace {{ .Release.Namespace }} get secret {{ include "openvpn.fullname" . }}-client -o jsonpath="{.data.tls\.key}" | base64 --decode > client.key
 {{- end }}
 
+{{- if .Values.certManager.clients }}
+client secrets:
+{{- range $k := .Values.certManager.clients }}
+{{- $client := ($k | trunc 63 | replace "@" "-" | replace "." "-" ) }}
+  - {{ include "openvpn.fullname" $ }}-client-{{ $client }}
+{{- end }}
+{{- end }}
+
 4. Example client config:
 
+kubectl --namespace {{ .Release.Namespace }} get configmap {{ include "openvpn.fullname" . }} -o jsonpath="{.data.client\.conf}" > client.ovpn
+
+or create your own:
+
+```
 client
 dev tun
 proto {{ .Values.service.proto | lower }}
-remote server(ip/domain) {{ default "30190" .Values.service.nodePort }}
+remote {{ .Values.openvpn.hostName }} {{ default "30190" .Values.service.nodePort }}
 ping 10
 ping-restart 120
 
@@ -36,13 +49,14 @@ data-ciphers AES-256-GCM
 remote-cert-tls server
 
 {{- if .Values.openvpn.tlsauth }}
-tls-auth /etc/openvpn/certs/tlsauth.key 1
+tls-auth tlsauth.key 1
 {{- end }}
-ca   /etc/openvpn/certs/ca.crt
-cert /etc/openvpn/certs/client.crt
-key  /etc/openvpn/certs/client.key
+ca   ca.crt
+cert client.crt
+key  client.key
 {{- if .Values.openvpn.dh }}
-dh   /etc/openvpn/certs/dh.pem
+dh   dh.pem
 {{- else }}
 dh   none
 {{- end }}
+```
