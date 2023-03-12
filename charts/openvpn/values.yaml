@@ -60,6 +60,20 @@ openvpn:
     # -----END PRIVATE KEY-----
 
   revoke: ~
+    ## openssl.cnf
+    # [ ca ]
+    # default_ca      = CA_default
+    # [ CA_default ]
+    # dir             = .
+    # database        = $dir/index.txt
+    # default_md      = sha256
+    # default_crl_days= 1000
+
+    #
+    # openssl ca -cert ca.crt -keyfile ca.key -revoke client.crt -config openssl.cnf
+    # openssl ca -gencrl -out revoke.pem -config openssl.cnf
+    # openssl crl -text -noout -in revoke.pem
+    #
 
   tlsauth: ~
     #
@@ -101,6 +115,8 @@ service:
   proto: UDP
   port: 1190
   # nodePort: 1190
+
+  annotations: {}
 
 resources:
   limits:

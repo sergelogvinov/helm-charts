@@ -1,0 +1,47 @@
+1. Mirror config:
+
+{{- range $host := .Values.ingress.hosts }}
+  {{- range $inx, $val := $.Values.mirrors }}
+  {{ $val.host }} -> http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}/{{ $val.host | replace "." "-" }}
+  {{- end }}
+{{- end }}
+
+{{- if .Values.auth.password }}
+2. Mirrors http auth
+Login: mirror
+Password:
+  kubectl -n {{ .Release.Namespace }} get secrets {{ include "registry-mirrors.fullname" . }} -o jsonpath="{.data.username}" | base64 --decode; echo
+  kubectl -n {{ .Release.Namespace }} get secrets {{ include "registry-mirrors.fullname" . }} -o jsonpath="{.data.password}" | base64 --decode; echo
+{{- end }}
+
+{{- if .Values.auth.tls }}
+3. Registry tls auth
+  kubectl -n {{ .Release.Namespace }} get secrets {{ include "registry-mirrors.fullname" . }}-auth-containerd -o jsonpath="{.data.tls\.crt}"; echo
+  kubectl -n {{ .Release.Namespace }} get secrets {{ include "registry-mirrors.fullname" . }}-auth-containerd -o jsonpath="{.data.tls\.key}"; echo
+
+Talos machine config example:
+
+```yaml
+machine:
+  registries:
+    config:
+      mirrors.torrero.cloud:
+        tls:
+          clientIdentity:
+            crt: <{{ include "registry-mirrors.fullname" . }}-auth-containerd tls.crt>
+            key: <{{ include "registry-mirrors.fullname" . }}-auth-containerd tls.key>
+      {{- if .Values.auth.password }}
+        auth:
+          username: <{{ include "registry-mirrors.fullname" . }} username>
+          password: <{{ include "registry-mirrors.fullname" . }} password>
+      {{- end }}
+    mirrors:
+      {{- range $inx, $val := .Values.mirrors }}
+      {{ $val.host }}:
+        endpoints:
+          {{- range $host := $.Values.ingress.hosts }}
+          - http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}/{{ $val.host | replace "." "-" }}
+          {{- end }}
+      {{- end }}
+```
+{{- end }}

@@ -1,0 +1,144 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "registry-mirrors.fullname" . }}
+  labels:
+    {{- include "registry-mirrors.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: {{ .Values.updateStrategy.type }}
+  selector:
+    matchLabels:
+      {{- include "registry-mirrors.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/mirrors: {{ toJson .Values.mirrors | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "registry-mirrors.selectorLabels" . | nindent 8 }}
+    spec:
+      enableServiceLinks: false
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "registry-mirrors.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-router
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
+            runAsUser: 65534
+            runAsGroup: 65534
+          image: registry.opensource.zalan.do/teapot/skipper:v0.13.174
+          command: ['skipper']
+          args:
+            - -routes-file=/etc/skipper/mirrors.eskip
+            - -access-log-json-enabled
+            - -application-log-level=WARN
+            - -timeout-backend=5s
+            - -read-timeout-server=30s
+            - -write-timeout-server=30s
+          ports:
+            - name: http
+              containerPort: 9090
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+              scheme: HTTP
+              httpHeaders:
+                - name: Host
+                  value: 127.0.0.1
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 30
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/skipper
+        {{- range $inx, $val := .Values.mirrors }}
+        - name: {{ $.Chart.Name }}-{{ $val.host | replace "." "-" }}
+          securityContext:
+            {{- toYaml $.Values.securityContext | nindent 12 }}
+          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          env:
+            - name: REGISTRY_HTTP_ADDR
+              value: 127.0.0.1:{{ add 5000 $inx }}
+            - name: REGISTRY_PROXY_REMOTEURL
+              value: {{ $val.source }}
+            - name: REGISTRY_STORAGE_DELETE_ENABLED
+              value: "true"
+            - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+              value: /var/lib/registry/{{ $val.host | replace "." "-" }}
+          resources:
+            {{- toYaml $.Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/docker/registry
+            - name: cache
+              mountPath: /var/lib/registry
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "registry-mirrors.fullname" . }}
+        {{- if .Values.persistence.storageClass }}
+        - name: cache
+          ephemeral:
+            volumeClaimTemplate:
+              metadata:
+                labels:
+                  {{- include "registry-mirrors.labels" . | nindent 22 }}
+              {{- with .Values.persistence.annotations }}
+                annotations:
+                {{- range $key, $value := . }}
+                  {{ $key }}: {{ $value }}
+                {{- end }}
+              {{- end }}
+              spec:
+                accessModes:
+                {{- range .Values.persistence.accessModes }}
+                  - {{ . | quote }}
+                {{- end }}
+                resources:
+                  requests:
+                    storage: {{ .Values.persistence.size | quote }}
+              {{- if .Values.persistence.storageClass }}
+              {{- if (eq "-" .Values.persistence.storageClass) }}
+                storageClassName: ""
+              {{- else }}
+                storageClassName: "{{ .Values.persistence.storageClass }}"
+              {{- end }}
+              {{- end }}
+        {{- else }}
+        - name: cache
+          emptyDir: {}
+        {{- end }}

@@ -1,0 +1,88 @@
+{{- if .Values.auth.tls }}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "registry-mirrors.fullname" . }}-issuer
+  labels:
+    {{- include "registry-mirrors.labels" . | nindent 4 }}
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "registry-mirrors.fullname" . }}-ca
+  labels:
+    {{- include "registry-mirrors.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "registry-mirrors.fullname" . }}-ca
+  commonName: {{ include "registry-mirrors.fullname" . }}
+  duration: 26280h # 3y
+  renewBefore: 26000h # ~3y
+  privateKey:
+    algorithm: ECDSA
+    encoding: PKCS1
+    size: 256
+  isCA: true
+  issuerRef:
+    name: {{ include "registry-mirrors.fullname" . }}-issuer
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "registry-mirrors.fullname" . }}-ca-issuer
+  labels:
+    {{- include "registry-mirrors.labels" . | nindent 4 }}
+spec:
+  ca:
+    secretName: {{ include "registry-mirrors.fullname" . }}-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "registry-mirrors.fullname" . }}-server
+  labels:
+    {{- include "registry-mirrors.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "registry-mirrors.fullname" . }}-auth-server
+  duration: 17520h # 24m
+  renewBefore: 4380h # 6m
+  privateKey:
+    rotationPolicy: Always
+  usages:
+    - server auth
+    - client auth
+  isCA: false
+  dnsNames:
+    {{- range .Values.ingress.hosts }}
+    - {{ .host | quote }}
+    {{- end }}
+  issuerRef:
+    name: {{ include "registry-mirrors.fullname" . }}-ca-issuer
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "registry-mirrors.fullname" . }}-containerd
+  labels:
+    {{- include "registry-mirrors.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "registry-mirrors.fullname" . }}-auth-containerd
+  commonName: containerd
+  duration: 17520h # 24m
+  renewBefore: 4380h # 6m
+  privateKey:
+    rotationPolicy: Always
+  usages:
+    - client auth
+  isCA: false
+  dnsNames:
+    {{- range .Values.ingress.hosts }}
+    - {{ printf "containerd.%s" .host | quote }}
+    {{- end }}
+  issuerRef:
+    name: {{ include "registry-mirrors.fullname" . }}-ca-issuer
+    kind: Issuer
+{{- end }}

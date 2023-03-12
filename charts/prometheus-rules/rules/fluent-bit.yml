@@ -1,7 +1,7 @@
 - name: fluent-bit-static.rules
   rules:
   - alert: FluentBitOutputError
-    expr: rate(fluentbit_output_errors_total{app_kubernetes_io_name="fluent-bit"}[5m]) > 0
+    expr: rate(fluentbit_output_errors_total{app_kubernetes_io_name="fluent-bit"}[5m]) > 0.05
     for: 2m
     labels:
       severity: warning
@@ -9,7 +9,7 @@
       description: In the last 5 minutes, fluent-bit ({{ $labels.kubernetes_node }}/{{ $labels.kubernetes_pod_name }}) output error increased. Current rate is {{ $value }}
       summary: FluentBit output are failing
   - alert: FluentBitRecordsDropped
-    expr: rate(fluentbit_output_dropped_records_total{app_kubernetes_io_name="fluent-bit"}[5m]) > 0
+    expr: rate(fluentbit_output_dropped_records_total{app_kubernetes_io_name="fluent-bit"}[5m]) > 0.1
     for: 2m
     labels:
       severity: warning

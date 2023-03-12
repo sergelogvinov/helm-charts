@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "registry-mirrors.fullname" . }}
+  labels:
+    {{- include "registry-mirrors.labels" . | nindent 4 }}
+data:
+  mirrors.eskip: |-
+    healthz: Path("/healthz") -> inlineContent("ok")
+        -> disableAccessLog() -> <shunt>;
+
+    {{- range $inx, $val := .Values.mirrors }}
+    {{ $val.host | replace "." "" }}: PathSubtree("/{{ $val.host | replace "." "-" }}/v2/") -> modPath("/{{ $val.host | replace "." "-" }}/", "/")
+        -> enableAccessLog(5) -> "http://127.0.0.1:{{ add 5000 $inx }}";
+    {{- end }}
+
+    docker: PathSubtree("/v2/")
+        -> enableAccessLog(5) -> "http://127.0.0.1:5000";
+
+    default: * -> status(404) -> <shunt>;
+
+  config.yml: |-
+    version: 0.1
+    log:
+      accesslog:
+        disabled: true
+      level: error
+      formatter: json
+    storage:
+      cache:
+        blobdescriptor: inmemory
+      maintenance:
+        uploadpurging:
+          enabled: true
+          age: 168h
+          interval: 24h
+          dryrun: false
+      filesystem:
+        rootdirectory: /var/lib/registry
+        maxthreads: 100
+    http:
+      addr: :8080
