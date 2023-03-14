@@ -34,10 +34,21 @@ rules:
   - pods/exec
   - pods/portforward
   - pods/proxy
+  - secrets
+  - services/proxy
   verbs:
   - get
   - list
   - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - pods/attach
+  - pods/exec
+  - pods/portforward
+  - pods/proxy
+  verbs:
   - create
   - delete
   - deletecollection
