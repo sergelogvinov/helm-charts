@@ -259,6 +259,16 @@ entries:
   openvpn:
   - apiVersion: v2
     appVersion: 2.5.8
+    created: "2023-03-14T15:52:36.283715595Z"
+    description: A Helm chart for Kubernetes
+    digest: 11e1187250e36d2bba97b0a675ba5ca479456e0ab89db542d19143d2b0fa1dae
+    name: openvpn
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/openvpn-0.2.1/openvpn-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: 2.5.8
     created: "2023-03-03T19:41:44.822833114Z"
     description: A Helm chart for Kubernetes
     digest: 7f5c0e391c0c441902c3140ea7255f18c3859f615c3b2b7caedfa5f0dd4cb955
@@ -422,6 +432,16 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2023-03-14T15:52:36.493023044Z"
+    description: A Helm chart for Kubernetes
+    digest: 16546d4365c10be82e44786a2f7828f1b222ba2650349ec09765adaf2ead05c3
+    name: prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.12/prometheus-rules-0.1.12.tgz
+    version: 0.1.12
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2023-02-24T14:08:51.683696609Z"
     description: A Helm chart for Kubernetes
     digest: d44973f0218df875e68d3c6a14ddd23dc61834dd1521126b555c971692112587
@@ -512,6 +532,16 @@ entries:
     version: 0.1.0
   rbac-common:
   - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2023-03-14T15:52:36.721142329Z"
+    description: A Helm chart for Kubernetes
+    digest: e0f1808f305d3e801593f235e551e7fc0be4e4d7354e738870675a703ab26650
+    name: rbac-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/rbac-common-0.1.1/rbac-common-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     appVersion: 0.1.0
     created: "2023-02-28T17:54:35.346835975Z"
     description: A Helm chart for Kubernetes
@@ -520,6 +550,17 @@ entries:
     type: application
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/rbac-common-0.1.0/rbac-common-0.1.0.tgz
+    version: 0.1.0
+  registry-mirrors:
+  - apiVersion: v2
+    appVersion: 2.8.1
+    created: "2023-03-14T15:52:36.974902008Z"
+    description: A Helm chart for Kubernetes
+    digest: 98b0b4ba5d5a22047049a37e90abe5fb6037aa29789d55bdb37275f3312685cb
+    name: registry-mirrors
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/registry-mirrors-0.1.0/registry-mirrors-0.1.0.tgz
     version: 0.1.0
   tabix:
   - apiVersion: v2
@@ -583,4 +624,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-03-03T19:41:44.823289823Z"
+generated: "2023-03-14T15:52:36.975059212Z"
