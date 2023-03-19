@@ -269,6 +269,16 @@ entries:
   openvpn:
   - apiVersion: v2
     appVersion: 2.5.8
+    created: "2023-03-19T10:57:59.840797604Z"
+    description: A Helm chart for Kubernetes
+    digest: 6f8069714ede3d9af881f945e306c32dc22993312d9e7deb2868226e1cd5d350
+    name: openvpn
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/openvpn-0.2.2/openvpn-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 2.5.8
     created: "2023-03-14T15:52:36.283715595Z"
     description: A Helm chart for Kubernetes
     digest: 11e1187250e36d2bba97b0a675ba5ca479456e0ab89db542d19143d2b0fa1dae
@@ -564,6 +574,16 @@ entries:
   registry-mirrors:
   - apiVersion: v2
     appVersion: 2.8.1
+    created: "2023-03-19T10:58:00.00008548Z"
+    description: A Helm chart for Kubernetes
+    digest: a814d9d9e3e57919605a0b71447fc97083f945179a3f48da4b7c0f4cf64f4d43
+    name: registry-mirrors
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/registry-mirrors-0.1.1/registry-mirrors-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 2.8.1
     created: "2023-03-14T15:52:36.974902008Z"
     description: A Helm chart for Kubernetes
     digest: 98b0b4ba5d5a22047049a37e90abe5fb6037aa29789d55bdb37275f3312685cb
@@ -573,6 +593,16 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/registry-mirrors-0.1.0/registry-mirrors-0.1.0.tgz
     version: 0.1.0
   tabix:
+  - apiVersion: v2
+    appVersion: 18.07.2
+    created: "2023-03-19T10:58:00.156692896Z"
+    description: A Helm chart for Kubernetes
+    digest: 0bccc61d370526ab816d717814c725d271c71ee81b8e895f5d32a95a4ea8c5b0
+    name: tabix
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/tabix-0.1.2/tabix-0.1.2.tgz
+    version: 0.1.2
   - apiVersion: v2
     appVersion: 18.07.1
     created: "2022-12-01T07:29:43.117489286Z"
@@ -644,4 +674,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-03-19T07:04:41.522327766Z"
+generated: "2023-03-19T10:58:00.156946011Z"
