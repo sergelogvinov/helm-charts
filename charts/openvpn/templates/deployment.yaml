@@ -25,7 +25,9 @@ spec:
   template:
     metadata:
       annotations:
+      {{- if .Values.config }}
         checksum/config: {{ .Values.openvpn.config | sha256sum }}
+      {{- end }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}

@@ -69,7 +69,7 @@ Create the mirror auth password
 {{- $previous := lookup "v1" "Secret" .Release.Namespace $sname }}
 {{- if .Values.auth.password }}
 {{- .Values.password }}
-{{- else if $previous.data.password }}
+{{- else if and $previous $previous.data.password }}
 {{- default (randAlphaNum 16) ($previous.data.password | b64dec ) }}
 {{- else }}
 {{- randAlphaNum 16 }}
