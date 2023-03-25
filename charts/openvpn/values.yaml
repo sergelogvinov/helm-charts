@@ -48,6 +48,11 @@ openvpn:
   defaultroutes: ~
     # push "route 8.8.8.8   255.255.255.255"
 
+  otp: ~
+    #
+    # google-authenticator -tdfWq -r 3 -R 30
+    #
+
   ### if createCerts==false
   ca: ~
     # -----BEGIN CERTIFICATE-----
@@ -92,6 +97,8 @@ openvpn:
 podAnnotations: {}
 
 podSecurityContext:
+  runAsUser: 0
+  runAsGroup: 101
   fsGroup: 101
   fsGroupChangePolicy: "OnRootMismatch"
 
@@ -108,7 +115,8 @@ securityContext:
       - ALL
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
-  runAsUser: 0
+  # runAsUser: 0
+  runAsGroup: 101
 
 service:
   type: ClusterIP

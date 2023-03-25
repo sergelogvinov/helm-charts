@@ -60,3 +60,12 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+OTP config
+*/}}
+{{- define "openvpn.otp" -}}
+{{ .Values.openvpn.otp }}
+" WINDOW_SIZE 3
+" TOTP_AUTH
+{{- end }}

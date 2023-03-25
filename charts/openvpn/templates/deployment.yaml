@@ -119,6 +119,8 @@ spec:
               drop:
               - all
             readOnlyRootFilesystem: true
+            runAsUser: 0
+            runAsGroup: 53
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -148,6 +150,10 @@ spec:
             items:
               - key: server.conf
                 path: server.conf
+            {{- if .Values.certManager.clients }}
+              - key: users.list
+                path: users.list
+            {{- end }}
         - name: users
           configMap:
             name: {{ template "openvpn.fullname" . }}-users
@@ -159,7 +165,7 @@ spec:
         - name: auth
           secret:
             secretName: {{ include "openvpn.fullname" . }}-auth
-            defaultMode: 288
+            defaultMode: 256
         - name: coredns
           configMap:
             name: {{ template "openvpn.fullname" . }}

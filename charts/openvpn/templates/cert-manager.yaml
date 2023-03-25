@@ -54,11 +54,12 @@ spec:
   commonName: {{ include "openvpn.fullname" . }}-server
   duration: 17520h # 24m
   renewBefore: 4380h # 6m
+  privateKey:
+    rotationPolicy: Always
   usages:
     - digital signature
     - key encipherment
     - server auth
-    - client auth
   dnsNames:
     - {{ include "openvpn.fullname" . }}
   issuerRef:
@@ -81,10 +82,11 @@ spec:
   commonName: {{ $k | trunc 63 | replace "@" "." }}
   duration: 17520h # 24m
   renewBefore: 2190h # 3m
+  privateKey:
+    rotationPolicy: Always
   usages:
     - digital signature
     - key encipherment
-    - server auth
     - client auth
   dnsNames:
     - {{ $k | trunc 63 | replace "@" "." }}
@@ -107,15 +109,15 @@ spec:
   commonName: client
   duration: 17520h # 24m
   renewBefore: 2190h # 3m
+  privateKey:
+    rotationPolicy: Always
   usages:
     - digital signature
     - key encipherment
-    - server auth
     - client auth
   dnsNames:
     - client
   issuerRef:
     name: {{ include "openvpn.fullname" . }}-issuer
 {{- end }}
-
 {{- end }}
