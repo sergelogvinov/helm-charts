@@ -1,5 +1,11 @@
 # Helm Charts
 
+Add repo:
+
+```shell
+helm repo add sinextra https://helm-charts.sinextra.dev
+```
+
 * [clickhouse](charts/clickhouse/)
 * [clickhouse-keeper](charts/clickhouse-keeper/)
 * [fluentd](charts/fluentd/)
@@ -10,5 +16,6 @@
 * [pgbouncer](charts/pgbouncer/)
 * [postgresql-single](charts/postgresql-single/)
 * [prometheus-rules](charts/prometheus-rules/)
+* [registry-mirrors](charts/registry-mirrors/)
 * [tabix](charts/tabix/)
 * [tailscale](charts/tailscale/)
