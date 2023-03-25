@@ -268,6 +268,16 @@ entries:
     version: 0.1.0
   openvpn:
   - apiVersion: v2
+    appVersion: 2.5.8-2
+    created: "2023-03-25T04:59:17.681312186Z"
+    description: A Helm chart for Kubernetes
+    digest: fb02fdf4ac55fd7370074470609ab0498e68ec515902e8bfd99befc87940e71a
+    name: openvpn
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/openvpn-0.3.0/openvpn-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: 2.5.8
     created: "2023-03-19T10:57:59.840797604Z"
     description: A Helm chart for Kubernetes
@@ -674,4 +684,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-03-19T10:58:00.156946011Z"
+generated: "2023-03-25T04:59:17.681593585Z"
