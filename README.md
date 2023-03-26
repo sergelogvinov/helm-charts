@@ -4,6 +4,7 @@ Add repo:
 
 ```shell
 helm repo add sinextra https://helm-charts.sinextra.dev
+helm repo update
 ```
 
 * [clickhouse](charts/clickhouse/)
