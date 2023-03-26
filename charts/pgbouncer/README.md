@@ -1,0 +1,35 @@
+# PGBouncer
+
+```yaml
+# helm values
+
+userlist:
+  # "username" "password"
+  # "md5" + "md5(password + username)" // echo -n '1234admin' | md5 -> md545f2603610af569b6155c45067268c6b
+  pgbouncer: password
+  betmaster: md5$HASH
+
+databases:
+  betmaster:
+    host: pg-0.pg-headless
+    port: 5432
+    user: username
+    dbname: databse
+    poolmode: session
+
+users:
+  username2:
+    poolmode: transaction
+
+pgHbaConfiguration: |-
+  hostssl all         all                   0.0.0.0/0       md5
+
+serverSslMode: require
+clientSslMode: require
+
+updateStrategy:
+  type: OnDelete
+
+metrics:
+  enabled: true
+```

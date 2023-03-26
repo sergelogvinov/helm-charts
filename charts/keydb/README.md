@@ -1,0 +1,45 @@
+# KeyDB
+
+KeyDB is a high-performance, distributed NoSQL database that is designed to be compatible with the Redis protocol. In many ways, KeyDB can be considered a drop-in replacement for Redis, as it supports the same data structures and commands.
+
+* TLS connections
+* HaProxy load balances
+* Master-master replication
+* Support backup/restore to the extrernal storage, using [wal-g](https://github.com/wal-g)
+
+```yaml
+# helm values
+
+replicaCount: 2
+
+updateStrategy:
+  type: OnDelete
+
+tlsCerts:
+  create: true
+
+loadbalancer:
+  enabled: true
+
+extraVolumes:
+  - name: certs
+    secret:
+      defaultMode: 256
+      secretName: backup-s3
+extraVolumeMounts:
+  - name: certs
+    mountPath: /home/redis/.aws
+    readOnly: true
+
+backup:
+  enabled: true
+  recovery: true
+
+  walg: |
+    WALG_TAR_DISABLE_FSYNC: true
+    WALG_COMPRESSION_METHOD: brotli
+    WALG_S3_PREFIX: s3://backup/postgrtes-backup
+
+metrics:
+  enabled: true
+```
