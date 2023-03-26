@@ -4,7 +4,7 @@ Helm chart to deploy single-node PostgreSQL database.
 
 A single-node PostgreSQL database is straightforward and relatively easy to maintain. You don't need to worry about configuring a distributed database or managing multiple nodes.
 
-* Support backup/restore to extrernal storage [wal-g](https://github.com/wal-g)
+* Support backup/restore to extrernal storage, using [wal-g](https://github.com/wal-g)
 * Automatically tuning PostgreSQL parameters base on `postgresqlServerMemory` value.
 
 ```shell
