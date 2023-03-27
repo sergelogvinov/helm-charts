@@ -17,15 +17,16 @@ fullnameOverride: ""
 podAnnotations: {}
 
 podSecurityContext:
-  fsGroup: 1000
+  fsGroup: 101
 
 securityContext:
   capabilities:
     drop:
     - ALL
-  readOnlyRootFilesystem: true
+  # readOnlyRootFilesystem: true
   runAsNonRoot: true
-  runAsUser: 1000
+  runAsUser: 100
+  runAsGroup: 101
 
 service:
   type: ClusterIP

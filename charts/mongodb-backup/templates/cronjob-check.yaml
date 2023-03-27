@@ -15,12 +15,13 @@ metadata:
     app.kubernetes.io/component: checker
 spec:
   concurrencyPolicy: Forbid
-  failedJobsHistoryLimit: 1
+  failedJobsHistoryLimit: {{ default 1 .Values.backupCheck.history }}
   schedule: "{{ .Values.backupCheck.schedule }}"
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
-      activeDeadlineSeconds: 43200
+      ttlSecondsAfterFinished: 3600 # 1h
+      activeDeadlineSeconds: 43200 # 12h
       backoffLimit: 0
       template:
         metadata:
@@ -129,8 +130,36 @@ spec:
                 claimName: {{ .Values.backupCheck.persistence.existingClaim }}
           {{- else if .Values.backupCheck.persistence.storageClass }}
             - name: data
-              persistentVolumeClaim:
-                claimName: data-{{ include "mongodb-backup.fullname" . }}-check
+              ephemeral:
+                volumeClaimTemplate:
+                  metadata:
+                    labels:
+                      {{- with .Values.podlabels }}
+                      {{ toYaml . | nindent 22 }}
+                      {{- end }}
+                      {{- include "mongodb-backup.labels" . | nindent 22 }}
+                      app.kubernetes.io/component: checker
+                  {{- with .Values.backupCheck.persistence.annotations }}
+                    annotations:
+                    {{- range $key, $value := . }}
+                      {{ $key }}: {{ $value }}
+                    {{- end }}
+                  {{- end }}
+                  spec:
+                    accessModes:
+                    {{- range .Values.backupCheck.persistence.accessModes }}
+                      - {{ . | quote }}
+                    {{- end }}
+                    resources:
+                      requests:
+                        storage: {{ .Values.backupCheck.persistence.size | quote }}
+                  {{- if .Values.backupCheck.persistence.storageClass }}
+                  {{- if (eq "-" .Values.backupCheck.persistence.storageClass) }}
+                    storageClassName: ""
+                  {{- else }}
+                    storageClassName: "{{ .Values.backupCheck.persistence.storageClass }}"
+                  {{- end }}
+                  {{- end }}
           {{- else }}
             - name: data
               emptyDir: {}
