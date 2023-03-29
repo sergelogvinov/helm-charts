@@ -9,7 +9,11 @@ kind: CronJob
 metadata:
   name: {{ include "clickhouse.fullname" $ }}-{{ $val.name }}
   labels:
-    {{- include "clickhouse.labels" $ | nindent 4 }}
+    {{- with $.Values.podlabels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
+    {{- include "clickhouse.crontab.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $val.name }}
 spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 1
@@ -23,7 +27,11 @@ spec:
         metadata:
           name: {{ include "clickhouse.fullname" $ }}-{{ $val.name }}
           labels:
-            {{- include "clickhouse.labels" $ | nindent 12 }}
+            {{- with $.Values.podlabels }}
+            {{ toYaml . | nindent 12 }}
+            {{- end }}
+            {{- include "clickhouse.crontab.labels" $ | nindent 12 }}
+            app.kubernetes.io/component: {{ $val.name }}
         spec:
           restartPolicy: Never
           enableServiceLinks: false

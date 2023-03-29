@@ -68,29 +68,28 @@ serviceAccount:
 podLabels: {}
 podAnnotations: {}
 
-podSecurityContext: {}
-  # runAsNonRoot: true
-  # runAsUser: 1001
-  # runAsGroup: 0
-  # fsGroup: 1001
-  # fsGroupChangePolicy: "OnRootMismatch"
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 34
+  runAsGroup: 0
+  fsGroup: 34
+  fsGroupChangePolicy: "OnRootMismatch"
 
-securityContext: {}
+securityContext:
   # seccompProfile:
   #   type: RuntimeDefault
-  # allowPrivilegeEscalation: false
-  # readOnlyRootFilesystem: true
-  # capabilities:
-  #   drop:
-  #   - ALL
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
 
-resources: {}
+resources:
   # limits:
   #   cpu: 100m
   #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+  requests:
+    cpu: 500m
+    memory: 256Mi
 
 # extraVolumes:
 #   - name: gcp-certs

@@ -45,6 +45,7 @@ spec:
           serviceAccountName: {{ include "mongodb-backup.serviceAccountName" . }}
           securityContext:
             {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          {{- if .Values.backupCheck.persistence.enabled }}
           initContainers:
             - name: cleanup
               securityContext:
@@ -57,6 +58,7 @@ spec:
                   mountPath: /docker-entrypoint-initdb.d
                 - name: data
                   mountPath: /bitnami/mongodb
+          {{- end }}
           containers:
             - name: {{ .Chart.Name }}
               securityContext:
@@ -64,8 +66,22 @@ spec:
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               # command: ["sleep","6000"]
-              args: ["/opt/bitnami/scripts/mongodb/setup.sh"]
+              args: ["/opt/bitnami/scripts/mongodb/run.sh"]
               env:
+                - name: MY_POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: MY_POD_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: MY_POD_HOST_IP
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: status.hostIP
+                - name: MONGODB_REPLICA_SET_NAME
+                  value: rs0
                 - name: MONGODB_REPLICA_SET_MODE
                   value: primary
                 - name: MONGODB_ROOT_USER
@@ -124,6 +140,8 @@ spec:
           {{- if .Values.extraVolumes -}}
             {{ toYaml .Values.extraVolumes | nindent 12 }}
           {{- end -}}
+
+          {{- if .Values.backupCheck.persistence.enabled }}
           {{- if .Values.backupCheck.persistence.existingClaim }}
             - name: data
               persistentVolumeClaim:
@@ -160,6 +178,7 @@ spec:
                     storageClassName: "{{ .Values.backupCheck.persistence.storageClass }}"
                   {{- end }}
                   {{- end }}
+          {{- end }}
           {{- else }}
             - name: data
               emptyDir: {}

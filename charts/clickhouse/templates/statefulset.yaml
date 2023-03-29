@@ -4,6 +4,9 @@ metadata:
   name: {{ include "clickhouse.fullname" . }}
   labels:
     {{- include "clickhouse.labels" . | nindent 4 }}
+    {{- with .Values.podlabels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   serviceName: {{ include "clickhouse.fullname" . }}-headless
   replicas: {{ .Values.replicaCount }}
@@ -24,6 +27,9 @@ spec:
       {{- end}}
       labels:
         {{- include "clickhouse.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podlabels }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       enableServiceLinks: false
       {{- with .Values.imagePullSecrets }}
