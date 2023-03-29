@@ -66,8 +66,10 @@ spec:
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               # command: ["sleep","6000"]
-              args: ["/opt/bitnami/scripts/mongodb/run.sh"]
+              args: ["/opt/bitnami/scripts/mongodb/setup.sh"]
               env:
+                # - name: BITNAMI_DEBUG
+                #   value: "true"
                 - name: MY_POD_NAME
                   valueFrom:
                     fieldRef:
