@@ -3,6 +3,16 @@ entries:
   clickhouse:
   - apiVersion: v2
     appVersion: 23.2.4.12
+    created: "2023-03-29T11:12:16.909509679Z"
+    description: Clickhouse chart for Kubernetes
+    digest: 6e34c31d6b450fb38a6fe238751a42a45bb36e08165856ab0a65ed9f7a3caa8a
+    name: clickhouse
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-0.2.2/clickhouse-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 23.2.4.12
     created: "2023-03-19T07:04:41.368587986Z"
     description: Clickhouse chart for Kubernetes
     digest: b115348386c1227f1eeb3037e14e583fe1736efc1baf99338fbfb7bbbd511d4e
@@ -185,6 +195,16 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.2.3/keydb-0.2.3.tgz
     version: 0.2.3
   mongodb-backup:
+  - apiVersion: v2
+    appVersion: 6.0.5
+    created: "2023-03-29T11:12:17.070830671Z"
+    description: A Helm chart for Kubernetes
+    digest: d0a79b0beff5b593c40b34736b1ba3944d3b010afd6ad0f321644c075feadf71
+    name: mongodb-backup
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongodb-backup-0.3.1/mongodb-backup-0.3.1.tgz
+    version: 0.3.1
   - apiVersion: v2
     appVersion: 6.0.3
     created: "2023-01-30T17:57:45.985927003Z"
@@ -694,4 +714,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-03-28T08:46:27.194555193Z"
+generated: "2023-03-29T11:12:17.071130078Z"
