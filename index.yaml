@@ -1,5 +1,16 @@
 apiVersion: v1
 entries:
+  bitwarden:
+  - apiVersion: v2
+    appVersion: 1.28.1
+    created: "2023-04-05T15:24:24.38566607Z"
+    description: A Helm chart for Kubernetes
+    digest: 27a26c27bcf1ae8cd2528d1ced4458fa0eb67869f0f7193f2de3f25c587d30ac
+    name: bitwarden
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/bitwarden-0.1.0/bitwarden-0.1.0.tgz
+    version: 0.1.0
   clickhouse:
   - apiVersion: v2
     appVersion: 23.2.4.12
@@ -724,4 +735,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-03-29T18:45:22.337286929Z"
+generated: "2023-04-05T15:24:24.386068673Z"
