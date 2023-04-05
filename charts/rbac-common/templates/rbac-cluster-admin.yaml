@@ -48,6 +48,11 @@ rules:
   - pods/exec
   - pods/portforward
   - pods/proxy
+  - configmaps
+  - secrets
+  - services
+  - services/proxy
+  - serviceaccounts
   verbs:
   - create
   - delete
@@ -63,6 +68,8 @@ rules:
   - statefulsets
   - statefulsets/scale
   verbs:
+  - create
+  - delete
   - patch
   - update
 - apiGroups:
@@ -86,6 +93,15 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - certificates
+  verbs:
+  - create
+  - delete
+  - patch
+  - update
 - apiGroups:
   - acme.cert-manager.io
   resources:
