@@ -15,9 +15,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubecpuovercommit
         summary: Cluster has overcommitted CPU resource requests.
       expr: |-
-        sum(namespace_cpu:kube_pod_container_resource_requests:sum{}) - (sum(kube_node_status_allocatable{resource="cpu"}) - max(kube_node_status_allocatable{resource="cpu"})) > 0
+        sum(namespace_cpu:kube_pod_container_resource_requests:sum{}) - (sum(kube_node_status_allocatable{resource="cpu", job="kubernetes-service-endpoints"}) - max(kube_node_status_allocatable{resource="cpu", job="kubernetes-service-endpoints"})) > 0
         and
-        (sum(kube_node_status_allocatable{resource="cpu"}) - max(kube_node_status_allocatable{resource="cpu"})) > 0
+        (sum(kube_node_status_allocatable{resource="cpu", job="kubernetes-service-endpoints"}) - max(kube_node_status_allocatable{resource="cpu", job="kubernetes-service-endpoints"})) > 0
       for: 10m
       labels:
         severity: warning
@@ -29,9 +29,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubememoryovercommit
         summary: Cluster has overcommitted memory resource requests.
       expr: |-
-        sum(namespace_memory:kube_pod_container_resource_requests:sum{}) - (sum(kube_node_status_allocatable{resource="memory"}) - max(kube_node_status_allocatable{resource="memory"})) > 0
+        sum(namespace_memory:kube_pod_container_resource_requests:sum{}) - (sum(kube_node_status_allocatable{resource="memory", job="kubernetes-service-endpoints"}) - max(kube_node_status_allocatable{resource="memory", job="kubernetes-service-endpoints"})) > 0
         and
-        (sum(kube_node_status_allocatable{resource="memory"}) - max(kube_node_status_allocatable{resource="memory"})) > 0
+        (sum(kube_node_status_allocatable{resource="memory", job="kubernetes-service-endpoints"}) - max(kube_node_status_allocatable{resource="memory", job="kubernetes-service-endpoints"})) > 0
       for: 10m
       labels:
         severity: warning

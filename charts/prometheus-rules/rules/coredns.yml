@@ -28,7 +28,7 @@
       description: Number of CoreDNS panics encountered {{ $value }} on {{ $labels.kubernetes_node }}
       summary: CoreDNS Panic Count
   - alert: CorednsForwardErrors
-    expr: sum(increase(coredns_forward_healthcheck_failures_total[10m])) BY (kubernetes_node,kubernetes_pod_name,to) > 1
+    expr: sum(increase(coredns_forward_healthcheck_failures_total[10m])) BY (kubernetes_node,kubernetes_pod_name,to) > 10
     for: 5m
     labels:
       severity: warning

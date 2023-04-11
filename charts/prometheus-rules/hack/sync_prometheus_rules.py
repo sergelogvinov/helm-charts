@@ -118,7 +118,7 @@ alert_condition_map = {
 
 replacement_map = {
     'job="alertmanager-main"': {
-        'replacement': 'job="kubernetes-service-endpoints"',
+        'replacement': 'job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager"',
         'init': ''},
     # 'job="prometheus-operator"': {
     #     'replacement': 'job="{{ $operatorJob }}"',
