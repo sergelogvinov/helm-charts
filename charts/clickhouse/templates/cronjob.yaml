@@ -30,7 +30,7 @@ spec:
             {{- with $.Values.podlabels }}
             {{ toYaml . | nindent 12 }}
             {{- end }}
-            {{- include "clickhouse.crontab.labels" $ | nindent 12 }}
+            {{- include "clickhouse.crontab.selectorLabels" $ | nindent 12 }}
             app.kubernetes.io/component: {{ $val.name }}
         spec:
           restartPolicy: Never

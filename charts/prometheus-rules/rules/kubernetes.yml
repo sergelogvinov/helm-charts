@@ -16,5 +16,5 @@
     labels:
       severity: warning
     annotations:
-      description: Pod {{$labels.namespace}}/{{$labels.pod}} cpi limit/usage {{$value | humanize1024}}
+      description: Pod {{$labels.namespace}}/{{$labels.pod}} cpu limit/usage {{$value | humanize1024}}
       summary: CPU limit reached
