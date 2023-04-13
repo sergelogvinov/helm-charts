@@ -11,11 +11,12 @@ metadata:
     {{- include "keydb.crontab.labels" . | nindent 4 }}
 spec:
   concurrencyPolicy: Forbid
-  failedJobsHistoryLimit: 1
+  failedJobsHistoryLimit: {{ default 1 .Values.backup.history }}
   schedule: "{{ .Values.backup.schedule }}"
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
+      ttlSecondsAfterFinished: 3600 # 1h
       activeDeadlineSeconds: 3600 # 1h
       backoffLimit: 1
       template:

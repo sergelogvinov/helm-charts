@@ -53,6 +53,7 @@ rules:
   - services
   - services/proxy
   - serviceaccounts
+  - persistentvolumeclaims
   verbs:
   - create
   - delete

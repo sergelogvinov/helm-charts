@@ -79,12 +79,40 @@ backup:
       cpu: 100m
       memory: 128Mi
 
+backupCheck:
+  enabled: false
+  schedule: "15 8 * * *"
+
+  resources:
+    # limits:
+    #   cpu: 2
+    #   memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  persistence:
+    ## A manually managed Persistent Volume and Claim
+    # existingClaim:
+    #
+    # storageClass: "-"
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+    annotations: {}
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
 metrics:
   enabled: false
   image:
     repository: oliver006/redis_exporter
     pullPolicy: IfNotPresent
-    tag: v1.29.0
+    tag: v1.50.0
 
 serviceAccount:
   # Specifies whether a service account should be created

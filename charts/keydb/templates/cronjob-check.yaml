@@ -1,0 +1,125 @@
+{{- if and .Values.backupCheck.enabled (ne .Values.backupCheck.schedule "") }}
+{{- if semverCompare ">=1.22" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: batch/v1
+{{- else -}}
+apiVersion: batch/v1beta1
+{{- end }}
+kind: CronJob
+metadata:
+  name: {{ include "keydb.fullname" . }}-backup-check
+  labels:
+    {{- include "keydb.crontab.labels" . | nindent 4 }}
+    app.kubernetes.io/component: checker
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: {{ default 1 .Values.backupCheck.history }}
+  schedule: "{{ .Values.backupCheck.schedule }}"
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 3600 # 1h
+      activeDeadlineSeconds: 43200 # 12h
+      backoffLimit: 0
+      template:
+        metadata:
+          name: {{ include "keydb.fullname" . }}
+          labels:
+            {{- include "keydb.crontab.labels" . | nindent 12 }}
+            app.kubernetes.io/component: checker
+        spec:
+          restartPolicy: Never
+          enableServiceLinks: false
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "keydb.serviceAccountName" . }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          containers:
+            - name: {{ .Chart.Name }}
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command: ["/bin/sh","-e","/entrypoint.d/restore.sh"]
+              volumeMounts:
+                - name: command
+                  mountPath: /entrypoint.d
+                - name: walg
+                  mountPath: /etc/walg
+              {{- if .Values.extraVolumeMounts }}
+                {{ toYaml .Values.extraVolumeMounts | nindent 16 }}
+              {{- end }}
+                - name: data
+                  mountPath: /data
+              resources:
+                {{- toYaml .Values.backupCheck.resources | nindent 16 }}
+          {{- with .Values.backupCheck.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.backupCheck.affinity }}
+          affinity:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.backupCheck.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumes:
+            - name: command
+              configMap:
+                name: {{ include "keydb.fullname" . }}
+                defaultMode: 360
+            - name: walg
+              secret:
+                secretName:  {{ include "keydb.fullname" . }}
+                defaultMode: 256
+                items:
+                  - key: walg.yaml
+                    path: walg.yaml
+          {{- if .Values.extraVolumes }}
+            {{ toYaml .Values.extraVolumes | nindent 12 }}
+          {{- end }}
+          {{- if .Values.backupCheck.persistence.existingClaim }}
+            - name: data
+              persistentVolumeClaim:
+                claimName: {{ .Values.backupCheck.persistence.existingClaim }}
+          {{- else if .Values.backupCheck.persistence.storageClass }}
+            - name: data
+              ephemeral:
+                volumeClaimTemplate:
+                  metadata:
+                    labels:
+                      {{- with .Values.podlabels }}
+                      {{ toYaml . | nindent 22 }}
+                      {{- end }}
+                      {{- include "postgresql-single.crontab.labels" . | nindent 22 }}
+                      app.kubernetes.io/component: checker
+                  {{- with .Values.backupCheck.persistence.annotations }}
+                    annotations:
+                    {{- range $key, $value := . }}
+                      {{ $key }}: {{ $value }}
+                    {{- end }}
+                  {{- end }}
+                  spec:
+                    accessModes:
+                    {{- range .Values.backupCheck.persistence.accessModes }}
+                      - {{ . | quote }}
+                    {{- end }}
+                    resources:
+                      requests:
+                        storage: {{ .Values.backupCheck.persistence.size | quote }}
+                  {{- if .Values.backupCheck.persistence.storageClass }}
+                  {{- if (eq "-" .Values.backupCheck.persistence.storageClass) }}
+                    storageClassName: ""
+                  {{- else }}
+                    storageClassName: "{{ .Values.backupCheck.persistence.storageClass }}"
+                  {{- end }}
+                  {{- end }}
+          {{- else }}
+            - name: data
+              emptyDir: {}
+          {{- end }}
+{{- end }}

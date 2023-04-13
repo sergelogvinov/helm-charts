@@ -51,6 +51,7 @@ data:
     #!/bin/sh
     set -e
 
+    wal-g --config /etc/walg/walg.yaml backup-list --detail
     wal-g --config /etc/walg/walg.yaml backup-fetch LATEST
     mv /data/dump.rdb /data/keydb.rdb
 
