@@ -1,0 +1,7 @@
+1. Backup command:
+
+kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "mongodb-backup.fullname" . }} {{ include "mongodb-backup.fullname" . }}-manual
+
+2. Backup check command:
+
+kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "mongodb-backup.fullname" . }}-check {{ include "mongodb-backup.fullname" . }}-check-manual

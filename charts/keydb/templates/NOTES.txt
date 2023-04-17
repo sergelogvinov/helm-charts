@@ -1,1 +1,9 @@
-1. Get the application URL by running these commands:
+{{- if and .Values.backup.enabled }}
+1. Backup command:
+
+kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "keydb.fullname" . }}-backup {{ include "keydb.fullname" . }}-backup-manual
+
+2. Backup check command:
+
+kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "keydb.fullname" . }}-backup-check {{ include "keydb.fullname" . }}-backup-check-manual
+{{- end }}
