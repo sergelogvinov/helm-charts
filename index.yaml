@@ -167,6 +167,16 @@ entries:
   keydb:
   - apiVersion: v2
     appVersion: 6.3.1
+    created: "2023-04-17T17:33:41.871105768Z"
+    description: A Helm chart for Kubernetes
+    digest: d93a8b2a960e3cbb06080386d21776c6bdb0c4efbef8b84da12558abd2583237
+    name: keydb
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.2.10/keydb-0.2.10.tgz
+    version: 0.2.10
+  - apiVersion: v2
+    appVersion: 6.3.1
     created: "2023-04-13T15:20:57.999264811Z"
     description: A Helm chart for Kubernetes
     digest: e197d98040ac9d0b9cec7c0df5a12f32c0fc519372f5a03ec022c8f2c71af423
@@ -226,6 +236,16 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.2.3/keydb-0.2.3.tgz
     version: 0.2.3
   mongodb-backup:
+  - apiVersion: v2
+    appVersion: 6.0.5
+    created: "2023-04-17T17:33:42.012004865Z"
+    description: A Helm chart for Kubernetes
+    digest: da1965d422a749961088885c62d28b056a91eb302b0c026fd6507fe19eeb1f11
+    name: mongodb-backup
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongodb-backup-0.3.3/mongodb-backup-0.3.3.tgz
+    version: 0.3.3
   - apiVersion: v2
     appVersion: 6.0.5
     created: "2023-03-29T18:45:22.337084127Z"
@@ -440,6 +460,16 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.0/pgbouncer-0.1.0.tgz
     version: 0.1.0
   postgresql-single:
+  - apiVersion: v2
+    appVersion: "14.6"
+    created: "2023-04-17T17:33:42.204633195Z"
+    description: A Helm chart for Kubernetes
+    digest: 962253f89985ccc82acd67d7746a4745851843ee9f71cfd42e30bb8a95416d78
+    name: postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.4.7/postgresql-single-0.4.7.tgz
+    version: 0.4.7
   - apiVersion: v2
     appVersion: "14.6"
     created: "2023-02-08T21:06:07.17686878Z"
@@ -805,4 +835,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-04-13T15:20:58.38769642Z"
+generated: "2023-04-17T17:33:42.204886307Z"
