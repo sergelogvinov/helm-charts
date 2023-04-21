@@ -573,6 +573,16 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2023-04-21T06:54:10.684462092Z"
+    description: A Helm chart for Kubernetes
+    digest: 2aab062ac57f7b443045e88e65984f19df2818cd0989d40b5418d7834d1e48f4
+    name: prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.15/prometheus-rules-0.1.15.tgz
+    version: 0.1.15
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2023-04-12T16:32:59.137724447Z"
     description: A Helm chart for Kubernetes
     digest: b505c9bf77c149013cf0698695c1afaf30d8e7397c997141fbec0bee66c1f2bd
@@ -692,6 +702,16 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.0/prometheus-rules-0.1.0.tgz
     version: 0.1.0
   rbac-common:
+  - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2023-04-21T06:54:10.838614268Z"
+    description: A Helm chart for Kubernetes
+    digest: 20582ed72ab2b8a8b9b7ff5c7fc18f2209b3847d15eab2bcad7b77a99501f5a3
+    name: rbac-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/rbac-common-0.1.4/rbac-common-0.1.4.tgz
+    version: 0.1.4
   - apiVersion: v2
     appVersion: 0.1.1
     created: "2023-04-13T15:20:58.387531923Z"
@@ -835,4 +855,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-04-17T17:33:42.204886307Z"
+generated: "2023-04-21T06:54:10.839310372Z"
