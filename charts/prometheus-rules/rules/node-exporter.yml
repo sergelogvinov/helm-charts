@@ -17,15 +17,6 @@
     annotations:
       description: "MD Raid {{$labels.device}} is in {{$labels.state}} state on {{$labels.kubernetes_node_name}} node"
 
-  - alert: NVME disk is overheated
-    expr: node_hwmon_temp_celsius{chip=~"^0000.*",sensor=~"temp.+"} > 65
-    for: 20m
-    labels:
-      severity: warning
-      infrastructure: true
-    annotations:
-      description: "NVME disk (chip id {{$labels.chip}} on node {{$labels.kubernetes_node_name}} is overheated ({{$value}}'C)"
-
   - alert: NodeUptime
     expr: node_time_seconds - node_boot_time_seconds > 6*30*24*60*60
     for: 1s
