@@ -12,6 +12,8 @@ mirrors:
     source: https://gcr.io
   - host: ghcr.io
     source: https://ghcr.io
+  - host: registry.k8s.io
+    source: https://registry.k8s.io
 
 ingress:
   enabled: true
@@ -41,4 +43,7 @@ machine:
       ghcr.io:
         endpoints:
           - https://mirrors.example.com/ghcr-io
+      registry.k8s.io:
+        endpoints:
+          - https://mirrors.example.com/registry-k8s-io
 ```

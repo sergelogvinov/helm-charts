@@ -74,7 +74,7 @@
       summary: PostgreSQL connections is close to the maximum
 
   - alert: PostgresReplicationLag
-    expr: pg_replication_lag > 2*60*60 and (pg_replication_is_replica == 1)
+    expr: pg_replication_lag > 2*60*60
     for: 5m
     labels:
       severity: critical
@@ -83,7 +83,7 @@
       description: PostgreSQL on {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} has replication lag {{ $value | humanizeDuration }}
       summary: PostgreSQL replication lag is going up
   - alert: PostgresReplicationLag
-    expr: pg_replication_lag > 15*60 and (pg_replication_is_replica == 1)
+    expr: pg_replication_lag > 30*60
     for: 5m
     labels:
       severity: warning
