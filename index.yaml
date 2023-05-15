@@ -461,6 +461,16 @@ entries:
     version: 0.1.0
   postgresql-single:
   - apiVersion: v2
+    appVersion: "14.8"
+    created: "2023-05-15T16:17:02.981465607Z"
+    description: A Helm chart for Kubernetes
+    digest: fcfc30202ca95a977a9bd142574d814a1f104f96bd5ce529a5f2e6529735d279
+    name: postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.4.8/postgresql-single-0.4.8.tgz
+    version: 0.4.8
+  - apiVersion: v2
     appVersion: "14.6"
     created: "2023-04-17T17:33:42.204633195Z"
     description: A Helm chart for Kubernetes
@@ -865,4 +875,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-05-02T11:33:25.45057981Z"
+generated: "2023-05-15T16:17:02.981758909Z"
