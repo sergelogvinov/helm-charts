@@ -157,6 +157,7 @@ hot_standby = on
 archive_mode = on
 {{- if or .Values.backup.enabled .Values.backup.recovery }}
 {{- if .Values.backup.walpush }}
+archive_timeout = 30min
 archive_command = '/usr/bin/wal-g --config /etc/walg/walg.yaml wal-push %p'
 {{- else }}
 archive_command = '/bin/true'
