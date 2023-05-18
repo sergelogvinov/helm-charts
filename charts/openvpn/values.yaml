@@ -74,9 +74,9 @@ openvpn:
     # default_md      = sha256
     # default_crl_days= 1000
 
-    #
+    # touch index.txt
     # openssl ca -cert ca.crt -keyfile ca.key -revoke client.crt -config openssl.cnf
-    # openssl ca -gencrl -out revoke.pem -config openssl.cnf
+    # openssl ca -cert ca.crt -keyfile ca.key -gencrl -out revoke.pem -config openssl.cnf
     # openssl crl -text -noout -in revoke.pem
     #
 

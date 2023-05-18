@@ -19,6 +19,10 @@ kubectl --namespace {{ .Release.Namespace }} get secret {{ include "openvpn.full
 kubectl --namespace {{ .Release.Namespace }} get secret {{ include "openvpn.fullname" . }}-client -o jsonpath="{.data.tls\.key}" | base64 --decode > client.key
 {{- end }}
 
+{{- if .Values.openvpn.tlsauth }}
+kubectl --namespace {{ .Release.Namespace }} get secret {{ include "openvpn.fullname" . }} -o jsonpath="{.data.tlsauth\.key}" | base64 --decode > tlsauth.key
+{{- end }}
+
 {{- if .Values.certManager.clients }}
 client secrets:
 {{- range $k := .Values.certManager.clients }}

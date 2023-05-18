@@ -23,11 +23,15 @@ spec:
     name: {{ include "openvpn.fullname" . }}
     kind: Issuer
   commonName: {{ include "openvpn.fullname" . }}
-  duration: 17520h # 24m
-  renewBefore: 4380h # 6m
+  duration: 26280h # 3y
+  renewBefore: 26000h # ~3y
+  privateKey:
+    algorithm: ECDSA
+    size: 256
   usages:
     - server auth
     - client auth
+    - crl sign
   isCA: true
 ---
 apiVersion: cert-manager.io/v1
@@ -52,13 +56,14 @@ spec:
     labels:
       {{- include "openvpn.labels" . | nindent 6 }}
   commonName: {{ include "openvpn.fullname" . }}-server
-  duration: 17520h # 24m
-  renewBefore: 4380h # 6m
+  duration: 26280h # 3y
+  renewBefore: 26000h # ~3y
   privateKey:
     rotationPolicy: Always
+    algorithm: ECDSA
+    size: 256
   usages:
     - digital signature
-    - key encipherment
     - server auth
   dnsNames:
     - {{ include "openvpn.fullname" . }}
@@ -80,13 +85,14 @@ spec:
     labels:
       {{- include "openvpn.labels" $ | nindent 6 }}
   commonName: {{ $k | trunc 63 | replace "@" "." }}
-  duration: 17520h # 24m
+  duration: 8760h # 12m
   renewBefore: 2190h # 3m
   privateKey:
     rotationPolicy: Always
+    algorithm: ECDSA
+    size: 256
   usages:
     - digital signature
-    - key encipherment
     - client auth
   dnsNames:
     - {{ $k | trunc 63 | replace "@" "." }}
@@ -111,9 +117,10 @@ spec:
   renewBefore: 2190h # 3m
   privateKey:
     rotationPolicy: Always
+    algorithm: ECDSA
+    size: 256
   usages:
     - digital signature
-    - key encipherment
     - client auth
   dnsNames:
     - client
