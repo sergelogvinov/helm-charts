@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ipsec.fullname" . }}
+  labels:
+    {{- include "ipsec.labels" . | nindent 4 }}
+spec:
+{{- if eq .Values.service.type "NodePort" }}
+  type: {{ .Values.service.type }}
+  sessionAffinity: None
+  externalTrafficPolicy: Local
+{{- else  }}
+  type: ClusterIP
+  clusterIP: None
+{{- end }}
+  ports:
+    - name: isakmp
+      port: {{ .Values.service.isakmp }}
+      targetPort: isakmp
+      protocol: UDP
+    - name: ipsec
+      port: {{ .Values.service.ipsec }}
+      targetPort: ipsec
+      protocol: UDP
+  selector:
+    {{- include "ipsec.selectorLabels" . | nindent 4 }}

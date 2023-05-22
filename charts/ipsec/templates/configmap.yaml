@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ipsec.fullname" . }}
+  labels:
+    {{- include "ipsec.labels" . | nindent 4 }}
+data:
+  entrypoint.sh: |
+    #!/bin/sh
+
+    {{- if .Values.ipsecService.enabled }}
+    # Create service interface
+    ip link add dummy0 type dummy
+    ip link set dummy0 mtu 1300
+    ip address add {{ .Values.ipsecService.ip }}/32 dev dummy0
+    ip link set dummy0 up
+    {{- end }}
+
+    # Update sysctl settings
+    if [ "$(getconf LONG_BIT)" = "64" ]; then
+      SHM_MAX=68719476736
+      SHM_ALL=4294967296
+    else
+      SHM_MAX=4294967295
+      SHM_ALL=268435456
+    fi
+    /sbin/sysctl -e -q -w kernel.msgmnb=65536
+    /sbin/sysctl -e -q -w kernel.msgmax=65536
+    /sbin/sysctl -e -q -w kernel.shmmax=$SHM_MAX
+    /sbin/sysctl -e -q -w kernel.shmall=$SHM_ALL
+    /sbin/sysctl -e -q -w net.ipv4.conf.all.accept_source_route=0
+    /sbin/sysctl -e -q -w net.ipv4.conf.all.accept_redirects=0
+    /sbin/sysctl -e -q -w net.ipv4.conf.all.send_redirects=0
+    /sbin/sysctl -e -q -w net.ipv4.conf.all.rp_filter=0
+    /sbin/sysctl -e -q -w net.ipv4.conf.default.accept_source_route=0
+    /sbin/sysctl -e -q -w net.ipv4.conf.default.accept_redirects=0
+    /sbin/sysctl -e -q -w net.ipv4.conf.default.send_redirects=0
+    /sbin/sysctl -e -q -w net.ipv4.conf.default.rp_filter=0
+    /sbin/sysctl -e -q -w net.ipv4.conf.eth0.send_redirects=0
+    /sbin/sysctl -e -q -w net.ipv4.conf.eth0.rp_filter=0
+    /sbin/sysctl -e -q -w net.ipv4.ip_forward=0
+
+    mkdir -p /run/pluto /var/run/pluto /var/lib/ipsec/nss
+    ipsec initnss --nssdir /var/lib/ipsec/nss
+
+    exec /usr/libexec/ipsec/pluto --nofork --nssdir /var/lib/ipsec/nss --config /etc/ipsec/ipsec.conf --secretsfile /etc/ipsec/ipsec.secrets --stderrlog
+
+  haproxy.cfg: |
+    global
+      maxconn 512
+      stats socket /tmp/haproxy.sock mode 600 level admin
+      server-state-file haproxy_state
+      server-state-base /tmp
+
+    resolvers clusterdns
+      parse-resolv-conf
+      resolve_retries  3
+      timeout resolve 1s
+      timeout retry   1s
+      hold other     60s
+      hold refused   30s
+      hold nx        30s
+      hold timeout   30s
+      hold valid     60s
+      hold obsolete  60s
+
+    defaults
+      mode tcp
+      option  dontlognull
+      timeout connect         4s
+      timeout server          86400s
+      timeout client          86400s
+      timeout http-keep-alive 1m
+      default-server init-addr libc,none
+
+    frontend stats
+      mode http
+      bind *:8404
+      http-request use-service prometheus-exporter if { path /metrics }
+      stats enable
+      stats uri /
+      stats refresh 10s
+      monitor-uri /healthz
+      option dontlognull
+
+    {{ if .Values.ipsecService.enabled }}
+    {{- range $key, $value := .Values.ipsecService.ports }}
+    frontend ipsec_{{ .name }}
+      bind {{ $.Values.ipsecService.ip }}:{{ .port }}
+      use_backend ipsec_{{ .name }}
+
+    backend ipsec_{{ .name }}
+      mode tcp
+      balance  leastconn
+      fullconn 512
+
+      option tcp-check
+
+      default-server check inter 15s fall 1 rise 1 on-marked-down shutdown-sessions resolve-prefer ipv4
+      server {{ .name }} {{ .backend }}:{{ .port }} no-check resolvers clusterdns
+    {{- end }}
+    {{- end }}

@@ -1,0 +1,143 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ipsec.fullname" . }}
+  labels:
+    {{- include "ipsec.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.useDaemonSet }}
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: {{ .Values.updateStrategy.type }}
+    rollingUpdate:
+      {{- toYaml .Values.updateStrategy.rollingUpdate | nindent 6 }}
+  {{- else }}
+  updateStrategy:
+    type: {{ .Values.updateStrategy.type }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ipsec.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+      {{- if .Values.ipsecService.enabled }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8404"
+      {{- end }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ipsec.selectorLabels" . | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN"]
+              drop: ["ALL"]
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # command: ["sleep","6000"]
+          command: ["/entrypoint/entrypoint.sh"]
+          env:
+            - name: PRIVATE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: PUBLIC_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            {{- range $key, $value := .Values.envs }}
+            - name: {{ $key | quote }}
+              value: {{ $value | quote }}
+            {{- end }}
+          ports:
+            - name: isakmp
+              containerPort: {{ .Values.service.isakmp }}
+              {{- if eq .Values.service.type "HostPort" }}
+              hostPort: {{ .Values.service.isakmp }}
+              {{- end }}
+              protocol: UDP
+            - name: ipsec
+              containerPort: {{ .Values.service.ipsec }}
+              {{- if eq .Values.service.type "HostPort" }}
+              hostPort: {{ .Values.service.ipsec }}
+              {{- end }}
+              protocol: UDP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: command
+              mountPath: /entrypoint
+            - name: ipsec
+              mountPath: /etc/ipsec
+              readOnly: true
+        {{- if .Values.ipsecService.enabled }}
+        - name: service
+          securityContext:
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 99
+            runAsGroup: 99
+          image: "{{ .Values.ipsecService.image.repository }}:{{ .Values.ipsecService.image.tag }}"
+          imagePullPolicy: {{ .Values.ipsecService.image.pullPolicy }}
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 50m
+              memory: 32Mi
+          volumeMounts:
+            - name: haproxy-config
+              mountPath: /usr/local/etc/haproxy
+        {{- end }}
+      volumes:
+        - name: ipsec
+          secret:
+            secretName:  {{ include "ipsec.fullname" . }}
+            defaultMode: 256
+        - name: command
+          configMap:
+            name: {{ include "ipsec.fullname" . }}
+            items:
+              - key: entrypoint.sh
+                path: entrypoint.sh
+            defaultMode: 360
+        {{- if .Values.ipsecService.enabled }}
+        - name: haproxy-config
+          configMap:
+            name: {{ include "ipsec.fullname" . }}
+            items:
+              - key: haproxy.cfg
+                path: haproxy.cfg
+            defaultMode: 292
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

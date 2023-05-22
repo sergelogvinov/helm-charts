@@ -1,0 +1,87 @@
+# Default values for ipsec.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/sergelogvinov/ipsec
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+envs: {}
+
+secrets: |
+  # openssl rand -base64 48
+  %any 1.2.3.4 : PSK "base64"
+
+users: {}
+  # user1: password
+  # user2: password
+
+config: |
+  conn gcp
+      ikev2=yes
+      ikelifetime=600m
+      keylife=180m
+      rekeymargin=3m
+      keyingtries=3
+      ike=aes256-sha256-modp2048
+      esp=aes256-sha256-modp2048
+      pfs=yes
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+ipsecService:
+  enabled: false
+
+  image:
+    repository: haproxy
+    pullPolicy: IfNotPresent
+    tag: "2.4.22"
+
+  ip: 10.10.10.10
+  ports: []
+    # - name: postgres
+    #   port: 5432
+    #   backend: postgres.default.svc.cluster.local
+
+service:
+  type: HostPort
+  isakmp: 500
+  ipsec: 4500
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi
+
+useDaemonSet: false
+
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
