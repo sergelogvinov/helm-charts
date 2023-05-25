@@ -20,6 +20,7 @@ secrets: |
   # openssl rand -base64 48
   %any 1.2.3.4 : PSK "base64"
 
+# XAUTH
 users: {}
   # user1: password
   # user2: password

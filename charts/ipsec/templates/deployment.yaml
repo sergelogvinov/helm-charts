@@ -21,6 +21,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config: {{ toJson .Values.config | sha256sum }}
       {{- if .Values.ipsecService.enabled }}
         prometheus.io/scrape: "true"
         prometheus.io/port: "8404"
