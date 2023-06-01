@@ -137,7 +137,7 @@ cluster-announce-port 6379
 tcp-backlog 511
 tcp-keepalive 300
 
-maxclients 1024
+maxclients 8192
 
 server-threads {{ .Values.keydb.threads | int }}
 active-replica {{ .Values.keydb.activeReplica }}
@@ -217,6 +217,7 @@ frontend keydb_master
 {{- if .Values.tlsCerts.create }}
   bind *:6380 ssl crt /run/server.pem ca-file /etc/ssl/tlscerts/ca.crt
 {{- end }}
+  option clitcpka
   use_backend keydb_master
 
 backend keydb_master
