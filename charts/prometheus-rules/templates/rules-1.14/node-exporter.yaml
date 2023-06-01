@@ -189,7 +189,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.NodeClockSkewDetected | default false) }}
     - alert: NodeClockSkewDetected
       annotations:
-        description: Clock on {{`{{`}} $labels.instance {{`}}`}} is out of sync by more than 300s. Ensure NTP is configured correctly on this host.
+        description: Clock on {{`{{`}} $labels.instance {{`}}`}} is out of sync by more than 0.05s. Ensure NTP is configured correctly on this host.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/node/nodeclockskewdetected
         summary: Clock skew detected.
       expr: |-

@@ -42,7 +42,7 @@
       description: Some connections to Redis {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} has been rejected
       summary: Rejected connections
   - alert: RedisMemoryFull
-    expr: (redis_config_maxmemory > 0) and (redis_memory_used_bytes * 0.9 > redis_config_maxmemory)
+    expr: (redis_memory_max_bytes > 0) and (redis_memory_used_bytes * 0.9 > redis_memory_max_bytes)
     for: 5s
     labels:
       severity: warning
@@ -59,3 +59,32 @@
       description: Redis {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name
         }} has not been backuped more then 7 days ({{ $value | humanizeDuration }})
       summary: Missing backup
+
+  - alert: RedisConnections
+    expr: redis_connected_clients > 512
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: Redis connections {{ $labels.kubernetes_namespace }}/{{ $labels.app_kubernetes_io_instance
+        }} limit reached
+      summary: Redis LoadBalancer limit
+
+  - alert: RedisLoadBalancer
+    expr: haproxy_frontend_limit_sessions{app_kubernetes_io_name="keydb"} - haproxy_frontend_current_sessions < 10
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: Redis LoadBalancer {{ $labels.kubernetes_namespace }}/{{ $labels.app_kubernetes_io_instance
+        }} limit reached
+      summary: Redis LoadBalancer limit
+  - alert: RedisLoadBalancer
+    expr: haproxy_frontend_status{app_kubernetes_io_name="keydb",state="DOWN"} > 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: Redis LoadBalancer {{ $labels.kubernetes_namespace }}/{{ $labels.app_kubernetes_io_instance
+        }} frontend down
+      summary: Redis LoadBalancer down
