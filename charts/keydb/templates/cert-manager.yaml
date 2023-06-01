@@ -16,8 +16,8 @@ spec:
     name: {{ include "keydb.fullname" . }}-issuer
     kind: Issuer
   commonName: {{ include "keydb.fullname" . }}
-  duration: 8760h # 12m
-  renewBefore: 4380h # 6m
+  duration: 26280h # 3y
+  renewBefore: 26000h # ~3y
   privateKey:
     algorithm: ECDSA
     size: 256
@@ -41,12 +41,13 @@ metadata:
 spec:
   secretName: {{ include "keydb.fullname" . }}-server-tls
   commonName: {{ include "keydb.fullname" . }}-server
-  duration: 8760h # 12m
-  renewBefore: 4380h # 6m
+  duration: 26280h # 3y
+  renewBefore: 8760h # 1y
   privateKey:
     algorithm: ECDSA
     size: 256
   usages:
+    - digital signature
     - server auth
     - client auth
   isCA: false
@@ -66,18 +67,19 @@ metadata:
 spec:
   secretName: {{ include "keydb.fullname" . }}-client-tls
   commonName: {{ include "keydb.fullname" . }}-client
-  duration: 4380h # 6m
+  duration: 8760h # 1y
   renewBefore: 2190h # 3m
   privateKey:
     algorithm: ECDSA
     size: 256
   usages:
+    - digital signature
     - client auth
   isCA: false
   ipAddresses:
     - 127.0.0.1
   dnsNames:
-    - {{ include "keydb.fullname" . }}
+    - {{ include "keydb.fullname" . }}.{{ .Release.Namespace }}.svc
   issuerRef:
     name: {{ include "keydb.fullname" . }}-ca-issuer
 {{- end }}

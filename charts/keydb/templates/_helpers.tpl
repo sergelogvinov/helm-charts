@@ -122,6 +122,7 @@ port 6379
 tls-port 6380
 tls-replication yes
 tls-cluster yes
+tls-allowlist {{ include "keydb.fullname" . }}.{{ .Release.Namespace }}.svc {{ include "keydb.fullname" . }}-client
 tls-cert-file /etc/ssl/tlscerts/tls.crt
 tls-key-file /etc/ssl/tlscerts/tls.key
 tls-ca-cert-file /etc/ssl/tlscerts/ca.crt
@@ -211,6 +212,7 @@ frontend stats
   stats refresh 10s
   monitor-uri /healthz
   option dontlognull
+  maxconn 16
 
 frontend keydb_master
   bind *:6379
@@ -223,7 +225,7 @@ frontend keydb_master
 backend keydb_master
   mode tcp
   balance  first
-  fullconn 512
+  maxconn 512
 
   option tcp-check
 {{- if .Values.tlsCerts.create }}
