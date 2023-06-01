@@ -167,6 +167,16 @@ entries:
   ipsec:
   - apiVersion: v2
     appVersion: "4.11"
+    created: "2023-06-01T12:35:55.219845174Z"
+    description: A Helm chart for Kubernetes
+    digest: efed5b992df57f0e8409605e7325a6cda29ca69e8f7d092bd4ff95e7b27fe2e1
+    name: ipsec
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/ipsec-0.1.2/ipsec-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: "4.11"
     created: "2023-05-25T09:50:42.673457878Z"
     description: A Helm chart for Kubernetes
     digest: eb28878d10c0dba1c4fab5e85a92bea892bd5697ed061b448580bf7afdb2b129
@@ -946,4 +956,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-06-01T12:34:41.395915289Z"
+generated: "2023-06-01T12:35:55.22026308Z"
