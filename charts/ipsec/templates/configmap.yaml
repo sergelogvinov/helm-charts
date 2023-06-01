@@ -87,6 +87,7 @@ data:
     {{- range $key, $value := .Values.ipsecService.ports }}
     frontend ipsec_{{ .name }}
       bind {{ $.Values.ipsecService.ip }}:{{ .port }}
+      option clitcpka
       use_backend ipsec_{{ .name }}
 
     backend ipsec_{{ .name }}
