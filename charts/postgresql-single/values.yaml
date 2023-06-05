@@ -29,6 +29,7 @@ postgresqlUsername: postgres
 # postgresqlDatabase:
 
 # postgresqlConfiguration:
+# postgresqlConfigurationExtra:
 # postgresqlConfigurationLogs:
 
 # postgresqlConninfo: host=postgres user=postgres

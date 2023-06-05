@@ -128,7 +128,8 @@ tcp_keepalives_interval = 75
 tcp_keepalives_count = 10
 
 shared_preload_libraries = 'pg_stat_statements'
-pg_stat_statements.max = 10000
+track_io_timing = on
+pg_stat_statements.max = 1000
 pg_stat_statements.track = all
 
 full_page_writes = on

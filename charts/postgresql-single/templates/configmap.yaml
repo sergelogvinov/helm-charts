@@ -12,11 +12,21 @@ data:
   {{- if gt (int .Values.postgresqlServerMemory) (int "511") }}
 
     # auto generated
-    shared_buffers = {{ div .Values.postgresqlServerMemory 4 }}MB
     work_mem = {{ div .Values.postgresqlServerMemory 32 }}MB
     maintenance_work_mem = {{ div .Values.postgresqlServerMemory 4 }}MB
     effective_cache_size = {{ div .Values.postgresqlServerMemory 2 }}MB
+    {{- if and .Values.resources.requests (hasKey .Values.resources.requests "hugepages-1Gi") }}
+    {{- $pages := int (regexFind "[0-9]+" (get .Values.resources.requests "hugepages-1Gi")) }}
+    shared_buffers = {{ sub $pages 1 }}GB
+    huge_pages = try
+    {{- else }}
+    shared_buffers = {{ div .Values.postgresqlServerMemory 4 }}MB
     huge_pages = off
+    {{- end }}
+  {{- end }}
+
+  {{- if .Values.postgresqlConfigurationExtra }}
+    {{ .Values.postgresqlConfigurationExtra | nindent 4 }}
   {{- end }}
 
     include_if_exists '{{ .Values.persistence.mountPath }}/postgresql-local.conf'
