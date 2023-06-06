@@ -9,7 +9,7 @@ metadata:
   name: {{ include "postgresql-single.fullname" . }}-backup-check
   labels:
     {{- with .Values.podlabels }}
-    {{ toYaml . | nindent 4 }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
     {{- include "postgresql-single.crontab.labels" . | nindent 4 }}
     app.kubernetes.io/component: checker
@@ -28,7 +28,7 @@ spec:
           name: {{ include "postgresql-single.fullname" . }}
           labels:
             {{- with .Values.podlabels }}
-            {{ toYaml . | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
             {{- end }}
             {{- include "postgresql-single.crontab.labels" . | nindent 12 }}
             app.kubernetes.io/component: checker
@@ -136,7 +136,7 @@ spec:
                   metadata:
                     labels:
                       {{- with .Values.podlabels }}
-                      {{ toYaml . | nindent 22 }}
+                      {{- toYaml . | nindent 22 }}
                       {{- end }}
                       {{- include "postgresql-single.crontab.labels" . | nindent 22 }}
                       app.kubernetes.io/component: checker

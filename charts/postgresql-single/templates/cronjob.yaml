@@ -9,7 +9,7 @@ metadata:
   name: {{ include "postgresql-single.fullname" . }}-backup
   labels:
     {{- with .Values.podlabels }}
-    {{ toYaml . | nindent 4 }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
     {{- include "postgresql-single.crontab.labels" . | nindent 4 }}
     app.kubernetes.io/component: backup
@@ -27,7 +27,7 @@ spec:
           name: {{ include "postgresql-single.fullname" . }}
           labels:
             {{- with .Values.podlabels }}
-            {{ toYaml . | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
             {{- end }}
             {{- include "postgresql-single.crontab.labels" . | nindent 12 }}
             app.kubernetes.io/component: backup

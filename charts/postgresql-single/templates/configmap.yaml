@@ -74,6 +74,12 @@ data:
     echo "primary_conninfo = '{{ .Values.postgresqlConninfo }}'" >> $PGDATA/postgresql.auto.conf
     touch {{ .Values.persistence.mountPath }}/data/standby.signal
     touch {{ .Values.persistence.mountPath }}/data/recovery.signal
+  {{- else }}
+    if [ "$HOSTNAME" != "{{ include "postgresql-single.fullname" . }}-0" ]; then
+        echo "primary_conninfo = 'host={{ include "postgresql-single.fullname" . }} user={{ .Values.postgresqlUsername  }} password=$POSTGRES_PASSWORD'" >> $PGDATA/postgresql.auto.conf
+        touch {{ .Values.persistence.mountPath }}/data/standby.signal
+        touch {{ .Values.persistence.mountPath }}/data/recovery.signal
+    fi
   {{- end }}
 
     touch {{ .Values.persistence.mountPath }}/postgresql-local.conf

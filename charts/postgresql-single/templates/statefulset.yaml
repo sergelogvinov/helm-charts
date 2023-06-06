@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "postgresql-single.labels" . | nindent 4 }}
     {{- with .Values.podlabels }}
-    {{ toYaml . | nindent 4 }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
   serviceName: {{ include "postgresql-single.fullname" . }}-headless
@@ -30,7 +30,7 @@ spec:
       labels:
         {{- include "postgresql-single.selectorLabels" . | nindent 8 }}
         {{- with .Values.podlabels }}
-        {{ toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
       enableServiceLinks: false
@@ -138,14 +138,21 @@ spec:
             - name: metrics
               containerPort: 9187
           resources:
-            {{ toYaml .Values.metrics.resources | nindent 12 }}
+            {{- toYaml .Values.metrics.resources | nindent 12 }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
       affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels: {{- (include "postgresql-single.selectorLabels" .) | nindent 18 }}
+              namespaces:
+                - {{ .Release.Namespace | quote }}
+              topologyKey: kubernetes.io/hostname
+      {{- with .Values.affinity }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
