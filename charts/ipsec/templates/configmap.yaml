@@ -40,6 +40,9 @@ data:
     /sbin/sysctl -e -q -w net.ipv4.conf.eth0.rp_filter=0
     /sbin/sysctl -e -q -w net.ipv4.ip_forward=0
 
+    rm -f /etc/ipsec.d/passwd
+    ln -s /etc/ipsec/ipsec.passwd /etc/ipsec.d/passwd
+
     mkdir -p /run/pluto /var/run/pluto /var/lib/ipsec/nss
     ipsec initnss --nssdir /var/lib/ipsec/nss
 

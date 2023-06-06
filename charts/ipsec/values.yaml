@@ -5,6 +5,7 @@
 replicaCount: 1
 
 image:
+  # libreswan
   repository: ghcr.io/sergelogvinov/ipsec
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
@@ -21,8 +22,9 @@ secrets: |
   %any 1.2.3.4 : PSK "base64"
 
 # XAUTH
+# openssl passwd -1 "$PASSWORD"
 users: {}
-  # user1: password
+  # user1: $1$6GUtZDrw$ewnkkSXNY0mjTajRSlY5h.
   # user2: password
 
 config: |
@@ -56,6 +58,8 @@ ipsecService:
     tag: "2.4.22"
 
   ip: 10.10.10.10
+  networks: "%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:!172.30.240.0/24"
+
   ports: []
     # - name: postgres
     #   port: 5432

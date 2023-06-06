@@ -1,0 +1,63 @@
+# IPSec on kubernetes
+
+## Deploy as server
+
+```yaml
+users:
+  # openssl passwd -1 "password"
+  user: $1$6GUtZDrw$ewnkkSXNY0mjTajRSlY5h.
+
+secrets: |
+  : PSK "ExampleSecret123"
+
+ipsecService:
+  enabled: true
+
+  ip: 172.30.1.1
+  ports:
+    - name: postgres
+      port: 5432
+      backend: pg-backend.database.svc.cluster.local.
+
+config: |
+  conn xauth-psk
+    pfs=no
+    rekey=no
+    ikev2=never
+    keyingtries=5
+    aggressive=no
+    fragmentation=no
+    cisco-unity=yes
+
+    encapsulation=yes
+    type=tunnel
+    mtu=1300
+
+    authby=secret
+    xauthby=file
+
+    ike=aes-sha1,aes-sha1;modp2048,aes-sha2;modp2048,aes256-sha2_512
+    esp=aes-sha1,aes-sha2,aes256-sha2_512
+    ikelifetime=24h
+    salifetime=24h
+
+    leftxauthserver=yes
+    leftmodecfgserver=yes
+
+    right=%any
+    rightaddresspool=172.30.240.1-172.30.240.254
+    rightxauthclient=yes
+    rightmodecfgclient=yes
+
+    also=service
+    auto=add
+    dpddelay=30
+    dpdtimeout=120
+    dpdaction=clear
+```
+
+# Reference
+
+* https://libreswan.org/man/ipsec.conf.5.html
+* https://gist.github.com/perfecto25/56a47fc541a327f921737bba5cbe18ee
+* https://github.com/hwdsl2/docker-ipsec-vpn-server/blob/master/docs/advanced-usage.md#run-without-privileged-mode

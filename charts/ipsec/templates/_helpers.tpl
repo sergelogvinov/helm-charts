@@ -65,21 +65,31 @@ Create the name of the service account to use
 {{ .Values.secrets }}
 {{- end }}
 
+{{- define "ipsec.passwd" -}}
+{{- range $key, $value := .Values.users }}
+{{ $key }}:{{ $value }}:xauth-psk
+{{- end }}
+{{- end }}
+
 {{- define "ipsec.conf" -}}
 version 2
 config setup
-    virtual-private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12
     protostack=netkey
+    virtual-private={{ .Values.ipsecService.networks }}
+    uniqueids=no
+    # plutodebug=all
 
-conn %default
-    ikelifetime=2880m
-    keylife=60m
-    rekeymargin=3m
-    keyingtries=1
-    mobike=no
+conn service
+    left=%defaultroute
+    leftsubnet={{ .Values.ipsecService.ip }}/32
 
-    encapsulation=yes
-    type=tunnel
+    right=%any
+    rightaddresspool=172.30.240.1-172.30.240.254
+
+    # MacOS hack?
+    modecfgdns={{ .Values.ipsecService.ip }}
+    modecfgdomains={{ .Release.Namespace }}.svc.cluster.local
+    modecfgpull=yes
 
 {{ .Values.config }}
 {{- end }}
