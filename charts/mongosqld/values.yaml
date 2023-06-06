@@ -17,6 +17,7 @@ fullnameOverride: ""
 tlsCerts:
   create: true
 
+schemaMode: memory
 schema: ~
   # schema:
   # - db: mongoDb
@@ -31,6 +32,11 @@ schema: ~
   #       SqlType: objectid
 
 config: ""
+auth:
+  host: mongo-backend-rs0:27017
+  username: user
+  password: pass
+  database: db
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -45,9 +51,9 @@ podAnnotations: {}
 
 podSecurityContext:
   runAsNonRoot: true
-  runAsUser: 1000
-  runAsGroup: 1000
-  fsGroup: 1000
+  runAsUser: 65534
+  runAsGroup: 65534
+  fsGroup: 65534
   fsGroupChangePolicy: "OnRootMismatch"
 
 securityContext:

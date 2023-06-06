@@ -2,21 +2,21 @@
 
 MongoDB Connector for BI
 
+## Create user
+
+```shell
+db.createUser({user: 'mongosql', pwd:"mongosql", roles: [{ 'role': 'read', 'db': 'db' }] })
+db.createUser({user: 'mongosql', pwd:"mongosql", roles: [{ 'role': 'readWrite', 'db': 'dbSchema' }] })
+```
+
+## Deploy chart
+
 ```yaml
 # helm values
 
-config: |
-  mongodb:
-    net:
-      uri: "mongodb://mongo-hidden-headless:27017/?connect=direct"
-      auth:
-        username: username
-        password: password
-
-  schema:
-    maxVarcharLength: 8000
-    refreshIntervalSecs: 3600
-    stored:
-      mode: "custom" # "auto"
-      source: "mongoSchema"
+auth:
+  host: mongo-rs0:27017
+  username: mongosql
+  password: mongosql
+  database: db
 ```
