@@ -208,6 +208,16 @@ entries:
   keydb:
   - apiVersion: v2
     appVersion: 6.3.3
+    created: "2023-06-06T21:45:17.846153825Z"
+    description: A Helm chart for Kubernetes
+    digest: 01e9db536ef66ea06dae51f5cf1452e0bf49e6eac8a41c813a11304dd3998bfe
+    name: keydb
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.3.1/keydb-0.3.1.tgz
+    version: 0.3.1
+  - apiVersion: v2
+    appVersion: 6.3.3
     created: "2023-06-01T12:34:41.395533173Z"
     description: A Helm chart for Kubernetes
     digest: 5a4a8bef534979ba9276ef9e80f01f0ebe10a85774844597d43858eb64f44023
@@ -1006,4 +1016,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-06-06T19:35:27.399228738Z"
+generated: "2023-06-06T21:45:17.846407729Z"
