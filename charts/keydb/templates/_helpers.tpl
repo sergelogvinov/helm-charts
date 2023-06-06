@@ -174,7 +174,7 @@ Haproxy config
 {{- $domain := printf "%s.svc.%s" .Release.Namespace .Values.clusterDomain }}
 {{- $port := include "keydb.port" . }}
 global
-  maxconn 512
+  maxconn 8192
   ssl-default-server-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
   ssl-default-server-options no-sslv3 no-tlsv10 no-tlsv11 no-tlsv12 no-tls-tickets
   ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
@@ -225,7 +225,7 @@ frontend keydb_master
 backend keydb_master
   mode tcp
   balance  first
-  maxconn 512
+  maxconn 4096
 
   option tcp-check
 {{- if .Values.tlsCerts.create }}
