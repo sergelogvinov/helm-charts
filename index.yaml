@@ -400,6 +400,16 @@ entries:
   mongosqld:
   - apiVersion: v2
     appVersion: 2.14.5
+    created: "2023-06-07T04:18:20.375712199Z"
+    description: A Helm chart for Kubernetes
+    digest: fb9df3e81c9c26b07d90f0ee693d12aff245dd2be78fbcba584514213ff4ffa6
+    name: mongosqld
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongosqld-0.2.1/mongosqld-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: 2.14.5
     created: "2023-06-06T15:58:02.784910464Z"
     description: A Helm chart for Kubernetes
     digest: 420dffa83e87fd8d3845c9aeaa677417a0b500a32ab2ebaed100a5bd223df399
@@ -1016,4 +1026,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-06-06T21:45:17.846407729Z"
+generated: "2023-06-07T04:18:20.376098104Z"
