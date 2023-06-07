@@ -38,6 +38,9 @@ auth:
   password: pass
   database: db
 
+args: []
+  # - --sampleNamespaces=contacts.addresses
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true

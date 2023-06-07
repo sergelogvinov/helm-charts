@@ -5,8 +5,7 @@ MongoDB Connector for BI
 ## Create user
 
 ```shell
-db.createUser({user: 'mongosql', pwd:"mongosql", roles: [{ 'role': 'read', 'db': 'db' }] })
-db.createUser({user: 'mongosql', pwd:"mongosql", roles: [{ 'role': 'readWrite', 'db': 'dbSchema' }] })
+db.createUser({user: 'mongosql', pwd:"mongosql", roles: [{ 'role': 'read', 'db': 'db' },{ 'role': 'readWrite', 'db': 'dbSchema' }] })
 ```
 
 ## Deploy chart

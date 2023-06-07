@@ -98,9 +98,9 @@ security:
 
 schema:
   maxVarcharLength: 8000
-{{- if .Values.schema }}
+  {{- if .Values.schema }}
   path: /etc/mongosqld/schema.drdl
-{{- else }}
+  {{- else }}
   refreshIntervalSecs: 3600
   {{- if ne .Values.schemaMode "memory" }}
   stored:
@@ -108,6 +108,8 @@ schema:
     mode: {{ .Values.schemaMode }}
     source: "{{ .Values.auth.database }}Schema"
   {{- end }}
+  sample:
+    namespaces: {{ .Values.auth.database }}.*
 
 {{- end }}
 {{- end }}
@@ -117,8 +119,10 @@ MongoSQL drdl schema upload
 */}}
 {{- define "mongosqld.schemaUpload" -}}
 {{- $connSrc := printf "mongodb://%s:%s@%s/%s?authSource=%s" .Values.auth.username .Values.auth.password .Values.auth.host .Values.auth.database .Values.auth.database -}}
-{{- $connDst := printf "mongodb://%s:%s@%s/%sSchema?authSource=%sSchema" .Values.auth.username .Values.auth.password .Values.auth.host .Values.auth.database .Values.auth.database -}}
+{{- $connDst := printf "mongodb://%s:%s@%s/%sSchema?authSource=%s" .Values.auth.username .Values.auth.password .Values.auth.host .Values.auth.database .Values.auth.database -}}
 #!/bin/sh
-mongodrdl --uri={{ $connSrc }} --out /tmp/schema.drdl
+mongodrdl --uri={{ $connSrc }} sample --db {{ .Values.auth.database }} --out /tmp/schema.drdl
 mongodrdl --uri={{ $connDst }} upload --schemaSource={{ .Values.auth.database }}Schema --drdl /tmp/schema.drdl
+mongodrdl --uri={{ $connDst }} list-schema-names --schemaSource={{ .Values.auth.database }}Schema
+mongodrdl --uri={{ $connDst }} list-schema-ids --schemaSource={{ .Values.auth.database }}Schema
 {{- end }}
