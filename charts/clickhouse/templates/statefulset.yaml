@@ -129,6 +129,8 @@ spec:
             items:
               - key: config.xml
                 path: config.xml
+              - key: collections.xml
+                path: collections.xml
               - key: storage.xml
                 path: storage.xml
               - key: backups.xml

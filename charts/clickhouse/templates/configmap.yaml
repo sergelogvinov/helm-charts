@@ -52,6 +52,21 @@ data:
         </users>
     </clickhouse>
 
+  collections.xml: |-
+    <clickhouse>
+        <named_collections>
+        {{- range $key, $val := .Values.clickhouse.collections }}
+            <{{ $val.name }}>
+                {{- range $k, $v := $val }}
+                {{- if not (has $k (list "name")) }}
+                <{{ $k }}>{{ $v }}</{{ $k }}>
+                {{- end }}
+                {{- end }}
+            </{{ $val.name }}>
+        {{- end }}
+        </named_collections>
+    </clickhouse>
+
   dictionaries.xml: |-
     <dictionaries>
     </dictionaries>

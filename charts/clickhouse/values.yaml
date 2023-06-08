@@ -145,3 +145,11 @@ clickhouse:
       profile: reader
       quota: default
       password: 3d0941964aa3ebdcb00ccef58b1bb399f9f898465e9886d5aec7f31090a0fb30 # echo -n "reader" | shasum -a 256
+
+  collections: []
+    # - name: postgres
+    #   host: 127.0.0.1
+    #   username: user
+    #   password: pwd
+    #   database: db
+    #   schema: public
