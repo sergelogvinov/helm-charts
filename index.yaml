@@ -461,6 +461,16 @@ entries:
   openvpn:
   - apiVersion: v2
     appVersion: 2.6.4
+    created: "2023-06-08T15:25:26.849347651Z"
+    description: A Helm chart for Kubernetes
+    digest: c0d319fa4254743a2c771341e1ab16d6d8e61c04bd03767f1ad22d5c814ea2f7
+    name: openvpn
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/openvpn-0.3.4/openvpn-0.3.4.tgz
+    version: 0.3.4
+  - apiVersion: v2
+    appVersion: 2.6.4
     created: "2023-05-25T09:50:42.898113979Z"
     description: A Helm chart for Kubernetes
     digest: 602d53672b08c5895e9f255c5e213029c3216a01501adefac5faa7639b600f51
@@ -550,6 +560,16 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/openvpn-0.1.1/openvpn-0.1.1.tgz
     version: 0.1.1
   pgbouncer:
+  - apiVersion: v2
+    appVersion: "14.7"
+    created: "2023-06-08T15:25:27.012269129Z"
+    description: A Helm chart for Kubernetes
+    digest: 1e9b6feb5d4fbc04263aee9553087933a44171400c43be505d6061add6785dde
+    name: pgbouncer
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.6/pgbouncer-0.1.6.tgz
+    version: 0.1.6
   - apiVersion: v2
     appVersion: "12.13"
     created: "2023-04-13T15:20:58.205007303Z"
@@ -1036,4 +1056,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-06-08T07:14:15.719911299Z"
+generated: "2023-06-08T15:25:27.012750134Z"
