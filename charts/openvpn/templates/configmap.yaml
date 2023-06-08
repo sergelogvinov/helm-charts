@@ -131,7 +131,14 @@ data:
     data-ciphers AES-256-GCM:AES-256-CBC
     remote-cert-tls server
 
+    {{- $ca := lookup "v1" "Secret" .Release.Namespace (include "openvpn.fullname" .) }}
+    {{- if and .Values.certManager.createCerts $ca }}
+    <ca>
+    {{- get $ca.data "ca.crt" | b64dec | nindent 4 -}}
+    </ca>
+    {{- else }}
     ca   ca.crt
+    {{- end }}
     cert client.crt
     key  client.key
     {{- if .Values.openvpn.dh }}
