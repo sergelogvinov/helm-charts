@@ -23,6 +23,8 @@ certManager:
     # - user1@dmain.com
     # - user2
 
+clusterDomain: ~
+
 openvpn:
   hostName: vpn.example.com
 

@@ -12,6 +12,12 @@ data:
         health {
            lameduck 5s
         }
+        {{- if .Values.clusterDomain }}
+        forward {{ .Values.clusterDomain }} /etc/resolv.conf {
+            policy sequential
+            expire 30s
+        }
+        {{- end }}
         forward . tls://1.1.1.1 tls://1.0.0.1 {
             tls_servername cloudflare-dns.com
             policy sequential
