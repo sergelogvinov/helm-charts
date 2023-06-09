@@ -5,4 +5,4 @@ metadata:
   labels:
     {{- include "bitwarden.labels" . | nindent 4 }}
 data:
-  config.json: {{ toJson .Values.config | lower | quote }}
+  config.json: {{ fromYaml (include "bitwarden.config" .) | toJson }}

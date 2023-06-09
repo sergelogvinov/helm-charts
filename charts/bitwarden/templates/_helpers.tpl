@@ -60,3 +60,12 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Prepare bitwarden config
+*/}}
+{{- define "bitwarden.config" -}}
+{{- range $key, $value := .Values.config }}
+{{ $key | lower }}: {{ $value }}
+{{- end }}
+{{- end }}
