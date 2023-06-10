@@ -3,6 +3,26 @@ entries:
   bitwarden:
   - apiVersion: v2
     appVersion: 1.28.1
+    created: "2023-06-10T15:50:39.838162257Z"
+    description: A Helm chart to deploy Bitwarden.
+    digest: 4f6d2108ee4d03b02a642c1e672c915360183e43ff4c0c3025871289560a4e6f
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - vaultwarden
+    - bitwarden
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: bitwarden
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/bitwarden
+    - https://github.com/dani-garcia/vaultwarden
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/bitwarden-0.1.3/bitwarden-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: 1.28.1
     created: "2023-06-10T14:53:57.966958338Z"
     description: A Helm chart to deploy Bitwarden.
     digest: 3eca68a12ac225f9b256f713483b2045e9b0cc930cb0e9c509033ddad3b8fb4b
@@ -42,6 +62,25 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/bitwarden-0.1.0/bitwarden-0.1.0.tgz
     version: 0.1.0
   clickhouse:
+  - apiVersion: v2
+    appVersion: 23.4.2.11
+    created: "2023-06-10T15:50:39.957513354Z"
+    description: Clickhouse chart for Kubernetes
+    digest: 3158c90e1ee731566a60d2a496cfcede7dd53abc3ed7ca3b0e6a040adcbf53f1
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - database
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: clickhouse
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/clickhouse
+    - https://github.com/ClickHouse/ClickHouse
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-0.3.1/clickhouse-0.3.1.tgz
+    version: 0.3.1
   - apiVersion: v2
     appVersion: 23.4.2.11
     created: "2023-06-08T07:14:15.719660397Z"
@@ -184,6 +223,27 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-keeper-0.1.0/clickhouse-keeper-0.1.0.tgz
     version: 0.1.0
   fluentd:
+  - apiVersion: v2
+    appVersion: 1.15.3
+    created: "2023-06-10T15:50:40.085981628Z"
+    description: Deploy fluentd as log router
+    digest: acd6db1ba5a5079602f7195140f7b985c9631a75c24a61dedbafd62ac8448223
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - fluentd
+    - logging
+    - logs
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: fluentd
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/fluentd
+    - https://www.fluentd.org
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/fluentd-0.0.5/fluentd-0.0.5.tgz
+    version: 0.0.5
   - apiVersion: v2
     appVersion: 1.15.3
     created: "2022-12-14T12:33:10.318024181Z"
@@ -438,6 +498,27 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/mongodb-backup-0.1.0/mongodb-backup-0.1.0.tgz
     version: 0.1.0
   mongosqld:
+  - apiVersion: v2
+    appVersion: 2.14.5
+    created: "2023-06-10T15:50:40.196121048Z"
+    description: Mongo to SQL bridge
+    digest: 99d23bb336c78a891dd9826766469cdab452ba8800503274ca8e8b2db88e7be5
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - mongodb
+    - mongosqld
+    - powerbi
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongosqld
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongosqld
+    - https://www.mongodb.com/docs/bi-connector/current/reference/mongosqld
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongosqld-0.2.2/mongosqld-0.2.2.tgz
+    version: 0.2.2
   - apiVersion: v2
     appVersion: 2.14.5
     created: "2023-06-07T04:18:20.375712199Z"
@@ -1106,4 +1187,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-06-10T14:53:57.96823935Z"
+generated: "2023-06-10T15:50:40.19640315Z"
