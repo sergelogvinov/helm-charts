@@ -1,0 +1,49 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+Example:
+
+```yaml
+# bitwarden.yaml
+
+envs:
+  SMTP_USERNAME: 'username'
+  SMTP_PASSWORD: 'password'
+  ADMIN_TOKEN: 'super-token'
+
+config:
+  SMTP_FROM_NAME: 'VaultWarden'
+  SMTP_HOST: 'smtp.gmail.com'
+  SMTP_SECURITY: starttls
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: vault.example.com
+  tls:
+    - secretName: vault.example.com-tls
+      hosts:
+        - vault.example.com
+
+persistence:
+  enabled: true
+  size: 10Gi
+```
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

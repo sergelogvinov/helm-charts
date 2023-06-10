@@ -14,3 +14,8 @@ test: $(foreach pkg,$(PACKAGES),test-$(pkg)) ## Test helm chart
 test-%:
 	@echo Test $*
 	@helm template test charts/$* | kubeconform -summary -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
+
+docs: $(foreach pkg,$(PACKAGES),docs-$(pkg)) ## Update helm chart readme
+docs-%:
+	@echo Update $* README.md
+	@cd charts/$*; helm-docs --sort-values-order=file

@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: vaultwarden/server
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
+  # -- Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
 imagePullSecrets: []
@@ -15,16 +15,22 @@ nameOverride: ""
 fullnameOverride: ""
 
 envs:
+  # -- smtp username
   SMTP_USERNAME: 'username'
+  # -- smtp password
   SMTP_PASSWORD: 'password'
-  # /vaultwarden hash
+  # -- Admin token,
+  # use `/vaultwarden hash` to encrypt password
   ADMIN_TOKEN: 'token'
+  # -- After creation, better to disable admin portal
   DISABLE_ADMIN_TOKEN: 'false'
 
+# -- Official documentation
+# https://github.com/dani-garcia/vaultwarden/wiki/Configuration-overview
 config:
   SMTP_HOST: 'smtp.domain.tld'
   SMTP_FROM: 'bitwarden-rs@domain.tld'
-  SMTP_FROM_NAME: 'Betmaster Vault'
+  SMTP_FROM_NAME: 'Vault'
   SMTP_PORT: 587
   SMTP_SSL: true
   #
@@ -45,6 +51,8 @@ config:
   USER_ATTACHMENT_LIMIT: 1048576
   ORG_ATTACHMENT_LIMIT: 1048576
 
+# -- Pods Service Account.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
   # Specifies whether a service account should be created
   create: false
@@ -54,8 +62,12 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+# -- Annotations for controller pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 podAnnotations: {}
 
+# -- Pod Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 podSecurityContext:
   runAsNonRoot: true
   runAsUser: 33
@@ -63,6 +75,8 @@ podSecurityContext:
   fsGroup: 33
   fsGroupChangePolicy: "OnRootMismatch"
 
+# -- Container Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 securityContext:
   allowPrivilegeEscalation: false
   seccompProfile:
@@ -73,14 +87,21 @@ securityContext:
   runAsGroup: 33
   # readOnlyRootFilesystem: true
 
+# -- Bitwarden service parameters
+# ref: https://kubernetes.io/docs/user-guide/services/
 service:
+  # -- service type
   type: ClusterIP
+  # -- service port
   port: 80
+  # -- websocket service port
   portWSocket: 3012
 
+# -- Bitwarden ingress parameters
+# ref: http://kubernetes.io/docs/user-guide/ingress/
 ingress:
   enabled: false
-  className: ""
+  className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: 1024m
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "10"
@@ -89,13 +110,15 @@ ingress:
     nginx.ingress.kubernetes.io/limit-connections: "25"
     nginx.ingress.kubernetes.io/limit-rps: "15"
   hosts:
-    - host: chart-example.local
+    - host: vault.local
 
   tls: []
-  #  - secretName: chart-example-tls
+  #  - secretName: vault.local-tls
   #    hosts:
-  #      - chart-example.local
+  #      - vault.local
 
+# -- Resource requests and limits.
+# ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:
   limits:
     cpu: 500m
@@ -104,6 +127,8 @@ resources:
     cpu: 100m
     memory: 128Mi
 
+# -- Persistence parameters
+# ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 persistence:
   enabled: false
   ## A manually managed Persistent Volume and Claim
@@ -114,8 +139,21 @@ persistence:
   size: 10Gi
   annotations: {}
 
+# -- Controller deployment update stategy type.
+# ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+
+# -- Node labels for controller assignment.
+# ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
 
+# -- Tolerations for controller assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
 
+# -- Affinity for controller assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}
