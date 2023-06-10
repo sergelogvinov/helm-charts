@@ -14,6 +14,8 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# -- Pods Service Account.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -23,9 +25,13 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+# -- Annotations for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 podAnnotations: {}
   # fluentbit.io/exclude: 'true'
 
+# -- Pod Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 podSecurityContext:
   runAsNonRoot: true
   runAsUser: 100
@@ -33,6 +39,8 @@ podSecurityContext:
   fsGroup: 101
   fsGroupChangePolicy: "OnRootMismatch"
 
+# -- Container Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 securityContext:
   seccompProfile:
     type: RuntimeDefault
@@ -42,6 +50,8 @@ securityContext:
     - ALL
   # readOnlyRootFilesystem: true
 
+# -- Service parameters
+# ref: https://kubernetes.io/docs/user-guide/services/
 service:
   type: ClusterIP
   ports:
@@ -52,24 +62,32 @@ service:
       protocol: UDP
       containerPort: 24224
 
+# -- Deployment env,
+# example: `FLUENTD_CONF: /fluentd/etc/fluent.conf`
 envs: {}
   # FLUENTD_CONF: /fluentd/etc/fluent.conf
 
 configMaps:
+  # -- Input rules
   forward-input.conf: |
     <source>
       @type forward
       port 24224
       bind 0.0.0.0
     </source>
+
+  # -- Output rules
   output.conf: |
     <match **>
       @type stdout
     </match>
 
+# -- Expose prometheus metrics
 metrics:
   enabled: false
 
+# -- Resource requests and limits.
+# ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:
   # limits:
   #   cpu: 100m
@@ -78,8 +96,11 @@ resources:
     cpu: 100m
     memory: 128Mi
 
+# -- Use a daemonset instead of a deployment
 useDaemonSet: false
 
+# -- Pod deployment update stategy type.
+# ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
   type: RollingUpdate
   rollingUpdate:
@@ -96,12 +117,20 @@ extraVolumeMounts: []
 
 # priorityClassName:
 
+# -- Node labels for pod assignment.
+# ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
 
+# -- Tolerations for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
   # - operator: Exists
   #   effect: NoSchedule
 
+# -- Pod Anti Affinity
 # soft/hard
 podAntiAffinityPreset: soft
+
+# -- Affinity for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}

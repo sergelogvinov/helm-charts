@@ -1,0 +1,39 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+MongoDB Connector for BI
+
+## Create user
+
+```shell
+db.createUser({user: 'mongosql', pwd:"mongosql", roles: [{ 'role': 'read', 'db': 'db' },{ 'role': 'readWrite', 'db': 'dbSchema' }] })
+```
+
+## Deploy chart
+
+```yaml
+# helm values
+
+auth:
+  host: mongo-rs0:27017
+  username: mongosql
+  password: mongosql
+  database: db
+```
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}
