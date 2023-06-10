@@ -104,12 +104,12 @@ data:
                 <preferServerCiphers>true</preferServerCiphers>
             </server>
             <client>
-                <loadDefaultCAFile>false</loadDefaultCAFile>
-                <caConfig>/etc/ssl/tlscerts/marsnet_ca.crt</caConfig>
+                <loadDefaultCAFile>true</loadDefaultCAFile>
+                <caConfig>/etc/ssl/tlscerts/ca.crt</caConfig>
                 <cacheSessions>true</cacheSessions>
                 <disableProtocols>sslv2,sslv3</disableProtocols>
                 <preferServerCiphers>true</preferServerCiphers>
-                <verificationMode>none</verificationMode>
+                <verificationMode>relaxed</verificationMode>
                 <invalidCertificateHandler>
                     <name>RejectCertificateHandler</name>
                 </invalidCertificateHandler>

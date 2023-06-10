@@ -1,0 +1,58 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+Example:
+
+```yaml
+# clickhouse.yaml
+
+clickhouse:
+  users:
+    - name: reader
+      profile: reader
+      quota: default
+      # echo -n "reader" | shasum -a 256
+      password: 3d0941964aa3ebdcb00ccef58b1bb399f9f898465e9886d5aec7f31090a0fb30
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: clickhouse.example.com
+  tls:
+    - secretName: clickhouse.example.com-tls
+      hosts:
+        - clickhouse.example.com
+
+resources:
+  limits:
+    cpu: 2
+    memory: 4Gi
+  requests:
+    cpu: 200m
+    memory: 1Gi
+
+persistence:
+  enabled: true
+  size: 10Gi
+
+metrics:
+  enabled: true
+```
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}
