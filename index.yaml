@@ -3,6 +3,26 @@ entries:
   bitwarden:
   - apiVersion: v2
     appVersion: 1.28.1
+    created: "2023-06-11T11:35:05.045401555Z"
+    description: A Helm chart to deploy Bitwarden.
+    digest: 4b71ffb6aebd454487fa6004a1a786d6153373828a75df58a9bed4c5f3e054ce
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - vaultwarden
+    - bitwarden
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: bitwarden
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/bitwarden
+    - https://github.com/dani-garcia/vaultwarden
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/bitwarden-0.1.4/bitwarden-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: 1.28.1
     created: "2023-06-10T15:50:39.838162257Z"
     description: A Helm chart to deploy Bitwarden.
     digest: 4f6d2108ee4d03b02a642c1e672c915360183e43ff4c0c3025871289560a4e6f
@@ -204,6 +224,16 @@ entries:
   clickhouse-keeper:
   - apiVersion: v2
     appVersion: 22.12.1.1752-alpine
+    created: "2023-06-11T11:35:05.267350327Z"
+    description: A Helm chart for Kubernetes
+    digest: 12b5881b352923a947f22f2769bdc5c134d793755f2ebc5037b731457797741e
+    name: clickhouse-keeper
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-keeper-0.1.2/clickhouse-keeper-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 22.12.1.1752-alpine
     created: "2023-01-05T01:06:44.049389571Z"
     description: A Helm chart for Kubernetes
     digest: bedabaa43e2f9074bac0205dd54f2d2d2bd2ca9e336337cf3a583026fbd8bb22
@@ -267,6 +297,25 @@ entries:
   ipsec:
   - apiVersion: v2
     appVersion: "4.11"
+    created: "2023-06-11T11:35:05.486974652Z"
+    description: IPSec link for Kubernetes
+    digest: 00fb745753b593fbbe78cd445600cebeeaab2dbef1c52e1d1dff731caeb9f5d4
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - ipsec
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: ipsec
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/ipsec
+    - https://libreswan.org/
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/ipsec-0.1.4/ipsec-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: "4.11"
     created: "2023-06-06T08:57:47.911493656Z"
     description: A Helm chart for Kubernetes
     digest: 6ca2eebbdc2500f100d572d455733f74d0fd776ed1ab8af8fb7e8c4c2d36ca7a
@@ -306,6 +355,28 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/ipsec-0.1.0/ipsec-0.1.0.tgz
     version: 0.1.0
   keydb:
+  - apiVersion: v2
+    appVersion: 6.3.3
+    created: "2023-06-11T11:35:05.701367803Z"
+    description: KeyDB with TLS, backup/restore support
+    digest: 7e14c891c2c9b5c580be169b078d84e4bb4696e5ae88d431249b39113432ff64
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - keydb
+    - redis
+    - wal-g
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: keydb
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/keydb
+    - https://docs.keydb.dev
+    - https://github.com/wal-g/wal-g
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.3.3/keydb-0.3.3.tgz
+    version: 0.3.3
   - apiVersion: v2
     appVersion: 6.3.3
     created: "2023-06-06T21:45:17.846153825Z"
@@ -407,6 +478,28 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.2.3/keydb-0.2.3.tgz
     version: 0.2.3
   mongodb-backup:
+  - apiVersion: v2
+    appVersion: 6.0.5
+    created: "2023-06-11T11:35:05.907437897Z"
+    description: Mongo backup with restore checks
+    digest: 6a7d0f178cc3b609115cd61859727302b6ee1524e853ad23d6c5209d1e708674
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - mongodb
+    - backup
+    - wal-g
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongodb-backup
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongodb-backup
+    - https://www.mongodb.com
+    - https://github.com/wal-g/wal-g
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongodb-backup-0.3.4/mongodb-backup-0.3.4.tgz
+    version: 0.3.4
   - apiVersion: v2
     appVersion: 6.0.5
     created: "2023-04-17T17:33:42.012004865Z"
@@ -572,6 +665,25 @@ entries:
   openvpn:
   - apiVersion: v2
     appVersion: 2.6.4
+    created: "2023-06-11T11:35:06.106373056Z"
+    description: OpenVPN in kubernetes
+    digest: 247fd5ce668a0214a17cbbb17eadabc878c175836f166ab03bf8152efe2ed46e
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - openvpn
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: openvpn
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/openvpn
+    - https://openvpn.net
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/openvpn-0.3.6/openvpn-0.3.6.tgz
+    version: 0.3.6
+  - apiVersion: v2
+    appVersion: 2.6.4
     created: "2023-06-09T15:50:40.181649303Z"
     description: A Helm chart for Kubernetes
     digest: c2d512c83ecdf3c145d2c6d5cbc099ddc797bab677fbcc3816eb6d94654f9215
@@ -683,6 +795,25 @@ entries:
   pgbouncer:
   - apiVersion: v2
     appVersion: "14.7"
+    created: "2023-06-11T11:35:06.319827385Z"
+    description: Postgres connection poller
+    digest: 9fd5aa450f7585a5e7bd118e8e02156c1aec74e2f32e043bf7482205667a4354
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - pgbouncer
+    - postgresql
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: pgbouncer
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/pgbouncer
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.7/pgbouncer-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
+    appVersion: "14.7"
     created: "2023-06-08T15:25:27.012269129Z"
     description: A Helm chart for Kubernetes
     digest: 1e9b6feb5d4fbc04263aee9553087933a44171400c43be505d6061add6785dde
@@ -732,6 +863,28 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.0/pgbouncer-0.1.0.tgz
     version: 0.1.0
   postgresql-single:
+  - apiVersion: v2
+    appVersion: "14.8"
+    created: "2023-06-11T11:35:06.548549688Z"
+    description: Postgres with backup/restore checks
+    digest: b8671b1392da551e3dfcbc5120c04253ad9500ec4c3a8d20b9695f046424e7bb
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: postgresql-single
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.5.3/postgresql-single-0.5.3.tgz
+    version: 0.5.3
   - apiVersion: v2
     appVersion: "14.8"
     created: "2023-06-09T15:24:03.332829937Z"
@@ -885,6 +1038,24 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2023-06-11T11:35:06.752409871Z"
+    description: Static prometheus rules
+    digest: a7bc30d9cb94118350dbbf016ed84991b15f2a3a4af4a215f6b116f9dc18258c
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - prometheus
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: prometheus-rules
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.18/prometheus-rules-0.1.18.tgz
+    version: 0.1.18
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2023-06-01T12:37:38.218165874Z"
     description: A Helm chart for Kubernetes
     digest: 8ecc43aa92a0b8d1f35357d32e421c075cbf97dcb3bcda257db2d0ffdf388f9a
@@ -1036,6 +1207,24 @@ entries:
   rbac-common:
   - apiVersion: v2
     appVersion: 0.1.1
+    created: "2023-06-11T11:35:06.949593022Z"
+    description: Kubernetes RBAC
+    digest: 420ee1218304353f451cd4f12d1bd40e5a03c0701805ea0ad6ec93fd15a150ed
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - rbac
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: rbac-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/rbac-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/rbac-common-0.1.5/rbac-common-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
+    appVersion: 0.1.1
     created: "2023-04-21T06:54:10.838614268Z"
     description: A Helm chart for Kubernetes
     digest: 20582ed72ab2b8a8b9b7ff5c7fc18f2209b3847d15eab2bcad7b77a99501f5a3
@@ -1087,6 +1276,25 @@ entries:
   registry-mirrors:
   - apiVersion: v2
     appVersion: 2.8.1
+    created: "2023-06-11T11:35:07.172722497Z"
+    description: Container registry mirror
+    digest: a6e1235da0a04bd8f3086fb14c89eb4af0e73785327161790463920c42ec98c3
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - containerd
+    - docker mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: registry-mirrors
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/registry-mirrors
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/registry-mirrors-0.1.3/registry-mirrors-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: 2.8.1
     created: "2023-03-19T10:58:00.00008548Z"
     description: A Helm chart for Kubernetes
     digest: a814d9d9e3e57919605a0b71447fc97083f945179a3f48da4b7c0f4cf64f4d43
@@ -1106,6 +1314,26 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/registry-mirrors-0.1.0/registry-mirrors-0.1.0.tgz
     version: 0.1.0
   tabix:
+  - apiVersion: v2
+    appVersion: 22.05.17
+    created: "2023-06-11T11:35:07.388575738Z"
+    description: Clickhouse WebUI
+    digest: baab939ac9d8a3384dd8e56b4b90121c36222e63e652afaa8f90c26d3b7a0278
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - tabix
+    - clickhouse
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: tabix
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/tabix
+    - https://github.com/tabixio/tabix
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/tabix-0.1.4/tabix-0.1.4.tgz
+    version: 0.1.4
   - apiVersion: v2
     appVersion: 18.07.2
     created: "2023-03-19T10:58:00.156692896Z"
@@ -1127,6 +1355,25 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tabix-0.1.0/tabix-0.1.0.tgz
     version: 0.1.0
   tailscale:
+  - apiVersion: v2
+    appVersion: v1.38.2
+    created: "2023-06-11T11:35:07.587059595Z"
+    description: Tailscale mesh network.
+    digest: 4df5880ebc0fb5afd69bb1c82c57fa8119739e700a6325a41cecb843e79fdbaa
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - tailscale
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: tailscale
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/tailscale
+    - https://tailscale.com
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.9/tailscale-0.1.9.tgz
+    version: 0.1.9
   - apiVersion: v2
     appVersion: v1.38.1
     created: "2023-03-19T07:04:41.522216067Z"
@@ -1187,4 +1434,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-06-10T15:50:40.19640315Z"
+generated: "2023-06-11T11:35:07.587720898Z"
