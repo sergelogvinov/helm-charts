@@ -14,10 +14,12 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# -- Mirror tls auth
 auth:
   tls: false
   # password: mirror-password
 
+# -- Container mirrors
 mirrors:
   - host: docker.io
     source: https://registry-1.docker.io
@@ -28,6 +30,8 @@ mirrors:
   - host: registry.k8s.io
     source: https://registry.k8s.io
 
+# -- Pods Service Account.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
   # Specifies whether a service account should be created
   create: false
@@ -37,13 +41,19 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+# -- Annotations for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 podAnnotations: {}
 
+# -- Pod Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 podSecurityContext:
   runAsNonRoot: true
   fsGroup: 65534
   fsGroupChangePolicy: "OnRootMismatch"
 
+# -- Container Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 securityContext:
   allowPrivilegeEscalation: false
   seccompProfile:
@@ -54,10 +64,14 @@ securityContext:
   runAsGroup: 65534
   # readOnlyRootFilesystem: true
 
+# -- Service parameters
+# ref: https://kubernetes.io/docs/user-guide/services/
 service:
   type: ClusterIP
   port: 80
 
+# -- Mirror ingress parameters
+# ref: http://kubernetes.io/docs/user-guide/ingress/
 ingress:
   enabled: false
   className: ""
@@ -72,11 +86,9 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+# -- Resource requests and limits.
+# ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   # limits:
   #   cpu: 100m
   #   memory: 128Mi
@@ -84,9 +96,8 @@ resources:
     cpu: 50m
     memory: 64Mi
 
-updateStrategy:
-  type: RollingUpdate
-
+# -- Persistence parameters
+# ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 persistence:
   # storageClass: "-"
   accessModes:
@@ -94,8 +105,22 @@ persistence:
   size: 1Gi
   annotations: {}
 
+# -- pod deployment update stategy type.
+# ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
+updateStrategy:
+  type: RollingUpdate
+
+# -- Node labels for pod assignment.
+# ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
+  # node-role.kubernetes.io/control-plane: ""
 
+# -- Tolerations for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
+  # - key: node-role.kubernetes.io/control-plane
+  #   effect: NoSchedule
 
+# -- Affinity for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}

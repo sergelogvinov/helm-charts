@@ -15,13 +15,14 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# -- Deployment envs
 envs: {}
 
 secrets: |
   # openssl rand -base64 48
   %any 1.2.3.4 : PSK "base64"
 
-# XAUTH
+# -- XAUTH
 # openssl passwd -1 "$PASSWORD"
 users: {}
   # user1: $1$6GUtZDrw$ewnkkSXNY0mjTajRSlY5h.
@@ -37,17 +38,6 @@ config: |
       ike=aes256-sha256-modp2048
       esp=aes256-sha256-modp2048
       pfs=yes
-
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
-podAnnotations: {}
 
 ipsecService:
   enabled: false
@@ -65,11 +55,30 @@ ipsecService:
     #   port: 5432
     #   backend: postgres.default.svc.cluster.local
 
+# -- Pods Service Account.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Annotations for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+podAnnotations: {}
+
+# -- Service parameters
+# ref: https://kubernetes.io/docs/user-guide/services/
 service:
   type: HostPort
   isakmp: 500
   ipsec: 4500
 
+# -- Resource requests and limits.
+# ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:
   limits:
     cpu: 100m
@@ -78,15 +87,24 @@ resources:
     cpu: 100m
     memory: 64Mi
 
+# -- Use a daemonset instead of a deployment
 useDaemonSet: false
 
+# -- Pod deployment update stategy type.
+# ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
   type: RollingUpdate
   rollingUpdate:
     maxUnavailable: 1
 
+# -- Node labels for pod assignment.
+# ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
 
+# -- Tolerations for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
 
+# -- Affinity for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}

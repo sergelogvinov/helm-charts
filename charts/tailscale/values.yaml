@@ -18,6 +18,8 @@ tailscale: {}
   # TS_AUTH_KEY: tskey-auth-
   # TS_TAGS: tag:exitnode
 
+# -- Pods Service Account.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -27,8 +29,12 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+# -- Annotations for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 podAnnotations: {}
 
+# -- Pod Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 podSecurityContext: {}
   # sysctls:
   #   # - name: net.ipv6.conf.all.forwarding
@@ -36,6 +42,8 @@ podSecurityContext: {}
   #   - name: net.ipv6.conf.all.disable_ipv6
   #     value: "1"
 
+# -- Container Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 securityContext:
   seccompProfile:
     type: RuntimeDefault
@@ -49,35 +57,44 @@ securityContext:
   runAsNonRoot: false
   runAsUser: 0
 
+# -- Service parameters
+# ref: https://kubernetes.io/docs/user-guide/services/
 service:
   type: ClusterIP
   port: 1055
   p2pPort: 30025
 
+# -- Resource requests and limits.
+# ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  requests:
-    cpu: 200m
+  limits:
+    cpu: 100m
     memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 72Mi
 
+# -- Use a daemonset instead of a deployment
 useDaemonSet: false
 
+# -- pod deployment update stategy type.
+# ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
   type: RollingUpdate
   rollingUpdate:
     maxUnavailable: 1
 
+# -- Node labels for pod assignment.
+# ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
   # node-role.kubernetes.io/control-plane: ""
 
+# -- Tolerations for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
   # - key: node-role.kubernetes.io/control-plane
   #   effect: NoSchedule
 
+# -- Affinity for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}

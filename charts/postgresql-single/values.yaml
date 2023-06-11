@@ -14,28 +14,26 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-## command Override default container command
-##
+# -- command Override default container command
 command: []
 
-## PostgreSQL admin user
-## ref: https://hub.docker.com/_/postgres
+# -- PostgreSQL admin user
+# ref: https://hub.docker.com/_/postgres
 postgresqlUsername: postgres
 
-## PostgreSQL password
-## ref: https://hub.docker.com/_/postgres
-##
+# -- PostgreSQL password
+# ref: https://hub.docker.com/_/postgres
 # postgresqlPassword:
 
-## Create a database
-## ref: https://hub.docker.com/_/postgres
-##
+# -- Create a database
+# ref: https://hub.docker.com/_/postgres
 # postgresqlDatabase:
 
 # postgresqlConfiguration:
 # postgresqlConfigurationExtra:
 # postgresqlConfigurationLogs:
 
+# -- PostgreSQL connection string
 # postgresqlConninfo: host=postgres user=postgres
 
 pgHbaConfiguration: |-
@@ -52,6 +50,8 @@ pgHbaConfiguration: |-
 tlsCerts:
   create: false
 
+# -- Pods Service Account.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -61,10 +61,16 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+# -- Extra labels for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 podlabels: {}
 
+# -- Annotations for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 podAnnotations: {}
 
+# -- Pod Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 podSecurityContext:
   runAsNonRoot: true
   runAsUser: 999
@@ -72,10 +78,8 @@ podSecurityContext:
   fsGroup: 999
   fsGroupChangePolicy: "OnRootMismatch"
 
-priorityClassName: ~
-
-terminationGracePeriodSeconds: 120
-
+# -- Container Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 securityContext:
   seccompProfile:
     type: RuntimeDefault
@@ -84,16 +88,17 @@ securityContext:
     drop:
     - ALL
 
+# -- Service parameters
+# ref: https://kubernetes.io/docs/user-guide/services/
 service:
   type: ClusterIP
   port: 5432
 
 postgresqlServerMemory: "128"
+
+# -- Resource requests and limits.
+# ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   # limits:
   #   cpu: 100m
   #   memory: 128Mi
@@ -111,6 +116,8 @@ resources:
 #     mountPath: /etc/gcp
 #     readOnly: true
 
+# -- Persistence parameters
+# ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 persistence:
   enabled: false
   ## A manually managed Persistent Volume and Claim
@@ -129,6 +136,12 @@ autoscaling:
   maxReplicas: 3
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
+
+# -- Priority Class Name
+# ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+priorityClassName: ~
+
+terminationGracePeriodSeconds: 120
 
 ## updateStrategy for PostgreSQL StatefulSet and its slaves StatefulSets
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
@@ -286,8 +299,14 @@ metrics:
       cpu: 10m
       memory: 32Mi
 
+# -- Node labels for pod assignment.
+# ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
 
+# -- Tolerations for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
 
+# -- Affinity for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}

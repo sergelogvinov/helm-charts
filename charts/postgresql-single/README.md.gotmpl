@@ -1,0 +1,79 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+A single-node PostgreSQL database is straightforward and relatively easy to maintain. You don't need to worry about configuring a distributed database or managing multiple nodes.
+
+* Support backup/restore to the extrernal storage, using [wal-g](https://github.com/wal-g)
+* Automatically tuning PostgreSQL parameters base on `postgresqlServerMemory` value.
+
+```shell
+# create backup-s3 secret
+kubectl create secret generic backup-s3 --from-file=credentials
+```
+
+```yaml
+# Helm values
+pgHbaConfiguration: |-
+  local   all         all                                 trust
+  local   replication postgres                            trust
+  host    all         all                   localhost     md5
+  hostssl postgres    postgres              10.0.0.0/8    md5
+  hostssl postgres    replication           10.0.0.0/8    md5
+  hostssl replication postgres              10.0.0.0/8    md5
+  hostssl replication replication           10.0.0.0/8    md5
+
+postgresqlServerMemory: 2048
+resources:
+  limits:
+    memory: 4Gi
+    cpu: 4
+  requests:
+    memory: 2Gi
+    cpu: 2
+
+extraVolumes:
+  - name: s3-certs
+    secret:
+      defaultMode: 256
+      secretName: backup-s3
+extraVolumeMounts:
+  - name: s3-certs
+    mountPath: /var/lib/postgresql/.aws
+    readOnly: true
+
+backup:
+  enabled: true
+
+  recovery: true # If PVC empty - it will use latest backup.
+  walpush: true  # Send wal for the s3.
+
+  walg: |
+    WALG_TAR_DISABLE_FSYNC: true
+    WALG_UPLOAD_WAL_METADATA: INDIVIDUAL
+    WALG_PREVENT_WAL_OVERWRITE: true
+    WALG_COMPRESSION_METHOD: brotli
+    WALG_S3_PREFIX: s3://backup/postgrtes-backup
+
+backupCheck:
+  enabled: true
+
+metrics:
+  enabled: true
+```
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

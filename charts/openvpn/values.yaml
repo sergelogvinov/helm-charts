@@ -90,14 +90,20 @@ openvpn:
     # -----BEGIN DH PARAMETERS-----
     # -----END DH PARAMETERS-----
 
+# -- Annotations for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 podAnnotations: {}
 
+# -- Pod Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 podSecurityContext:
   runAsUser: 0
   runAsGroup: 101
   fsGroup: 101
   fsGroupChangePolicy: "OnRootMismatch"
 
+# -- Container Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 securityContext:
   seccompProfile:
     type: RuntimeDefault
@@ -114,6 +120,8 @@ securityContext:
   # runAsUser: 0
   runAsGroup: 101
 
+# -- Service parameters
+# ref: https://kubernetes.io/docs/user-guide/services/
 service:
   type: ClusterIP
   proto: UDP
@@ -122,6 +130,8 @@ service:
 
   annotations: {}
 
+# -- Resource requests and limits.
+# ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:
   limits:
     cpu: 1
@@ -130,15 +140,24 @@ resources:
     cpu: 100m
     memory: 32Mi
 
+# -- Use a daemonset instead of a deployment
 useDaemonSet: false
 
+# -- pod deployment update stategy type.
+# ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
   type: RollingUpdate
   rollingUpdate:
     maxUnavailable: 1
 
+# -- Node labels for pod assignment.
+# ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
 
+# -- Tolerations for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
 
+# -- Affinity for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}

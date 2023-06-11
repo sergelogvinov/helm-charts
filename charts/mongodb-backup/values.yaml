@@ -56,6 +56,8 @@ env: []
 # walg: |
 #   GOOGLE_APPLICATION_CREDENTIALS: /etc/gcp/backup.json
 
+# -- Pods Service Account.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -65,9 +67,16 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+# -- Extra labels for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 podLabels: {}
+
+# -- Annotations for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 podAnnotations: {}
 
+# -- Pod Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 podSecurityContext:
   runAsNonRoot: true
   runAsUser: 34
@@ -75,6 +84,8 @@ podSecurityContext:
   fsGroup: 34
   fsGroupChangePolicy: "OnRootMismatch"
 
+# -- Container Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 securityContext:
   # seccompProfile:
   #   type: RuntimeDefault
@@ -83,6 +94,8 @@ securityContext:
     drop:
     - ALL
 
+# -- Resource requests and limits.
+# ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:
   # limits:
   #   cpu: 100m
@@ -101,6 +114,8 @@ resources:
 #     mountPath: /etc/gcp
 #     readOnly: true
 
+# -- Persistence parameters
+# ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 persistence:
   enabled: false
   ## A manually managed Persistent Volume and Claim
@@ -112,8 +127,14 @@ persistence:
   size: 10Gi
   annotations: {}
 
+# -- Node labels for pod assignment.
+# ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
 
+# -- Tolerations for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
 
+# -- Affinity for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}

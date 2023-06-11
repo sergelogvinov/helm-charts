@@ -1,0 +1,100 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+Using a Tailscale exit node allows you to route traffic from your Tailscale network to the internet through a kubernetes nodes outside of your network. This can be useful for a variety of reasons, such as accessing geographically-restricted content or improving network performance.
+
+## Prepare the nodes
+
+Add to node config:
+
+```yaml
+allowed-unsafe-sysctls: net.ipv6.conf.all.forwarding
+```
+
+## Deploy
+
+Install the Tailscale client on each Kubernetes `VPN` node role.
+
+```shell
+helm upgrade -i -n vpn -f vars/tailscale.yaml tailscale sinextra/tailscale
+```
+
+Helm values vars/tailscale.yaml
+
+```yaml
+tailscale:
+  # Tailscale authentication key
+  TS_AUTH_KEY: tskey-auth-XXX
+  TS_TAGS: tag:vpn
+
+useDaemonSet: true
+nodeSelector:
+  node-role.kubernetes.io/vpn: ""
+
+podSecurityContext:
+  sysctls:
+    - name: net.ipv6.conf.all.forwarding
+      value: "1"
+```
+
+Result:
+for each node will create a secret taiscale state.
+You can rename the client on the Portal.
+By default the nodes have name `$REGION-$NODE`
+
+```shell
+# kubectl -n vpn get pods
+NAME              READY   STATUS     RESTARTS        AGE
+tailscale-2bqk4   1/1     Running    0               46d
+tailscale-484sl   1/1     Running    0               46d
+...
+
+# kubectl -n vpn get secrets
+tailscale-node-1          Opaque               5      46d
+tailscale-node-2          Opaque               6      46d
+```
+
+## Tailscale Access Controls
+
+Tailscale acls https://login.tailscale.com/admin/acls
+
+```json
+{
+	"tagOwners": {
+		"tag:vpn": ["email-who-created-token"],
+	},
+	"autoApprovers": {
+		// A device tagged security can advertise exit nodes that are auto-approved
+		"exitNode": ["tag:vpn"],
+	},
+
+	// Access control lists.
+	"acls": [
+		{
+			"action": "accept",
+			"src":    ["autogroup:members"],
+			"dst":    ["autogroup:internet:*"],
+		},
+	],
+}
+```
+
+It's important to note that Tailscale exit nodes are intended for personal use only,
+and should not be used for commercial purposes or to violate the terms of service of any websites or services you are accessing through the exit node.
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}
