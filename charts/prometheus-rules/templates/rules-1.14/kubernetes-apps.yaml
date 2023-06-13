@@ -71,6 +71,19 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
       labels:
         severity: warning
 {{- end }}
+{{- if not (.Values.defaultRules.disabled.KubeDeploymentRolloutStuck | default false) }}
+    - alert: KubeDeploymentRolloutStuck
+      annotations:
+        description: Rollout of deployment {{`{{`}} $labels.namespace {{`}}`}}/{{`{{`}} $labels.deployment {{`}}`}} is not progressing for longer than 15 minutes.
+        runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubedeploymentrolloutstuck
+        summary: Deployment rollout is not progressing.
+      expr: |-
+        kube_deployment_status_condition{condition="Progressing", status="false",job="kubernetes-service-endpoints"}
+        != 0
+      for: 15m
+      labels:
+        severity: warning
+{{- end }}
 {{- if not (.Values.defaultRules.disabled.KubeStatefulSetReplicasMismatch | default false) }}
     - alert: KubeStatefulSetReplicasMismatch
       annotations:

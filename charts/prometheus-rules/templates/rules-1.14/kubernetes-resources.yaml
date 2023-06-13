@@ -11,13 +11,13 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeCPUOvercommit | default false) }}
     - alert: KubeCPUOvercommit
       annotations:
-        description: Cluster has overcommitted CPU resource requests for Pods by {{`{{`}} $value {{`}}`}} CPU shares and cannot tolerate node failure.
+        description: Cluster {{`{{`}} $labels.cluster {{`}}`}} has overcommitted CPU resource requests for Pods by {{`{{`}} $value {{`}}`}} CPU shares and cannot tolerate node failure.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubecpuovercommit
         summary: Cluster has overcommitted CPU resource requests.
       expr: |-
-        sum(namespace_cpu:kube_pod_container_resource_requests:sum{}) - (sum(kube_node_status_allocatable{resource="cpu", job="kubernetes-service-endpoints"}) - max(kube_node_status_allocatable{resource="cpu", job="kubernetes-service-endpoints"})) > 0
+        sum(namespace_cpu:kube_pod_container_resource_requests:sum{job="kubernetes-service-endpoints",}) by (cluster) - (sum(kube_node_status_allocatable{job="kubernetes-service-endpoints",resource="cpu"}) by (cluster) - max(kube_node_status_allocatable{job="kubernetes-service-endpoints",resource="cpu"}) by (cluster)) > 0
         and
-        (sum(kube_node_status_allocatable{resource="cpu", job="kubernetes-service-endpoints"}) - max(kube_node_status_allocatable{resource="cpu", job="kubernetes-service-endpoints"})) > 0
+        (sum(kube_node_status_allocatable{job="kubernetes-service-endpoints",resource="cpu"}) by (cluster) - max(kube_node_status_allocatable{job="kubernetes-service-endpoints",resource="cpu"}) by (cluster)) > 0
       for: 10m
       labels:
         severity: warning
@@ -25,13 +25,13 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeMemoryOvercommit | default false) }}
     - alert: KubeMemoryOvercommit
       annotations:
-        description: Cluster has overcommitted memory resource requests for Pods by {{`{{`}} $value | humanize {{`}}`}} bytes and cannot tolerate node failure.
+        description: Cluster {{`{{`}} $labels.cluster {{`}}`}} has overcommitted memory resource requests for Pods by {{`{{`}} $value | humanize {{`}}`}} bytes and cannot tolerate node failure.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubememoryovercommit
         summary: Cluster has overcommitted memory resource requests.
       expr: |-
-        sum(namespace_memory:kube_pod_container_resource_requests:sum{}) - (sum(kube_node_status_allocatable{resource="memory", job="kubernetes-service-endpoints"}) - max(kube_node_status_allocatable{resource="memory", job="kubernetes-service-endpoints"})) > 0
+        sum(namespace_memory:kube_pod_container_resource_requests:sum{}) by (cluster) - (sum(kube_node_status_allocatable{resource="memory", job="kubernetes-service-endpoints"}) by (cluster) - max(kube_node_status_allocatable{resource="memory", job="kubernetes-service-endpoints"}) by (cluster)) > 0
         and
-        (sum(kube_node_status_allocatable{resource="memory", job="kubernetes-service-endpoints"}) - max(kube_node_status_allocatable{resource="memory", job="kubernetes-service-endpoints"})) > 0
+        (sum(kube_node_status_allocatable{resource="memory", job="kubernetes-service-endpoints"}) by (cluster) - max(kube_node_status_allocatable{resource="memory", job="kubernetes-service-endpoints"}) by (cluster)) > 0
       for: 10m
       labels:
         severity: warning
@@ -39,13 +39,13 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeCPUQuotaOvercommit | default false) }}
     - alert: KubeCPUQuotaOvercommit
       annotations:
-        description: Cluster has overcommitted CPU resource requests for Namespaces.
+        description: Cluster {{`{{`}} $labels.cluster {{`}}`}}  has overcommitted CPU resource requests for Namespaces.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubecpuquotaovercommit
         summary: Cluster has overcommitted CPU resource requests.
       expr: |-
-        sum(min without(resource) (kube_resourcequota{job="kubernetes-service-endpoints", type="hard", resource=~"(cpu|requests.cpu)"}))
+        sum(min without(resource) (kube_resourcequota{job="kubernetes-service-endpoints", type="hard", resource=~"(cpu|requests.cpu)"})) by (cluster)
           /
-        sum(kube_node_status_allocatable{resource="cpu", job="kubernetes-service-endpoints"})
+        sum(kube_node_status_allocatable{resource="cpu", job="kubernetes-service-endpoints"}) by (cluster)
           > 1.5
       for: 5m
       labels:
@@ -54,13 +54,13 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeMemoryQuotaOvercommit | default false) }}
     - alert: KubeMemoryQuotaOvercommit
       annotations:
-        description: Cluster has overcommitted memory resource requests for Namespaces.
+        description: Cluster {{`{{`}} $labels.cluster {{`}}`}}  has overcommitted memory resource requests for Namespaces.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubememoryquotaovercommit
         summary: Cluster has overcommitted memory resource requests.
       expr: |-
-        sum(min without(resource) (kube_resourcequota{job="kubernetes-service-endpoints", type="hard", resource=~"(memory|requests.memory)"}))
+        sum(min without(resource) (kube_resourcequota{job="kubernetes-service-endpoints", type="hard", resource=~"(memory|requests.memory)"})) by (cluster)
           /
-        sum(kube_node_status_allocatable{resource="memory", job="kubernetes-service-endpoints"})
+        sum(kube_node_status_allocatable{resource="memory", job="kubernetes-service-endpoints"}) by (cluster)
           > 1.5
       for: 5m
       labels:

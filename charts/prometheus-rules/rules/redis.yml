@@ -71,7 +71,7 @@
       summary: Redis LoadBalancer limit
 
   - alert: RedisLoadBalancer
-    expr: haproxy_frontend_limit_sessions{app_kubernetes_io_name="keydb"} - haproxy_frontend_current_sessions < 10
+    expr: haproxy_frontend_limit_sessions{app_kubernetes_io_name="keydb",proxy!="stats"} - haproxy_frontend_current_sessions < 10
     for: 1m
     labels:
       severity: critical

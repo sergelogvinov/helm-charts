@@ -141,6 +141,9 @@ replacement_map = {
     'job="node-exporter"': {
         'replacement': 'job="prometheus-node-exporter"',
         'init': ''},
+    'job, namespace, service': {
+        'replacement': 'job, kubernetes_namespace, service',
+        'init': ''},
     'runbook_url: https://runbooks.prometheus-operator.dev/runbooks/': {
         'replacement': 'runbook_url: {{ .Values.defaultRules.runbookUrl }}/',
         'init': ''}
