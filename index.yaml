@@ -1225,6 +1225,24 @@ entries:
   rbac-common:
   - apiVersion: v2
     appVersion: 0.1.1
+    created: "2023-06-17T10:06:41.146979675Z"
+    description: Kubernetes RBAC
+    digest: 9739521cf86279d11b046e16eda986c56bcc7ab4beaaccbe635d04d1920f76e4
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - rbac
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: rbac-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/rbac-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/rbac-common-0.1.6/rbac-common-0.1.6.tgz
+    version: 0.1.6
+  - apiVersion: v2
+    appVersion: 0.1.1
     created: "2023-06-11T11:35:06.949593022Z"
     description: Kubernetes RBAC
     digest: 420ee1218304353f451cd4f12d1bd40e5a03c0701805ea0ad6ec93fd15a150ed
@@ -1330,6 +1348,23 @@ entries:
     type: application
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/registry-mirrors-0.1.0/registry-mirrors-0.1.0.tgz
+    version: 0.1.0
+  service-common:
+  - apiVersion: v2
+    appVersion: 2.4.22
+    created: "2023-06-17T10:06:41.296102467Z"
+    description: Simple gateway with TLS auth
+    digest: 6747694d49104a8ae8c8158e09159f1bcf168984361c07bde6564970ecd81c0e
+    home: https://github.com/sergelogvinov/helm-charts
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: service-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/service-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/service-common-0.1.0/service-common-0.1.0.tgz
     version: 0.1.0
   tabix:
   - apiVersion: v2
@@ -1452,4 +1487,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-06-13T09:40:24.599939815Z"
+generated: "2023-06-17T10:06:41.296481667Z"
