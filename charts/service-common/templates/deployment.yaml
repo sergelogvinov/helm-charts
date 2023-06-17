@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "service-common.fullname" . }}
+  labels:
+    {{- include "service-common.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: {{ .Values.updateStrategy.type }}
+    rollingUpdate:
+      {{- toYaml .Values.updateStrategy.rollingUpdate | nindent 6 }}
+  selector:
+    matchLabels:
+      {{- include "service-common.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "service-common.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      serviceAccountName: {{ include "service-common.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/entrypoint.d/haproxy.sh"]
+          ports:
+            - name: stats
+              containerPort: 8404
+              protocol: TCP
+            {{- range $key, $value := .Values.service.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .port }}
+              protocol: TCP
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: command
+              mountPath: /entrypoint.d
+              readOnly: true
+            - name: config
+              mountPath: /usr/local/etc/haproxy
+            - name: tlscerts
+              mountPath: /etc/ssl/tlscerts
+            - name: run
+              mountPath: /run
+      volumes:
+        - name: command
+          configMap:
+            name: {{ include "service-common.fullname" . }}
+            defaultMode: 365
+            items:
+              - key: haproxy.sh
+                path: haproxy.sh
+        - name: config
+          configMap:
+            name: {{ include "service-common.fullname" . }}
+            defaultMode: 288
+            items:
+              - key: haproxy.cfg
+                path: haproxy.cfg
+        - name: tlscerts
+          secret:
+            secretName: {{ include "service-common.fullname" . }}-server-tls
+            defaultMode: 288
+        - name: run
+          emptyDir:
+            medium: Memory
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

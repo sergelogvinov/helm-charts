@@ -1,0 +1,4 @@
+
+kubectl --namespace {{ .Release.Namespace }} get secret {{ include "service-common.fullname" . }}-client-tls -o jsonpath="{.data.ca\.crt}"  | base64 --decode > ca.crt
+kubectl --namespace {{ .Release.Namespace }} get secret {{ include "service-common.fullname" . }}-client-tls -o jsonpath="{.data.tls\.crt}" | base64 --decode > client.crt
+kubectl --namespace {{ .Release.Namespace }} get secret {{ include "service-common.fullname" . }}-client-tls -o jsonpath="{.data.tls\.key}" | base64 --decode > client.key

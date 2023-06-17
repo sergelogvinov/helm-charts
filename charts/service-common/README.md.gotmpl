@@ -1,0 +1,37 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+Example:
+
+```yaml
+service:
+  type: LoadBalancer
+
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+    service.beta.kubernetes.io/aws-load-balancer-name: services
+    service.beta.kubernetes.io/aws-load-balancer-manage-backend-security-group-rules: "false"
+
+  externalName: services.elb.us-east-2.amazonaws.com
+  ports:
+    - name: postgres
+      port: 5432
+      backend: postgres.us-east-1.rds.amazonaws.com:5432
+```
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

@@ -1,0 +1,94 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "service-common.fullname" . }}
+  labels:
+    {{- include "service-common.labels" . | nindent 4 }}
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "service-common.fullname" . }}-ca
+spec:
+  secretName: {{ include "service-common.fullname" . }}-ca
+  secretTemplate:
+    labels:
+      {{- include "service-common.labels" . | nindent 6 }}
+  issuerRef:
+    name: {{ include "service-common.fullname" . }}
+    kind: Issuer
+  commonName: {{ include "service-common.fullname" . }}
+  duration: 26280h # 3y
+  renewBefore: 26000h # ~3y
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - server auth
+    - client auth
+    - crl sign
+  isCA: true
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "service-common.fullname" . }}-ca-issuer
+spec:
+  ca:
+    secretName: {{ include "service-common.fullname" . }}-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "service-common.fullname" . }}-server
+spec:
+  # additionalOutputFormats:
+  #   - type: CombinedPEM
+  secretName: {{ include "service-common.fullname" . }}-server-tls
+  secretTemplate:
+    labels:
+      {{- include "service-common.labels" . | nindent 6 }}
+  commonName: {{ include "service-common.fullname" . }}-server
+  duration: 26280h # 3y
+  renewBefore: 8760h # 1y
+  privateKey:
+    rotationPolicy: Always
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - digital signature
+    - server auth
+    - client auth
+  isCA: false
+  ipAddresses:
+    - 127.0.0.1
+  dnsNames:
+    - {{ include "service-common.fullname" . }}
+    - {{ .Values.service.externalName }}
+  issuerRef:
+    name: {{ include "service-common.fullname" . }}-ca-issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "service-common.fullname" . }}-client
+spec:
+  secretName: {{ include "service-common.fullname" . }}-client-tls
+  secretTemplate:
+    labels:
+      {{- include "service-common.labels" . | nindent 6 }}
+  commonName: {{ include "service-common.fullname" . }}-client
+  duration: 8760h # 1y
+  renewBefore: 2190h # 3m
+  privateKey:
+    rotationPolicy: Always
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - digital signature
+    - client auth
+  isCA: false
+  issuerRef:
+    name: {{ include "service-common.fullname" . }}-ca-issuer

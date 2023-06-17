@@ -293,4 +293,15 @@ rules:
   - list
   - watch
   - create
+- apiGroups:
+  - metrics.k8s.io
+  resources:
+  - pods
+  {{- if not .Values.rbac.singleNamespace }}
+  - nodes
+  {{- end }}
+  verbs:
+  - get
+  - list
+  - watch
 {{- end }}
