@@ -1,4 +1,4 @@
-{{- if and .Values.backupCheck.enabled (ne .Values.backupCheck.schedule "") }}
+{{- if and .Values.backupCheck.enabled }}
 {{- if semverCompare ">=1.22" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
 {{- else -}}
@@ -9,14 +9,15 @@ metadata:
   name: {{ include "mongodb-backup.fullname" . }}-check
   labels:
     {{- with .Values.podlabels }}
-    {{ toYaml . | nindent 4 }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
     {{- include "mongodb-backup.labels" . | nindent 4 }}
     app.kubernetes.io/component: checker
 spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: {{ default 1 .Values.backupCheck.history }}
-  schedule: "{{ .Values.backupCheck.schedule }}"
+  suspend: {{ eq .Values.schedule "" }}
+  schedule: {{ default "0 1 * * *" .Values.backupCheck.schedule | quote }}
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
@@ -28,7 +29,7 @@ spec:
           name: {{ include "mongodb-backup.fullname" . }}
           labels:
             {{- with .Values.podlabels }}
-            {{ toYaml . | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
             {{- end }}
             {{- include "mongodb-backup.selectorLabels" . | nindent 12 }}
             app.kubernetes.io/component: checker
@@ -143,7 +144,6 @@ spec:
             {{ toYaml .Values.extraVolumes | nindent 12 }}
           {{- end -}}
 
-          {{- if .Values.backupCheck.persistence.enabled }}
           {{- if .Values.backupCheck.persistence.existingClaim }}
             - name: data
               persistentVolumeClaim:
@@ -155,7 +155,7 @@ spec:
                   metadata:
                     labels:
                       {{- with .Values.podlabels }}
-                      {{ toYaml . | nindent 22 }}
+                      {{- toYaml . | nindent 22 }}
                       {{- end }}
                       {{- include "mongodb-backup.labels" . | nindent 22 }}
                       app.kubernetes.io/component: checker
@@ -180,7 +180,6 @@ spec:
                     storageClassName: "{{ .Values.backupCheck.persistence.storageClass }}"
                   {{- end }}
                   {{- end }}
-          {{- end }}
           {{- else }}
             - name: data
               emptyDir: {}
