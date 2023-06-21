@@ -480,6 +480,28 @@ entries:
   mongodb-backup:
   - apiVersion: v2
     appVersion: 6.0.5
+    created: "2023-06-21T07:52:41.521524267Z"
+    description: Mongo backup with restore checks
+    digest: 65ed2e0da9a2a5f6376fcf0c443c915dc340b83b6f739ed5f0917849f64fbc10
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - mongodb
+    - backup
+    - wal-g
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongodb-backup
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongodb-backup
+    - https://www.mongodb.com
+    - https://github.com/wal-g/wal-g
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongodb-backup-0.3.6/mongodb-backup-0.3.6.tgz
+    version: 0.3.6
+  - apiVersion: v2
+    appVersion: 6.0.5
     created: "2023-06-19T16:14:19.156580682Z"
     description: Mongo backup with restore checks
     digest: 6329f8bd670014983cd82f68ff5978f2fc94411c52341ee630f184de31246b48
@@ -1509,4 +1531,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-06-19T16:14:19.156937784Z"
+generated: "2023-06-21T07:52:41.521922267Z"
