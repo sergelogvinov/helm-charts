@@ -22,7 +22,7 @@ spec:
   jobTemplate:
     spec:
       ttlSecondsAfterFinished: 3600 # 1h
-      activeDeadlineSeconds: 43200 # 12h
+      activeDeadlineSeconds: {{ default 86400 .Values.backupCheck.activeDeadlineSeconds }} # 24h
       backoffLimit: 0
       template:
         metadata:

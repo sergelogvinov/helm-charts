@@ -28,5 +28,16 @@ data:
     set -e
 
     export HOME=/var/backups
+    [ -z "$VERSION" ] && export VERSION=LATEST
 
-    wal-g --config=/etc/walg/walg-check.yaml backup-fetch LATEST
+    echo "*** Star recovery from wal-g backup ($VERSION)"
+    start=`date +%s`
+
+    wal-g --config=/etc/walg/walg-check.yaml backup-fetch $VERSION
+
+    end=`date +%s`
+    runtime=$((end-start))
+    echo "*** Recovery time - ${runtime}s"
+
+    export HOME=/tmp
+    mongosh --quiet --eval "show dbs" {{ include "mongodb-backup-localhost.mongodb" . }} ||:
