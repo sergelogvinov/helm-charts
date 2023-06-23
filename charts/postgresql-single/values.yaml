@@ -16,6 +16,7 @@ fullnameOverride: ""
 
 # -- command Override default container command
 command: []
+  # - /pause
 
 # -- PostgreSQL admin user
 # ref: https://hub.docker.com/_/postgres

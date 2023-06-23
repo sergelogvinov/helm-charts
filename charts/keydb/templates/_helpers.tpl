@@ -212,7 +212,8 @@ frontend stats
   stats refresh 10s
   monitor-uri /healthz
   option dontlognull
-  maxconn 16
+  option clitcpka
+  fullconn 16
 
 frontend keydb_master
   bind *:6379
@@ -225,7 +226,7 @@ frontend keydb_master
 backend keydb_master
   mode tcp
   balance  first
-  maxconn 4096
+  fullconn 4096
 
   option tcp-check
 {{- if .Values.tlsCerts.create }}

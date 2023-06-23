@@ -3,6 +3,8 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: {{ include "postgresql-single.fullname" . }}-issuer
+  labels:
+    {{- include "postgresql-single.labels" . | nindent 4 }}
 spec:
   selfSigned: {}
 ---
@@ -10,14 +12,19 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: {{ include "postgresql-single.fullname" . }}-tls
+  labels:
+    {{- include "postgresql-single.labels" . | nindent 4 }}
 spec:
   secretName: {{ include "postgresql-single.fullname" . }}-tls
+  secretTemplate:
+    labels:
+      {{- include "postgresql-single.labels" . | nindent 6 }}
   issuerRef:
     name: {{ include "postgresql-single.fullname" . }}-issuer
     kind: Issuer
   commonName: {{ include "postgresql-single.fullname" . }}
-  duration: 8760h # 12m
-  renewBefore: 4380h # 6m
+  duration: 26280h # 3y
+  renewBefore: 26000h # ~3y
   privateKey:
     algorithm: ECDSA
     size: 256
@@ -30,6 +37,8 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: {{ include "postgresql-single.fullname" . }}-ca-issuer
+  labels:
+    {{- include "postgresql-single.labels" . | nindent 4 }}
 spec:
   ca:
     secretName: {{ include "postgresql-single.fullname" . }}-tls
@@ -38,15 +47,21 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: {{ include "postgresql-single.fullname" . }}-server
+  labels:
+    {{- include "postgresql-single.labels" . | nindent 4 }}
 spec:
   secretName: {{ include "postgresql-single.fullname" . }}-server-tls
+  secretTemplate:
+    labels:
+      {{- include "postgresql-single.labels" . | nindent 6 }}
   commonName: {{ include "postgresql-single.fullname" . }}-server
-  duration: 8760h # 12m
-  renewBefore: 4380h # 6m
+  duration: 26280h # 3y
+  renewBefore: 8760h # 1y
   privateKey:
     algorithm: ECDSA
     size: 256
   usages:
+    - digital signature
     - server auth
     - client auth
   isCA: false
@@ -63,15 +78,21 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: {{ include "postgresql-single.fullname" . }}-client
+  labels:
+    {{- include "postgresql-single.labels" . | nindent 4 }}
 spec:
   secretName: {{ include "postgresql-single.fullname" . }}-client-tls
+  secretTemplate:
+    labels:
+      {{- include "postgresql-single.labels" . | nindent 6 }}
   commonName: {{ include "postgresql-single.fullname" . }}-client
-  duration: 4380h # 6m
+  duration: 8760h # 1y
   renewBefore: 2190h # 3m
   privateKey:
     algorithm: ECDSA
     size: 256
   usages:
+    - digital signature
     - client auth
   isCA: false
   ipAddresses:

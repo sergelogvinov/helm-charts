@@ -13,3 +13,19 @@ spec:
       name: postgresql
   selector:
     {{- include "postgresql-single.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}-headless
+  labels:
+    {{- include "postgresql-single.labels" . | nindent 4 }}
+spec:
+  clusterIP: None
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: postgresql
+      protocol: TCP
+      name: postgresql
+  selector:
+    {{- include "postgresql-single.selectorLabels" . | nindent 4 }}

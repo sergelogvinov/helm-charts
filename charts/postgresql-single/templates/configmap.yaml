@@ -40,6 +40,12 @@ data:
   metrics.sql: |
     CREATE EXTENSION pg_stat_statements;
 
+  vacuum-all.sh: |
+    #!/bin/sh
+    set -e
+
+    vacuumdb -avf
+
 {{- if or .Values.backup.enabled .Values.backup.recovery }}
   backup.sh: |
     #!/bin/sh
@@ -106,8 +112,8 @@ data:
 
     export VERSION=LATEST
 
-    echo "*** Star recovery from wal-g backup ($VERSION)"
-    start=`date +%s`
+    echo "*** Start recovery from wal-g backup ($VERSION)"
+    START=`date +%s`
 
     trap 'rm -rf {{ .Values.persistence.mountPath }}/data; exit 1' 9 15
 
@@ -125,7 +131,7 @@ data:
     touch {{ .Values.persistence.mountPath }}/data/recovery.signal
     chmod 0700 {{ .Values.persistence.mountPath }}/data
 
-    pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -w start
+    pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -o "-c fsync=off" -w start
     sleep 60
 
     TRIES=30
@@ -136,12 +142,19 @@ data:
     done
     pg_ctl -D "$PGDATA" -w -t 600 promote ||:
 
-    end=`date +%s`
-    runtime=$((end-start))
-    echo "*** Recovery time - ${runtime}s"
+    END=`date +%s`
+    RUNTIME=`expr $END - $START`
+    echo "*** Recovery time - ${RUNTIME}s"
+
+    echo "*** Start sql dump"
+    START=`date +%s`
 
     pg_dumpall -U postgres >/dev/null
     pg_ctl -D "$PGDATA" -w stop
+
+    END=`date +%s`
+    RUNTIME=`expr $END - $START`
+    echo "*** DumpAll time - ${RUNTIME}s"
 
     rm -rf {{ .Values.persistence.mountPath }}/data
 {{- end }}

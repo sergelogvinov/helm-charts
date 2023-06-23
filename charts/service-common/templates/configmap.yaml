@@ -59,6 +59,8 @@ data:
       stats refresh 10s
       monitor-uri /healthz
       option dontlognull
+      option clitcpka
+      fullconn 16
 
     # services
     {{- range $key, $value := .Values.service.ports }}

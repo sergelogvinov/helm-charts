@@ -95,7 +95,7 @@ spec:
             - name: postgresql-config
               mountPath: /postgresql/conf
           {{- if .Values.extraVolumeMounts }}
-            {{ toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
           {{- end }}
           {{- if or .Values.backup.enabled .Values.backup.recovery }}
             - name: config

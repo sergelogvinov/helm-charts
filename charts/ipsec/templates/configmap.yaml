@@ -85,6 +85,8 @@ data:
       stats refresh 10s
       monitor-uri /healthz
       option dontlognull
+      option clitcpka
+      fullconn 16
 
     {{ if .Values.ipsecService.enabled }}
     {{- range $key, $value := .Values.ipsecService.ports }}
