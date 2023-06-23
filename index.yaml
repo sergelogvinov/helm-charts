@@ -297,6 +297,25 @@ entries:
   ipsec:
   - apiVersion: v2
     appVersion: "4.11"
+    created: "2023-06-23T15:46:51.845163627Z"
+    description: IPSec link for Kubernetes
+    digest: 8202ccffafe1e957a25ccae789054c3809dbf8f42ef47d0856e7de4a783fd0c3
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - ipsec
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: ipsec
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/ipsec
+    - https://libreswan.org/
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/ipsec-0.1.5/ipsec-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
+    appVersion: "4.11"
     created: "2023-06-11T11:35:05.486974652Z"
     description: IPSec link for Kubernetes
     digest: 00fb745753b593fbbe78cd445600cebeeaab2dbef1c52e1d1dff731caeb9f5d4
@@ -355,6 +374,28 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/ipsec-0.1.0/ipsec-0.1.0.tgz
     version: 0.1.0
   keydb:
+  - apiVersion: v2
+    appVersion: 6.3.3
+    created: "2023-06-23T15:46:51.967634171Z"
+    description: KeyDB with TLS, backup/restore support
+    digest: 7c259ea337d6d6ec2df9e570ad05d11a3bf9e454277ccac0fa29eb0453e87f7a
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - keydb
+    - redis
+    - wal-g
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: keydb
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/keydb
+    - https://docs.keydb.dev
+    - https://github.com/wal-g/wal-g
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.3.5/keydb-0.3.5.tgz
+    version: 0.3.5
   - apiVersion: v2
     appVersion: 6.3.3
     created: "2023-06-22T05:23:10.032279217Z"
@@ -931,6 +972,28 @@ entries:
   postgresql-single:
   - apiVersion: v2
     appVersion: "14.8"
+    created: "2023-06-23T15:46:52.609427311Z"
+    description: Postgres with backup/restore checks
+    digest: 9bb44b02c5af7f81f6dda390ba1a346a2c088a61854d7bf4602faba2fc1f4c7a
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: postgresql-single
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.5.4/postgresql-single-0.5.4.tgz
+    version: 0.5.4
+  - apiVersion: v2
+    appVersion: "14.8"
     created: "2023-06-11T11:35:06.548549688Z"
     description: Postgres with backup/restore checks
     digest: b8671b1392da551e3dfcbc5120c04253ad9500ec4c3a8d20b9695f046424e7bb
@@ -1418,6 +1481,22 @@ entries:
   service-common:
   - apiVersion: v2
     appVersion: 2.4.22
+    created: "2023-06-23T15:46:52.746493054Z"
+    description: Simple gateway with TLS auth
+    digest: e8d124b9e52b5e05437d7c87d04c63ffc275e7647d811847b50471bb24f90fc6
+    home: https://github.com/sergelogvinov/helm-charts
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: service-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/service-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/service-common-0.1.1/service-common-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 2.4.22
     created: "2023-06-17T10:06:41.296102467Z"
     description: Simple gateway with TLS auth
     digest: 6747694d49104a8ae8c8158e09159f1bcf168984361c07bde6564970ecd81c0e
@@ -1553,4 +1632,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-06-22T05:23:10.032907628Z"
+generated: "2023-06-23T15:46:52.747273129Z"
