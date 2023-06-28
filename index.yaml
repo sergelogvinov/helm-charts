@@ -972,6 +972,28 @@ entries:
   postgresql-single:
   - apiVersion: v2
     appVersion: "14.8"
+    created: "2023-06-28T16:34:18.354978071Z"
+    description: Postgres with backup/restore checks
+    digest: 20853e80477be63e41d2e352d3a1f8560f076e803f68cb63463cb1361f74db08
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: postgresql-single
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.6.0/postgresql-single-0.6.0.tgz
+    version: 0.6.0
+  - apiVersion: v2
+    appVersion: "14.8"
     created: "2023-06-23T15:46:52.609427311Z"
     description: Postgres with backup/restore checks
     digest: 9bb44b02c5af7f81f6dda390ba1a346a2c088a61854d7bf4602faba2fc1f4c7a
@@ -1632,4 +1654,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-06-23T15:46:52.747273129Z"
+generated: "2023-06-28T16:34:18.356715736Z"
