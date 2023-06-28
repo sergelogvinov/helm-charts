@@ -37,6 +37,8 @@ postgresqlUsername: postgres
 # -- PostgreSQL connection string
 # postgresqlConninfo: host=postgres user=postgres
 
+# -- Postgres auth
+# ref: https://www.postgresql.org/docs/current/auth-pg-hba-conf.html
 pgHbaConfiguration: |-
   # host  database    user                  address       auth-method
   #

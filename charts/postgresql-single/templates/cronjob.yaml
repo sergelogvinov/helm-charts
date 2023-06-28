@@ -1,4 +1,5 @@
 {{- if and .Values.backup.enabled (ne .Values.backup.schedule "") }}
+{{- $instance := sub (int .Values.replicaCount) 1 }}
 {{- if semverCompare ">=1.22" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
 {{- else -}}
@@ -48,7 +49,6 @@ spec:
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               command: ["/bin/sh","-e","/usr/backup/backup.sh"]
-              # command: ["sleep","6000"]
               env:
                 - name: PGAPPNAME
                   valueFrom:
@@ -62,7 +62,7 @@ spec:
                       name: {{ include "postgresql-single.fullname" . }}
                       key: postgresqlPassword
                 - name: PGHOST
-                  value: "{{ include "postgresql-single.fullname" . }}"
+                  value: "{{ include "postgresql-single.fullname" . }}-{{ $instance }}.{{ include "postgresql-single.fullname" . }}-headless"
                 - name: PGPORT
                   value: "{{ .Values.service.port }}"
                 - name: PGDATA
@@ -93,6 +93,7 @@ spec:
                 - labelSelector:
                     matchLabels:
                       {{- include "postgresql-single.selectorLabels" . | nindent 22 }}
+                      statefulset.kubernetes.io/pod-name: {{ include "postgresql-single.fullname" . }}-{{ $instance }}
                   topologyKey: kubernetes.io/hostname
             {{- else }}
               preferredDuringSchedulingIgnoredDuringExecution:
@@ -131,6 +132,6 @@ spec:
           {{- if eq .Values.backup.podAffinityPreset "hard" }}
             - name: data
               persistentVolumeClaim:
-                claimName: data-{{ include "postgresql-single.fullname" . }}-0
+                claimName: data-{{ include "postgresql-single.fullname" . }}-{{ $instance }}
           {{- end }}
 {{- end }}

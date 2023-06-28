@@ -34,11 +34,81 @@ data:
   pg_hba.conf: |
     {{ .Values.pgHbaConfiguration | nindent 4 }}
 
+  rsyncd.conf: |
+    port = 1873
+    log file = /dev/stdout
+    reverse lookup = no
+    use chroot = no
+
+    [database]
+    path = {{ .Values.persistence.mountPath }}/data
+    comment = Postgres Database
+    read only = true
+    timeout = 300
+
   queries.yaml: |
     {{ tpl .Values.metrics.queries . | nindent 4 }}
 
   metrics.sql: |
     CREATE EXTENSION pg_stat_statements;
+
+  migrate.sh: |
+    #!/bin/sh
+    set -e
+
+    migrate_err() {
+        [ $? -eq 0 ] && exit 0
+
+        echo "*** ERROR, needs manual fixes, waiting"
+        /pause
+    }
+
+    trap migrate_err EXIT
+
+    cd {{ .Values.persistence.mountPath }}
+
+    PG_MAJOR_OLD=`expr $PG_MAJOR - 1`
+    [ -d /usr/lib/postgresql/$PG_MAJOR/bin ] || (echo "*** Postgres binary do not found ($PG_MAJOR)"; exit 1)
+    [ -d /usr/lib/postgresql/$PG_MAJOR_OLD/bin ] || (echo "*** Postgres binary do not found ($PG_MAJOR_OLD)"; exit 1)
+
+    [ "`cat {{ .Values.persistence.mountPath }}/data/PG_VERSION`" = "$PG_MAJOR" ] && (echo "*** Postgres already migrated"; exit 1)
+    [ "`cat {{ .Values.persistence.mountPath }}/data/PG_VERSION`" = "$PG_MAJOR_OLD" ] || (echo "*** Do not support database version"; exit 1)
+    [ -f {{ .Values.persistence.mountPath }}/data/standby.signal ] && (echo "*** Database in recovery mode, use rsync -av --delete --exclude=postgresql.auto.conf --exlude='*.signal' rsync://{{ include "postgresql-single.fullname" . }}-0.{{ include "postgresql-single.fullname" . }}-headless:1873/database/ {{ .Values.persistence.mountPath }}/data/"; exit 1)
+
+    echo "*** Start migration"
+
+    mv /database/data /database/data.old
+    rm -f /database/data.old/recovery.conf /database/data.old/recovery.done /database/data.old/recovery.signal
+    rm -f /database/data.old/backup_label.old
+
+    /usr/lib/postgresql/$PG_MAJOR/bin/initdb --auth-local=trust --locale=en_US.UTF-8 $POSTGRES_INITDB_ARGS /database/data
+
+    cp /postgresql/conf/postgresql.conf /database/data.old/postgresql.conf
+    sed -i '/archive_command/d' /database/data.old/postgresql.conf
+    sed -i '/restore_command/d' /database/data.old/postgresql.conf
+    sed -i '/hot_standby/d' /database/data.old/postgresql.conf
+
+    pg_upgrade --old-bindir /usr/lib/postgresql/$PG_MAJOR_OLD/bin --new-bindir /usr/lib/postgresql/$PG_MAJOR/bin --old-datadir /database/data.old --new-datadir /database/data --check
+    pg_upgrade --old-bindir /usr/lib/postgresql/$PG_MAJOR_OLD/bin --new-bindir /usr/lib/postgresql/$PG_MAJOR/bin --old-datadir /database/data.old --new-datadir /database/data --link
+
+    /usr/lib/postgresql/$PG_MAJOR/bin/postgres -c config_file=/postgresql/conf/postgresql.conf -c listen_addresses='' -c archive_mode=off -c fsync=off &
+
+    TRIES=30
+    while [ "$TRIES" != "0" ]
+    do
+        echo "* Trying to connect... #$TRIES"
+        psql -U postgres postgres -tAc "SELECT 1;" >/dev/null 2>/dev/null && break || sleep 5 && TRIES=`expr "$TRIES" - 1`
+    done
+
+    [ -f update_extensions.sql ] && psql --file=update_extensions.sql -U postgres postgres ||:
+    [ -f analyze_new_cluster.sh ] && sh analyze_new_cluster.sh || /usr/lib/postgresql/$PG_MAJOR/bin/vacuumdb --all --analyze-in-stages
+    [ -f delete_old_cluster.sh  ] && sh delete_old_cluster.sh
+    rm -f analyze_new_cluster.sh delete_old_cluster.sh update_extensions.sql
+
+    /usr/lib/postgresql/$PG_MAJOR/bin/pg_ctl -s stop
+
+    echo "*** Finish migration"
+    echo "*** if needed, run it: rsync --no-detach --daemon --config /postgresql/conf/rsyncd.conf"
 
   vacuum-all.sh: |
     #!/bin/sh
@@ -47,15 +117,27 @@ data:
     vacuumdb -avf
 
 {{- if or .Values.backup.enabled .Values.backup.recovery }}
+  rewind.sh: |
+    #!/bin/sh
+    set -e
+
+    pg_rewind -D {{ .Values.persistence.mountPath }}/data --source-server="host={{ include "postgresql-single.fullname" . }}-0.{{ include "postgresql-single.fullname" . }}-headless sslmode=require user={{ .Values.postgresqlUsername }} password=$POSTGRES_PASSWORD"
+
   backup.sh: |
     #!/bin/sh
     set -e
 
+    {{- if eq .Values.backup.podAffinityPreset "hard" }}
+    /usr/bin/wal-g --config /etc/walg/walg.yaml backup-push {{ .Values.persistence.mountPath }}/data
+    {{- else }}
     /usr/bin/wal-g --config /etc/walg/walg.yaml backup-push
+    {{- end }}
     /usr/bin/wal-g --config /etc/walg/walg.yaml backup-list --pretty --detail
     /usr/bin/wal-g --config /etc/walg/walg.yaml wal-show ||:
     /usr/bin/wal-g --config /etc/walg/walg.yaml wal-verify integrity ||:
+    {{- if .Values.backup.cleanPolicy }}
     /usr/bin/wal-g --config /etc/walg/walg.yaml delete {{ .Values.backup.cleanPolicy }} --confirm ||:
+    {{- end }}
 
   restore.sh: |
     #!/bin/sh
@@ -82,7 +164,7 @@ data:
     touch {{ .Values.persistence.mountPath }}/data/recovery.signal
   {{- else }}
     if [ "$HOSTNAME" != "{{ include "postgresql-single.fullname" . }}-0" ]; then
-        echo "primary_conninfo = 'host={{ include "postgresql-single.fullname" . }} user={{ .Values.postgresqlUsername  }} password=$POSTGRES_PASSWORD'" >> $PGDATA/postgresql.auto.conf
+        echo "primary_conninfo = 'host={{ include "postgresql-single.fullname" . }}-0.{{ include "postgresql-single.fullname" . }}-headless sslmode=require user={{ .Values.postgresqlUsername }} password=$POSTGRES_PASSWORD'" >> $PGDATA/postgresql.auto.conf
         touch {{ .Values.persistence.mountPath }}/data/standby.signal
         touch {{ .Values.persistence.mountPath }}/data/recovery.signal
     fi
@@ -131,7 +213,7 @@ data:
     touch {{ .Values.persistence.mountPath }}/data/recovery.signal
     chmod 0700 {{ .Values.persistence.mountPath }}/data
 
-    pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -o "-c fsync=off" -w start
+    pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -o "-c fsync=off" -o "-c log_min_duration_statement=-1" -w start
     sleep 60
 
     TRIES=30
@@ -146,10 +228,14 @@ data:
     RUNTIME=`expr $END - $START`
     echo "*** Recovery time - ${RUNTIME}s"
 
+    echo "*** Size: `du -hs {{ .Values.persistence.mountPath }}/data`"
+    psql -U postgres postgres -c "SELECT pg_database.datname,pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database ORDER BY datname;"
+
     echo "*** Start sql dump"
     START=`date +%s`
 
     pg_dumpall -U postgres >/dev/null
+
     pg_ctl -D "$PGDATA" -w stop
 
     END=`date +%s`

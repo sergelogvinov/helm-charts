@@ -81,6 +81,8 @@ spec:
                   fieldPath: metadata.name
             - name: PGUSER
               value: {{ .Values.postgresqlUsername | quote }}
+            - name: PGSSLMODE
+              value: require
             - name: PGDATA
               value: {{ .Values.persistence.mountPath }}/data
           ports:
