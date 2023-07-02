@@ -78,7 +78,7 @@ spec:
                   mountPath: {{ .Values.persistence.mountPath }}
               {{- end }}
               {{- if .Values.extraVolumeMounts }}
-                {{ toYaml .Values.extraVolumeMounts | nindent 16 }}
+                {{- toYaml .Values.extraVolumeMounts | nindent 16 }}
               {{- end }}
               resources:
                 {{- toYaml .Values.backup.resources | nindent 16 }}

@@ -101,7 +101,7 @@ data:
     done
 
     [ -f update_extensions.sql ] && psql --file=update_extensions.sql -U postgres postgres ||:
-    [ -f analyze_new_cluster.sh ] && sh analyze_new_cluster.sh || /usr/lib/postgresql/$PG_MAJOR/bin/vacuumdb --all --analyze-in-stages
+    [ -f analyze_new_cluster.sh ] && sh analyze_new_cluster.sh || /usr/lib/postgresql/$PG_MAJOR/bin/vacuumdb --all --analyze-in-stages -j 4
     [ -f delete_old_cluster.sh  ] && sh delete_old_cluster.sh
     rm -f analyze_new_cluster.sh delete_old_cluster.sh update_extensions.sql
 
@@ -114,7 +114,7 @@ data:
     #!/bin/sh
     set -e
 
-    vacuumdb -avf
+    vacuumdb -avf -P 4
 
 {{- if or .Values.backup.enabled .Values.backup.recovery }}
   rewind.sh: |
@@ -234,6 +234,9 @@ data:
     echo "*** Start sql dump"
     START=`date +%s`
 
+    {{- if semverCompare ">=14.0" (.Values.image.tag | default .Chart.AppVersion) }}
+    pg_amcheck -a --install-missing --parent-check --heapallindexed
+    {{- end }}
     pg_dumpall -U postgres >/dev/null
 
     pg_ctl -D "$PGDATA" -w stop
