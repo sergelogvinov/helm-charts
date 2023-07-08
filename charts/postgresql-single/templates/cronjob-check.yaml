@@ -43,7 +43,7 @@ spec:
           securityContext:
             {{- toYaml .Values.podSecurityContext | nindent 12 }}
           containers:
-            - name: {{ .Chart.Name }}
+            - name: {{ .Chart.Name }}-backup-check
               securityContext:
                 {{- toYaml .Values.securityContext | nindent 16 }}
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"

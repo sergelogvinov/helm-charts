@@ -188,6 +188,15 @@ data:
     runtime=$((end-start))
     echo "*** Recovery time - ${runtime}s"
 
+  postgresql-checker.conf: |
+    work_mem = {{ div (include "resource-megabytes" .Values.backupCheck.resources.requests.memory) 8 }}MB
+    maintenance_work_mem = {{ div (include "resource-megabytes" .Values.backupCheck.resources.requests.memory) 4 }}MB
+    shared_buffers = {{ div (include "resource-megabytes" .Values.backupCheck.resources.requests.memory) 8 }}MB
+    huge_pages = off
+
+    fsync = off
+    log_min_duration_statement = -1
+
   restore-checker.sh: |
     #!/bin/sh -e
     set -e
@@ -209,11 +218,11 @@ data:
     echo "archive_command = '/bin/true'"                                                   >> $PGDATA/postgresql.auto.conf
     echo "restore_command = '/usr/bin/wal-g --config /etc/walg/walg.yaml wal-fetch %f %p'" >> $PGDATA/postgresql.auto.conf
 
-    touch {{ .Values.persistence.mountPath }}/postgresql-local.conf
+    cp /postgresql/conf/postgresql-checker.conf {{ .Values.persistence.mountPath }}/postgresql-local.conf
     touch {{ .Values.persistence.mountPath }}/data/recovery.signal
     chmod 0700 {{ .Values.persistence.mountPath }}/data
 
-    pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -o "-c fsync=off" -o "-c log_min_duration_statement=-1" -w start
+    pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -w start
     sleep 60
 
     TRIES=30
@@ -231,19 +240,22 @@ data:
     echo "*** Size: `du -hs {{ .Values.persistence.mountPath }}/data`"
     psql -U postgres postgres -c "SELECT pg_database.datname,pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database ORDER BY datname;"
 
-    echo "*** Start sql dump"
+    echo "*** Start tests"
     START=`date +%s`
 
     {{- if semverCompare ">=14.0" (.Values.image.tag | default .Chart.AppVersion) }}
+    echo "*** AMCheck"
     pg_amcheck -a --install-missing --parent-check --heapallindexed
     {{- end }}
+    echo "*** PGDump"
     pg_dumpall -U postgres >/dev/null
+    echo "*** Passed"
 
     pg_ctl -D "$PGDATA" -w stop
 
     END=`date +%s`
     RUNTIME=`expr $END - $START`
-    echo "*** DumpAll time - ${RUNTIME}s"
+    echo "*** Tests time - ${RUNTIME}s"
 
     rm -rf {{ .Values.persistence.mountPath }}/data
 {{- end }}

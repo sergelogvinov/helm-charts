@@ -76,6 +76,19 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
+Convert a memory resource like "500Mi" to the number 500
+*/}}
+{{- define "resource-megabytes" -}}
+{{- if . | hasSuffix "Mi" -}}
+{{- . | trimSuffix "Mi" | int64 -}}
+{{- else if . | hasSuffix "Gi" -}}
+{{- mulf (. | trimSuffix "Gi" | int64) 1024 -}}
+{{- else -}}
+1024
+{{- end }}
+{{- end }}
+
+{{/*
 Create the postgresqlPassword
 */}}
 {{- define "postgresql-single.postgresqlPassword" -}}
