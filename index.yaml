@@ -294,6 +294,28 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/fluentd-0.0.1/fluentd-0.0.1.tgz
     version: 0.0.1
+  github-actions-runner:
+  - apiVersion: v2
+    appVersion: 2.305.0
+    created: "2023-07-09T07:52:06.794585563Z"
+    description: Github Actions with container registry and mirrors
+    digest: 0c7ee716c397683b7373860acb9a0b993f0c55068237d8948eab87415888e232
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - github-actions
+    - conteiner
+    - docker-registry
+    - docker-mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: github-actions-runner
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/github-actions-runner
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/github-actions-runner-1.0.0/github-actions-runner-1.0.0.tgz
+    version: 1.0.0
   ipsec:
   - apiVersion: v2
     appVersion: "4.11"
@@ -1698,4 +1720,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-07-08T07:01:22.273576278Z"
+generated: "2023-07-09T07:52:06.794994074Z"
