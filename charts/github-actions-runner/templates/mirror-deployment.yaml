@@ -1,0 +1,173 @@
+{{- if .Values.mirrors }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "github-actions-runner.fullname" . }}-mirrors
+  labels:
+    {{- include "github-actions-runner.labels" . | nindent 4 }}
+    app.kubernetes.io/component: mirrors
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "github-actions-runner.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: mirrors
+  template:
+    metadata:
+      labels:
+        {{- include "github-actions-runner.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: mirrors
+    spec:
+      enableServiceLinks: false
+      automountServiceAccountToken: false
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: "OnRootMismatch"
+      containers:
+        - name: {{ include "github-actions-runner.fullname" . }}-mirrors
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
+          image: registry.opensource.zalan.do/teapot/skipper:v0.16.1
+          command: ['skipper']
+          args:
+            - -address=:9080
+            - -routes-file=/etc/skipper/mirrors.eskip
+            - -access-log-json-enabled
+            - -application-log-level=WARN
+            - -timeout-backend=5s
+            - -read-timeout-server=30s
+            - -write-timeout-server=30s
+          ports:
+            - name: http
+              containerPort: 9080
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+              scheme: HTTP
+              httpHeaders:
+                - name: Host
+                  value: 127.0.0.1
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 30
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/skipper
+        - name: {{ include "github-actions-runner.fullname" . }}-mirrors-tls
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
+          image: registry.opensource.zalan.do/teapot/skipper:v0.16.1
+          command: ['skipper']
+          args:
+            - -address=:9443
+            - -tls-cert=/etc/skipper/tls.crt
+            - -tls-key=/etc/skipper/tls.key
+            - -routes-file=/etc/skipper/mirrors.eskip
+            - -access-log-json-enabled
+            - -application-log-level=WARN
+            - -timeout-backend=5s
+            - -read-timeout-server=30s
+            - -write-timeout-server=30s
+          ports:
+            - name: https
+              containerPort: 9443
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: https
+              scheme: HTTPS
+              httpHeaders:
+                - name: Host
+                  value: 127.0.0.1
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 30
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/skipper
+        {{- range $inx, $val := .Values.mirrors.registry }}
+        - name: {{ $.Chart.Name }}-{{ $val.host | replace "." "-" }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
+            runAsUser: 65534
+            runAsGroup: 65534
+          image: "{{ $.Values.mirrors.image.repository }}:{{ $.Values.mirrors.image.tag }}"
+          imagePullPolicy: {{ $.Values.mirrors.image.pullPolicy }}
+          env:
+            - name: REGISTRY_HTTP_ADDR
+              value: 127.0.0.1:{{ add 5000 $inx }}
+            - name: REGISTRY_PROXY_REMOTEURL
+              value: {{ $val.source }}
+            - name: REGISTRY_STORAGE_DELETE_ENABLED
+              value: "true"
+          resources:
+            {{- toYaml $.Values.mirrors.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/registry
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: data
+      {{- if not .Values.mirrors.persistence.enabled }}
+          emptyDir: {}
+      {{- else }}
+          ephemeral:
+            volumeClaimTemplate:
+              metadata:
+                labels:
+                  {{- include "github-actions-runner.selectorLabels" . | nindent 18 }}
+                  app.kubernetes.io/component: mirrors
+              {{- with .Values.mirrors.persistence.annotations }}
+                annotations:
+                {{- range $key, $value := . }}
+                  {{ $key }}: {{ $value }}
+                {{- end }}
+              {{- end }}
+              {{- include "volumeClaimTemplate.spec.render" .Values.mirrors.persistence | nindent 14 }}
+      {{- end }}
+        - name: config
+          configMap:
+            name: {{ include "github-actions-runner.fullname" . }}
+            items:
+              - key: mirrors.eskip
+                path: mirrors.eskip
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key
+{{- end }}

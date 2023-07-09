@@ -1,0 +1,225 @@
+# Default values for github-actions-runner.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: ghcr.io/sergelogvinov/github-actions-runner
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+maxRunners: 8
+minRunners: 1
+runnerGroup: "default"
+runnerScaleSetName: ""
+
+githubConfigUrl: "https://github.com/..."
+githubConfigSecret:
+  github_token: "ghp_123"
+  # github_app_id: ""
+  # github_app_installation_id: ""
+  # github_app_private_key: |
+
+controllerServiceAccount:
+  name: arc
+
+dind:
+  enabled: true
+
+  image:
+    repository: docker
+    pullPolicy: IfNotPresent
+    tag: 23.0-dind
+
+  # -- Resource requests and limits.
+  # ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  resources:
+    limits:
+      cpu: 1
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+
+  # -- Persistence parameters for source code
+  # ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  persistence:
+    enabled: false
+    ## A manually managed Persistent Volume and Claim
+    ## If defined, PVC must be created manually before volume will be bound
+    # existingClaim:
+    # storageClass: "-"
+    accessModes:
+      - ReadWriteOnce
+    size: 100Gi
+    annotations: {}
+
+mirrors:
+  enabled: true
+
+  image:
+    repository: registry
+    pullPolicy: IfNotPresent
+    tag: 2.8
+
+  # -- Container registry list.
+  # ref: https://docs.docker.com/registry/recipes/mirror/
+  registry:
+    - host: docker.io
+      source: https://registry-1.docker.io
+    - host: gcr.io
+      source: https://gcr.io
+    - host: ghcr.io
+      source: https://ghcr.io
+
+  # -- Resource requests and limits.
+  # ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  resources:
+    limits:
+      cpu: 200m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+
+  # -- Persistence parameters for source code
+  # ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  persistence:
+    enabled: false
+    ## A manually managed Persistent Volume and Claim
+    ## If defined, PVC must be created manually before volume will be bound
+    # existingClaim:
+    # storageClass: "-"
+    accessModes:
+      - ReadWriteOnce
+    size: 100Gi
+    annotations: {}
+
+  # -- Node labels for mirrors deploy assignment.
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+
+  # -- Tolerations for mirrors deploy assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+
+  # -- Affinity for mirrors deploy assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+
+registry:
+  enabled: true
+
+  image:
+    repository: registry
+    pullPolicy: IfNotPresent
+    tag: 2.8
+
+  # -- Resource requests and limits.
+  # ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  resources:
+    limits:
+      cpu: 1
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  extraVolumeMounts: []
+  extraVolumes: []
+
+  # -- Persistence parameters for source code
+  # ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  persistence:
+    enabled: false
+    ## A manually managed Persistent Volume and Claim
+    ## If defined, PVC must be created manually before volume will be bound
+    # existingClaim:
+    # storageClass: "-"
+    accessModes:
+      - ReadWriteOnce
+    size: 100Gi
+    annotations: {}
+
+  # -- Node labels for local registry deploy assignment.
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+
+  # -- Tolerations for local registry deploy assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+
+  # -- Affinity for local registry deploy assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+
+# -- Pods Service Account.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Annotations for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+podAnnotations: {}
+
+# -- Pod Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+podSecurityContext: {}
+  # fsGroup: 0
+  # fsGroupChangePolicy: "OnRootMismatch"
+
+# -- Container Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+securityContext:
+  allowPrivilegeEscalation: false
+  seccompProfile:
+    type: RuntimeDefault
+  capabilities:
+    drop: ["ALL"]
+  runAsUser: 1001
+  runAsGroup: 0
+
+# -- Resource requests and limits.
+# ref: https://kubernetes.io/docs/user-guide/compute-resources/
+resources:
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+
+# -- Persistence parameters for source code
+# ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+persistence:
+  enabled: false
+  ## A manually managed Persistent Volume and Claim
+  ## If defined, PVC must be created manually before volume will be bound
+  # existingClaim:
+  # storageClass: "-"
+  accessModes:
+    - ReadWriteOnce
+  size: 8Gi
+  annotations: {}
+
+# -- Node labels for pod assignment.
+# ref: https://kubernetes.io/docs/user-guide/node-selection/
+nodeSelector: {}
+
+# -- Tolerations for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+tolerations: []
+
+# -- Affinity for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}

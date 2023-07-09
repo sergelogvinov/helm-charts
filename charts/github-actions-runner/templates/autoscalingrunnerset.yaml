@@ -1,0 +1,169 @@
+apiVersion: actions.github.com/v1alpha1
+kind: AutoscalingRunnerSet
+metadata:
+  name: {{ include "github-actions-runner.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "github-actions-runner.labels" . | nindent 4 }}
+    app.kubernetes.io/component: autoscaling-runner-set
+  annotations:
+    actions.github.com/cleanup-github-secret-name: {{ include "github-actions-runner.fullname" . }}-github
+    actions.github.com/cleanup-manager-role-binding: {{ include "github-actions-runner.managerRoleName" . }}
+    actions.github.com/cleanup-manager-role-name: {{ include "github-actions-runner.managerRoleName" . }}
+spec:
+  githubConfigUrl: {{ required ".Values.githubConfigUrl is required" (trimSuffix "/" .Values.githubConfigUrl) }}
+  githubConfigSecret: {{ include "github-actions-runner.fullname" . }}-github
+
+  {{- with .Values.runnerGroup }}
+  runnerGroup: {{ . }}
+  {{- end }}
+  {{- with .Values.runnerScaleSetName }}
+  runnerScaleSetName: {{ . }}
+  {{- end }}
+  maxRunners: {{ default 2 .Values.maxRunners | int }}
+  minRunners: {{ default 0 .Values.minRunners | int }}
+
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "github-actions-runner.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: autoscaling-runner-set
+    spec:
+      enableServiceLinks: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "github-actions-runner.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: 5
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "3"
+      containers:
+        {{- if .Values.dind.enabled }}
+        - name: {{ .Chart.Name }}-dind
+          securityContext:
+            privileged: true
+            seccompProfile:
+              type: Unconfined
+          image: "{{ .Values.dind.image.repository }}:{{ .Values.dind.image.tag }}"
+          imagePullPolicy: {{ .Values.dind.image.pullPolicy }}
+          command: ["dockerd"]
+          args:
+            - --config-file=/etc/docker-config/daemon.json
+          volumeMounts:
+            - name: config
+              mountPath: /etc/docker-config
+            - name: docker
+              mountPath: /var/lib/docker
+            - name: run
+              mountPath: /run
+            - name: modules
+              mountPath: /lib/modules
+              readOnly: true
+          resources:
+            {{- toYaml .Values.dind.resources | nindent 12 }}
+        {{- end }}
+        - name: runner
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/home/runner/run.sh"]
+          env:
+            - name: ACTIONS_RUNNER_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+              value: "false"
+            - name: RUNNER_WORK_FOLDER
+              value: /builds
+          envFrom:
+            - secretRef:
+                name: "{{ include "github-actions-runner.fullname" . }}"
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "/etc/docker-config/mirrors.sh"]
+          volumeMounts:
+            - name: config
+              mountPath: /etc/docker-config
+          {{- if .Values.extraVolumeMounts }}
+            {{ toYaml .Values.extraVolumeMounts | nindent 12 }}
+          {{- end }}
+            - name: builds
+              mountPath: /builds
+            - name: run
+              mountPath: /run
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+        podAntiAffinity: {{- include "affinities.pods" . | nindent 10 }}
+      {{- with .Values.affinity }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: run
+          emptyDir:
+            medium: Memory
+        - name: config
+          configMap:
+            name: {{ include "github-actions-runner.fullname" . }}
+      {{- if .Values.dind.enabled }}
+        - name: modules
+          hostPath:
+            path: /lib/modules
+        - name: docker
+        {{- if .Values.dind.persistence.storageClass }}
+          ephemeral:
+            volumeClaimTemplate:
+              metadata:
+                labels:
+                  {{- include "github-actions-runner.labels" . | nindent 22 }}
+              {{- with .Values.dind.persistence.annotations }}
+                annotations:
+                {{- range $key, $value := . }}
+                  {{ $key }}: {{ $value }}
+                {{- end }}
+              {{- end }}
+              {{- include "volumeClaimTemplate.spec.render" .Values.dind.persistence | nindent 14 }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
+      {{- end }}
+        - name: builds
+        {{- if .Values.persistence.storageClass }}
+          ephemeral:
+            volumeClaimTemplate:
+              metadata:
+                labels:
+                  {{- include "github-actions-runner.labels" . | nindent 22 }}
+              {{- with .Values.persistence.annotations }}
+                annotations:
+                {{- range $key, $value := . }}
+                  {{ $key }}: {{ $value }}
+                {{- end }}
+              {{- end }}
+              {{- include "volumeClaimTemplate.spec.render" .Values.persistence | nindent 14 }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
+      {{- if .Values.extraVolumes }}
+        {{ toYaml .Values.extraVolumes | nindent 8 }}
+      {{- end }}

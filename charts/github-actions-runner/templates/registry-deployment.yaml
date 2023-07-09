@@ -1,0 +1,108 @@
+{{- if .Values.registry.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "github-actions-runner.fullname" . }}-registry
+  labels:
+    {{- include "github-actions-runner.labels" . | nindent 4 }}
+    app.kubernetes.io/component: registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "github-actions-runner.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: registry
+  template:
+    metadata:
+      labels:
+        {{- include "github-actions-runner.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: registry
+    spec:
+      enableServiceLinks: false
+      automountServiceAccountToken: false
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: "OnRootMismatch"
+      containers:
+        - name: {{ include "github-actions-runner.fullname" . }}-registry
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
+            runAsUser: 65534
+            runAsGroup: 65534
+          image: "{{ .Values.registry.image.repository }}:{{ .Values.registry.image.tag }}"
+          imagePullPolicy: {{ .Values.registry.image.pullPolicy }}
+          command:
+            - /bin/registry
+            - serve
+            - /etc/registry/config.yaml
+          ports:
+            - name: http
+              containerPort: 8443
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 30
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.registry.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/registry
+            - name: config
+              mountPath: /etc/registry
+          {{- if .Values.registry.extraVolumeMounts }}
+            {{ toYaml .Values.registry.extraVolumeMounts | nindent 12 }}
+          {{- end }}
+      {{- with .Values.registry.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.registry.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.registry.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "github-actions-runner.fullname" . }}
+            items:
+              - key: registry.yaml
+                path: config.yaml
+              - key: registry.crt
+                path: registry.crt
+              - key: registry.key
+                path: registry.key
+        - name: data
+      {{- if not .Values.registry.persistence.enabled }}
+          emptyDir: {}
+      {{- else }}
+          ephemeral:
+            volumeClaimTemplate:
+              metadata:
+                labels:
+                  {{- include "github-actions-runner.selectorLabels" . | nindent 18 }}
+                  app.kubernetes.io/component: registry
+              {{- with .Values.registry.persistence.annotations }}
+                annotations:
+                {{- range $key, $value := . }}
+                  {{ $key }}: {{ $value }}
+                {{- end }}
+              {{- end }}
+              {{- include "volumeClaimTemplate.spec.render" .Values.registry.persistence | nindent 14 }}
+      {{- end }}
+      {{- if .Values.registry.extraVolumes }}
+        {{ toYaml .Values.registry.extraVolumes | nindent 8 }}
+      {{- end }}
+{{- end }}

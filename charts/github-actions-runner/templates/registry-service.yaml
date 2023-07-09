@@ -1,0 +1,25 @@
+{{- if .Values.registry.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "github-actions-runner.fullname" . }}-registry
+  labels:
+    {{- include "github-actions-runner.labels" . | nindent 4 }}
+    app.kubernetes.io/component: registry
+  annotations:
+    service.kubernetes.io/topology-mode: Auto
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+    - name: https
+      port: 443
+      targetPort: 8443
+      protocol: TCP
+  selector:
+    {{- include "github-actions-runner.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: registry
+{{- end }}

@@ -1,0 +1,132 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "github-actions-runner.fullname" . }}
+  labels:
+    {{- include "github-actions-runner.labels" . | nindent 4 }}
+data:
+  {{- $ca := genCA (include "github-actions-runner.fullname" .) 3650 }}
+  {{- $host := printf "%s-mirrors" (include "github-actions-runner.fullname" .) }}
+  {{- $domain := printf "%s-mirrors.%s.svc" (include "github-actions-runner.fullname" .) .Release.Namespace }}
+  {{- $server := genSignedCert $host nil (list $host $domain) 3650 $ca }}
+  {{- $domainReg := printf "%s-registry.%s.svc" (include "github-actions-runner.fullname" .) .Release.Namespace }}
+  {{- $registry := genSignedCert $host nil (list $domainReg) 3650 $ca }}
+  ca.crt: |
+    {{- $ca.Cert | nindent 4 }}
+  tls.crt: |
+    {{- $server.Cert | nindent 4 }}
+  tls.key: |
+    {{- $server.Key | nindent 4 }}
+  registry.crt: |
+    {{- $registry.Cert | nindent 4 }}
+  registry.key: |
+    {{- $registry.Key | nindent 4 }}
+
+  mirrors.eskip: |-
+    healthz: Path("/healthz") -> inlineContent("ok")
+        -> disableAccessLog() -> <shunt>;
+
+    {{- range $inx, $val := .Values.mirrors.registry }}
+    {{ $val.host | replace "." "" }}: PathSubtree("/{{ $val.host | replace "." "-" }}/v2/") -> modPath("/{{ $val.host | replace "." "-" }}/", "/")
+        -> enableAccessLog() -> "http://127.0.0.1:{{ add 5000 $inx }}";
+    {{- end }}
+
+    docker: PathSubtree("/v2/")
+        -> enableAccessLog() -> "http://127.0.0.1:5000";
+
+    default: * -> status(404) -> <shunt>;
+
+  registry.yaml: |-
+    version: 0.1
+    log:
+      accesslog:
+        disabled: true
+      level: warn
+      formatter: json
+    storage:
+      maintenance:
+        uploadpurging:
+          enabled: true
+          age: 168h
+          interval: 24h
+          dryrun: false
+      filesystem:
+        rootdirectory: /var/lib/registry
+        maxthreads: 100
+    http:
+      addr: :8443
+      host: https://{{ include "github-actions-runner.fullname" . }}-registry.{{ .Release.Namespace }}.svc
+      tls:
+        certificate: /etc/registry/registry.crt
+        key: /etc/registry/registry.key
+
+  buildkitd.toml: |-
+    root = "/var/lib/buildkit"
+    debug = false
+
+    [grpc]
+    address = [ "unix:///run/buildkit/buildkitd.sock", "tcp://0.0.0.0:1234" ]
+    uid = 0
+    gid = 0
+
+    [worker.containerd]
+      enabled = false
+
+    [worker.oci]
+      enabled = true
+      gc = true
+      gckeepstorage = 10000
+    [[worker.oci.gcpolicy]]
+        keepBytes = 512000000
+        keepDuration = 172800
+        filters = [ "type==source.local", "type==exec.cachemount", "type==source.git.checkout"]
+    [[worker.oci.gcpolicy]]
+      all = true
+      keepBytes = 1024000000
+
+    {{ range $inx, $val := .Values.mirrors.registry }}
+    [registry."{{ $val.host }}"]
+      capabilities = ["pull", "resolve"]
+      mirrors = ["{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc/{{ $val.host | replace "." "-" }}"]
+      http = true
+      insecure = true
+    {{- end }}
+    {{- range $inx, $val := .Values.mirrors.registry }}
+    [registry."{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc/{{ $val.host | replace "." "-" }}"]
+      http = true
+      insecure = true
+    {{- end }}
+
+    {{- if .Values.registry.enabled }}
+    [registry."{{ include "github-actions-runner.fullname" . }}-registry.{{ $.Release.Namespace }}.svc"]
+      insecure = true
+    {{- end }}
+
+  daemon.json: |-
+    {
+      "features": {
+        "buildkit" : true
+      },
+      "builder": {
+        "gc": {
+          "defaultKeepStorage": "32GB",
+          "enabled": true
+        }
+      },
+      "hosts": ["unix:///var/run/docker.sock","tcp://127.0.0.1:2376"],
+      "mtu": 1300,
+      {{- if .Values.mirrors.enabled }}
+      "registry-mirrors": ["http://{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc"],
+      {{- end }}
+      "insecure-registries": [
+        "{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc",
+        "{{ include "github-actions-runner.fullname" . }}-registry.{{ .Release.Namespace }}.svc"
+      ],
+      "log-level": "warn"
+    }
+
+  mirrors.sh: |
+    #!/bin/sh
+    until docker ps; do sleep 1; done
+    docker buildx create --name multiarch --driver docker-container --config /etc/docker-config/buildkitd.toml --use
+    docker buildx inspect --bootstrap multiarch
