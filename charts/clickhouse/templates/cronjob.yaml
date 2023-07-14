@@ -7,17 +7,18 @@ apiVersion: batch/v1beta1
 {{- end }}
 kind: CronJob
 metadata:
-  name: {{ include "clickhouse.fullname" $ }}-{{ $val.name }}
+  name: {{ include "clickhouse.fullname" $ }}-{{ $key }}
   labels:
     {{- with $.Values.podlabels }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
     {{- include "clickhouse.crontab.labels" $ | nindent 4 }}
-    app.kubernetes.io/component: {{ $val.name }}
+    app.kubernetes.io/component: {{ $key }}
 spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 1
-  schedule: "{{ $val.schedule }}"
+  suspend: {{ eq .Values.schedule "" }}
+  schedule: "{{ default "15 12 * * *" $val.schedule | quote }}"
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
@@ -25,13 +26,13 @@ spec:
       backoffLimit: 0
       template:
         metadata:
-          name: {{ include "clickhouse.fullname" $ }}-{{ $val.name }}
+          name: {{ include "clickhouse.fullname" $ }}-{{ $key }}
           labels:
             {{- with $.Values.podlabels }}
             {{ toYaml . | nindent 12 }}
             {{- end }}
             {{- include "clickhouse.crontab.selectorLabels" $ | nindent 12 }}
-            app.kubernetes.io/component: {{ $val.name }}
+            app.kubernetes.io/component: {{ $key }}
         spec:
           restartPolicy: Never
           enableServiceLinks: false
@@ -42,7 +43,7 @@ spec:
           securityContext:
             {{- toYaml $.Values.podSecurityContext | nindent 12 }}
           containers:
-            - name: {{ include "clickhouse.fullname" $ }}-{{ $val.name }}
+            - name: {{ include "clickhouse.fullname" $ }}-{{ $key }}
               securityContext:
                 {{- toYaml $.Values.securityContext | nindent 16 }}
               image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
@@ -54,7 +55,7 @@ spec:
               envFrom:
                 {{- if ne (len $val.envs) 0 }}
                 - secretRef:
-                    name: {{ include "clickhouse.fullname" $ }}-{{ $val.name }}-envs
+                    name: {{ include "clickhouse.fullname" $ }}-{{ $key }}-envs
                 {{- end }}
               volumeMounts:
                   - name: command
@@ -78,7 +79,7 @@ spec:
               configMap:
                 name: {{ include "clickhouse.fullname" $ }}
                 items:
-                  - key: command-{{ $val.name }}
+                  - key: command-{{ $key }}
                     path: command.sh
                 defaultMode: 360
 {{- end }}

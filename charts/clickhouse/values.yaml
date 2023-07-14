@@ -65,6 +65,7 @@ ingress:
   enabled: false
   className: ""
   annotations: {}
+    # nginx.ingress.kubernetes.io/rewrite-target: "/$1"
   hosts:
     - host: chart-example.local
       paths: ['/clickhouse']
@@ -113,8 +114,8 @@ affinity: {}
 metrics:
   enabled: false
 
-cronjobs: []
-  # - name: backup
+cronjobs: {}
+  # backup:
   #   schedule: "0 0 * * *"
   #   command: |
   #     #!/bin/sh
@@ -160,6 +161,10 @@ storage: {}
   #     prefer_not_to_merge: true
 
 clickhouse:
+  # -- Clickhouse SQL-driven Access Control
+  # refs: https://clickhouse.com/docs/en/operations/access-rights
+  accessManagement: false
+
   users:
     # -- Clickhouse read write user
     - name: logger

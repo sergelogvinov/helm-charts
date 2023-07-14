@@ -33,6 +33,21 @@ data:
             </default>
         </quotas>
         <users replace="replace">
+        {{- if .Values.clickhouse.accessManagement }}
+            <default>
+                <password></password>
+                <profile>default</profile>
+                <quota>default</quota>
+                <networks>
+                    <ip>::1</ip>
+                    <ip>127.0.0.1</ip>
+                </networks>
+                <access_management>1</access_management>
+                <named_collection_control>1</named_collection_control>
+                <show_named_collections>1</show_named_collections>
+                <show_named_collections_secrets>1</show_named_collections_secrets>
+            </default>
+        {{- end }}
         {{- range .Values.clickhouse.users }}
             <{{ .name }}>
                 {{- if .password_plain }}
@@ -181,15 +196,17 @@ data:
 
   backups.xml: |-
     <clickhouse>
+        {{- if ne (len .Values.storage.disks) 0 }}
         <backups>
             {{- range $key, $val := .Values.storage.disks }}{{ if $val.backup }}
             <allowed_disk>{{ $key }}</allowed_disk>
             {{- end }}{{- end }}
             <allowed_path>/backups/</allowed_path>
         </backups>
+        {{- end }}
     </clickhouse>
 
 {{ range $key, $val := .Values.cronjobs }}
-  command-{{ $val.name }}: |-
+  command-{{ $key }}: |-
     {{- $val.command | nindent 4 }}
 {{- end }}

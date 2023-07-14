@@ -54,6 +54,8 @@ securityContext:
 # ref: https://kubernetes.io/docs/user-guide/services/
 service:
   type: ClusterIP
+  annotations: {}
+  # service.kubernetes.io/topology-mode: Auto
   ports:
     - name: "fluentd"
       protocol: TCP

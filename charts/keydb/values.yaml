@@ -181,6 +181,8 @@ startupProbe:
 # ref: https://kubernetes.io/docs/user-guide/services/
 service:
   type: ClusterIP
+  annotations: {}
+  # service.kubernetes.io/topology-mode: Auto
 
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/
@@ -231,6 +233,7 @@ tolerations: []
 # -- Pod Anti Affinity
 # soft/hard
 podAntiAffinityPreset: soft
+podAntiAffinityPresetKey: kubernetes.io/hostname
 
 # -- Affinity for pod assignment.
 # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity

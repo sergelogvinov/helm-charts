@@ -4,6 +4,10 @@ metadata:
   name: {{ include "keydb.fullname" . }}
   labels:
     {{- include "keydb.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 8 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -49,6 +53,10 @@ metadata:
   name: {{ include "keydb.fullname" . }}-loadbalancer
   labels:
     {{- include "keydb.loadbalancer.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 8 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:

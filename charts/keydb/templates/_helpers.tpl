@@ -289,7 +289,7 @@ preferredDuringSchedulingIgnoredDuringExecution:
         matchLabels: {{- (include "keydb.selectorLabels" .) | nindent 10 }}
       namespaces:
         - {{ .Release.Namespace | quote }}
-      topologyKey: kubernetes.io/hostname
+      topologyKey: {{ .Values.podAntiAffinityPresetKey }}
     weight: 1
 {{- end -}}
 
@@ -303,7 +303,7 @@ requiredDuringSchedulingIgnoredDuringExecution:
       matchLabels: {{- (include "keydb.selectorLabels" .) | nindent 8 }}
     namespaces:
       - {{ .Release.Namespace | quote }}
-    topologyKey: kubernetes.io/hostname
+    topologyKey: {{ .Values.podAntiAffinityPresetKey }}
 {{- end -}}
 
 

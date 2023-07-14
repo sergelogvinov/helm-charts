@@ -121,8 +121,8 @@ max_connections = 100
 superuser_reserved_connections = 3
 
 ssl = on
-ssl_ciphers = 'HIGH:MEDIUM:+3DES:!aNULL'
-ssl_prefer_server_ciphers = True
+ssl_ciphers = 'EECDH+AESGCM:EDH+AESGCM'
+ssl_prefer_server_ciphers = on
 ssl_ecdh_curve = 'prime256v1'
 {{- if or .Values.tlsCerts.create }}
 ssl_cert_file = '/etc/ssl/tlscerts/tls.crt'
@@ -132,7 +132,7 @@ ssl_crl_file = ''
 {{- else }}
 ssl_cert_file = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
 ssl_key_file = '/etc/ssl/private/ssl-cert-snakeoil.key'
-ssl_ca_file = ''
+ssl_ca_file = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
 ssl_crl_file = ''
 {{- end }}
 

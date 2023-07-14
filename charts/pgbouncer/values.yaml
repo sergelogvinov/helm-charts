@@ -75,8 +75,10 @@ securityContext:
 service:
   type: ClusterIP
   port: 5432
-  # clusterIP: 10.10.10.10
   # nodePort: 5432
+
+  annotations: {}
+  # service.kubernetes.io/topology-mode: Auto
 
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/

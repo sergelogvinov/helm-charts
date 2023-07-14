@@ -83,6 +83,17 @@ spec:
               value: {{ .Values.postgresqlUsername | quote }}
             - name: PGSSLMODE
               value: require
+            {{- if or .Values.tlsCerts.create }}
+            - name: PGSSLROOTCERT
+              value: /etc/ssl/tlscerts/ca.crt
+            - name: PGSSLCERT
+              value: /etc/ssl/tlscerts/tls.crt
+            - name: PGSSLKEY
+              value: /etc/ssl/tlscerts/tls.key
+            {{- else }}
+            - name: PGSSLROOTCERT
+              value: /etc/ssl/certs/ssl-cert-snakeoil.pem
+            {{- end }}
             - name: PGDATA
               value: {{ .Values.persistence.mountPath }}/data
           ports:
