@@ -66,8 +66,7 @@
     labels:
       severity: critical
     annotations:
-      description: Redis connections {{ $labels.kubernetes_namespace }}/{{ $labels.app_kubernetes_io_instance
-        }} limit reached
+      description: Redis connections {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} limit reached
       summary: Redis LoadBalancer limit
 
   - alert: RedisLoadBalancer

@@ -1,5 +1,14 @@
 - name: prometheus-static.rules
   rules:
+  - alert: TargetDown
+    annotations:
+      description: '{{ printf "%.4g" $value }}% of the {{ $labels.job }}/{{ $labels.app_kubernetes_io_name }} targets in {{ $labels.kubernetes_namespace }} namespace are down.'
+      summary: One or more targets are unreachable.
+    expr: 100 * (count(up == 0) BY (cluster, job, kubernetes_namespace, app_kubernetes_io_name) / count(up) BY (cluster, job, kubernetes_namespace, app_kubernetes_io_name)) > 10
+    for: 10m
+    labels:
+      severity: warning
+
   - alert: PrometheusTSDBWALCorruptions
     expr: prometheus_tsdb_wal_corruptions_total > 0
     for: 4h

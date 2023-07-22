@@ -94,5 +94,6 @@ defaultRules:
   disabled:
     Watchdog: true
     InfoInhibitor: true
+    TargetDown: true
     # KubeAPIDown: true
     # NodeRAIDDegraded: true

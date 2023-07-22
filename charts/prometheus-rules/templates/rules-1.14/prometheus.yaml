@@ -22,6 +22,17 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
       labels:
         severity: critical
 {{- end }}
+{{- if not (.Values.defaultRules.disabled.PrometheusSDRefreshFailure | default false) }}
+    - alert: PrometheusSDRefreshFailure
+      annotations:
+        description: Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} has failed to refresh SD with mechanism {{`{{`}}$labels.mechanism{{`}}`}}.
+        runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus/prometheussdrefreshfailure
+        summary: Failed Prometheus SD refresh.
+      expr: increase(prometheus_sd_refresh_failures_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[10m]) > 0
+      for: 20m
+      labels:
+        severity: warning
+{{- end }}
 {{- if not (.Values.defaultRules.disabled.PrometheusNotificationQueueRunningFull | default false) }}
     - alert: PrometheusNotificationQueueRunningFull
       annotations:
