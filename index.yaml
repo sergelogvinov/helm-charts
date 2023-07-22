@@ -1358,6 +1358,24 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2023-07-22T15:07:02.87092995Z"
+    description: Static prometheus rules
+    digest: 8d934f98c4ea33ca9cb07d5cd34f2728938f6f13e3a942af782f72e96808ef87
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - prometheus
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: prometheus-rules
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.20/prometheus-rules-0.1.20.tgz
+    version: 0.1.20
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2023-06-13T09:40:24.599581617Z"
     description: Static prometheus rules
     digest: e2150ff9a710c2e80d1f2e37bdaea4edb161a8b98329739421feabb701597df7
@@ -1843,4 +1861,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-07-14T16:58:06.928775633Z"
+generated: "2023-07-22T15:07:02.871371047Z"
