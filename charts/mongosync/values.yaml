@@ -1,0 +1,107 @@
+# Default values for mongosync.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/sergelogvinov/mongosync
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+hostAliases: []
+  # - ip: 172.20.2.15
+  #   hostnames:
+  #     - mongo-0.mongo-headless
+  #     - mongo-1.mongo-headless
+  #     - mongo-arbiter-0.mongo-arbiter-headless
+
+config:
+  # uri: https://www.mongodb.com/docs/upcoming/reference/connection-string/
+  #
+  # mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]
+  # mongodb+srv://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]
+  cluster0: "mongodb://192.0.2.10:27017/admin"
+  cluster1: "mongodb://192.0.2.20:27017/admin"
+  verbosity: "WARN"
+  disableTelemetry: true
+
+filters: []
+  # - database: databaseOne
+  #   collections:
+  #     - collectionOne
+  #     - collectionTwo
+  # - database: databaseTwo
+
+# -- Mongosqld arguments
+# example: `- --verbosity=DEBUG`
+args: []
+  # - --verbosity=DEBUG
+
+# -- Pods Service Account.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Annotations for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+podAnnotations: {}
+
+# -- Pod Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 34
+  runAsGroup: 34
+  fsGroup: 34
+  fsGroupChangePolicy: "OnRootMismatch"
+
+# -- Container Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  seccompProfile:
+    type: RuntimeDefault
+  readOnlyRootFilesystem: true
+
+# -- Service parameters
+# ref: https://kubernetes.io/docs/user-guide/services/
+service:
+  type: ClusterIP
+  port: 27182
+
+# -- Resource requests and limits.
+# ref: https://kubernetes.io/docs/user-guide/compute-resources/
+resources:
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# -- Node labels for pod assignment.
+# ref: https://kubernetes.io/docs/user-guide/node-selection/
+nodeSelector: {}
+
+# -- Tolerations for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+tolerations: []
+
+# -- Affinity for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}
