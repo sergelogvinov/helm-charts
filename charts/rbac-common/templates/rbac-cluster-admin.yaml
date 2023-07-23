@@ -31,6 +31,13 @@ rules:
   - clusterroles
   verbs:
   - list
+- apiGroups:
+  - scheduling.k8s.io
+  resources:
+  - priorityclasses
+  verbs:
+  - get
+  - list
 {{- end }}
 - apiGroups:
   - rbac.authorization.k8s.io
@@ -249,11 +256,22 @@ rules:
 - apiGroups:
   - networking.k8s.io
   resources:
-  - ingresses
   - ingresses/status
   - networkpolicies
   verbs:
   - get
   - list
   - watch
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - delete
+  - patch
+  - update
 {{- end }}

@@ -21,3 +21,12 @@
       description: '{{ $labels.job }}: {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} instance
         will exhaust in file/socket descriptors within the next hour'
       summary: file descriptors soon exhausted
+
+  - alert: NodeMemoryHighUtilization
+    annotations:
+      description: Memory is filling up at {{ $labels.kubernetes_node_name }}, has been above 95% for the last 1 minutes, is currently at {{ $value | humanizePercentage }}
+      summary: Host is running out of memory.
+    expr: 100 - (node_memory_MemAvailable_bytes{job="prometheus-node-exporter"} / node_memory_MemTotal_bytes{job="prometheus-node-exporter"} * 100) > 95
+    for: 1m
+    labels:
+      severity: critical
