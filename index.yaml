@@ -1358,6 +1358,24 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2023-07-23T16:50:08.412229903Z"
+    description: Static prometheus rules
+    digest: d3d690a2aee257850758c7f59673ac1bca4a1abb53b67bb1de4bae2d68961f25
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - prometheus
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: prometheus-rules
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.21/prometheus-rules-0.1.21.tgz
+    version: 0.1.21
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2023-07-22T15:07:02.87092995Z"
     description: Static prometheus rules
     digest: 8d934f98c4ea33ca9cb07d5cd34f2728938f6f13e3a942af782f72e96808ef87
@@ -1561,6 +1579,24 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.0/prometheus-rules-0.1.0.tgz
     version: 0.1.0
   rbac-common:
+  - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2023-07-23T16:50:08.551227518Z"
+    description: Kubernetes RBAC
+    digest: e29d2ac6c2d958c767cd765ed2f8cd6eb0fc9155b456a29cc314ecb5c4e56082
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - rbac
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: rbac-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/rbac-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/rbac-common-0.1.7/rbac-common-0.1.7.tgz
+    version: 0.1.7
   - apiVersion: v2
     appVersion: 0.1.1
     created: "2023-06-17T10:06:41.146979675Z"
@@ -1861,4 +1897,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-07-22T15:07:02.871371047Z"
+generated: "2023-07-23T16:50:08.551877774Z"
