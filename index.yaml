@@ -856,6 +856,25 @@ entries:
   mongosync:
   - apiVersion: v2
     appVersion: 1.4.1
+    created: "2023-07-24T17:38:20.877410254Z"
+    description: Mongo Cluster-to-Cluster Sync
+    digest: ca8ecbaa2c822cc004d0a4140de0e142e5f8944a2518ed875bcaf8b78e3274ab
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - mongosync
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongosync
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongosync
+    - https://www.mongodb.com/docs/cluster-to-cluster-sync
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongosync-0.1.1/mongosync-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.4.1
     created: "2023-07-23T19:02:54.045668775Z"
     description: Mongo Cluster-to-Cluster Sync
     digest: 09c6fdfd1b660f7aa8dd1207143535a889f3bcf351f13008fc1cc40a9cce8a68
@@ -1839,6 +1858,25 @@ entries:
     version: 0.1.0
   tailscale:
   - apiVersion: v2
+    appVersion: v1.38.4
+    created: "2023-07-24T17:38:20.978410944Z"
+    description: Tailscale mesh network.
+    digest: 94a8dcc5ac15fa8863a1a775ac0531e1971ede8072eb287ab0f23caddeeccc32
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - tailscale
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: tailscale
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/tailscale
+    - https://tailscale.com
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.10/tailscale-0.1.10.tgz
+    version: 0.1.10
+  - apiVersion: v2
     appVersion: v1.38.2
     created: "2023-06-11T11:35:07.587059595Z"
     description: Tailscale mesh network.
@@ -1917,4 +1955,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-07-23T19:02:54.046963382Z"
+generated: "2023-07-24T17:38:20.979066153Z"
