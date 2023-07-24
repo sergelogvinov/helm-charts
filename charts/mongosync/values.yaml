@@ -28,7 +28,7 @@ config:
   # mongodb+srv://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]
   cluster0: "mongodb://192.0.2.10:27017/admin"
   cluster1: "mongodb://192.0.2.20:27017/admin"
-  verbosity: "WARN"
+  verbosity: "INFO"
   disableTelemetry: true
 
 filters: []
@@ -87,12 +87,12 @@ service:
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
+  limits:
+    cpu: 500m
+    # memory: 2Gi
   requests:
     cpu: 100m
-    memory: 128Mi
+    memory: 1Gi
 
 # -- Node labels for pod assignment.
 # ref: https://kubernetes.io/docs/user-guide/node-selection/
