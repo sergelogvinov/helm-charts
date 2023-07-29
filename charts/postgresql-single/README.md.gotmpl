@@ -58,9 +58,9 @@ backup:
   enabled: true
 
   recovery: true # If PVC empty - it will use latest backup.
-  walpush: true  # Send wal for the s3.
+  walpush: true  # Send wal to the s3.
 
-  walg: |
+  walg:
     WALG_TAR_DISABLE_FSYNC: true
     WALG_UPLOAD_WAL_METADATA: INDIVIDUAL
     WALG_PREVENT_WAL_OVERWRITE: true

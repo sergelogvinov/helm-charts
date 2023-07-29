@@ -1,6 +1,6 @@
 # postgresql-single
 
-![Version: 0.6.3](https://img.shields.io/badge/Version-0.6.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 14.8](https://img.shields.io/badge/AppVersion-14.8-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 14.8](https://img.shields.io/badge/AppVersion-14.8-informational?style=flat-square)
 
 Postgres with backup/restore checks
 
@@ -60,9 +60,9 @@ backup:
   enabled: true
 
   recovery: true # If PVC empty - it will use latest backup.
-  walpush: true  # Send wal for the s3.
+  walpush: true  # Send wal to the s3.
 
-  walg: |
+  walg:
     WALG_TAR_DISABLE_FSYNC: true
     WALG_UPLOAD_WAL_METADATA: INDIVIDUAL
     WALG_PREVENT_WAL_OVERWRITE: true
@@ -110,7 +110,7 @@ metrics:
 | backup.enabled | bool | `false` |  |
 | backup.recovery | bool | `false` |  |
 | backup.walpush | bool | `false` |  |
-| backup.walg | string | `nil` |  |
+| backup.walg | object | `{}` |  |
 | backup.cleanPolicy | string | `"retain FULL 3"` |  |
 | backup.schedule | string | `"15 4 * * *"` |  |
 | backup.resources.limits.cpu | int | `2` |  |

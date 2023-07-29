@@ -237,6 +237,6 @@ WALG_COMPRESSION_METHOD: brotli
 WALG_DELTA_MAX_STEPS: 1
 WALG_FILE_PREFIX: {{ .Values.persistence.mountPath }}/backup
 {{- else }}
-{{ .Values.backup.walg }}
+{{ .Values.backup.walg | toYaml }}
 {{- end }}
 {{- end }}
