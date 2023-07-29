@@ -22,11 +22,30 @@
         will exhaust in file/socket descriptors within the next hour'
       summary: file descriptors soon exhausted
 
-  - alert: NodeMemoryHighUtilization
+  - alert: NodeNotReady
+    expr: kube_node_status_condition{job="kubernetes-service-endpoints",condition="Ready",status="true"} == 0
+    for: 60m
+    labels:
+      infrastructure: true
+      severity: critical
     annotations:
-      description: Memory is filling up at {{ $labels.kubernetes_node_name }}, has been above 95% for the last 1 minutes, is currently at {{ $value | humanizePercentage }}
-      summary: Host is running out of memory.
+      description: '{{ $labels.node }} has been unready for more than 60 minutes'
+      summary: Node is not ready.
+  - alert: NodeDiskPressure
+    expr: kube_node_status_condition{condition="DiskPressure",status="true"} == 1
+    for: 1m
+    labels:
+      infrastructure: true
+      severity: warning
+    annotations:
+      description: '{{ $labels.node }} has DiskPressure status'
+      summary: Node is not ready.
+
+  - alert: NodeMemoryHighUtilization
     expr: 100 - (node_memory_MemAvailable_bytes{job="prometheus-node-exporter"} / node_memory_MemTotal_bytes{job="prometheus-node-exporter"} * 100) > 95
     for: 1m
     labels:
       severity: critical
+    annotations:
+      description: Memory is filling up at {{ $labels.kubernetes_node_name }}, has been above 95% for the last 1 minutes, is currently at {{ $value | humanizePercentage }}
+      summary: Host is running out of memory.
