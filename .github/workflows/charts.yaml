@@ -1,9 +1,9 @@
-name: Helm chart check
+name: HelmChart Check
 
 on:
   pull_request:
     branches:
-      - main
+      - master
     paths:
       - 'charts/**'
 
@@ -22,4 +22,4 @@ jobs:
         uses: helm/chart-testing-action@v2.3.1
 
       - name: Run helm chart linter
-        run: ct --config hack/ct.yml lint
+        run: ct --config .github/ct.yml lint
