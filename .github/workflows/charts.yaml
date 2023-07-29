@@ -1,9 +1,9 @@
-name: Helm chart check
+name: HelmChart check
 
 on:
   pull_request:
     branches:
-      - main
+      - master
     paths:
       - 'charts/**'
 
