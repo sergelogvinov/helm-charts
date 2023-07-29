@@ -49,19 +49,5 @@ spec:
                 name: {{ $fullName }}
                 port:
                   number: {{ $svcPort }}
-          - path: /notifications/hub
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ $fullName }}
-                port:
-                  number: {{ $svcWsPort }}
-          - path: /notifications/hub/negotiate
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ $fullName }}
-                port:
-                  number: {{ $svcPort }}
     {{- end }}
 {{- end }}

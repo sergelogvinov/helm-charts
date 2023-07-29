@@ -32,10 +32,9 @@ config:
   SMTP_FROM: 'bitwarden-rs@domain.tld'
   SMTP_FROM_NAME: 'Vault'
   SMTP_PORT: 587
-  SMTP_SSL: true
+  SMTP_SECURITY: starttls
   #
   WEB_VAULT_ENABLED: true
-  WEBSOCKET_ENABLED: true
   ROCKET_WORKERS: 10
   #
   EXTENDED_LOGGING: true

@@ -11,9 +11,5 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-    - port: {{ .Values.service.portWSocket }}
-      targetPort: ws
-      protocol: TCP
-      name: ws
   selector:
     {{- include "bitwarden.selectorLabels" . | nindent 4 }}
