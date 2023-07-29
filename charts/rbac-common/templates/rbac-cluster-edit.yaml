@@ -11,23 +11,6 @@ metadata:
     {{- include "rbac-common.labels" . | nindent 4 }}
 rules:
 - apiGroups:
-  - cert-manager.io
-  resources:
-  - certificates
-  verbs:
-  - patch
-  - update
-- apiGroups:
-  - cert-manager.io
-  resources:
-  - certificates
-  - certificaterequests
-  - issuers
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
   - scheduling.k8s.io
   resources:
   - priorityclasses
@@ -311,4 +294,31 @@ rules:
   - get
   - list
   - watch
+###
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - certificates
+  verbs:
+  - patch
+  - update
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - certificates
+  - certificaterequests
+  - issuers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - external-secrets.io
+  resources:
+  - externalsecrets
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
 {{- end }}

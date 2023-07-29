@@ -108,35 +108,6 @@ rules:
   verbs:
   - patch
   - update
-# copy from viewer
-- apiGroups:
-  - cert-manager.io
-  resources:
-  - certificates
-  - certificaterequests
-  - issuers
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - cert-manager.io
-  resources:
-  - certificates
-  verbs:
-  - create
-  - delete
-  - patch
-  - update
-- apiGroups:
-  - acme.cert-manager.io
-  resources:
-  - challenges
-  - orders
-  verbs:
-  - get
-  - list
-  - watch
 - apiGroups:
   - ""
   resources:
@@ -226,6 +197,16 @@ rules:
   - list
   - watch
 - apiGroups:
+  - batch
+  resources:
+  - cronjobs
+  - jobs
+  verbs:
+  - create
+  - delete
+  - patch
+  - update
+- apiGroups:
   - extensions
   resources:
   - daemonsets
@@ -254,6 +235,15 @@ rules:
   - list
   - watch
 - apiGroups:
+  - policy
+  resources:
+  - poddisruptionbudgets
+  verbs:
+  - create
+  - delete
+  - patch
+  - update
+- apiGroups:
   - networking.k8s.io
   resources:
   - ingresses/status
@@ -274,4 +264,76 @@ rules:
   - delete
   - patch
   - update
+- apiGroups:
+  - storage.k8s.io
+  resources:
+  - storageclasses
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - get
+  - list
+  - watch
+####
+- apiGroups:
+  - cilium.io
+  resources:
+  - ciliumnodes
+  - ciliumendpoints
+  - ciliumclusterwidenetworkpolicies
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - certificates
+  - certificaterequests
+  - issuers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - certificates
+  verbs:
+  - create
+  - delete
+  - patch
+  - update
+- apiGroups:
+  - acme.cert-manager.io
+  resources:
+  - challenges
+  - orders
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - external-secrets.io
+  resources:
+  - externalsecrets
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+  - update
+- apiGroups:
+  - psmdb.percona.com
+  resources:
+  - perconaservermongodbs
+  - perconaservermongodbbackups
+  verbs:
+  - get
+  - list
 {{- end }}
