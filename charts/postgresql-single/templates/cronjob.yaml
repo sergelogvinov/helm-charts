@@ -1,4 +1,4 @@
-{{- if and .Values.backup.enabled (ne .Values.backup.schedule "") }}
+{{- if .Values.backup.enabled }}
 {{- $instance := sub (int .Values.replicaCount) 1 }}
 {{- if semverCompare ">=1.22" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
@@ -17,7 +17,8 @@ metadata:
 spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: {{ default 2 .Values.backup.history }}
-  schedule: "{{ .Values.backup.schedule }}"
+  suspend: {{ eq .Values.backup.schedule "" }}
+  schedule: {{ default "15 4 * * *" .Values.backup.schedule | quote }}
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:

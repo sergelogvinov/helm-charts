@@ -152,7 +152,7 @@ masterauth "{{ .Values.keydb.password  }}"
 requirepass "{{ .Values.keydb.password  }}"
 {{- end }}
 
-save 900 1
+save 300 1
 save 60  100000
 
 dir /data
@@ -266,7 +266,7 @@ Backup wal-g config
 {{- define "keydb.walgYaml" -}}
 WALG_COMPRESSION_METHOD: brotli
 WALG_DELTA_MAX_STEPS: 4
-WALG_STREAM_CREATE_COMMAND: "redis-cli -h {{ include "keydb.fullname" . }} --rdb -"
+WALG_STREAM_CREATE_COMMAND: "redis-cli -h {{ include "keydb.fullname" . }}-0.{{ include "keydb.fullname" . }}-headless.{{ .Release.Namespace }}.svc --rdb -"
 WALG_STREAM_RESTORE_COMMAND: "cat > /data/dump.rdb"
 {{- if .Values.keydb.password }}
 WALG_REDIS_PASSWORD: "{{ .Values.keydb.password  }}"
@@ -274,7 +274,7 @@ WALG_REDIS_PASSWORD: "{{ .Values.keydb.password  }}"
 {{- if not .Values.backup.walg }}
 WALG_FILE_PREFIX: /data
 {{- else }}
-{{ .Values.backup.walg }}
+{{ .Values.backup.walg | toYaml }}
 {{- end }}
 {{- end }}
 

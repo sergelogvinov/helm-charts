@@ -1,4 +1,4 @@
-{{- if and .Values.backup.enabled (ne .Values.backup.schedule "") }}
+{{- if .Values.backup.enabled }}
 {{- if semverCompare ">=1.22" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
 {{- else -}}
@@ -12,12 +12,13 @@ metadata:
 spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: {{ default 1 .Values.backup.history }}
-  schedule: "{{ .Values.backup.schedule }}"
+  suspend: {{ eq .Values.backup.schedule "" }}
+  schedule: {{ default "15 4 * * *" .Values.backup.schedule | quote }}
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
       ttlSecondsAfterFinished: 3600 # 1h
-      activeDeadlineSeconds: 3600 # 1h
+      activeDeadlineSeconds: 1800 # 30m
       backoffLimit: 1
       template:
         metadata:
@@ -64,15 +65,9 @@ spec:
             podAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
                 - labelSelector:
-                    matchExpressions:
-                      - key: app.kubernetes.io/name
-                        operator: In
-                        values:
-                          - {{ include "keydb.name" . }}
-                      - key: app.kubernetes.io/instance
-                        operator: In
-                        values:
-                          - {{ .Release.Name }}
+                    matchLabels:
+                      {{- include "keydb.selectorLabels" . | nindent 22 }}
+                      statefulset.kubernetes.io/pod-name: {{ include "keydb.fullname" . }}-0
                   topologyKey: kubernetes.io/hostname
           {{- with .Values.tolerations }}
           tolerations:

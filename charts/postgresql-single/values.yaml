@@ -35,7 +35,7 @@ postgresqlUsername: postgres
 # postgresqlConfigurationLogs:
 
 # -- PostgreSQL connection string
-# postgresqlConninfo: host=postgres user={{ .Values.postgresqlUsername }} password={{ .Values.postgresqlPassword }} sslmode=require
+# postgresqlConninfo: host=postgres user={{ .Values.postgresqlUsername }} password={{ .Values.postgresqlPassword }} sslmode=require sslrootcert=/tmp/nonexist
 
 # -- Postgres auth
 # ref: https://www.postgresql.org/docs/current/auth-pg-hba-conf.html

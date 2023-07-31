@@ -44,6 +44,14 @@ spec:
       {{- if or .Values.tlsCerts.create }}
       initContainers:
         - name: tls
+          securityContext:
+            capabilities:
+              drop:
+              - ALL
+            seccompProfile:
+              type: RuntimeDefault
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
           image: "{{ .Values.loadbalancer.image.repository }}:{{ .Values.loadbalancer.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.loadbalancer.image.pullPolicy }}
           command:
@@ -61,6 +69,9 @@ spec:
       containers:
         - name: {{ .Chart.Name }}-loadbalancer
           securityContext:
+            capabilities:
+              drop:
+              - ALL
             seccompProfile:
               type: RuntimeDefault
             allowPrivilegeEscalation: false

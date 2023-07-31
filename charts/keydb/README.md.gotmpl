@@ -49,10 +49,10 @@ backup:
   enabled: true
   recovery: true
 
-  walg: |
+  walg:
     WALG_TAR_DISABLE_FSYNC: true
     WALG_COMPRESSION_METHOD: brotli
-    WALG_S3_PREFIX: s3://backup/postgrtes-backup
+    WALG_S3_PREFIX: s3://backup/redis-backup
 
 metrics:
   enabled: true

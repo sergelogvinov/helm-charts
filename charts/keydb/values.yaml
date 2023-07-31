@@ -64,7 +64,7 @@ backup:
   enabled: false
   recovery: false
 
-  walg: ~
+  walg: {}
 
   # schedule: "" to disable cron backup
   schedule: "15 4 * * *"

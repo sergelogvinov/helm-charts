@@ -7,6 +7,16 @@ helm repo add sinextra https://helm-charts.sinextra.dev
 helm repo update
 ```
 
+Helm and OCI registry
+
+```shell
+# list helm chart versions
+skopeo list-tags docker://ghcr.io/sergelogvinov/charts/${PKG_NAME}
+
+# deploy
+helm upgrade -i ${PKG_NAME} --version=${CHART_VERSION} oci://ghcr.io/sergelogvinov/charts/${PKG_NAME}
+```
+
 ## Common charts
 
 * [bitwarden](charts/bitwarden/) - Open source bitwarden (rust)
