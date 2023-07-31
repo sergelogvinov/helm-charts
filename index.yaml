@@ -458,6 +458,28 @@ entries:
   keydb:
   - apiVersion: v2
     appVersion: 6.3.3
+    created: "2023-07-31T15:12:48.680997858Z"
+    description: KeyDB with TLS, backup/restore support
+    digest: 94277208eeca5d66fa94d90ca5737504572c3bcb2d4b692efba04061d2756d1b
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - keydb
+    - redis
+    - wal-g
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: keydb
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/keydb
+    - https://docs.keydb.dev
+    - https://github.com/wal-g/wal-g
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.4.0/keydb-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
+    appVersion: 6.3.3
     created: "2023-07-14T16:58:06.519023809Z"
     description: KeyDB with TLS, backup/restore support
     digest: d993cdc9edddce27270ff72d3deb6a31a7caf3e6c50a59b3479edfe4acecbf26
@@ -1132,6 +1154,28 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.0/pgbouncer-0.1.0.tgz
     version: 0.1.0
   postgresql-single:
+  - apiVersion: v2
+    appVersion: "14.8"
+    created: "2023-07-31T15:12:48.805201633Z"
+    description: Postgres with backup/restore checks
+    digest: 787205d4b66bc4ef7acb9f1ee00797672044cf045a031e5ea1a7d1c79f21ac76
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: postgresql-single
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.7.1/postgresql-single-0.7.1.tgz
+    version: 0.7.1
   - apiVersion: v2
     appVersion: "14.8"
     created: "2023-07-29T11:25:31.308194971Z"
@@ -2015,4 +2059,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-07-29T11:25:31.308609873Z"
+generated: "2023-07-31T15:12:48.806024751Z"
