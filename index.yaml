@@ -356,6 +356,27 @@ entries:
     version: 0.0.1
   github-actions-runner:
   - apiVersion: v2
+    appVersion: 2.307.1
+    created: "2023-08-03T07:26:10.025954275Z"
+    description: Github Actions with container registry and mirrors
+    digest: 39b50b806e7d4772528bfce159c7814be20ad8ed208ca2c60446a626e4b5ce15
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - github-actions
+    - conteiner
+    - docker-registry
+    - docker-mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: github-actions-runner
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/github-actions-runner
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/github-actions-runner-1.0.1/github-actions-runner-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
     appVersion: 2.305.0
     created: "2023-07-09T07:52:06.794585563Z"
     description: Github Actions with container registry and mirrors
@@ -1962,6 +1983,25 @@ entries:
     version: 0.1.0
   tailscale:
   - apiVersion: v2
+    appVersion: v1.44.0
+    created: "2023-08-03T07:26:10.185418016Z"
+    description: Tailscale mesh network.
+    digest: a229a90be921970853114b983fa269816181c0864ee03c46a2bdda685166da35
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - tailscale
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: tailscale
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/tailscale
+    - https://tailscale.com
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.11/tailscale-0.1.11.tgz
+    version: 0.1.11
+  - apiVersion: v2
     appVersion: v1.38.4
     created: "2023-07-24T17:38:20.978410944Z"
     description: Tailscale mesh network.
@@ -2059,4 +2099,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-07-31T15:12:48.806024751Z"
+generated: "2023-08-03T07:26:10.185956327Z"
