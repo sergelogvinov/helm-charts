@@ -918,6 +918,26 @@ entries:
     version: 0.1.0
   mongosync:
   - apiVersion: v2
+    appVersion: 1.5.0
+    created: "2023-08-03T07:33:58.400305596Z"
+    description: Mongo Cluster-to-Cluster Sync
+    digest: 1c1b00b353255c1cda15a590932f16db046cf62a0f4cdf19f1bd4c1c4b95d440
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - mongodb
+    - mongosync
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongosync
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongosync
+    - https://www.mongodb.com/docs/cluster-to-cluster-sync
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongosync-0.1.2/mongosync-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     appVersion: 1.4.1
     created: "2023-07-24T17:38:20.877410254Z"
     description: Mongo Cluster-to-Cluster Sync
@@ -2099,4 +2119,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-08-03T07:26:10.185956327Z"
+generated: "2023-08-03T07:33:58.4005807Z"
