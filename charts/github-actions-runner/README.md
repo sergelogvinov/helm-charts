@@ -1,6 +1,6 @@
 # github-actions-runner
 
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.305.0](https://img.shields.io/badge/AppVersion-2.305.0-informational?style=flat-square)
+![Version: 1.0.1](https://img.shields.io/badge/Version-1.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.307.1](https://img.shields.io/badge/AppVersion-2.307.1-informational?style=flat-square)
 
 Github Actions with container registry and mirrors
 
@@ -23,6 +23,11 @@ maxRunners: 8
 minRunners: 1
 
 githubConfigUrl: https://github.com/...
+githubConfigSecret:
+  github_app_id: "123"
+  github_app_installation_id: "123"
+  github_app_private_key: |
+    KEY
 
 controllerServiceAccount:
   name: arc
@@ -70,7 +75,7 @@ nodeSelector:
 | runnerGroup | string | `"default"` |  |
 | runnerScaleSetName | string | `""` |  |
 | githubConfigUrl | string | `"https://github.com/..."` |  |
-| githubConfigSecret.github_token | string | `"ghp_123"` |  |
+| githubConfigSecret | object | `{}` |  |
 | controllerServiceAccount.name | string | `"arc"` |  |
 | dind.enabled | bool | `true` |  |
 | dind.image.repository | string | `"docker"` |  |

@@ -18,8 +18,8 @@ runnerGroup: "default"
 runnerScaleSetName: ""
 
 githubConfigUrl: "https://github.com/..."
-githubConfigSecret:
-  github_token: "ghp_123"
+githubConfigSecret: {}
+  # github_token: "ghp_123"
   # github_app_id: ""
   # github_app_installation_id: ""
   # github_app_private_key: |

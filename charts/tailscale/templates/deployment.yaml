@@ -101,7 +101,7 @@ spec:
             #   value: /tmp
             {{- if .Values.service.p2pPort }}
             - name: TS_TAILSCALED_EXTRA_ARGS
-              value: -port={{ .Values.service.p2pPort }}
+              value: "-no-logs-no-support -port={{ .Values.service.p2pPort }}"
             {{- end }}
             - name: NODE
               valueFrom:
