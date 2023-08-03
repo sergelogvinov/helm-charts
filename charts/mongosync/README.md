@@ -1,6 +1,6 @@
 # mongosync
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.4.1](https://img.shields.io/badge/AppVersion-1.4.1-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.5.0](https://img.shields.io/badge/AppVersion-1.5.0-informational?style=flat-square)
 
 Mongo Cluster-to-Cluster Sync
 
@@ -31,7 +31,7 @@ Mongo Cluster-to-Cluster Sync
 | hostAliases | list | `[]` |  |
 | config.cluster0 | string | `"mongodb://192.0.2.10:27017/admin"` |  |
 | config.cluster1 | string | `"mongodb://192.0.2.20:27017/admin"` |  |
-| config.verbosity | string | `"WARN"` |  |
+| config.verbosity | string | `"INFO"` |  |
 | config.disableTelemetry | bool | `true` |  |
 | filters | list | `[]` |  |
 | args | list | `[]` | Mongosqld arguments example: `- --verbosity=DEBUG` |
