@@ -29,8 +29,11 @@ rules:
   - rbac.authorization.k8s.io
   resources:
   - clusterroles
+  - clusterrolebindings
   verbs:
+  - get
   - list
+  - watch
 - apiGroups:
   - scheduling.k8s.io
   resources:

@@ -19,7 +19,7 @@ jobs:
 
       - name: Install chart-testing tools
         id: lint
-        uses: helm/chart-testing-action@v2.3.1
+        uses: helm/chart-testing-action@v2.4.0
 
       - name: Run helm chart linter
-        run: ct --config .github/ct.yml lint
+        run: ct lint --config .github/ct.yml --lint-conf .github/lintconf.yaml

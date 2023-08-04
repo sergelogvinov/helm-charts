@@ -1,0 +1,10 @@
+- name: github-actions.rules
+  rules:
+  - alert: GithubActionsRunnersBusy
+    expr: sum(github_runner_organization_status) by (organization) > 0 and sum(github_runner_organization_status{busy="true"}) by (organization) >=  sum(github_runner_organization_status) by (organization)
+    for: 30m
+    labels:
+      severity: warning
+    annotations:
+      description: All GithubActionsRunners are busy more than 30m {{ $labels.organization }}, runners={{ $value }}
+      summary: GithubActions runners is not enough
