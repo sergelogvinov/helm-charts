@@ -25,10 +25,13 @@ spec:
 
   template:
     metadata:
-    {{- with .Values.podAnnotations }}
       annotations:
+      {{- if .Values.mirrors.enabled }}
+        checksum/config: {{ toJson .Values.mirrors.registry | sha256sum }}
+      {{- end }}
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-    {{- end }}
+      {{- end }}
       labels:
         {{- include "github-actions-runner.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: autoscaling-runner-set

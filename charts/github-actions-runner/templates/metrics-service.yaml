@@ -1,0 +1,22 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "github-actions-runner.fullname" . }}-metrics
+  labels:
+    {{- include "github-actions-runner.labels" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9999"
+spec:
+  type: ClusterIP
+  ports:
+    - name: metrics
+      port: 9999
+      targetPort: 9999
+      protocol: TCP
+  selector:
+    {{- include "github-actions-runner.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+{{- end }}

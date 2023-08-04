@@ -21,6 +21,7 @@ spec:
       enableServiceLinks: false
       automountServiceAccountToken: false
       securityContext:
+        runAsNonRoot: true
         fsGroup: 65534
         fsGroupChangePolicy: "OnRootMismatch"
       containers:

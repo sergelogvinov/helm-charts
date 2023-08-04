@@ -1,0 +1,98 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "github-actions-runner.fullname" . }}-metrics
+  labels:
+    {{- include "github-actions-runner.labels" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "github-actions-runner.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: metrics
+  template:
+    metadata:
+      labels:
+        {{- include "github-actions-runner.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: metrics
+    spec:
+      enableServiceLinks: false
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        fsGroup: 65534
+        fsGroupChangePolicy: "OnRootMismatch"
+      containers:
+        - name: {{ include "github-actions-runner.fullname" . }}-metrics
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
+            runAsUser: 65534
+            runAsGroup: 65534
+          image: "{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}"
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy }}
+          env:
+            - name: EXPORT_FIELDS
+              value: repo,event,status
+            - name: GITHUB_ORGAS
+              value: {{ trimPrefix "/" (get (urlParse .Values.githubConfigUrl) "path") }}
+            - name: GITHUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: github_token
+                  name: {{ include "github-actions-runner.fullname" . }}-github
+                  optional: true
+            - name: GITHUB_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  key: github_app_id
+                  name: {{ include "github-actions-runner.fullname" . }}-github
+                  optional: true
+            - name: GITHUB_APP_INSTALLATION_ID
+              valueFrom:
+                secretKeyRef:
+                  key: github_app_installation_id
+                  name: {{ include "github-actions-runner.fullname" . }}-github
+                  optional: true
+            - name: GITHUB_APP_PRIVATE_KEY
+              value: /etc/metrics/github_app_private_key
+          ports:
+            - name: metrics
+              containerPort: 9999
+          startupProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 30
+            periodSeconds: 10
+          resources:
+            {{- toYaml .Values.metrics.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/metrics
+      volumes:
+        - name: config
+          secret:
+            secretName:  {{ include "github-actions-runner.fullname" . }}-github
+            defaultMode: 256
+      {{- with .Values.metrics.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.metrics.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.metrics.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

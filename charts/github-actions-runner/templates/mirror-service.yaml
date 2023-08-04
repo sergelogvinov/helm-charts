@@ -1,4 +1,4 @@
-{{- if .Values.mirrors }}
+{{- if .Values.mirrors.enabled }}
 apiVersion: v1
 kind: Service
 metadata:

@@ -84,6 +84,7 @@ data:
       all = true
       keepBytes = 1024000000
 
+    {{- if .Values.mirrors.enabled }}
     {{ range $inx, $val := .Values.mirrors.registry }}
     [registry."{{ $val.host }}"]
       capabilities = ["pull", "resolve"]
@@ -95,6 +96,7 @@ data:
     [registry."{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc/{{ $val.host | replace "." "-" }}"]
       http = true
       insecure = true
+    {{- end }}
     {{- end }}
 
     {{- if .Values.registry.enabled }}
@@ -114,7 +116,7 @@ data:
         }
       },
       "hosts": ["unix:///var/run/docker.sock","tcp://127.0.0.1:2376"],
-      "mtu": 1300,
+      "mtu": 1280,
       {{- if .Values.mirrors.enabled }}
       "registry-mirrors": ["http://{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc"],
       {{- end }}

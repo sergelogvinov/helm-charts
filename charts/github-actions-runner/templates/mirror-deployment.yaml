@@ -1,4 +1,4 @@
-{{- if .Values.mirrors }}
+{{- if .Values.mirrors.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,6 +21,9 @@ spec:
       enableServiceLinks: false
       automountServiceAccountToken: false
       securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
         fsGroup: 65534
         fsGroupChangePolicy: "OnRootMismatch"
       containers:
@@ -112,8 +115,6 @@ spec:
               type: RuntimeDefault
             capabilities:
               drop: ["ALL"]
-            runAsUser: 65534
-            runAsGroup: 65534
           image: "{{ $.Values.mirrors.image.repository }}:{{ $.Values.mirrors.image.tag }}"
           imagePullPolicy: {{ $.Values.mirrors.image.pullPolicy }}
           env:
