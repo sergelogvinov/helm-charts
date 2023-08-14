@@ -69,7 +69,7 @@ backup:
   # schedule: "" to disable cron backup
   schedule: "15 4 * * *"
 
-  cleanPolicy: "retain FULL 3"
+  cleanPolicy: "retain FULL 7"
 
   resources:
     # limits:

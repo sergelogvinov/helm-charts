@@ -1,10 +1,6 @@
 {{- range $key, $val := .Values.cronjobs }}
-{{- if $val.envs }}
-{{- if semverCompare ">=1.22" $.Capabilities.KubeVersion.GitVersion -}}
+---
 apiVersion: batch/v1
-{{- else -}}
-apiVersion: batch/v1beta1
-{{- end }}
 kind: CronJob
 metadata:
   name: {{ include "clickhouse.fullname" $ }}-{{ $key }}
@@ -17,8 +13,8 @@ metadata:
 spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 1
-  suspend: {{ eq .Values.schedule "" }}
-  schedule: "{{ default "15 12 * * *" $val.schedule | quote }}"
+  suspend: {{ eq $val.schedule "" }}
+  schedule: {{ default "15 12 * * *" $val.schedule | quote }}
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
@@ -53,7 +49,7 @@ spec:
                 - name: CLICKHOUSE_HOST
                   value: {{ include "clickhouse.fullname" $ }}
               envFrom:
-                {{- if ne (len $val.envs) 0 }}
+                {{- if and $val.envs (ne (len $val.envs) 0) }}
                 - secretRef:
                     name: {{ include "clickhouse.fullname" $ }}-{{ $key }}-envs
                 {{- end }}
@@ -82,5 +78,4 @@ spec:
                   - key: command-{{ $key }}
                     path: command.sh
                 defaultMode: 360
-{{- end }}
 {{- end }}

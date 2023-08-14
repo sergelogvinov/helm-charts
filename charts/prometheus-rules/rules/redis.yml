@@ -17,7 +17,7 @@
       description: Redis slave cannot connect to master, {{ $labels.kubernetes_namespace }}/project={{ $labels.project }}
       summary: Redis slave cannot connect to master
   - alert: RedisReplicationBroken
-    expr: delta(redis_connected_slaves[3m]) < 0
+    expr: delta(redis_connected_slaves[5m]) < 0
     for: 5m
     labels:
       severity: warning
@@ -67,7 +67,31 @@
       severity: critical
     annotations:
       description: Redis connections {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} limit reached
-      summary: Redis LoadBalancer limit
+      summary: Redis connections limit
+  - alert: RedisError
+    expr: increase(redis_errors_total{err="ERR"}[10m]) > 15
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      description: Redis has undefined error {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} check the logs
+      summary: Redis error
+  - alert: RedisAuthError
+    expr: increase(redis_errors_total{err="NOAUTH"}[10m]) > 5
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      description: Redis auth error {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
+      summary: Redis auth error
+  - alert: RedisLoadError
+    expr: increase(redis_errors_total{err="LOADING"}[10m]) > 5
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      description: Redis load error {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
+      summary: Redis load error
 
   - alert: RedisLoadBalancer
     expr: haproxy_frontend_limit_sessions{app_kubernetes_io_name="keydb",proxy!="stats"} - haproxy_frontend_current_sessions < 10

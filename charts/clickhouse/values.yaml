@@ -119,7 +119,7 @@ cronjobs: {}
   #   schedule: "0 0 * * *"
   #   command: |
   #     #!/bin/sh
-  #   env: {}
+  #   envs: {}
   #   resources:
   #     # limits:
   #     #   cpu: 100m

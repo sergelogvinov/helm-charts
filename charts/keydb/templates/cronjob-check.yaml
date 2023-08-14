@@ -1,15 +1,11 @@
 {{- if .Values.backupCheck.enabled }}
-{{- if semverCompare ">=1.22" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
-{{- else -}}
-apiVersion: batch/v1beta1
-{{- end }}
 kind: CronJob
 metadata:
   name: {{ include "keydb.fullname" . }}-backup-check
   labels:
     {{- include "keydb.crontab.labels" . | nindent 4 }}
-    app.kubernetes.io/component: checker
+    app.kubernetes.io/component: check
 spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: {{ default 1 .Values.backupCheck.history }}
@@ -26,7 +22,7 @@ spec:
           name: {{ include "keydb.fullname" . }}
           labels:
             {{- include "keydb.crontab.labels" . | nindent 12 }}
-            app.kubernetes.io/component: checker
+            app.kubernetes.io/component: check
         spec:
           restartPolicy: Never
           enableServiceLinks: false
@@ -96,8 +92,8 @@ spec:
                       {{- with .Values.podlabels }}
                       {{ toYaml . | nindent 22 }}
                       {{- end }}
-                      {{- include "postgresql-single.crontab.labels" . | nindent 22 }}
-                      app.kubernetes.io/component: checker
+                      {{- include "keydb.crontab.labels" . | nindent 22 }}
+                      app.kubernetes.io/component: check
                   {{- with .Values.backupCheck.persistence.annotations }}
                     annotations:
                     {{- range $key, $value := . }}

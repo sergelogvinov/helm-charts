@@ -1,6 +1,6 @@
 # keydb
 
-![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.3](https://img.shields.io/badge/AppVersion-6.3.3-informational?style=flat-square)
+![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.3](https://img.shields.io/badge/AppVersion-6.3.3-informational?style=flat-square)
 
 KeyDB with TLS, backup/restore support
 
@@ -102,7 +102,7 @@ metrics:
 | backup.recovery | bool | `false` |  |
 | backup.walg | object | `{}` |  |
 | backup.schedule | string | `"15 4 * * *"` |  |
-| backup.cleanPolicy | string | `"retain FULL 3"` |  |
+| backup.cleanPolicy | string | `"retain FULL 7"` |  |
 | backup.resources.requests.cpu | string | `"100m"` |  |
 | backup.resources.requests.memory | string | `"128Mi"` |  |
 | backupCheck.enabled | bool | `false` |  |

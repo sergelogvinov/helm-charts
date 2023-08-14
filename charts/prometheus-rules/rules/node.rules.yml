@@ -41,6 +41,18 @@
       description: '{{ $labels.node }} has DiskPressure status'
       summary: Node is not ready.
 
+  - alert: NodeDiskIOSaturation
+    expr: rate(node_disk_io_time_weighted_seconds_total{job="prometheus-node-exporter", device=~"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)"}[5m]) > 10
+    for: 30m
+    labels:
+      infrastructure: true
+      severity: warning
+    annotations:
+      description: 'Disk IO queue (aqu-sq) is high on {{ $labels.device }} at {{ $labels.kubernetes_node_name }}, has been above 10 for the last 15 minutes,
+        is currently at {{ printf "%.2f" $value }}.
+        This symptom might indicate disk saturation.'
+      summary: Disk IO queue is high.
+
   - alert: NodeMemoryHighUtilization
     expr: 100 - (node_memory_MemAvailable_bytes{job="prometheus-node-exporter"} / node_memory_MemTotal_bytes{job="prometheus-node-exporter"} * 100) > 95
     for: 1m

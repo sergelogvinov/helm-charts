@@ -196,7 +196,7 @@ data:
 
   backups.xml: |-
     <clickhouse>
-        {{- if ne (len .Values.storage.disks) 0 }}
+        {{- if and .Values.storage.disks (ne (len .Values.storage.disks) 0) }}
         <backups>
             {{- range $key, $val := .Values.storage.disks }}{{ if $val.backup }}
             <allowed_disk>{{ $key }}</allowed_disk>
@@ -208,5 +208,5 @@ data:
 
 {{ range $key, $val := .Values.cronjobs }}
   command-{{ $key }}: |-
-    {{- $val.command | nindent 4 }}
+    {{- default "exit 1" $val.command | nindent 4 }}
 {{- end }}

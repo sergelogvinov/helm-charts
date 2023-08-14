@@ -1,9 +1,11 @@
-{{- if and .Values.backup.enabled }}
+{{- if .Values.backup.enabled }}
 1. Backup command:
 
 kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "keydb.fullname" . }}-backup {{ include "keydb.fullname" . }}-backup-manual
 
+{{- if .Values.backupCheck.enabled }}
 2. Backup check command:
 
 kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "keydb.fullname" . }}-backup-check {{ include "keydb.fullname" . }}-backup-check-manual
+{{- end }}
 {{- end }}

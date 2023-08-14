@@ -1,14 +1,11 @@
 {{- if .Values.backup.enabled }}
-{{- if semverCompare ">=1.22" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
-{{- else -}}
-apiVersion: batch/v1beta1
-{{- end }}
 kind: CronJob
 metadata:
   name: {{ include "keydb.fullname" . }}-backup
   labels:
     {{- include "keydb.crontab.labels" . | nindent 4 }}
+    app.kubernetes.io/component: backup
 spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: {{ default 1 .Values.backup.history }}
@@ -25,6 +22,7 @@ spec:
           name: {{ include "keydb.fullname" . }}
           labels:
             {{- include "keydb.crontab.labels" . | nindent 12 }}
+            app.kubernetes.io/component: backup
         spec:
           restartPolicy: Never
           enableServiceLinks: false
