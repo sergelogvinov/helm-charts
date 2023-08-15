@@ -1169,6 +1169,25 @@ entries:
     version: 0.1.1
   pgbouncer:
   - apiVersion: v2
+    appVersion: "15.4"
+    created: "2023-08-15T06:02:45.225743568Z"
+    description: Postgres connection poller
+    digest: 08a2bdcc937535db81aab7dbc03ffdea073faef29f32d350e6289edc78972684
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - pgbouncer
+    - postgresql
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: pgbouncer
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/pgbouncer
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.9/pgbouncer-0.1.9.tgz
+    version: 0.1.9
+  - apiVersion: v2
     appVersion: "14.7"
     created: "2023-07-14T16:58:06.657307968Z"
     description: Postgres connection poller
@@ -1257,6 +1276,28 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.0/pgbouncer-0.1.0.tgz
     version: 0.1.0
   postgresql-single:
+  - apiVersion: v2
+    appVersion: "14.9"
+    created: "2023-08-15T06:02:45.430650799Z"
+    description: Postgres with backup/restore checks
+    digest: e548c2779f7a650d7839a9d118191cae020199cdc4b65d143247381b6be229ec
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: postgresql-single
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.8.0/postgresql-single-0.8.0.tgz
+    version: 0.8.0
   - apiVersion: v2
     appVersion: "14.8"
     created: "2023-07-31T15:12:48.805201633Z"
@@ -2253,4 +2294,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-08-14T18:18:57.632352801Z"
+generated: "2023-08-15T06:02:45.431217554Z"
