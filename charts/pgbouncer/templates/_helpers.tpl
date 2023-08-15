@@ -146,15 +146,27 @@ min_pool_size = 0
 unix_socket_dir = /var/run/postgresql
 
 server_tls_sslmode   = {{ .Values.serverSslMode }}
+{{ if .Values.serverSslSecret -}}
+server_tls_ca_file   = /etc/ssl/server/ca.crt
+server_tls_cert_file = /etc/ssl/server/tls.crt
+server_tls_key_file  = /etc/ssl/server/tls.key
+{{ else -}}
 server_tls_key_file  = /etc/ssl/private/ssl-cert-snakeoil.key
 server_tls_cert_file = /etc/ssl/certs/ssl-cert-snakeoil.pem
+{{ end -}}
 server_tls_protocols = secure
 server_tls_ciphers   = fast
 
 client_tls_sslmode   = {{ .Values.clientSslMode }}
-client_tls_key_file  = /etc/ssl/private/ssl-cert-snakeoil.key
-client_tls_cert_file = /etc/ssl/certs/ssl-cert-snakeoil.pem
+{{ if .Values.clientSslSecret -}}
+client_tls_ca_file   = /etc/ssl/client/ca.crt
+client_tls_cert_file = /etc/ssl/client/tls.crt
+client_tls_key_file  = /etc/ssl/client/tls.key
+{{ else -}}
 client_tls_ca_file   = /etc/ssl/certs/ssl-cert-snakeoil.pem
+client_tls_cert_file = /etc/ssl/certs/ssl-cert-snakeoil.pem
+client_tls_key_file  = /etc/ssl/private/ssl-cert-snakeoil.key
+{{ end -}}
 client_tls_protocols = secure
 client_tls_ciphers   = fast
 client_tls_ecdhcurve = auto
@@ -184,6 +196,7 @@ log_disconnections = 0
 log_pooler_errors = 1
 
 tcp_keepalive = 1
+tcp_keepidle = 600
 
 ;;; Custom attributes added from .Values.customSettings
 {{- range $k, $v := .Values.customSettings }}

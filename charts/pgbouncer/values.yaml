@@ -40,7 +40,12 @@ pgHbaConfiguration: |-
 customSettings: {}
 
 serverSslMode: allow
+serverSslSecret: ""
+  # pgbouncer-tls
+
 clientSslMode: allow
+clientSslSecret: ""
+  # pgbouncer-tls
 
 # -- Extra labels for pod.
 # ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/

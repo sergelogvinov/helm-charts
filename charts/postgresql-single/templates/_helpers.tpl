@@ -124,17 +124,12 @@ ssl = on
 ssl_ciphers = 'EECDH+AESGCM:EDH+AESGCM'
 ssl_prefer_server_ciphers = on
 ssl_ecdh_curve = 'prime256v1'
-{{- if or .Values.tlsCerts.create }}
 ssl_cert_file = '/etc/ssl/tlscerts/tls.crt'
 ssl_key_file = '/etc/ssl/tlscerts/tls.key'
+{{- if .Values.tlsCerts.create }}
 ssl_ca_file = '/etc/ssl/tlscerts/ca.crt'
-ssl_crl_file = ''
-{{- else }}
-ssl_cert_file = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
-ssl_key_file = '/etc/ssl/private/ssl-cert-snakeoil.key'
-ssl_ca_file = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
-ssl_crl_file = ''
 {{- end }}
+ssl_crl_file = ''
 
 tcp_keepalives_idle = 600
 tcp_keepalives_interval = 75

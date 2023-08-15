@@ -1,6 +1,6 @@
 # pgbouncer
 
-![Version: 0.1.8](https://img.shields.io/badge/Version-0.1.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 14.7](https://img.shields.io/badge/AppVersion-14.7-informational?style=flat-square)
+![Version: 0.1.9](https://img.shields.io/badge/Version-0.1.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 15.4](https://img.shields.io/badge/AppVersion-15.4-informational?style=flat-square)
 
 Postgres connection poller
 
@@ -67,7 +67,9 @@ metrics:
 | pgHbaConfiguration | string | `"# host  database    user                  address        auth-method\nhost    all         all                   10.0.0.0/8     md5\nhostssl all         all                   0.0.0.0/0      md5"` |  |
 | customSettings | object | `{}` |  |
 | serverSslMode | string | `"allow"` |  |
+| serverSslSecret | string | `""` |  |
 | clientSslMode | string | `"allow"` |  |
+| clientSslSecret | string | `""` |  |
 | podLabels | object | `{}` | Extra labels for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ |
 | podAnnotations | object | `{}` | Annotations for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
 | podSecurityContext | object | `{"fsGroup":999,"fsGroupChangePolicy":"OnRootMismatch","runAsGroup":999,"runAsNonRoot":true,"runAsUser":999}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |

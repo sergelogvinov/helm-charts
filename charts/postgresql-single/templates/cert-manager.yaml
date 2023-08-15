@@ -71,6 +71,9 @@ spec:
     - {{ include "postgresql-single.fullname" . }}
     - {{ include "postgresql-single.fullname" . }}.{{ .Release.Namespace }}
     - {{ include "postgresql-single.fullname" . }}.{{ .Release.Namespace }}.svc
+    - {{ include "postgresql-single.fullname" . }}-0.{{ include "postgresql-single.fullname" . }}-headless.{{ .Release.Namespace }}.svc
+    - {{ include "postgresql-single.fullname" . }}-1.{{ include "postgresql-single.fullname" . }}-headless.{{ .Release.Namespace }}.svc
+    - {{ include "postgresql-single.fullname" . }}-2.{{ include "postgresql-single.fullname" . }}-headless.{{ .Release.Namespace }}.svc
   issuerRef:
     name: {{ include "postgresql-single.fullname" . }}-ca-issuer
 ---

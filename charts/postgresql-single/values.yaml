@@ -53,6 +53,10 @@ pgHbaConfiguration: |-
 tlsCerts:
   create: false
 
+  ## -- SSL Mode
+  ## ref: https://www.postgresql.org/docs/current/libpq-ssl.html
+  mode: require
+
 # -- Pods Service Account.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:

@@ -82,18 +82,15 @@ spec:
             - name: PGUSER
               value: {{ .Values.postgresqlUsername | quote }}
             - name: PGSSLMODE
-              value: require
-            {{- if or .Values.tlsCerts.create }}
+              value: {{ .Values.tlsCerts.mode | quote }}
+            {{- if hasPrefix "verify" .Values.tlsCerts.mode }}
             - name: PGSSLROOTCERT
               value: /etc/ssl/tlscerts/ca.crt
+            {{- end }}
             - name: PGSSLCERT
               value: /etc/ssl/tlscerts/tls.crt
             - name: PGSSLKEY
               value: /etc/ssl/tlscerts/tls.key
-            {{- else }}
-            - name: PGSSLROOTCERT
-              value: /etc/ssl/certs/ssl-cert-snakeoil.pem
-            {{- end }}
             - name: PGDATA
               value: {{ .Values.persistence.mountPath }}/data
           ports:
@@ -117,10 +114,8 @@ spec:
             - name: recovery
               mountPath: /docker-entrypoint-initdb.d
           {{- end }}{{- end }}
-          {{- if .Values.tlsCerts.create }}
             - name: tlscerts
               mountPath: /etc/ssl/tlscerts
-          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- if .Values.metrics.enabled }}
@@ -201,12 +196,10 @@ spec:
               - key: restore.sh
                 path: restore.sh
       {{- end }}
-      {{- if .Values.tlsCerts.create }}
         - name: tlscerts
           secret:
             secretName: {{ include "postgresql-single.fullname" . }}-server-tls
             defaultMode: 256
-      {{- end }}
       {{- if .Values.metrics.enabled }}
         - name: pgpass
           secret:

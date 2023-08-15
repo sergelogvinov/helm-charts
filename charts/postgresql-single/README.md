@@ -1,6 +1,6 @@
 # postgresql-single
 
-![Version: 0.7.1](https://img.shields.io/badge/Version-0.7.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 14.8](https://img.shields.io/badge/AppVersion-14.8-informational?style=flat-square)
+![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 14.9](https://img.shields.io/badge/AppVersion-14.9-informational?style=flat-square)
 
 Postgres with backup/restore checks
 
@@ -91,6 +91,7 @@ metrics:
 | postgresqlUsername | string | `"postgres"` | PostgreSQL admin user ref: https://hub.docker.com/_/postgres |
 | pgHbaConfiguration | string | `"# host  database    user                  address       auth-method\n#\nlocal   all         all                                 trust\nlocal   replication postgres                            trust\nhost    all         all                   localhost     trust\nhost    postgres    postgres              10.0.0.0/8    md5\nhostssl postgres    postgres              10.0.0.0/8    md5\nhost    replication postgres              10.0.0.0/8    md5\nhostssl replication postgres              10.0.0.0/8    md5"` | Postgres auth ref: https://www.postgresql.org/docs/current/auth-pg-hba-conf.html |
 | tlsCerts.create | bool | `false` |  |
+| tlsCerts.mode | string | `"require"` |  |
 | serviceAccount | object | `{"annotations":{},"create":true,"name":""}` | Pods Service Account. ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
 | podlabels | object | `{}` | Extra labels for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ |
 | podAnnotations | object | `{}` | Annotations for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |

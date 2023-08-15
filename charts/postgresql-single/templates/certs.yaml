@@ -1,0 +1,70 @@
+{{- if not .Values.tlsCerts.create }}
+{{- $ca := genCA .Chart.Name 3650 }}
+{{- $name0  := include "postgresql-single.fullname" . }}
+{{- $name1  := printf "%s.%s" (include "postgresql-single.fullname" .) .Release.Namespace }}
+{{- $name2  := printf "%s.%s.svc" (include "postgresql-single.fullname" .) .Release.Namespace }}
+{{- $nameH1  := printf "%s-0.%s-headless.%s.svc" $name0 $name0 .Release.Namespace }}
+{{- $nameH2  := printf "%s-1.%s-headless.%s.svc" $name0 $name0 .Release.Namespace }}
+{{- $nameH3  := printf "%s-2.%s-headless.%s.svc" $name0 $name0 .Release.Namespace }}
+{{- $server := genSignedCert "server" (list "127.0.0.1") (list $name0 $name1 $name2 $nameH1 $nameH2 $nameH3) 3650 $ca }}
+{{- $client := genSignedCert "client" nil nil 3650 $ca }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}-tls
+  labels:
+    {{- include "postgresql-single.labels" . | nindent 4 }}
+type: kubernetes.io/tls
+data:
+{{- $secretName := printf "%s-tls" (include "postgresql-single.fullname" .) }}
+{{- $secretData := (lookup "v1" "Secret" .Release.Namespace $secretName).data }}
+{{- if and $secretData (hasKey $secretData "ca.crt") }}
+  ca.crt: {{ get $secretData "ca.crt" }}
+  tls.crt: {{ get $secretData "tls.crt" }}
+  tls.key: {{ get $secretData "tls.key" }}
+{{- else }}
+  ca.crt: {{ $ca.Cert | b64enc }}
+  tls.crt: {{ $ca.Cert | b64enc }}
+  tls.key: {{ $ca.Key | b64enc }}
+{{- end }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}-server-tls
+  labels:
+    {{- include "postgresql-single.labels" . | nindent 4 }}
+type: kubernetes.io/tls
+data:
+{{- $serverName := printf "%s-server-tls" (include "postgresql-single.fullname" .) }}
+{{- $serverData := (lookup "v1" "Secret" .Release.Namespace $serverName).data }}
+{{- if and $serverData (hasKey $serverData "ca.crt") }}
+  ca.crt: {{ get $serverData "ca.crt" }}
+  tls.crt: {{ get $serverData "tls.crt" }}
+  tls.key: {{ get $serverData "tls.key" }}
+{{- else }}
+  ca.crt: {{ $ca.Cert | b64enc }}
+  tls.crt: {{ $server.Cert | b64enc }}
+  tls.key: {{ $server.Key | b64enc }}
+{{- end }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}-client-tls
+  labels:
+    {{- include "postgresql-single.labels" . | nindent 4 }}
+type: kubernetes.io/tls
+data:
+{{- $clientName := printf "%s-client-tls" (include "postgresql-single.fullname" .) }}
+{{- $clientData := (lookup "v1" "Secret" .Release.Namespace $clientName).data }}
+{{- if and $clientData (hasKey $clientData "ca.crt") }}
+  ca.crt: {{ get $clientData "ca.crt" }}
+  tls.crt: {{ get $clientData "tls.crt" }}
+  tls.key: {{ get $clientData "tls.key" }}
+{{- else }}
+  ca.crt: {{ $ca.Cert | b64enc }}
+  tls.crt: {{ $client.Cert | b64enc }}
+  tls.key: {{ $client.Key | b64enc }}
+{{- end }}
+{{- end }}
