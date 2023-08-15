@@ -213,7 +213,7 @@ frontend stats
   monitor-uri /healthz
   option dontlognull
   option clitcpka
-  fullconn 16
+  maxconn 16
 
 frontend keydb_master
   bind *:6379

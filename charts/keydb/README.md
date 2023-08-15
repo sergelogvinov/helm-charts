@@ -1,6 +1,6 @@
 # keydb
 
-![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.3](https://img.shields.io/badge/AppVersion-6.3.3-informational?style=flat-square)
+![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.3](https://img.shields.io/badge/AppVersion-6.3.3-informational?style=flat-square)
 
 KeyDB with TLS, backup/restore support
 
@@ -83,7 +83,7 @@ metrics:
 | loadbalancer.replicaCount | int | `1` |  |
 | loadbalancer.image.repository | string | `"haproxy"` |  |
 | loadbalancer.image.pullPolicy | string | `"IfNotPresent"` |  |
-| loadbalancer.image.tag | string | `"2.4.7"` |  |
+| loadbalancer.image.tag | string | `"2.7.10-alpine3.18"` |  |
 | loadbalancer.podSecurityContext.runAsNonRoot | bool | `true` |  |
 | loadbalancer.podSecurityContext.runAsUser | int | `99` |  |
 | loadbalancer.podSecurityContext.runAsGroup | int | `99` |  |
