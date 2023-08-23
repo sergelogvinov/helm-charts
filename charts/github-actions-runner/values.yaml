@@ -171,10 +171,10 @@ metrics:
   resources:
     limits:
       cpu: 100m
-      memory: 128Mi
+      memory: 256Mi
     requests:
       cpu: 50m
-      memory: 64Mi
+      memory: 128Mi
 
   # -- Node labels for local registry deploy assignment.
   # ref: https://kubernetes.io/docs/user-guide/node-selection/
