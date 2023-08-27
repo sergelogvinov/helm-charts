@@ -91,3 +91,18 @@ done
 
 curl -XPOST http://127.0.0.1:{{ .Values.service.port }}/api/v1/start --data @/etc/mongosync/filters.json
 {{- end }}
+
+
+{{/*
+MongoSync stop/finish script
+*/}}
+{{- define "mongosync.finish" -}}
+#!/bin/sh
+#
+# https://www.mongodb.com/docs/cluster-to-cluster-sync/current/reference/api/commit/
+#
+
+curl --fail --silent --connect-timeout 5 http://127.0.0.1:{{ .Values.service.port }}/api/v1/progress | jq '.progress.canCommit'
+
+curl -XPOST http://127.0.0.1:{{ .Values.service.port }}/api/v1/commit --data '{}'
+{{- end }}

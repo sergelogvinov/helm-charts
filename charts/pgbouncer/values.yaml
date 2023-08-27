@@ -107,6 +107,8 @@ autoscaling:
 # -- Use a daemonset instead of a deployment
 useDaemonSet: false
 
+terminationGracePeriodSeconds: 240
+
 # -- pod deployment update stategy type.
 # ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
@@ -139,7 +141,7 @@ metrics:
 
   image:
     repository: jbub/pgbouncer_exporter
-    tag: v0.14.0
+    tag: v0.15.0
     pullPolicy: IfNotPresent
 
   resources:
@@ -148,4 +150,4 @@ metrics:
       memory: 32Mi
     requests:
       cpu: 10m
-      memory: 8Mi
+      memory: 16Mi

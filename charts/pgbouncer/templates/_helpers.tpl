@@ -139,8 +139,8 @@ Create config file pgbouncer.ini
 listen_addr = *
 listen_port = 5432
 
-max_client_conn = 256
-default_pool_size = 100
+max_client_conn = 512
+default_pool_size = 200
 min_pool_size = 0
 
 unix_socket_dir = /var/run/postgresql

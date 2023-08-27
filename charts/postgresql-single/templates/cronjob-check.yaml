@@ -78,8 +78,10 @@ spec:
                 - name: recovery
                   mountPath: /usr/backup
               {{- if .Values.extraVolumeMounts }}
-                {{ toYaml .Values.extraVolumeMounts | nindent 16 }}
+                {{- toYaml .Values.extraVolumeMounts | nindent 16 }}
               {{- end }}
+                - name: tlscerts
+                  mountPath: /etc/ssl/tlscerts
               resources:
                 {{- toYaml .Values.backupCheck.resources | nindent 16 }}
           {{- with default .Values.nodeSelector .Values.backupCheck.nodeSelector }}
@@ -116,8 +118,12 @@ spec:
                 items:
                   - key: restore-checker.sh
                     path: restore-checker.sh
+            - name: tlscerts
+              secret:
+                secretName: {{ include "postgresql-single.fullname" . }}-server-tls
+                defaultMode: 256
           {{- if .Values.extraVolumes -}}
-            {{ toYaml .Values.extraVolumes | nindent 12 }}
+            {{- toYaml .Values.extraVolumes | nindent 12 }}
           {{- end -}}
           {{- if .Values.tlsCerts.create }}
             - name: tlscerts

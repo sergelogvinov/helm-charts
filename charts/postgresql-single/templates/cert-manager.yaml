@@ -31,6 +31,7 @@ spec:
   usages:
     - server auth
     - client auth
+    - crl sign
   isCA: true
 ---
 apiVersion: cert-manager.io/v1

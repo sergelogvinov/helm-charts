@@ -178,7 +178,7 @@ spec:
           configMap:
             name: {{ include "postgresql-single.fullname" . }}
       {{- if .Values.extraVolumes }}
-        {{ toYaml .Values.extraVolumes | nindent 8 }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
       {{- end }}
       {{- if or .Values.backup.enabled .Values.backup.recovery }}
         - name: config

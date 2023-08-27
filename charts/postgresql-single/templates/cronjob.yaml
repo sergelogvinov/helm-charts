@@ -122,7 +122,7 @@ spec:
                   - key: walg.yaml
                     path: walg.yaml
           {{- if .Values.extraVolumes -}}
-            {{ toYaml .Values.extraVolumes | nindent 12 }}
+            {{- toYaml .Values.extraVolumes | nindent 12 }}
           {{- end -}}
           {{- if .Values.tlsCerts.create }}
             - name: tlscerts
