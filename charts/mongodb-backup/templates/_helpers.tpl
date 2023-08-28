@@ -87,7 +87,7 @@ WALG_COMPRESSION_METHOD: brotli
 {{- if not .Values.walg }}
 WALG_FILE_PREFIX: /backup
 {{- else }}
-{{ .Values.walg }}
+{{ .Values.walg | toYaml }}
 {{- end }}
 
 OPLOG_PITR_DISCOVERY_INTERVAL: '168h'
@@ -107,7 +107,7 @@ WALG_COMPRESSION_METHOD: brotli
 {{- if not .Values.walg }}
 WALG_FILE_PREFIX: /backup
 {{- else }}
-{{ .Values.walg }}
+{{ .Values.walg | toYaml }}
 {{- end }}
 
 MONGODB_URI:                 '{{ include "mongodb-backup-localhost.mongodb" . }}'

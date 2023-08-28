@@ -53,7 +53,7 @@ auth:
 
 env: []
 
-# walg: |
+walg: {}
 #   GOOGLE_APPLICATION_CREDENTIALS: /etc/gcp/backup.json
 
 # -- Pods Service Account.
@@ -87,8 +87,8 @@ podSecurityContext:
 # -- Container Security Context.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 securityContext:
-  # seccompProfile:
-  #   type: RuntimeDefault
+  seccompProfile:
+    type: RuntimeDefault
   allowPrivilegeEscalation: false
   capabilities:
     drop:
