@@ -46,7 +46,7 @@ spec:
                 - name: walg
                   mountPath: /etc/walg
               {{- if .Values.extraVolumeMounts }}
-                {{ toYaml .Values.extraVolumeMounts | nindent 16 }}
+                {{- toYaml .Values.extraVolumeMounts | nindent 16 }}
               {{- end }}
                 - name: data
                   mountPath: /data
@@ -77,7 +77,7 @@ spec:
                   - key: walg.yaml
                     path: walg.yaml
           {{- if .Values.extraVolumes }}
-            {{ toYaml .Values.extraVolumes | nindent 12 }}
+            {{- toYaml .Values.extraVolumes | nindent 12 }}
           {{- end }}
           {{- if .Values.backupCheck.persistence.existingClaim }}
             - name: data
@@ -90,7 +90,7 @@ spec:
                   metadata:
                     labels:
                       {{- with .Values.podlabels }}
-                      {{ toYaml . | nindent 22 }}
+                      {{- toYaml . | nindent 22 }}
                       {{- end }}
                       {{- include "keydb.crontab.labels" . | nindent 22 }}
                       app.kubernetes.io/component: check

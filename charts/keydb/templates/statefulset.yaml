@@ -75,7 +75,7 @@ spec:
               mountPath: /etc/walg
           {{- end }}
           {{- if .Values.extraVolumeMounts }}
-            {{ toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
           {{- end }}
             - name: data
               mountPath: /data
@@ -199,7 +199,7 @@ spec:
                 path: walg.yaml
       {{- end }}
       {{- if .Values.extraVolumes }}
-        {{ toYaml .Values.extraVolumes | nindent 8 }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
       {{- end }}
       {{- if .Values.tlsCerts.create }}
         - name: tlscerts

@@ -1,6 +1,6 @@
 # keydb
 
-![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.3](https://img.shields.io/badge/AppVersion-6.3.3-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.3](https://img.shields.io/badge/AppVersion-6.3.3-informational?style=flat-square)
 
 KeyDB with TLS, backup/restore support
 
@@ -78,6 +78,8 @@ metrics:
 | keydb.threads | int | `2` |  |
 | keydb.activeReplica | string | `"yes"` |  |
 | keydb.multiMaster | string | `"yes"` |  |
+| keydb.save[0] | string | `"900 1"` |  |
+| keydb.save[1] | string | `"120 100000"` |  |
 | tlsCerts.create | bool | `false` |  |
 | loadbalancer.enabled | bool | `false` |  |
 | loadbalancer.replicaCount | int | `1` |  |
@@ -135,7 +137,7 @@ metrics:
 | startupProbe.failureThreshold | int | `10` |  |
 | startupProbe.successThreshold | int | `1` |  |
 | startupProbe.periodSeconds | int | `10` |  |
-| service | object | `{"annotations":{},"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
+| service | object | `{"annotations":{},"ipFamilies":["IPv4"],"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
 | resources | object | `{"requests":{"cpu":"10m","memory":"64Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"10Gi"}` | Persistence parameters ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
 | updateStrategy | object | `{"type":"RollingUpdate"}` | pod deployment update stategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |

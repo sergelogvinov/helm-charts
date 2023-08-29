@@ -152,8 +152,9 @@ masterauth "{{ .Values.keydb.password  }}"
 requirepass "{{ .Values.keydb.password  }}"
 {{- end }}
 
-save 300 1
-save 60  100000
+{{- with .Values.keydb.save }}
+save {{ . }}
+{{- end }}
 
 dir /data
 dbfilename keydb.rdb

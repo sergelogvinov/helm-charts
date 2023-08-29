@@ -22,6 +22,10 @@ keydb:
   activeReplica: "yes"
   multiMaster: "yes"
 
+  save:
+    - 900 1
+    - 120 100000
+
 tlsCerts:
   create: false
 
@@ -183,6 +187,8 @@ service:
   type: ClusterIP
   annotations: {}
   # service.kubernetes.io/topology-mode: Auto
+
+  ipFamilies: [IPv4]
 
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/
