@@ -101,6 +101,8 @@ service:
   type: ClusterIP
   port: 5432
 
+  ipFamilies: [IPv4]
+
 postgresqlServerMemory: "128"
 
 # -- Resource requests and limits.

@@ -59,6 +59,8 @@ securityContext:
 service:
   type: ClusterIP
 
+  ipFamilies: [IPv4]
+
 # -- Clickhouse ingress parameters
 # ref: http://kubernetes.io/docs/user-guide/ingress/
 ingress:

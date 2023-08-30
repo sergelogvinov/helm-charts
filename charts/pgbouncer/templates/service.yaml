@@ -13,6 +13,11 @@ spec:
   {{- if eq .Values.service.type "NodePort" }}
   externalTrafficPolicy: Local
   {{- end }}
+  {{- with .Values.service.ipFamilies }}
+  ipFamilies:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  ipFamilyPolicy: {{ if eq (len .Values.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: psql

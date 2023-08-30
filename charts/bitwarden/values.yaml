@@ -96,6 +96,8 @@ service:
   # -- websocket service port
   portWSocket: 3012
 
+  ipFamilies: [IPv4]
+
 # -- Bitwarden ingress parameters
 # ref: http://kubernetes.io/docs/user-guide/ingress/
 ingress:

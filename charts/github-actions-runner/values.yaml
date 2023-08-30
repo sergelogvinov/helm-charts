@@ -157,7 +157,6 @@ registry:
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
 
-
 metrics:
   enabled: true
 
@@ -219,6 +218,11 @@ securityContext:
     drop: ["ALL"]
   runAsUser: 1001
   runAsGroup: 0
+
+# -- Service parameters
+# ref: https://kubernetes.io/docs/user-guide/services/
+service:
+  ipFamilies: [IPv4]
 
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/

@@ -10,6 +10,11 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
+  {{- with .Values.service.ipFamilies }}
+  ipFamilies:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  ipFamilyPolicy: {{ if eq (len .Values.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
   ports:
     {{- range $key, $value := .Values.service.ports }}
     - name: {{ .name }}

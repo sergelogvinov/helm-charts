@@ -1,6 +1,13 @@
 1. Get the application URL by running these commands:
+
 {{- if .Values.ingress.enabled }}
-{{- range $host := .Values.ingress.hosts }}
+{{ range $host := .Values.ingress.hosts }}
   http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}
-{{- end }}
+{{ end }}
+{{ end }}
+{{ if .Values.cronjobs }}
+2. Cronjob command:
+{{ range $key, $val := .Values.cronjobs }}
+kubectl -n {{ $.Release.Namespace }} create job --from=cronjob/{{ include "clickhouse.fullname" $ }}-{{ $key }} {{ include "clickhouse.fullname" $ }}-{{ $key }}-manual
+{{ end }}
 {{- end }}

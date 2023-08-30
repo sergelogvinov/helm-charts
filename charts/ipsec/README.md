@@ -1,6 +1,6 @@
 # ipsec
 
-![Version: 0.1.5](https://img.shields.io/badge/Version-0.1.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.11](https://img.shields.io/badge/AppVersion-4.11-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.11](https://img.shields.io/badge/AppVersion-4.11-informational?style=flat-square)
 
 IPSec link for Kubernetes
 
@@ -97,7 +97,7 @@ config: |
 | ipsecService.ports | list | `[]` |  |
 | serviceAccount | object | `{"annotations":{},"create":true,"name":""}` | Pods Service Account. ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
 | podAnnotations | object | `{}` | Annotations for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
-| service | object | `{"ipsec":4500,"isakmp":500,"type":"HostPort"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
+| service | object | `{"ipFamilies":["IPv4"],"ipsec":4500,"isakmp":500,"type":"HostPort"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
 | resources | object | `{"limits":{"cpu":"100m","memory":"128Mi"},"requests":{"cpu":"100m","memory":"64Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | useDaemonSet | bool | `false` | Use a daemonset instead of a deployment |
 | updateStrategy | object | `{"rollingUpdate":{"maxUnavailable":1},"type":"RollingUpdate"}` | Pod deployment update stategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |

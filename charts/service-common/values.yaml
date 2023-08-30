@@ -49,6 +49,7 @@ securityContext:
 # ref: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
   type: ClusterIP
+  ipFamilies: [IPv4]
 
   externalName: services
   ports:

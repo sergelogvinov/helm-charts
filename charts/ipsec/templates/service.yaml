@@ -13,6 +13,11 @@ spec:
   type: ClusterIP
   clusterIP: None
 {{- end }}
+  {{- with .Values.service.ipFamilies }}
+  ipFamilies:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  ipFamilyPolicy: {{ if eq (len .Values.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
   ports:
     - name: isakmp
       port: {{ .Values.service.isakmp }}

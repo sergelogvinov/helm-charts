@@ -70,6 +70,8 @@ service:
   type: ClusterIP
   port: 80
 
+  ipFamilies: [IPv4]
+
 # -- Mirror ingress parameters
 # ref: http://kubernetes.io/docs/user-guide/ingress/
 ingress:

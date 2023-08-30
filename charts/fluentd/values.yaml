@@ -54,6 +54,7 @@ securityContext:
 # ref: https://kubernetes.io/docs/user-guide/services/
 service:
   type: ClusterIP
+  ipFamilies: [IPv4]
   annotations: {}
   # service.kubernetes.io/topology-mode: Auto
   ports:

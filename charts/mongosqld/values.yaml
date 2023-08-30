@@ -89,6 +89,8 @@ service:
   type: ClusterIP
   port: 3306
 
+  ipFamilies: [IPv4]
+
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:

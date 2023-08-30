@@ -11,6 +11,11 @@ metadata:
     prometheus.io/port: "9999"
 spec:
   type: ClusterIP
+  {{- with .Values.service.ipFamilies }}
+  ipFamilies:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  ipFamilyPolicy: {{ if eq (len .Values.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
   ports:
     - name: metrics
       port: 9999
