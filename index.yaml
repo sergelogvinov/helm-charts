@@ -2,6 +2,26 @@ apiVersion: v1
 entries:
   bitwarden:
   - apiVersion: v2
+    appVersion: 1.29.1
+    created: "2023-08-30T04:41:41.992880451Z"
+    description: A Helm chart to deploy Bitwarden.
+    digest: 012cdb79a32534f12678ee59bad0f4efed4496aeb1d9416c137543d6949d071c
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - vaultwarden
+    - bitwarden
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: bitwarden
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/bitwarden
+    - https://github.com/dani-garcia/vaultwarden
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/bitwarden-0.3.0/bitwarden-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: 1.29.0
     created: "2023-07-29T05:02:52.919377534Z"
     description: A Helm chart to deploy Bitwarden.
@@ -102,6 +122,26 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/bitwarden-0.1.0/bitwarden-0.1.0.tgz
     version: 0.1.0
   clickhouse:
+  - apiVersion: v2
+    appVersion: 23.7.5.30
+    created: "2023-08-30T04:41:42.107383248Z"
+    description: Clickhouse chart for Kubernetes
+    digest: abe641d9c6ad184e5602ef6e66cf32ec88472af864809e893959c21da96eb9f1
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - database
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: clickhouse
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/clickhouse
+    - https://github.com/ClickHouse/ClickHouse
+    - https://hub.docker.com/r/clickhouse/clickhouse-server
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-0.5.0/clickhouse-0.5.0.tgz
+    version: 0.5.0
   - apiVersion: v2
     appVersion: 23.7.3.14
     created: "2023-08-14T18:14:06.312747349Z"
@@ -313,6 +353,27 @@ entries:
   fluentd:
   - apiVersion: v2
     appVersion: 1.15.3
+    created: "2023-08-30T04:41:42.231334502Z"
+    description: Deploy fluentd as log router
+    digest: 629fc389a30d452bfe255ee0d376a4632c94fe39d9784b820763d388144ebaa7
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - fluentd
+    - logging
+    - logs
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: fluentd
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/fluentd
+    - https://www.fluentd.org
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/fluentd-0.1.0/fluentd-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v2
+    appVersion: 1.15.3
     created: "2023-07-14T16:58:06.377867219Z"
     description: Deploy fluentd as log router
     digest: 58899d219b4ed3443c8f963c0ed2313bcd28db7323721099c0ae796801f7b278
@@ -374,6 +435,27 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/fluentd-0.0.1/fluentd-0.0.1.tgz
     version: 0.0.1
   github-actions-runner:
+  - apiVersion: v2
+    appVersion: 2.308.0
+    created: "2023-08-30T04:41:42.342079237Z"
+    description: Github Actions with container registry and mirrors
+    digest: 3ee043725c143fd1a20fcd56d0921380d74f0eedc8a7ef4b0037f99c58caa4ef
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - github-actions
+    - conteiner
+    - docker-registry
+    - docker-mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: github-actions-runner
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/github-actions-runner
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/github-actions-runner-1.2.0/github-actions-runner-1.2.0.tgz
+    version: 1.2.0
   - apiVersion: v2
     appVersion: 2.308.0
     created: "2023-08-23T13:18:13.977192545Z"
@@ -459,6 +541,25 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/github-actions-runner-1.0.0/github-actions-runner-1.0.0.tgz
     version: 1.0.0
   ipsec:
+  - apiVersion: v2
+    appVersion: "4.11"
+    created: "2023-08-30T04:41:42.467945422Z"
+    description: IPSec link for Kubernetes
+    digest: ab056dd6120580a3000b46d959808de94574e4225726c13d243430442960c867
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - ipsec
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: ipsec
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/ipsec
+    - https://libreswan.org/
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/ipsec-0.2.0/ipsec-0.2.0.tgz
+    version: 0.2.0
   - apiVersion: v2
     appVersion: "4.11"
     created: "2023-06-23T15:46:51.845163627Z"
@@ -996,6 +1097,27 @@ entries:
   mongosqld:
   - apiVersion: v2
     appVersion: 2.14.5
+    created: "2023-08-30T04:41:42.592287182Z"
+    description: Mongo to SQL bridge
+    digest: 2fb3b21d74293f439f12db1ca3c8b6a962b04fb5e16571a52067271228411b16
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - mongodb
+    - mongosqld
+    - powerbi
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongosqld
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongosqld
+    - https://www.mongodb.com/docs/bi-connector/current/reference/mongosqld
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongosqld-0.3.0/mongosqld-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
+    appVersion: 2.14.5
     created: "2023-06-10T15:50:40.196121048Z"
     description: Mongo to SQL bridge
     digest: 99d23bb336c78a891dd9826766469cdab452ba8800503274ca8e8b2db88e7be5
@@ -1277,6 +1399,25 @@ entries:
   pgbouncer:
   - apiVersion: v2
     appVersion: "15.4"
+    created: "2023-08-30T04:41:42.709547425Z"
+    description: Postgres connection poller
+    digest: 92f09ecfa47dc332bcedd0217571535eb2e786f6d5d3df1e5fa3d31a67756138
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - pgbouncer
+    - postgresql
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: pgbouncer
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/pgbouncer
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.2.0/pgbouncer-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: "15.4"
     created: "2023-08-27T05:06:01.169653621Z"
     description: Postgres connection poller
     digest: 62e99f108558b12a8c8a535842e666811cca255399db22fc805df2164e3eabce
@@ -1402,6 +1543,28 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.0/pgbouncer-0.1.0.tgz
     version: 0.1.0
   postgresql-single:
+  - apiVersion: v2
+    appVersion: "14.9"
+    created: "2023-08-30T04:41:42.816652599Z"
+    description: Postgres with backup/restore checks
+    digest: 35e1b83a8617143b96a8941a54081dc5a04774b2a97421251efb52d02c750836
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: postgresql-single
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.9.0/postgresql-single-0.9.0.tgz
+    version: 0.9.0
   - apiVersion: v2
     appVersion: "14.9"
     created: "2023-08-27T05:06:01.327461606Z"
@@ -2215,6 +2378,25 @@ entries:
   registry-mirrors:
   - apiVersion: v2
     appVersion: 2.8.1
+    created: "2023-08-30T04:41:42.928910159Z"
+    description: Container registry mirror
+    digest: 0aea36b6422b9cbd16fd0e5fe6a38254eb5b0a1af6b418a20ab5c937c1c84535
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - containerd
+    - docker mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: registry-mirrors
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/registry-mirrors
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/registry-mirrors-0.2.0/registry-mirrors-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 2.8.1
     created: "2023-06-11T11:35:07.172722497Z"
     description: Container registry mirror
     digest: a6e1235da0a04bd8f3086fb14c89eb4af0e73785327161790463920c42ec98c3
@@ -2253,6 +2435,22 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/registry-mirrors-0.1.0/registry-mirrors-0.1.0.tgz
     version: 0.1.0
   service-common:
+  - apiVersion: v2
+    appVersion: 2.4.22
+    created: "2023-08-30T04:41:43.108420533Z"
+    description: Simple gateway with TLS auth
+    digest: 2116c55fb75e9d6b7157f4bf38a2159fe364a0996a573aaa473c74addaac1c9f
+    home: https://github.com/sergelogvinov/helm-charts
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: service-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/service-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/service-common-0.2.0/service-common-0.2.0.tgz
+    version: 0.2.0
   - apiVersion: v2
     appVersion: 2.4.22
     created: "2023-06-23T15:46:52.746493054Z"
@@ -2464,4 +2662,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-08-29T17:12:05.90116323Z"
+generated: "2023-08-30T04:41:43.109028143Z"
