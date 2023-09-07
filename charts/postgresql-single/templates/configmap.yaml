@@ -267,11 +267,14 @@ data:
     pg_dumpall -U postgres >/dev/null
     echo "*** Passed"
 
-    pg_ctl -D "$PGDATA" -w stop
+    sleep 5
+    pg_ctl -D "$PGDATA" -t 60 -w stop 2>/dev/null ||:
 
     END=`date +%s`
     RUNTIME=`expr $END - $START`
     echo "*** Tests time - ${RUNTIME}s"
 
-    rm -rf {{ .Values.persistence.mountPath }}/data
+    {{- if .Values.backupCheck.persistence.existingClaim }}
+    rm -rf {{ .Values.persistence.mountPath }}/data 2>/dev/null ||:
+    {{- end }}
 {{- end }}
