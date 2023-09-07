@@ -2284,6 +2284,24 @@ entries:
   rbac-common:
   - apiVersion: v2
     appVersion: 0.1.1
+    created: "2023-09-07T06:54:16.007668014Z"
+    description: Kubernetes RBAC
+    digest: 2ce78e8bf909a3e5b81ca491bc62d632e20a6728e8e3540688a9a59ec4b22e45
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - rbac
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: rbac-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/rbac-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/rbac-common-0.2.0/rbac-common-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 0.1.1
     created: "2023-08-14T18:18:57.631573098Z"
     description: Kubernetes RBAC
     digest: 3e4ebddd789fdd617011989236232fdffcc9bf0ff6a8a175f907ccc127c97f0f
@@ -2727,4 +2745,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-09-07T06:53:05.693411135Z"
+generated: "2023-09-07T06:54:16.008010418Z"
