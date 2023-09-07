@@ -437,6 +437,27 @@ entries:
   github-actions-runner:
   - apiVersion: v2
     appVersion: 2.308.0
+    created: "2023-09-07T06:53:05.277260223Z"
+    description: Github Actions with container registry and mirrors
+    digest: c0943eb876cba489f00b0e48b58c6d64f19a080fda47e9cf478aefca5022495f
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - github-actions
+    - conteiner
+    - docker-registry
+    - docker-mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: github-actions-runner
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/github-actions-runner
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/github-actions-runner-1.2.1/github-actions-runner-1.2.1.tgz
+    version: 1.2.1
+  - apiVersion: v2
+    appVersion: 2.308.0
     created: "2023-08-30T04:41:42.342079237Z"
     description: Github Actions with container registry and mirrors
     digest: 3ee043725c143fd1a20fcd56d0921380d74f0eedc8a7ef4b0037f99c58caa4ef
@@ -916,6 +937,28 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.2.3/keydb-0.2.3.tgz
     version: 0.2.3
   mongodb-backup:
+  - apiVersion: v2
+    appVersion: 6.0.9
+    created: "2023-09-07T06:53:05.481462459Z"
+    description: Mongo backup with restore checks
+    digest: 4b7de806f647369131bdfd9d8bb91c5f42f1ae1463a2c6e1a45e4af30e141a0e
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - mongodb
+    - backup
+    - wal-g
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongodb-backup
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongodb-backup
+    - https://www.mongodb.com
+    - https://github.com/wal-g/wal-g
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongodb-backup-0.4.1/mongodb-backup-0.4.1.tgz
+    version: 0.4.1
   - apiVersion: v2
     appVersion: 6.0.9
     created: "2023-08-28T14:06:45.975314769Z"
@@ -1543,6 +1586,28 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.0/pgbouncer-0.1.0.tgz
     version: 0.1.0
   postgresql-single:
+  - apiVersion: v2
+    appVersion: "14.9"
+    created: "2023-09-07T06:53:05.692674131Z"
+    description: Postgres with backup/restore checks
+    digest: 8c6dc326ae25a624a640cc2df194f8a78cf12d7730843185faff5027b8a9c36f
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: postgresql-single
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.9.1/postgresql-single-0.9.1.tgz
+    version: 0.9.1
   - apiVersion: v2
     appVersion: "14.9"
     created: "2023-08-30T04:41:42.816652599Z"
@@ -2662,4 +2727,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-08-30T04:41:43.109028143Z"
+generated: "2023-09-07T06:53:05.693411135Z"
