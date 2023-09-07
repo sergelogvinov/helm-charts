@@ -56,8 +56,11 @@ rules:
   - rbac.authorization.k8s.io
   resources:
   - roles
+  - rolebindings
   verbs:
+  - get
   - list
+  - watch
 - apiGroups:
   - apiextensions.k8s.io
   resources:
@@ -349,4 +352,14 @@ rules:
   verbs:
   - get
   - list
+  - watch
+  - patch
+  - update
+- apiGroups:
+  - psmdb.percona.com
+  resources:
+  - perconaservermongodbbackups
+  verbs:
+  - create
+  - delete
 {{- end }}

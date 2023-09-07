@@ -6,6 +6,10 @@ rbac:
   create: true
   singleNamespace: false
 
+viewers: []
+  # - user1
+  # - user2
+
 developers: []
   # - user1
   # - user2

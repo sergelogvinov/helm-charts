@@ -13,6 +13,18 @@ rules:
 - apiGroups:
   - ""
   resources:
+  - pods/portforward
+  - pods/proxy
+  - services/proxy
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - delete
+- apiGroups:
+  - ""
+  resources:
   - configmaps
   - endpoints
   - persistentvolumeclaims
