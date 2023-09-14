@@ -98,3 +98,4 @@ defaultRules:
     # KubeAPIDown: true
     # NodeRAIDDegraded: true
     NodeDiskIOSaturation: true
+    NodeMemoryHighUtilization: true

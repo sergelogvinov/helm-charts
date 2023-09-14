@@ -13,16 +13,18 @@ data:
     set -e
 
     install -m 0660 -c /etc/keydb-common-config/keydb.conf /etc/keydb/keydb.conf
-    echo >> /etc/keydb/keydb.conf
-    echo "maxmemory ${MEMORY_LIMIT}b" >> /etc/keydb/keydb.conf
 
-  {{ if eq .Values.keydb.multiMaster "yes" }}
+  {{ if eq .Values.keydb.activeReplica "yes" }}
     echo "# replicas">> /etc/keydb/keydb.conf
     for node in {{ range $i := until (int .Values.replicaCount) }} {{ $i }}{{ end }}; do
       if [ "${HOSTNAME}" != "{{ $name }}-${node}" ]; then
           echo "replicaof {{ $name }}-${node}.{{ $name }}-headless {{ $port }}" >> /etc/keydb/keydb.conf
       fi
     done
+  {{- else }}
+    if [ "$HOSTNAME" != "{{ $name }}-0" ]; then
+      echo "replicaof {{ $name }}-0.{{ $name }}-headless {{ $port }}" >> /etc/keydb/keydb.conf
+    fi
   {{- end }}
 
   {{- if and .Values.backup.enabled .Values.backup.recovery }}
@@ -42,10 +44,10 @@ data:
     set -e
 
     wal-g --config /etc/walg/walg.yaml backup-push
-    wal-g --config /etc/walg/walg.yaml backup-list --detail
     {{- if .Values.backup.cleanPolicy }}
     wal-g --config /etc/walg/walg.yaml delete {{ .Values.backup.cleanPolicy }} --confirm ||:
     {{- end }}
+    wal-g --config /etc/walg/walg.yaml backup-list --detail
 
   restore.sh: |
     #!/bin/sh

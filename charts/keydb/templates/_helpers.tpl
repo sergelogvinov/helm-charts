@@ -110,6 +110,16 @@ Common port
 {{- end }}
 {{- end }}
 
+{{/*
+Convert a memory resource like "500Mi" to the number 500000000 (bytes)
+*/}}
+{{- define "resource-bytes" -}}
+{{- if . | hasSuffix "Mi" -}}
+{{- mul (. | trimSuffix "Mi" | int64) 1000000 -}}
+{{- else if . | hasSuffix "Gi" -}}
+{{- mul (. | trimSuffix "Gi" | int64) 1000000000 -}}
+{{- end }}
+{{- end }}
 
 {{/*
 Common config
@@ -143,6 +153,9 @@ maxclients 8192
 server-threads {{ .Values.keydb.threads | int }}
 active-replica {{ .Values.keydb.activeReplica }}
 multi-master {{ .Values.keydb.multiMaster }}
+{{- if .Values.resources.requests.memory }}
+repl-backlog-size {{ include "resource-bytes" .Values.resources.requests.memory }}b
+{{ end }}
 
 loglevel notice
 logfile ""
@@ -152,7 +165,7 @@ masterauth "{{ .Values.keydb.password  }}"
 requirepass "{{ .Values.keydb.password  }}"
 {{- end }}
 
-{{- with .Values.keydb.save }}
+{{- range .Values.keydb.save }}
 save {{ . }}
 {{- end }}
 
@@ -163,8 +176,12 @@ stop-writes-on-bgsave-error yes
 rdbcompression yes
 rdbchecksum yes
 
+{{ if or .Values.resources.requests.memory .Values.resources.limits.memory }}
 maxmemory-policy noeviction
-{{- end }}
+{{- /*  Reserve 1m to keydb daemon */}}
+maxmemory {{ sub (int64 (include "resource-bytes" (default .Values.resources.requests.memory .Values.resources.limits.memory))) 1048576 }}b
+{{ end }}
+{{ end }}
 
 
 {{/*
@@ -184,6 +201,7 @@ global
   stats socket /var/run/haproxy.sock mode 600 level admin
   server-state-file haproxy_state
   server-state-base /run
+  log stdout len 65535 format raw local0 info
 
 resolvers clusterdns
   parse-resolv-conf
@@ -199,10 +217,14 @@ resolvers clusterdns
 
 defaults
   mode tcp
+  option  dontlognull
   timeout connect  4s
-  timeout server  30s
-  timeout client  30s
-  default-server  init-addr libc,none
+  timeout server   86400s
+  timeout client   86400s
+  default-server   init-addr libc,none
+
+  # log global
+  # log-format '{"remote_addr":"%ci","backend":"%b","retries":%rc,"bytes_read":%B,"bytes_write":%U,"cons":%fc}'
 
 frontend stats
   mode http
@@ -210,7 +232,9 @@ frontend stats
   http-request use-service prometheus-exporter if { path /metrics }
   stats enable
   stats uri /
+  stats admin if LOCALHOST
   stats refresh 10s
+  stats hide-version
   monitor-uri /healthz
   option dontlognull
   option clitcpka
@@ -230,6 +254,7 @@ backend keydb_master
   fullconn 4096
 
   option tcp-check
+  option log-health-checks
 {{- if .Values.tlsCerts.create }}
   tcp-check connect ssl
 {{- else }}
@@ -242,22 +267,27 @@ backend keydb_master
   tcp-check send PING\r\n
   tcp-check expect string +PONG
   tcp-check send info\ replication\r\n
+  tcp-check expect rstring role:(active-replica|master)
 {{- if eq .Values.keydb.activeReplica "yes" }}
-  tcp-check expect string role:active-replica
-{{- else }}
-  tcp-check expect string role:master
+  tcp-check expect string master_sync_in_progress:0
 {{- end }}
   tcp-check send QUIT\r\n
   tcp-check expect string +OK
 
 {{- if .Values.tlsCerts.create }}
-  default-server check check-ssl inter 15s fall 1 rise 1 on-marked-down shutdown-sessions resolve-prefer ipv4 ssl crt /run/server.pem ca-file /etc/ssl/tlscerts/ca.crt
+  default-server check check-ssl inter 15s fastinter 10s downinter 5s fall 3 rise 8 on-marked-down shutdown-sessions resolve-prefer ipv4 ssl crt /run/server.pem ca-file /etc/ssl/tlscerts/ca.crt
 {{- else }}
-  default-server check inter 15s fall 1 rise 1 on-marked-down shutdown-sessions resolve-prefer ipv4
+  default-server check inter 15s fastinter 10s downinter 5s fall 3 rise 8 on-marked-down shutdown-sessions resolve-prefer ipv4
 {{- end }}
 
   server RS {{ printf "%s.%s:%s" $name $domain $port }} backup no-check resolvers clusterdns
+{{- if eq .Values.loadbalancer.type "dynamic" }}
   server-template R {{if le (int .Values.replicaCount) 3}}3{{else}}{{ .Values.replicaCount }}{{end}} {{ printf "%s-headless.%s:%s" $name $domain $port }} resolvers clusterdns
+{{- else }}
+{{- range $i, $e := until (int .Values.replicaCount) }}
+  server {{ printf "%s-%d" $name $i }} {{ printf "%s-%d.%s-headless.%s:%s" $name $i $name $domain $port }} resolvers clusterdns
+{{- end }}
+{{- end }}
 {{ end }}
 
 
@@ -340,6 +370,13 @@ podAffinity:
       namespaces:
         - {{ .Release.Namespace | quote }}
       topologyKey: kubernetes.io/hostname
+  preferredDuringSchedulingIgnoredDuringExecution:
+    - podAffinityTerm:
+        labelSelector:
+          matchLabels: {{- (include "keydb.selectorLabels" .) | nindent 12 }}
+            statefulset.kubernetes.io/pod-name: {{ include "keydb.fullname" . }}-0
+        topologyKey: kubernetes.io/hostname
+      weight: 1
 {{- end -}}
 
 
@@ -361,6 +398,13 @@ podAffinity:
       namespaces:
         - {{ .Release.Namespace | quote }}
       topologyKey: kubernetes.io/hostname
+  preferredDuringSchedulingIgnoredDuringExecution:
+    - podAffinityTerm:
+        labelSelector:
+          matchLabels: {{- (include "keydb.selectorLabels" .) | nindent 12 }}
+            statefulset.kubernetes.io/pod-name: {{ include "keydb.fullname" . }}-0
+        topologyKey: kubernetes.io/hostname
+      weight: 1
 {{- end -}}
 
 

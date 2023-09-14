@@ -7,6 +7,7 @@ metadata:
 spec:
   serviceName: {{ include "keydb.fullname" . }}-headless
   replicas: {{ .Values.replicaCount }}
+  podManagementPolicy: Parallel
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
   selector:
@@ -55,12 +56,6 @@ spec:
           command:
             - /bin/sh
             - /entrypoint.d/init.sh
-          env:
-            - name: MEMORY_LIMIT
-              valueFrom:
-                resourceFieldRef:
-                  containerName: keydb
-                  resource: limits.memory
           volumeMounts:
             - name: common-config
               mountPath: /etc/keydb-common-config
@@ -98,19 +93,19 @@ spec:
           {{- if .Values.livenessProbe }}
           livenessProbe:
             tcpSocket:
-              port: {{  include "keydb.port" . }}
+              port: keydb
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe }}
           readinessProbe:
             tcpSocket:
-              port: {{  include "keydb.port" . }}
+              port: keydb
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           {{- end }}
           {{- if .Values.startupProbe }}
           startupProbe:
             tcpSocket:
-              port: {{  include "keydb.port" . }}
+              port: keydb
             {{- toYaml .Values.startupProbe | nindent 12 }}
           {{- end }}
           volumeMounts:

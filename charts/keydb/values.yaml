@@ -32,6 +32,10 @@ tlsCerts:
 loadbalancer:
   enabled: false
 
+  # -- Type of loadbalancer.
+  # Can be dynamic or static
+  type: static
+
   replicaCount: 1
 
   image:
@@ -170,14 +174,16 @@ livenessProbe: {}
 #   periodSeconds: 60
 
 readinessProbe:
-  initialDelaySeconds: 1
+  initialDelaySeconds: 15
   timeoutSeconds: 1
-  successThreshold: 1
-  periodSeconds: 60
+  failureThreshold: 2
+  successThreshold: 2
+  periodSeconds: 30
 
 startupProbe:
   initialDelaySeconds: 10
-  failureThreshold: 10
+  timeoutSeconds: 1
+  failureThreshold: 60
   successThreshold: 1
   periodSeconds: 10
 

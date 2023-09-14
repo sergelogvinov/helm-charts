@@ -5,7 +5,7 @@ metadata:
   name: {{ include "keydb.fullname" . }}-backup-check
   labels:
     {{- include "keydb.crontab.labels" . | nindent 4 }}
-    app.kubernetes.io/component: check
+    app.kubernetes.io/component: backup-check
 spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: {{ default 1 .Values.backupCheck.history }}
@@ -22,7 +22,7 @@ spec:
           name: {{ include "keydb.fullname" . }}
           labels:
             {{- include "keydb.crontab.labels" . | nindent 12 }}
-            app.kubernetes.io/component: check
+            app.kubernetes.io/component: backup-check
         spec:
           restartPolicy: Never
           enableServiceLinks: false
@@ -34,7 +34,7 @@ spec:
           securityContext:
             {{- toYaml .Values.podSecurityContext | nindent 12 }}
           containers:
-            - name: {{ .Chart.Name }}
+            - name: {{ .Chart.Name }}-backup-check
               securityContext:
                 {{- toYaml .Values.securityContext | nindent 16 }}
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -52,7 +52,7 @@ spec:
                   mountPath: /data
               resources:
                 {{- toYaml .Values.backupCheck.resources | nindent 16 }}
-          {{- with .Values.backupCheck.nodeSelector }}
+          {{- with default .Values.nodeSelector .Values.backupCheck.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}
           {{- end }}

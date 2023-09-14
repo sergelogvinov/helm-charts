@@ -7,6 +7,7 @@ metadata:
     {{- include "keydb.loadbalancer.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.loadbalancer.replicaCount }}
+  minReadySeconds: 15
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -88,17 +89,17 @@ spec:
               containerPort: 6380
               protocol: TCP
             {{- end }}
-          {{- if .Values.livenessProbe }}
+          {{- if .Values.loadbalancer.livenessProbe }}
           livenessProbe:
             tcpSocket:
               port: {{  include "keydb.port" . }}
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
+            {{- toYaml .Values.loadbalancer.livenessProbe | nindent 12 }}
           {{- end }}
-          {{- if .Values.readinessProbe }}
+          {{- if .Values.loadbalancer.readinessProbe }}
           readinessProbe:
             tcpSocket:
               port: {{  include "keydb.port" . }}
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
+            {{- toYaml .Values.loadbalancer.readinessProbe | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: common-config

@@ -28,6 +28,7 @@ spec:
     {{- end}}
   selector:
     {{- include "keydb.selectorLabels" . | nindent 4 }}
+    statefulset.kubernetes.io/pod-name: {{ include "keydb.fullname" . }}-0
 ---
 apiVersion: v1
 kind: Service

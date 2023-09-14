@@ -92,6 +92,14 @@
     annotations:
       description: Redis load error {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
       summary: Redis load error
+  - alert: RedisLoadError
+    expr: increase(redis_errors_total{err="OOM"}[1m]) > 5
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: Redis out of memeory issue {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
+      summary: Redis out of memeory error
 
   - alert: RedisLoadBalancer
     expr: haproxy_frontend_limit_sessions{app_kubernetes_io_name="keydb",proxy!="stats"} - haproxy_frontend_current_sessions < 10

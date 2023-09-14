@@ -1,6 +1,6 @@
 # keydb
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.3](https://img.shields.io/badge/AppVersion-6.3.3-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.3](https://img.shields.io/badge/AppVersion-6.3.3-informational?style=flat-square)
 
 KeyDB with TLS, backup/restore support
 
@@ -82,6 +82,7 @@ metrics:
 | keydb.save[1] | string | `"120 100000"` |  |
 | tlsCerts.create | bool | `false` |  |
 | loadbalancer.enabled | bool | `false` |  |
+| loadbalancer.type | string | `"static"` | Type of loadbalancer. Can be dynamic or static |
 | loadbalancer.replicaCount | int | `1` |  |
 | loadbalancer.image.repository | string | `"haproxy"` |  |
 | loadbalancer.image.pullPolicy | string | `"IfNotPresent"` |  |
@@ -129,12 +130,14 @@ metrics:
 | priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
 | terminationGracePeriodSeconds | int | `30` |  |
 | livenessProbe | object | `{}` |  |
-| readinessProbe.initialDelaySeconds | int | `1` |  |
+| readinessProbe.initialDelaySeconds | int | `15` |  |
 | readinessProbe.timeoutSeconds | int | `1` |  |
-| readinessProbe.successThreshold | int | `1` |  |
-| readinessProbe.periodSeconds | int | `60` |  |
+| readinessProbe.failureThreshold | int | `2` |  |
+| readinessProbe.successThreshold | int | `2` |  |
+| readinessProbe.periodSeconds | int | `30` |  |
 | startupProbe.initialDelaySeconds | int | `10` |  |
-| startupProbe.failureThreshold | int | `10` |  |
+| startupProbe.timeoutSeconds | int | `1` |  |
+| startupProbe.failureThreshold | int | `60` |  |
 | startupProbe.successThreshold | int | `1` |  |
 | startupProbe.periodSeconds | int | `10` |  |
 | service | object | `{"annotations":{},"ipFamilies":["IPv4"],"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
