@@ -662,6 +662,28 @@ entries:
   keydb:
   - apiVersion: v2
     appVersion: 6.3.3
+    created: "2023-09-14T16:13:42.429236989Z"
+    description: KeyDB with TLS, backup/restore support
+    digest: 94603309ad8c7ad9f8835b45725425f9b1871bc88d6df8b86d5e2d442b757e41
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - keydb
+    - redis
+    - wal-g
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: keydb
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/keydb
+    - https://docs.keydb.dev
+    - https://github.com/wal-g/wal-g
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.6.0/keydb-0.6.0.tgz
+    version: 0.6.0
+  - apiVersion: v2
+    appVersion: 6.3.3
     created: "2023-08-29T17:12:05.900704504Z"
     description: KeyDB with TLS, backup/restore support
     digest: efd96922cf0239ffff17bdb0b4f12c4dea8f162357873858abc3b4efe48eb233
@@ -2044,6 +2066,24 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2023-09-14T16:13:42.566457477Z"
+    description: Static prometheus rules
+    digest: 969fd52a5cb693ff1fbd9f3439156668be8db6fd247628dd447672068e493d9e
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - prometheus
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: prometheus-rules
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.25/prometheus-rules-0.1.25.tgz
+    version: 0.1.25
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2023-08-14T18:14:06.744036328Z"
     description: Static prometheus rules
     digest: a44f55354ca64351c770276e31d9a6ec4ec9c36bffc7d7b8f401882503ba9763
@@ -2764,4 +2804,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-09-08T18:07:42.190659477Z"
+generated: "2023-09-14T16:13:42.567085482Z"
