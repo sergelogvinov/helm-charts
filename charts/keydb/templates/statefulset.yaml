@@ -81,6 +81,14 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/usr/bin/keydb-server","/etc/keydb/keydb.conf"]
+          env:
+          {{- if .Values.keydb.password }}
+            - name: REDISCLI_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keydb.fullname" . }}
+                  key: keydb_auth
+          {{- end }}
           ports:
             - name: keydb
               containerPort: 6379
