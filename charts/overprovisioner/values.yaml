@@ -14,7 +14,7 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-priorityClassName: "tete"
+priorityClassName: ""
 
 podAnnotations: {}
 
