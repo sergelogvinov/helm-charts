@@ -1526,6 +1526,16 @@ entries:
   overprovisioner:
   - apiVersion: v2
     appVersion: "3.6"
+    created: "2023-09-20T08:28:14.707852019Z"
+    description: Reserve the resources for the migration
+    digest: 3b3747f84a56109c85b1a1acbda73114ff1b7f10add06b27c63818267c32cfe5
+    name: overprovisioner
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/overprovisioner-0.1.1/overprovisioner-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: "3.6"
     created: "2023-09-20T08:11:33.754240792Z"
     description: Reserve the resources for the migration
     digest: 371c6e991a9844d0b8ad62c7eaae10f3750bed515f98504e418ae8d003e47938
@@ -2899,4 +2909,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-09-20T08:11:34.115973237Z"
+generated: "2023-09-20T08:28:14.708206624Z"
