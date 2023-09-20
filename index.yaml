@@ -353,6 +353,27 @@ entries:
   fluentd:
   - apiVersion: v2
     appVersion: 1.15.3
+    created: "2023-09-20T08:11:33.568977445Z"
+    description: Deploy fluentd as log router
+    digest: 70e7084f934781b99514c821fb8166ec06f132c7631cde834e8e2a88480c1b6a
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - fluentd
+    - logging
+    - logs
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: fluentd
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/fluentd
+    - https://www.fluentd.org
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/fluentd-0.1.1/fluentd-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.15.3
     created: "2023-08-30T04:41:42.231334502Z"
     description: Deploy fluentd as log router
     digest: 629fc389a30d452bfe255ee0d376a4632c94fe39d9784b820763d388144ebaa7
@@ -1502,6 +1523,17 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/openvpn-0.1.1/openvpn-0.1.1.tgz
     version: 0.1.1
+  overprovisioner:
+  - apiVersion: v2
+    appVersion: "3.6"
+    created: "2023-09-20T08:11:33.754240792Z"
+    description: Reserve the resources for the migration
+    digest: 371c6e991a9844d0b8ad62c7eaae10f3750bed515f98504e418ae8d003e47938
+    name: overprovisioner
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/overprovisioner-0.1.0/overprovisioner-0.1.0.tgz
+    version: 0.1.0
   pgbouncer:
   - apiVersion: v2
     appVersion: "15.4"
@@ -1649,6 +1681,28 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.0/pgbouncer-0.1.0.tgz
     version: 0.1.0
   postgresql-single:
+  - apiVersion: v2
+    appVersion: "14.9"
+    created: "2023-09-20T08:11:33.927507608Z"
+    description: Postgres with backup/restore checks
+    digest: 255c3d600feea4e5f509d97219f5989fb22b4cb07db5df2cd7f9ff352d3e0dd2
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: postgresql-single
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.9.2/postgresql-single-0.9.2.tgz
+    version: 0.9.2
   - apiVersion: v2
     appVersion: "14.9"
     created: "2023-09-07T06:53:05.692674131Z"
@@ -2710,6 +2764,25 @@ entries:
     version: 0.1.0
   tailscale:
   - apiVersion: v2
+    appVersion: v1.48.2
+    created: "2023-09-20T08:11:34.115489339Z"
+    description: Tailscale mesh network.
+    digest: 797bca2d0f3cd2075dc7c071b90f73fdd828da93d22e28cb1853c4f762fae3af
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - tailscale
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: tailscale
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/tailscale
+    - https://tailscale.com
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.2.0/tailscale-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     appVersion: v1.44.0
     created: "2023-08-03T07:26:10.185418016Z"
     description: Tailscale mesh network.
@@ -2826,4 +2899,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-09-15T05:23:59.438364694Z"
+generated: "2023-09-20T08:11:34.115973237Z"
