@@ -23,6 +23,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config: {{ toJson .Values.configMaps | sha256sum }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}

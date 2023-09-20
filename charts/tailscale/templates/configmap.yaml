@@ -5,6 +5,27 @@ metadata:
   labels:
     {{- include "tailscale.labels" . | nindent 4 }}
 data:
+  Corefile: |
+    .:53 {
+        errors
+        health {
+           lameduck 5s
+        }
+
+        forward . tls://9.9.9.9 tls://149.112.112.112 1.1.1.1 {
+            health_check 60s
+            tls_servername dns.quad9.net
+            policy sequential
+            expire 30s
+        }
+
+        rewrite stop type AAAA A
+        cache 300
+        loop
+        reload
+        loadbalance
+    }
+
   entrypoint.sh: |
     #!/bin/sh
     set -e
@@ -29,7 +50,7 @@ data:
     CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
 
     curl --fail --silent --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" \
-        https://kubernetes.default.svc/api/v1/nodes/${NODE} | jq .metadata.labels > /tmp/labels.json
+        https://${KUBERNETES_PORT_443_TCP_ADDR}/api/v1/nodes/${NODE} | jq .metadata.labels > /tmp/labels.json
 
     ZONE=$(jq '."topology.kubernetes.io/zone"' -r /tmp/labels.json)
     REGION=$(jq '."topology.kubernetes.io/region"' -r /tmp/labels.json)

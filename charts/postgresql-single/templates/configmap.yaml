@@ -148,6 +148,7 @@ data:
     {{- end }}
     /usr/bin/wal-g --config /etc/walg/walg.yaml backup-list --pretty --detail
     /usr/bin/wal-g --config /etc/walg/walg.yaml wal-show ||:
+    /usr/bin/wal-g --config /etc/walg/walg.yaml wal-verify timeline
     /usr/bin/wal-g --config /etc/walg/walg.yaml wal-verify integrity ||:
     {{- if .Values.backup.cleanPolicy }}
     /usr/bin/wal-g --config /etc/walg/walg.yaml delete {{ .Values.backup.cleanPolicy }} --confirm ||:

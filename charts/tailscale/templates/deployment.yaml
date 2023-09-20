@@ -39,12 +39,16 @@ spec:
       serviceAccountName: {{ include "tailscale.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      # dnsPolicy: "None"
       dnsConfig:
+        nameservers:
+          - 127.0.0.1
         searches:
           - cluster.local
         options:
           - name: ndots
             value: "3"
+          # - name: edns0
       initContainers:
         - name: {{ .Chart.Name }}-init-tailscale
           securityContext:
@@ -128,6 +132,42 @@ spec:
               mountPath: /tmp
             - name: tun
               mountPath: /dev/net/tun
+        - name: {{ .Chart.Name }}-dns
+          image: coredns/coredns:1.11.1
+          imagePullPolicy: IfNotPresent
+          args: [ "-conf", "/etc/coredns/Corefile" ]
+          volumeMounts:
+            - name: coredns
+              mountPath: /etc/coredns
+              readOnly: true
+          resources:
+            limits:
+              memory: 170Mi
+            requests:
+              cpu: 100m
+              memory: 70Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              add:
+              - NET_BIND_SERVICE
+              drop:
+              - all
+            readOnlyRootFilesystem: true
+            runAsUser: 0
+            runAsGroup: 53
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -154,6 +194,12 @@ spec:
           configMap:
             name: {{ include "tailscale.fullname" . }}
             defaultMode: 493
+        - name: coredns
+          configMap:
+            name: {{ include "tailscale.fullname" . }}
+            items:
+              - key: Corefile
+                path: Corefile
         - name: state
           emptyDir: {}
         - name: tun

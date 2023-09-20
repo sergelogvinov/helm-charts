@@ -25,6 +25,7 @@ spec:
   type: NodePort
   sessionAffinity: None
   externalTrafficPolicy: Local
+  ipFamilyPolicy: PreferDualStack
   ports:
     - port: {{ .Values.service.p2pPort }}
       nodePort: {{ .Values.service.p2pPort }}

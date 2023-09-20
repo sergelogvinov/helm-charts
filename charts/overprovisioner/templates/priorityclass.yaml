@@ -1,0 +1,9 @@
+{{- if eq .Values.priorityClassName "" }}
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: {{ include "overprovisioner.priorityClassName" . }}
+value: -10
+globalDefault: false
+description: {{  printf "Priority class used by %s" (include "overprovisioner.fullname" .) }}
+{{- end}}
