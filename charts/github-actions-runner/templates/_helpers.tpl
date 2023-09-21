@@ -105,6 +105,17 @@ Return a podAffinity/podAntiAffinity definition
 {{- end -}}
 
 {{/*
+Convert a memory resource like "500Mi" to the number 500 (Megabytes)
+*/}}
+{{- define "resource-mb" -}}
+{{- if . | hasSuffix "Mi" -}}
+{{- (. | trimSuffix "Mi" | int64) -}}
+{{- else if . | hasSuffix "Gi" -}}
+{{- mul (. | trimSuffix "Gi" | int64) 1000 -}}
+{{- end }}
+{{- end }}
+
+{{/*
 Renders a volumeClaimTemplate.
 Usage:
 {{ include "volumeClaimTemplate.render" .Values.persistence }}

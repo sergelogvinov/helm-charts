@@ -47,8 +47,8 @@ data:
       maintenance:
         uploadpurging:
           enabled: true
-          age: 168h
-          interval: 24h
+          age: 72h
+          interval: 4h
           dryrun: false
       filesystem:
         rootdirectory: /var/lib/registry
@@ -60,14 +60,15 @@ data:
         certificate: /etc/registry/registry.crt
         key: /etc/registry/registry.key
 
+  {{- $size := default 10 (include "resource-mb" .Values.dind.persistence.size) }}
   buildkitd.toml: |-
     root = "/var/lib/buildkit"
     debug = false
 
     [grpc]
-    address = [ "unix:///run/buildkit/buildkitd.sock", "tcp://0.0.0.0:1234" ]
-    uid = 0
-    gid = 0
+      address = [ "unix:///run/buildkit/buildkitd.sock", "tcp://0.0.0.0:1234" ]
+      uid = 0
+      gid = 0
 
     [worker.containerd]
       enabled = false
@@ -75,14 +76,14 @@ data:
     [worker.oci]
       enabled = true
       gc = true
-      gckeepstorage = 10000
+      gckeepstorage = "{{ int64 (divf $size 2) }}MB"
     [[worker.oci.gcpolicy]]
-        keepBytes = 512000000
-        keepDuration = 172800
-        filters = [ "type==source.local", "type==exec.cachemount", "type==source.git.checkout"]
+      keepBytes = "{{ int64 (divf $size 2) }}MB"
+      keepDuration = "24h"
+      filters = [ "type==source.local", "type==exec.cachemount", "type==source.git.checkout"]
     [[worker.oci.gcpolicy]]
       all = true
-      keepBytes = 1024000000
+      keepBytes = "{{ int64 (divf $size 2) }}MB"
 
     {{- if .Values.mirrors.enabled }}
     {{ range $inx, $val := .Values.mirrors.registry }}
@@ -111,8 +112,8 @@ data:
       },
       "builder": {
         "gc": {
-          "defaultKeepStorage": "32GB",
-          "enabled": true
+          "enabled": true,
+          "defaultKeepStorage": "{{ int64 (divf $size 2) }}MB"
         }
       },
       "hosts": ["unix:///var/run/docker.sock","tcp://127.0.0.1:2376"],
