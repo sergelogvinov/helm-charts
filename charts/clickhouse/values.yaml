@@ -96,6 +96,10 @@ persistence:
   size: 64Gi
   annotations: {}
 
+# -- Priority Class Name
+# ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+priorityClassName: ~
+
 # -- pod deployment update stategy type.
 # ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
