@@ -101,6 +101,10 @@ resources:
     cpu: 50m
     memory: 64Mi
 
+# -- Priority Class Name
+# ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+priorityClassName: ~
+
 # -- Node labels for pod assignment.
 # ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
