@@ -1226,6 +1226,27 @@ entries:
   mongosqld:
   - apiVersion: v2
     appVersion: 2.14.11
+    created: "2023-09-22T14:38:43.121330001Z"
+    description: Mongo to SQL bridge
+    digest: ce2e0760a24d4c4895670a1eac62380e0f188b78dea28aa160b01422bcca93a4
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - mongodb
+    - mongosqld
+    - powerbi
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongosqld
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongosqld
+    - https://www.mongodb.com/docs/bi-connector/current/reference/mongosqld
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongosqld-0.3.2/mongosqld-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v2
+    appVersion: 2.14.11
     created: "2023-09-22T11:14:22.742692273Z"
     description: Mongo to SQL bridge
     digest: 07489b4595e5bab081da45b9b3c4a675243dc3ce9ad882370bb77b71967f242e
@@ -2951,4 +2972,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-09-22T11:14:22.743245203Z"
+generated: "2023-09-22T14:38:43.121648803Z"
