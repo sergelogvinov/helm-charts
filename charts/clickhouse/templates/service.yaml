@@ -32,6 +32,7 @@ spec:
     {{- end }}
   selector:
     {{- include "clickhouse.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: server
 ---
 apiVersion: v1
 kind: Service
@@ -56,3 +57,4 @@ spec:
       protocol: TCP
   selector:
     {{- include "clickhouse.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: server

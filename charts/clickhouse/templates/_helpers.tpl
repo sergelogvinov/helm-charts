@@ -44,7 +44,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 
 {{- define "clickhouse.crontab.labels" -}}
 helm.sh/chart: {{ include "clickhouse.chart" . }}
-{{ include "clickhouse.selectorLabels" . }}
+{{ include "clickhouse.crontab.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
