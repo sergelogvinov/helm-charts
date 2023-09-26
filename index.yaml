@@ -2768,6 +2768,22 @@ entries:
   service-common:
   - apiVersion: v2
     appVersion: 2.4.22
+    created: "2023-09-26T20:01:20.491086727Z"
+    description: Simple gateway with TLS auth
+    digest: 949128deb8f501023997084775f0f5f25b3e9da1466337adc94966fe175b1734
+    home: https://github.com/sergelogvinov/helm-charts
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: service-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/service-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/service-common-0.2.1/service-common-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: 2.4.22
     created: "2023-08-30T04:41:43.108420533Z"
     description: Simple gateway with TLS auth
     digest: 2116c55fb75e9d6b7157f4bf38a2159fe364a0996a573aaa473c74addaac1c9f
@@ -3012,4 +3028,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-09-25T14:03:40.065628284Z"
+generated: "2023-09-26T20:01:20.492139634Z"
