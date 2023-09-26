@@ -42,13 +42,13 @@
       description: Some connections to Redis {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} has been rejected
       summary: Rejected connections
   - alert: RedisMemoryFull
-    expr: (redis_memory_max_bytes > 0) and (redis_memory_used_bytes * 0.9 > redis_memory_max_bytes)
-    for: 5s
+    expr: (redis_memory_used_bytes > redis_memory_max_bytes * 0.9) and (redis_memory_max_bytes > 0)
+    for: 5m
     labels:
       severity: warning
     annotations:
-      description: No more redis connections {{ $labels.kubernetes_namespace }} project={{ $labels.project
-        }} {{ $labels.kubernetes_pod_name }} - {{ $labels.redis_memory_used_bytes | humanize }}
+      description: Redis memory usage {{ $labels.kubernetes_namespace }} project={{ $labels.project
+        }} {{ $labels.kubernetes_pod_name }} - {{ $value | humanize }}
       summary: Free redis memory less then 10%
   - alert: RedisMissingBackup
     expr: time() - redis_rdb_last_save_timestamp_seconds > 60 * 60 * 24 * 7

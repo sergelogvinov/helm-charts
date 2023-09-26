@@ -206,8 +206,8 @@ global
 resolvers clusterdns
   parse-resolv-conf
   resolve_retries  3
-  timeout resolve 1s
-  timeout retry   1s
+  timeout resolve 60s
+  timeout retry    5s
   hold other     60s
   hold refused   30s
   hold nx        30s
