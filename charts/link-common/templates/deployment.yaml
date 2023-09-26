@@ -1,0 +1,132 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "link-common.fullname" . }}
+  labels:
+    {{- include "link-common.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "link-common.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "link-common.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      serviceAccountName: {{ include "link-common.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        {{- if .Values.wireguard.enabled }}
+        - name: wireguard
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN"]
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
+          image: "{{ .Values.wireguard.image.repository }}:{{ .Values.wireguard.image.tag }}"
+          imagePullPolicy: {{ .Values.wireguard.image.pullPolicy }}
+          command: ["/entrypoint.d/wireguard.sh"]
+          volumeMounts:
+            - name: command
+              mountPath: /entrypoint.d
+              readOnly: true
+            - name: wireguard
+              mountPath: /etc/wireguard
+              readOnly: true
+        {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/entrypoint.d/haproxy.sh"]
+          ports:
+            - name: stats
+              containerPort: 8404
+              protocol: TCP
+            {{- if .Values.wireguard.enabled }}
+            - name: wg
+              containerPort: 51820
+              hostPort: 51820
+              protocol: UDP
+            - name: wg-health
+              containerPort: 51820
+              hostPort: 51820
+              protocol: TCP
+            {{- end }}
+            {{- range $key, $value := .Values.service.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .port }}
+              protocol: TCP
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: command
+              mountPath: /entrypoint.d
+              readOnly: true
+            - name: config
+              mountPath: /usr/local/etc/haproxy
+            - name: run
+              mountPath: /run
+      volumes:
+        - name: command
+          configMap:
+            name: {{ include "link-common.fullname" . }}
+            defaultMode: 365
+            items:
+              - key: haproxy.sh
+                path: haproxy.sh
+              - key: wireguard.sh
+                path: wireguard.sh
+        - name: config
+          configMap:
+            name: {{ include "link-common.fullname" . }}
+            defaultMode: 288
+            items:
+              - key: haproxy.cfg
+                path: haproxy.cfg
+        {{- if .Values.wireguard.enabled }}
+        - name: wireguard
+          secret:
+            secretName: {{ include "link-common.fullname" . }}
+            defaultMode: 256
+            items:
+              - key: wg0.conf
+                path: wg0.conf
+        {{- end }}
+        - name: run
+          emptyDir:
+            medium: Memory
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

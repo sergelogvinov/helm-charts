@@ -1,0 +1,101 @@
+# Default values for link-common.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: haproxy
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Annotations for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+podAnnotations: {}
+
+# -- Pod Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+podSecurityContext:
+  fsGroup: 99
+  fsGroupChangePolicy: "OnRootMismatch"
+
+# -- Container Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+securityContext:
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: RuntimeDefault
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  runAsUser: 99
+  runAsGroup: 99
+
+# -- Service parameters
+# ref: https://kubernetes.io/docs/concepts/services-networking/service/
+service:
+  type: ClusterIP
+  ipFamilies: [IPv4]
+
+  ports: []
+    # - name: postgres
+    #   port: 5432
+    #   backend: postgres.default.svc.cluster.local:5432
+
+wireguard:
+  enabled: false
+
+  image:
+    repository: ghcr.io/sergelogvinov/wireguard
+    pullPolicy: IfNotPresent
+    tag: "1.0.20210914"
+
+  wireguardIP: 172.30.1.1/32
+  wireguardMTU: 1280
+
+  # -- WireGuard private key.
+  # ref: https://www.wireguard.com/quickstart/
+  #   wg genkey | tee privatekey | wg pubkey > publickey
+  wireguardKey: ""
+
+  peers: {}
+    # peer-1:
+    #   endpoint: 1.2.3.4:51820
+    #   publicKey: Dpj+rWfq5zVNr7vlREef2Ug5Y8w4gDSPF/da4tZj0T0=
+    #   allowedIps: 172.30.1.11/32
+
+# -- Resource requests and limits.
+# ref: https://kubernetes.io/docs/user-guide/compute-resources/
+resources:
+  limits:
+    cpu: 100m
+    memory: 64Mi
+  requests:
+    cpu: 50m
+    memory: 32Mi
+
+# -- Node labels for pod assignment.
+# ref: https://kubernetes.io/docs/user-guide/node-selection/
+nodeSelector: {}
+
+# -- Tolerations for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+tolerations: []
+
+# -- Affinity for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}

@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "link-common.fullname" . }}
+  labels:
+    {{- include "link-common.labels" . | nindent 4 }}
+data:
+  haproxy.sh: |
+    #!/bin/sh
+    set -e
+
+    umask 177
+    touch /run/haproxy_state
+    exec /usr/local/sbin/haproxy -f /usr/local/etc/haproxy/haproxy.cfg
+
+  haproxy.cfg: |
+    global
+      maxconn 8192
+      ssl-default-server-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+      ssl-default-server-options no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets
+      ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+      ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384
+      ssl-default-bind-options prefer-client-ciphers no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets
+
+      stats socket /tmp/haproxy.sock mode 600 level admin
+      log stdout len 65535 format raw local0 info
+
+    resolvers clusterdns
+      parse-resolv-conf
+      resolve_retries  3
+      timeout resolve 60s
+      timeout retry    5s
+      hold other     60s
+      hold refused   30s
+      hold nx        30s
+      hold timeout   30s
+      hold valid     60s
+      hold obsolete  60s
+
+    defaults
+      mode tcp
+      option  dontlognull
+      timeout connect         4s
+      timeout server          86400s
+      timeout client          86400s
+      timeout http-keep-alive 1m
+      default-server init-addr libc,none
+
+      log global
+      log-format '{"remote_addr":"%ci","backend":"%b","retries":%rc,"bytes_read":%B,"bytes_uploaded":%U,"cons":%fc}'
+
+    frontend stats
+      mode http
+      bind *:8404
+      http-request use-service prometheus-exporter if { path /metrics }
+      stats enable
+      stats uri /
+      stats refresh 10s
+      monitor-uri /healthz
+      option dontlognull
+      option clitcpka
+      maxconn 16
+
+    {{- if .Values.wireguard.enabled }}
+    frontend wireguard-health
+      mode http
+      bind *:51820
+      http-request return status 200
+      maxconn 16
+    {{- end }}
+
+    # services
+    {{- range $key, $value := .Values.service.ports }}
+    frontend {{ .name }}
+      bind *:{{ .port }} mss {{ default 1280 $.Values.wireguard.wireguardMTU }}
+      option clitcpka
+      use_backend {{ .name }}
+    backend {{ .name }}
+      mode tcp
+      option   tcp-check
+      balance  leastconn
+      fullconn 512
+
+      default-server check inter 30s fastinter 10s downinter 5s fall 3 rise 8 on-marked-down shutdown-sessions resolve-prefer ipv4
+      server {{ .name }} {{ .backend }} resolvers clusterdns
+    {{- end }}
+
+  wireguard.sh: |
+    #!/bin/sh
+    wg-quick up /etc/wireguard/wg0.conf
