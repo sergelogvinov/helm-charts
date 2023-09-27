@@ -56,6 +56,7 @@ data:
       stats enable
       stats uri /
       stats refresh 10s
+      stats hide-version
       monitor-uri /healthz
       option dontlognull
       option clitcpka
@@ -72,7 +73,7 @@ data:
     # services
     {{- range $key, $value := .Values.service.ports }}
     frontend {{ .name }}
-      bind *:{{ .port }} mss {{ default 1280 $.Values.wireguard.wireguardMTU }}
+      bind *:{{ .port }} mss {{ default 1280 (sub $.Values.wireguard.wireguardMTU 120) }}
       option clitcpka
       use_backend {{ .name }}
     backend {{ .name }}
