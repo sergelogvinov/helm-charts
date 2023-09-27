@@ -2768,6 +2768,22 @@ entries:
   service-common:
   - apiVersion: v2
     appVersion: 2.4.22
+    created: "2023-09-27T14:35:57.626119125Z"
+    description: Simple gateway with TLS auth
+    digest: c6b3e98967614c7cb8ecb8a5bdab83646629bb224e21e840ed94008cb58e12c2
+    home: https://github.com/sergelogvinov/helm-charts
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: service-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/service-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/service-common-0.2.2/service-common-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 2.4.22
     created: "2023-09-26T20:01:20.491086727Z"
     description: Simple gateway with TLS auth
     digest: 949128deb8f501023997084775f0f5f25b3e9da1466337adc94966fe175b1734
@@ -2798,6 +2814,22 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/service-common-0.2.0/service-common-0.2.0.tgz
     version: 0.2.0
+  - apiVersion: v2
+    appVersion: 2.7.10-alpine3.18
+    created: "2023-09-27T14:35:57.45061701Z"
+    description: Simple vpn-p2p-link service
+    digest: b87858f213e260c9c0efe8ecdcb50b63f929caa7c31c20c0791a4d5b374bdf9a
+    home: https://github.com/sergelogvinov/helm-charts
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: service-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/link-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/service-common-0.1.2/service-common-0.1.2.tgz
+    version: 0.1.2
   - apiVersion: v2
     appVersion: 2.4.22
     created: "2023-06-23T15:46:52.746493054Z"
@@ -3028,4 +3060,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-09-26T20:01:20.492139634Z"
+generated: "2023-09-27T14:35:57.626766434Z"
