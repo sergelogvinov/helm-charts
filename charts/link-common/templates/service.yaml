@@ -17,7 +17,7 @@ spec:
   ipFamilyPolicy: {{ if eq (len .Values.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
   ports:
     {{- range $key, $value := .Values.service.ports }}
-    - name: {{ .name }}
+    - name: {{ .name | trunc 15 }}
       port: {{ .port }}
       targetPort: {{ .port }}
       protocol: TCP
