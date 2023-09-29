@@ -39,7 +39,7 @@ spec:
                 {{- toYaml .Values.securityContext | nindent 16 }}
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
-              command: ["/bin/sh","-e","/entrypoint.d/restore.sh"]
+              command: ["/entrypoint.d/restore-check.sh"]
               volumeMounts:
                 - name: command
                   mountPath: /entrypoint.d

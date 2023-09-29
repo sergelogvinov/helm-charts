@@ -57,6 +57,18 @@ data:
     wal-g --config /etc/walg/walg.yaml backup-fetch LATEST
     mv /data/dump.rdb /data/keydb.rdb
 
+  restore-check.sh: |
+    #!/bin/sh
+    set -e
+
+    /entrypoint.d/restore.sh
+    redis-server --dbfilename keydb.rdb --dir /data --daemonize yes --pidfile /tmp/keydb.pid
+    sleep 5
+
+    echo "*** Size of the database ***"
+    redis-cli info keyspace
+    [ -f /tmp/keydb.pid ] && kill $(cat /tmp/keydb.pid) ||:
+
   redis-cli.sh: |
     #!/usr/bin/env bash
 
