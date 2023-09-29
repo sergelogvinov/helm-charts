@@ -744,6 +744,28 @@ entries:
   keydb:
   - apiVersion: v2
     appVersion: 6.3.3
+    created: "2023-09-29T05:18:33.436046891Z"
+    description: KeyDB with TLS, backup/restore support
+    digest: 34226a3534f04dc4506beb31feef6f8831c77b504f75f635adae991057cbe893
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - keydb
+    - redis
+    - wal-g
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: keydb
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/keydb
+    - https://docs.keydb.dev
+    - https://github.com/wal-g/wal-g
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.6.3/keydb-0.6.3.tgz
+    version: 0.6.3
+  - apiVersion: v2
+    appVersion: 6.3.3
     created: "2023-09-15T05:23:59.437393787Z"
     description: KeyDB with TLS, backup/restore support
     digest: 11e7c1f60154b04aeed3d8c2435d94b244bb14b24788f394204961fc17b901de
@@ -3060,4 +3082,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-09-27T14:35:57.626766434Z"
+generated: "2023-09-29T05:18:33.436796193Z"
