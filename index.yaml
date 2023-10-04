@@ -2947,6 +2947,25 @@ entries:
     version: 0.1.0
   tailscale:
   - apiVersion: v2
+    appVersion: v1.50.0
+    created: "2023-10-04T07:45:52.72900093Z"
+    description: Tailscale mesh network.
+    digest: dbcac274e30925df8648a6d460b4d829e4374cf07c3f34aded1b4d15bc288d19
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - tailscale
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: tailscale
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/tailscale
+    - https://tailscale.com
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.2.1/tailscale-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
     appVersion: v1.48.2
     created: "2023-09-20T08:11:34.115489339Z"
     description: Tailscale mesh network.
@@ -3082,4 +3101,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-09-29T05:18:33.436796193Z"
+generated: "2023-10-04T07:45:52.729529648Z"
