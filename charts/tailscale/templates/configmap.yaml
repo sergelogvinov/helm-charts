@@ -12,6 +12,11 @@ data:
            lameduck 5s
         }
 
+        kubernetes cluster.local in-addr.arpa ip6.arpa {
+            pods insecure
+            ttl 60
+        }
+
         forward . tls://9.9.9.9 tls://149.112.112.112 1.1.1.1 {
             health_check 60s
             tls_servername dns.quad9.net
@@ -31,7 +36,7 @@ data:
     set -e
 
     source /tmp/labels
-    export TS_EXTRA_ARGS="--hostname=$REGION-$NODE -advertise-exit-node --advertise-tags=$TS_TAGS --accept-dns=false"
+    export TS_EXTRA_ARGS="--hostname=$REGION-$NODE -advertise-exit-node --advertise-tags=$TS_TAGS --accept-dns=false --accept-routes=false"
     export TS_KUBE_SECRET=tailscale-$NODE
 
     /usr/local/bin/containerboot
@@ -44,7 +49,6 @@ data:
   init.sh: |
     #!/bin/sh
     set -e
-    apk add jq curl
 
     TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
     CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt

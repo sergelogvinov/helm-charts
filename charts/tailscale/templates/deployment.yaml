@@ -39,7 +39,7 @@ spec:
       serviceAccountName: {{ include "tailscale.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      # dnsPolicy: "None"
+      dnsPolicy: "None"
       dnsConfig:
         nameservers:
           - 127.0.0.1
@@ -48,7 +48,6 @@ spec:
         options:
           - name: ndots
             value: "3"
-          # - name: edns0
       initContainers:
         - name: {{ .Chart.Name }}-init-tailscale
           securityContext:
@@ -75,7 +74,7 @@ spec:
             capabilities:
               drop:
                 - ALL
-          image: alpine:3.16
+          image: ghcr.io/sergelogvinov/curl:8.3.0
           imagePullPolicy: IfNotPresent
           command: ["/start/init.sh"]
           env:
@@ -89,6 +88,42 @@ spec:
             - name: state
               mountPath: /tmp
       containers:
+        - name: {{ .Chart.Name }}-dns
+          image: coredns/coredns:1.11.1
+          imagePullPolicy: IfNotPresent
+          args: [ "-conf", "/etc/coredns/Corefile" ]
+          volumeMounts:
+            - name: coredns
+              mountPath: /etc/coredns
+              readOnly: true
+          resources:
+            limits:
+              memory: 170Mi
+            requests:
+              cpu: 100m
+              memory: 70Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              add:
+              - NET_BIND_SERVICE
+              drop:
+              - all
+            readOnlyRootFilesystem: true
+            runAsUser: 0
+            runAsGroup: 53
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -132,42 +167,6 @@ spec:
               mountPath: /tmp
             - name: tun
               mountPath: /dev/net/tun
-        - name: {{ .Chart.Name }}-dns
-          image: coredns/coredns:1.11.1
-          imagePullPolicy: IfNotPresent
-          args: [ "-conf", "/etc/coredns/Corefile" ]
-          volumeMounts:
-            - name: coredns
-              mountPath: /etc/coredns
-              readOnly: true
-          resources:
-            limits:
-              memory: 170Mi
-            requests:
-              cpu: 100m
-              memory: 70Mi
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 30
-            periodSeconds: 60
-            timeoutSeconds: 5
-            successThreshold: 1
-            failureThreshold: 5
-          securityContext:
-            allowPrivilegeEscalation: false
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              add:
-              - NET_BIND_SERVICE
-              drop:
-              - all
-            readOnlyRootFilesystem: true
-            runAsUser: 0
-            runAsGroup: 53
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
