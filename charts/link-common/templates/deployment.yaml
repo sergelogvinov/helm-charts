@@ -18,6 +18,10 @@ spec:
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if and .Values.wireguard.metrics.enabled .Values.wireguard.enabled }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9586"
+      {{- end}}
       labels:
         {{- include "link-common.selectorLabels" . | nindent 8 }}
     spec:
@@ -89,6 +93,28 @@ spec:
               mountPath: /usr/local/etc/haproxy
             - name: run
               mountPath: /run
+        {{- if .Values.wireguard.metrics.enabled }}
+        - name: wireguard-metrics
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN"]
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
+          image: "{{ .Values.wireguard.metrics.image.repository }}:{{ .Values.wireguard.metrics.image.tag }}"
+          imagePullPolicy: {{ .Values.wireguard.metrics.image.pullPolicy }}
+          args:
+            - --port=9586
+            - --interfaces=wg0
+            - --extract_names_config_files=/etc/wireguard/wg0.conf
+          volumeMounts:
+            - name: wireguard
+              mountPath: /etc/wireguard
+              readOnly: true
+        {{- end }}
       volumes:
         - name: command
           configMap:

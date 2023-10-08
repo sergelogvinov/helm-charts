@@ -4,8 +4,10 @@ metadata:
   name: {{ include "link-common.fullname" . }}
   labels:
     {{- include "link-common.labels" . | nindent 4 }}
-  {{- with .Values.service.annotations }}
   annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8404"
+  {{- with .Values.service.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:

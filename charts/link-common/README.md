@@ -1,6 +1,6 @@
 # service-common
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.7.10-alpine3.18](https://img.shields.io/badge/AppVersion-2.7.10--alpine3.18-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.7.10-alpine3.18](https://img.shields.io/badge/AppVersion-2.7.10--alpine3.18-informational?style=flat-square)
 
 Simple vpn-p2p-link service
 
@@ -21,7 +21,7 @@ Simple vpn-p2p-link service
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | replicaCount | int | `1` |  |
-| image.repository | string | `"haproxy"` |  |
+| image.repository | string | `"ghcr.io/sergelogvinov/haproxy"` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.tag | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
@@ -32,7 +32,7 @@ Simple vpn-p2p-link service
 | serviceAccount.name | string | `""` |  |
 | podAnnotations | object | `{}` | Annotations for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
 | podSecurityContext | object | `{"fsGroup":99,"fsGroupChangePolicy":"OnRootMismatch"}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
-| securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"runAsGroup":99,"runAsNonRoot":true,"runAsUser":99,"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
+| securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"add":["NET_BIND_SERVICE"],"drop":["ALL"]},"runAsGroup":99,"runAsNonRoot":true,"runAsUser":99,"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | service | object | `{"ipFamilies":["IPv4"],"ports":[],"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/concepts/services-networking/service/ |
 | wireguard.enabled | bool | `false` |  |
 | wireguard.image.repository | string | `"ghcr.io/sergelogvinov/wireguard"` |  |
@@ -42,6 +42,10 @@ Simple vpn-p2p-link service
 | wireguard.wireguardMTU | int | `1280` |  |
 | wireguard.wireguardKey | string | `""` | WireGuard private key. ref: https://www.wireguard.com/quickstart/   wg genkey | tee privatekey | wg pubkey > publickey |
 | wireguard.peers | object | `{}` |  |
+| wireguard.metrics.enabled | bool | `true` |  |
+| wireguard.metrics.image.repository | string | `"mindflavor/prometheus-wireguard-exporter"` |  |
+| wireguard.metrics.image.pullPolicy | string | `"IfNotPresent"` |  |
+| wireguard.metrics.image.tag | string | `"3.6.6"` |  |
 | resources | object | `{"limits":{"cpu":"100m","memory":"64Mi"},"requests":{"cpu":"50m","memory":"32Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
