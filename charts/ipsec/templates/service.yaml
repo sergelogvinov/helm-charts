@@ -27,5 +27,11 @@ spec:
       port: {{ .Values.service.ipsec }}
       targetPort: ipsec
       protocol: UDP
+    {{- range $key, $value := .Values.ipsecService.ports }}
+    - name: {{ .name | trunc 15 }}
+      port: {{ .port }}
+      targetPort: {{ .port }}
+      protocol: TCP
+    {{- end }}
   selector:
     {{- include "ipsec.selectorLabels" . | nindent 4 }}

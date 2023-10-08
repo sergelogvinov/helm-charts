@@ -43,9 +43,9 @@ ipsecService:
   enabled: false
 
   image:
-    repository: haproxy
+    repository: ghcr.io/sergelogvinov/haproxy
     pullPolicy: IfNotPresent
-    tag: "2.4.22"
+    tag: "2.7.10-alpine3.18"
 
   ip: 10.10.10.10
   networks: "%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:!172.30.240.0/24"
@@ -73,7 +73,7 @@ podAnnotations: {}
 # -- Service parameters
 # ref: https://kubernetes.io/docs/user-guide/services/
 service:
-  type: HostPort
+  type: ClusterIP
   isakmp: 500
   ipsec: 4500
 
