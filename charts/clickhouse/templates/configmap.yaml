@@ -152,6 +152,10 @@ data:
         </prometheus>
         {{- end }}
         {{- default "" .Values.config | nindent 8 }}
+
+        <merge_tree>
+            <max_suspicious_broken_parts>100</max_suspicious_broken_parts>
+        </merge_tree>
     </clickhouse>
 
   storage.xml: |-
