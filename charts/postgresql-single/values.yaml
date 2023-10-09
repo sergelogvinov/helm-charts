@@ -173,6 +173,8 @@ backup:
   # set value "" to disable cron backup
   schedule: "15 4 * * *"
 
+  # -- Resource requests and limits.
+  # ref: https://kubernetes.io/docs/user-guide/compute-resources/
   resources:
     limits:
       cpu: 2
@@ -181,6 +183,10 @@ backup:
       cpu: 1500m
       memory: 512Mi
 
+  # -- Priority Class Name
+  # ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ~
+
   # AffinityPreset with statefulset pods
   podAffinityPreset: hard
 
@@ -188,6 +194,8 @@ backupCheck:
   enabled: false
   schedule: "15 8 * * *"
 
+  # -- Resource requests and limits.
+  # ref: https://kubernetes.io/docs/user-guide/compute-resources/
   resources:
     limits:
       cpu: 2
@@ -196,6 +204,8 @@ backupCheck:
       cpu: 100m
       memory: 512Mi
 
+  # -- Persistence parameters
+  # ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   persistence:
     ## A manually managed Persistent Volume and Claim
     # existingClaim:
@@ -206,10 +216,16 @@ backupCheck:
     size: 8Gi
     annotations: {}
 
+  # -- Node labels for pod assignment.
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
   nodeSelector: {}
 
+  # -- Tolerations for pod assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   tolerations: []
 
+  # -- Affinity for pod assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
 
 metrics:
@@ -304,6 +320,8 @@ metrics:
             usage: "HISTOGRAM"
             description: "Idle time of server processes"
 
+  # -- Resource requests and limits.
+  # ref: https://kubernetes.io/docs/user-guide/compute-resources/
   resources:
     limits:
       cpu: 200m

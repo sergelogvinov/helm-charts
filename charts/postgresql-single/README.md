@@ -1,6 +1,6 @@
 # postgresql-single
 
-![Version: 0.9.2](https://img.shields.io/badge/Version-0.9.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 14.9](https://img.shields.io/badge/AppVersion-14.9-informational?style=flat-square)
+![Version: 0.9.3](https://img.shields.io/badge/Version-0.9.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 14.9](https://img.shields.io/badge/AppVersion-14.9-informational?style=flat-square)
 
 Postgres with backup/restore checks
 
@@ -114,23 +114,16 @@ metrics:
 | backup.walg | object | `{}` |  |
 | backup.cleanPolicy | string | `"retain FULL 3"` |  |
 | backup.schedule | string | `"15 4 * * *"` |  |
-| backup.resources.limits.cpu | int | `2` |  |
-| backup.resources.limits.memory | string | `"1Gi"` |  |
-| backup.resources.requests.cpu | string | `"1500m"` |  |
-| backup.resources.requests.memory | string | `"512Mi"` |  |
+| backup.resources | object | `{"limits":{"cpu":2,"memory":"1Gi"},"requests":{"cpu":"1500m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| backup.priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
 | backup.podAffinityPreset | string | `"hard"` |  |
 | backupCheck.enabled | bool | `false` |  |
 | backupCheck.schedule | string | `"15 8 * * *"` |  |
-| backupCheck.resources.limits.cpu | int | `2` |  |
-| backupCheck.resources.limits.memory | string | `"1Gi"` |  |
-| backupCheck.resources.requests.cpu | string | `"100m"` |  |
-| backupCheck.resources.requests.memory | string | `"512Mi"` |  |
-| backupCheck.persistence.accessModes[0] | string | `"ReadWriteOnce"` |  |
-| backupCheck.persistence.size | string | `"8Gi"` |  |
-| backupCheck.persistence.annotations | object | `{}` |  |
-| backupCheck.nodeSelector | object | `{}` |  |
-| backupCheck.tolerations | list | `[]` |  |
-| backupCheck.affinity | object | `{}` |  |
+| backupCheck.resources | object | `{"limits":{"cpu":2,"memory":"1Gi"},"requests":{"cpu":"100m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| backupCheck.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"size":"8Gi"}` | Persistence parameters ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
+| backupCheck.nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| backupCheck.tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| backupCheck.affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | metrics.enabled | bool | `false` |  |
 | metrics.image.repository | string | `"quay.io/prometheuscommunity/postgres-exporter"` |  |
 | metrics.image.pullPolicy | string | `"IfNotPresent"` |  |
@@ -138,13 +131,10 @@ metrics:
 | metrics.database | string | `"postgres"` |  |
 | metrics.username | string | `"postgres"` |  |
 | metrics.queries | string | `"pg_replication:\n  query: \"SELECT CASE WHEN NOT pg_is_in_recovery() THEN 0 ELSE GREATEST (0, EXTRACT(EPOCH FROM (now() - pg_last_xact_replay_timestamp()))) END AS lag\"\n  master: true\n  metrics:\n    - lag:\n        usage: \"GAUGE\"\n        description: \"Replication lag behind master in seconds\"\npg_postmaster:\n  query: \"SELECT pg_postmaster_start_time as start_time_seconds from pg_postmaster_start_time()\"\n  master: true\n  metrics:\n    - start_time_seconds:\n        usage: \"GAUGE\"\n        description: \"Time at which postmaster started\"\n{{- if semverCompare \">=14.0\" (.Values.image.tag | default .Chart.AppVersion) }}\npg_stat_slow_queries:\n  query: SELECT pg_get_userbyid(userid) as rolname,t3.datname,queryid,calls,max_exec_time / 1000 as max_time_seconds,REGEXP_REPLACE(substring(query,1,100),'[\"\\n\\s]','','g') as sql FROM pg_stat_statements t1 JOIN pg_database t3 ON (t1.dbid=t3.oid) WHERE rows != 0 AND max_exec_time > 1000 ORDER BY max_exec_time DESC LIMIT 10\n  metrics:\n    - rolname:\n        usage: \"LABEL\"\n        description: \"Name of user\"\n    - datname:\n        usage: \"LABEL\"\n        description: \"Name of database\"\n    - queryid:\n        usage: \"LABEL\"\n        description: \"Query ID\"\n    - sql:\n        usage: \"LABEL\"\n        description: \"SQL\"\n    - calls:\n        usage: \"COUNTER\"\n        description: \"Number of times executed\"\n    - max_time_seconds:\n        usage: \"GAUGE\"\n        description: \"Maximum time spent in the statement, in milliseconds\"\n{{- end }}\npg_stat_activity_idle:\n  query: |\n    WITH\n      metrics AS (\n        SELECT\n          application_name,\n          SUM(EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - state_change))::bigint)::float AS process_seconds_sum,\n          COUNT(*) AS process_seconds_count\n        FROM pg_stat_activity\n        WHERE state = 'idle'\n        GROUP BY application_name\n      ),\n      buckets AS (\n        SELECT\n          application_name,\n          le,\n          SUM(\n            CASE WHEN EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - state_change)) <= le\n              THEN 1\n              ELSE 0\n            END\n          )::bigint AS bucket\n        FROM\n          pg_stat_activity,\n          UNNEST(ARRAY[1, 2, 5, 15, 30, 60, 90, 120, 300]) AS le\n        GROUP BY application_name, le\n        ORDER BY application_name, le\n      )\n    SELECT\n      application_name,\n      process_seconds_sum,\n      process_seconds_count,\n      ARRAY_AGG(le) AS process_seconds,\n      ARRAY_AGG(bucket) AS process_seconds_bucket\n    FROM metrics JOIN buckets USING (application_name)\n    GROUP BY 1, 2, 3\n  metrics:\n    - application_name:\n        usage: \"LABEL\"\n        description: \"Application Name\"\n    - process_seconds:\n        usage: \"HISTOGRAM\"\n        description: \"Idle time of server processes\""` |  |
-| metrics.resources.limits.cpu | string | `"200m"` |  |
-| metrics.resources.limits.memory | string | `"128Mi"` |  |
-| metrics.resources.requests.cpu | string | `"10m"` |  |
-| metrics.resources.requests.memory | string | `"32Mi"` |  |
+| metrics.resources | object | `{"limits":{"cpu":"200m","memory":"128Mi"},"requests":{"cpu":"10m","memory":"32Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.11.0](https://github.com/norwoodj/helm-docs/releases/v1.11.0)
+Autogenerated from chart metadata using [helm-docs v1.11.2](https://github.com/norwoodj/helm-docs/releases/v1.11.2)

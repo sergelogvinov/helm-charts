@@ -37,6 +37,7 @@ spec:
       enableServiceLinks: false
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
+      preemptionPolicy: PreemptLowerPriority
       {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
