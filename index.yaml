@@ -666,6 +666,25 @@ entries:
   ipsec:
   - apiVersion: v2
     appVersion: "4.11"
+    created: "2023-10-11T14:06:07.584343982Z"
+    description: IPSec link for Kubernetes
+    digest: 3e467b9db12402ac74221fce56d0ddebb560656f48d65f277969f67fab62e8e6
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - ipsec
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: ipsec
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/ipsec
+    - https://libreswan.org/
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/ipsec-0.3.1/ipsec-0.3.1.tgz
+    version: 0.3.1
+  - apiVersion: v2
+    appVersion: "4.11"
     created: "2023-08-30T04:41:42.467945422Z"
     description: IPSec link for Kubernetes
     digest: ab056dd6120580a3000b46d959808de94574e4225726c13d243430442960c867
@@ -3178,4 +3197,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-10-09T10:48:47.110899205Z"
+generated: "2023-10-11T14:06:07.585005504Z"
