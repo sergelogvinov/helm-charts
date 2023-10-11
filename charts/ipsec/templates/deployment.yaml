@@ -38,6 +38,8 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      hostAliases:
+        {{- toYaml .Values.hostAliases | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:

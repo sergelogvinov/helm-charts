@@ -1,6 +1,6 @@
 # ipsec
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.11](https://img.shields.io/badge/AppVersion-4.11-informational?style=flat-square)
+![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.11](https://img.shields.io/badge/AppVersion-4.11-informational?style=flat-square)
 
 IPSec link for Kubernetes
 
@@ -88,6 +88,7 @@ config: |
 | secrets | string | `"# openssl rand -base64 48\n%any 1.2.3.4 : PSK \"base64\"\n"` |  |
 | users | object | `{}` | XAUTH openssl passwd -1 "$PASSWORD" |
 | config | string | `"conn gcp\n    ikev2=yes\n    ikelifetime=600m\n    keylife=180m\n    rekeymargin=3m\n    keyingtries=3\n    ike=aes256-sha256-modp2048\n    esp=aes256-sha256-modp2048\n    pfs=yes\n"` |  |
+| hostAliases | list | `[]` | host aliases ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/ |
 | ipsecService.enabled | bool | `false` |  |
 | ipsecService.image.repository | string | `"ghcr.io/sergelogvinov/haproxy"` |  |
 | ipsecService.image.pullPolicy | string | `"IfNotPresent"` |  |

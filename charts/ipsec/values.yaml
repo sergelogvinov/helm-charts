@@ -39,6 +39,13 @@ config: |
       esp=aes256-sha256-modp2048
       pfs=yes
 
+# -- host aliases
+# ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+hostAliases: []
+  # - ip: 172.20.2.15
+  #   hostnames:
+  #     - domain.com
+
 ipsecService:
   enabled: false
 
