@@ -36,7 +36,7 @@ Common labels
 {{- define "github-actions-runner.labels" -}}
 helm.sh/chart: {{ include "github-actions-runner.chart" . }}
 {{ include "github-actions-runner.selectorLabels" . }}
-app.kubernetes.io/version: "0.5.0"
+app.kubernetes.io/version: "{{ .Values.runnerVersion }}"
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 

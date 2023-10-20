@@ -16,6 +16,7 @@ maxRunners: 8
 minRunners: 1
 runnerGroup: "default"
 runnerScaleSetName: ""
+runnerVersion: "0.6.1"
 
 githubConfigUrl: "https://github.com/..."
 githubConfigSecret: {}

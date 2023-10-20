@@ -11,7 +11,9 @@ spec:
   externalTrafficPolicy: Local
 {{- else  }}
   type: ClusterIP
+{{ if eq (len .Values.ipsecService.ports) 0 }}
   clusterIP: None
+{{- end }}
 {{- end }}
   {{- with .Values.service.ipFamilies }}
   ipFamilies:
