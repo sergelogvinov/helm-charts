@@ -537,6 +537,27 @@ entries:
     version: 0.0.1
   github-actions-runner:
   - apiVersion: v2
+    appVersion: 2.310.2
+    created: "2023-10-20T14:23:14.234294736Z"
+    description: Github Actions with container registry and mirrors
+    digest: aecb7bdb42b3b116cbb67dffa39469bb1fd2e351665bad4eb7196019240a4067
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - github-actions
+    - conteiner
+    - docker-registry
+    - docker-mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: github-actions-runner
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/github-actions-runner
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/github-actions-runner-1.2.3/github-actions-runner-1.2.3.tgz
+    version: 1.2.3
+  - apiVersion: v2
     appVersion: 2.309.0
     created: "2023-09-21T18:48:21.933077677Z"
     description: Github Actions with container registry and mirrors
@@ -684,6 +705,25 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/github-actions-runner-1.0.0/github-actions-runner-1.0.0.tgz
     version: 1.0.0
   ipsec:
+  - apiVersion: v2
+    appVersion: "4.11"
+    created: "2023-10-20T14:23:14.374738386Z"
+    description: IPSec link for Kubernetes
+    digest: de32742af15df66038e198dd89bcb49be20cccca26dc26155a2ab8a79b776441
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - ipsec
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: ipsec
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/ipsec
+    - https://libreswan.org/
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/ipsec-0.3.2/ipsec-0.3.2.tgz
+    version: 0.3.2
   - apiVersion: v2
     appVersion: "4.11"
     created: "2023-10-11T14:06:07.584343982Z"
@@ -3217,4 +3257,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-10-17T09:41:13.164265447Z"
+generated: "2023-10-20T14:23:14.37522179Z"
