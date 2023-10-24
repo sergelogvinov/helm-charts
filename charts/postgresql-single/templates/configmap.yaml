@@ -30,13 +30,13 @@ data:
   {{- end }}
 
   {{- if .Values.postgresqlConfigurationExtra }}
-    {{ .Values.postgresqlConfigurationExtra | nindent 4 }}
+    {{- .Values.postgresqlConfigurationExtra | nindent 4 }}
   {{- end }}
 
     include_if_exists '{{ .Values.persistence.mountPath }}/postgresql-local.conf'
 
   pg_hba.conf: |
-    {{ .Values.pgHbaConfiguration | nindent 4 }}
+    {{- .Values.pgHbaConfiguration | nindent 4 }}
 
   rsyncd.conf: |
     port = 1873
@@ -60,10 +60,15 @@ data:
           sslmode: allow
 
   queries.yaml: |
-    {{ tpl .Values.metrics.queries . | nindent 4 }}
+    {{- tpl .Values.metrics.queries . | nindent 4 }}
 
   metrics.sql: |
     CREATE EXTENSION pg_stat_statements;
+
+  {{ if .Values.initdb.script }}
+  initdb.sh: |
+    {{- .Values.initdb.script | nindent 4 }}
+  {{- end }}
 
   migrate.sh: |
     #!/bin/sh
@@ -260,7 +265,7 @@ data:
     echo "*** Start tests"
     START=`date +%s`
 
-    {{- if semverCompare ">=14.0" ((regexMatch "^[0-9]+\\.[0-9]+$" .Values.image.tag) | default .Chart.AppVersion) }}
+    {{- if and (regexMatch "^[0-9]+\\.[0-9]+$" .Values.image.tag) (semverCompare ">=14.0" .Values.image.tag) | default .Chart.AppVersion }}
     echo "*** AMCheck"
     pg_amcheck -a --install-missing --parent-check --heapallindexed
     {{- end }}
