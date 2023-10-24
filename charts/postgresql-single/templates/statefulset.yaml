@@ -37,7 +37,6 @@ spec:
       enableServiceLinks: false
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
-      preemptionPolicy: PreemptLowerPriority
       {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -48,6 +47,14 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- with .Values.initContainers }}
+      initContainers:
+        {{- range $key := . }}
+        - name: {{ default "init" $key.name }}
+          image: {{ default (printf "%s:%s" $.Values.image.repository (default $.Chart.AppVersion $.Values.image.tag)) $key.image }}
+          {{- tpl (toYaml (mergeOverwrite (omit $key "name" "image") (dict "securityContext" $.Values.securityContext))) $ | nindent 10 }}
+        {{- end }}
       {{- end }}
       containers:
         - name: {{ template "postgresql-single.fullname" . }}
@@ -68,7 +75,7 @@ spec:
           {{- end }}
           env:
             - name: POSTGRES_INITDB_ARGS
-              value: --data-checksums --auth-host=scram-sha-256
+              value: {{ .Values.initdb.args | quote }}
             - name: POSTGRES_USER
               value: {{ .Values.postgresqlUsername | quote }}
             - name: POSTGRES_PASSWORD
@@ -115,6 +122,10 @@ spec:
             - name: recovery
               mountPath: /docker-entrypoint-initdb.d
           {{- end }}{{- end }}
+          {{- if and .Values.initdb.script (not .Values.backup.recovery) }}
+            - name: initdb
+              mountPath: /docker-entrypoint-initdb.d
+          {{- end }}
             - name: tlscerts
               mountPath: /etc/ssl/tlscerts
           resources:
@@ -196,6 +207,15 @@ spec:
             items:
               - key: restore.sh
                 path: restore.sh
+      {{- end }}
+      {{- if and .Values.initdb.script }}
+        - name: initdb
+          configMap:
+            name: {{ include "postgresql-single.fullname" . }}
+            defaultMode: 493
+            items:
+              - key: initdb.sh
+                path: initdb.sh
       {{- end }}
         - name: tlscerts
           secret:

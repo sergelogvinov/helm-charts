@@ -50,12 +50,34 @@ pgHbaConfiguration: |-
   host    replication postgres              10.0.0.0/8    md5
   hostssl replication postgres              10.0.0.0/8    md5
 
+initdb:
+  ## -- PostgreSQL initdb parameters
+  ## ref: https://www.postgresql.org/docs/current/app-initdb.html
+  args: "--data-checksums --auth-host=scram-sha-256"
+
+  ## -- PostgreSQL initdb scripts
+  ## ref: https://hub.docker.com/_/postgres
+  script: ""
+  #  #!/bin/sh
+  #  echo "Do something."
+  #
+
 tlsCerts:
   create: false
 
   ## -- SSL Mode
   ## ref: https://www.postgresql.org/docs/current/libpq-ssl.html
   mode: require
+
+initContainers: []
+  # - name: pg-init
+  #   command: ['/copy_if_not_exist.sh']
+  #   env:
+  #     - name: PGDATA
+  #       value: "{{ .Values.persistence.mountPath }}/data"
+  #   volumeMounts:
+  #     - name: data
+  #       mountPath: "{{ .Values.persistence.mountPath }}"
 
 # -- Pods Service Account.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -253,7 +275,7 @@ metrics:
         - start_time_seconds:
             usage: "GAUGE"
             description: "Time at which postmaster started"
-    {{- if semverCompare ">=14.0" ((regexMatch "^[0-9]+\\.[0-9]+$" .Values.image.tag) | default .Chart.AppVersion) }}
+    {{- if and (regexMatch "^[0-9]+\\.[0-9]+$" .Values.image.tag) (semverCompare ">=14.0" .Values.image.tag) | default .Chart.AppVersion }}
     pg_stat_slow_queries:
       query: SELECT pg_get_userbyid(userid) as rolname,t3.datname,queryid,calls,max_exec_time / 1000 as max_time_seconds,REGEXP_REPLACE(substring(query,1,100),'["\n\s]','','g') as sql FROM pg_stat_statements t1 JOIN pg_database t3 ON (t1.dbid=t3.oid) WHERE rows != 0 AND max_exec_time > 1000 ORDER BY max_exec_time DESC LIMIT 10
       metrics:

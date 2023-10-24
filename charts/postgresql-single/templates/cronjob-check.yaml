@@ -131,7 +131,6 @@ spec:
                 secretName: {{ include "postgresql-single.fullname" . }}-server-tls
                 defaultMode: 256
           {{- end }}
-
           {{- if .Values.backupCheck.persistence.existingClaim }}
             - name: data
               persistentVolumeClaim:
