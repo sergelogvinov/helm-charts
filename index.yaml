@@ -143,6 +143,26 @@ entries:
     version: 0.1.0
   clickhouse:
   - apiVersion: v2
+    appVersion: 23.9.3
+    created: "2023-10-31T06:37:20.479231017Z"
+    description: Clickhouse chart for Kubernetes
+    digest: d3c1bef4f631a403139d837db2a8564aaa4f9edf878a8b4e2323eecb07f17260
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - database
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: clickhouse
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/clickhouse
+    - https://github.com/ClickHouse/ClickHouse
+    - https://hub.docker.com/r/clickhouse/clickhouse-server
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-0.5.4/clickhouse-0.5.4.tgz
+    version: 0.5.4
+  - apiVersion: v2
     appVersion: 23.8.2
     created: "2023-10-08T09:18:26.166495546Z"
     description: Clickhouse chart for Kubernetes
@@ -536,6 +556,27 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/fluentd-0.0.1/fluentd-0.0.1.tgz
     version: 0.0.1
   github-actions-runner:
+  - apiVersion: v2
+    appVersion: 2.311.0
+    created: "2023-10-31T06:37:20.661068669Z"
+    description: Github Actions with container registry and mirrors
+    digest: 7219013c3de159cb61def450c1dd1bd8e04bb1d0f2972a02eadd7b9e5cb2c562
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - github-actions
+    - conteiner
+    - docker-registry
+    - docker-mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: github-actions-runner
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/github-actions-runner
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/github-actions-runner-1.2.4/github-actions-runner-1.2.4.tgz
+    version: 1.2.4
   - apiVersion: v2
     appVersion: 2.310.2
     created: "2023-10-20T14:23:14.234294736Z"
@@ -3318,4 +3359,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-10-30T13:11:42.320562364Z"
+generated: "2023-10-31T06:37:20.661896163Z"
