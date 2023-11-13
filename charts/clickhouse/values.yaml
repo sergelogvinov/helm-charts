@@ -167,6 +167,11 @@ storage: {}
   #     prefer_not_to_merge: true
 
 clickhouse:
+  # -- Clickhouse log level
+  # ref: https://clickhouse.com/docs/en/operations/server-configuration-parameters/settings#logger
+  # trace, debug, information, warning, error
+  logLevel: information
+
   # -- Clickhouse SQL-driven Access Control
   # refs: https://clickhouse.com/docs/en/operations/access-rights
   accessManagement: false

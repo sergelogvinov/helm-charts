@@ -133,13 +133,13 @@ data:
         {{- end }}
 
         <logger>
-            <level>information</level>
+            <level>{{ .Values.clickhouse.logLevel }}</level>
             <console>1</console>
             <size>1000M</size>
             <count>2</count>
             <log>/var/log/clickhouse/clickhouse-server.log</log>
+            <errorlog>/var/log/clickhouse/clickhouse-server.err.log</errorlog>
         </logger>
-        <errorlog>/var/log/clickhouse/clickhouse-server.err.log</errorlog>
 
         {{- if .Values.metrics.enabled }}
         <prometheus>

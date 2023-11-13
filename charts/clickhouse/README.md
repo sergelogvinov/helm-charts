@@ -1,6 +1,6 @@
 # clickhouse
 
-![Version: 0.5.4](https://img.shields.io/badge/Version-0.5.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 23.9.3](https://img.shields.io/badge/AppVersion-23.9.3-informational?style=flat-square)
+![Version: 0.5.5](https://img.shields.io/badge/Version-0.5.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 23.10.3](https://img.shields.io/badge/AppVersion-23.10.3-informational?style=flat-square)
 
 Clickhouse chart for Kubernetes
 
@@ -88,6 +88,7 @@ metrics:
 | files | object | `{}` |  |
 | config | string | `nil` |  |
 | storage | object | `{}` |  |
+| clickhouse.logLevel | string | `"information"` | Clickhouse log level ref: https://clickhouse.com/docs/en/operations/server-configuration-parameters/settings#logger trace, debug, information, warning, error |
 | clickhouse.accessManagement | bool | `false` | Clickhouse SQL-driven Access Control refs: https://clickhouse.com/docs/en/operations/access-rights |
 | clickhouse.users[0] | object | `{"name":"logger","password":"2686af9f25e1a64f5e9f7290c7e457aa06b616fb31d2b4331ff6fa0857661cd5","profile":"default","quota":"default"}` | Clickhouse read write user |
 | clickhouse.users[1] | object | `{"name":"reader","password":"3d0941964aa3ebdcb00ccef58b1bb399f9f898465e9886d5aec7f31090a0fb30","profile":"reader","quota":"default"}` | Clickhouse read only user |
