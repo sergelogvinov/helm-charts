@@ -1,6 +1,6 @@
 # pgbouncer
 
-![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 15.4](https://img.shields.io/badge/AppVersion-15.4-informational?style=flat-square)
+![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 15.4](https://img.shields.io/badge/AppVersion-15.4-informational?style=flat-square)
 
 Postgres connection poller
 
@@ -67,7 +67,7 @@ metrics:
 | pgHbaConfiguration | string | `"# host  database    user                  address        auth-method\nhost    all         all                   10.0.0.0/8     md5\nhostssl all         all                   0.0.0.0/0      md5"` |  |
 | customSettings | object | `{}` |  |
 | serverSslMode | string | `"allow"` | Server TLS configuration. ref: https://www.pgbouncer.org/config.html#server_tls_sslmode |
-| serverSslSecret | string | `""` |  |
+| serverSslSecret | string | `""` | Server TLS secret name (cert-manager). |
 | serverSsl | object | `{}` | Server TLS secrets. ref: https://www.pgbouncer.org/config.html#server_tls_ca_file ca, cert, key: If you want to use your own certificates, you can provide them here. |
 | clientSslMode | string | `"allow"` | Client TLS configuration. ref: https://www.pgbouncer.org/config.html#client_tls_sslmode |
 | clientSslSecret | string | `""` |  |

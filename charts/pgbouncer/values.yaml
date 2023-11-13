@@ -42,8 +42,9 @@ customSettings: {}
 # -- Server TLS configuration.
 # ref: https://www.pgbouncer.org/config.html#server_tls_sslmode
 serverSslMode: allow
+# -- Server TLS secret name (cert-manager).
 serverSslSecret: ""
-  # pgbouncer-tls
+
 # -- Server TLS secrets.
 # ref: https://www.pgbouncer.org/config.html#server_tls_ca_file
 # ca, cert, key: If you want to use your own certificates, you can provide them here.

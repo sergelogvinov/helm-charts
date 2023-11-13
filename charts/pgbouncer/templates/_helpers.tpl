@@ -147,7 +147,7 @@ unix_socket_dir = /var/run/postgresql
 
 server_tls_sslmode   = {{ .Values.serverSslMode }}
 server_tls_ca_file   = /etc/ssl/server/ca.crt
-{{- if or .Values.serverSslSecret (and .Values.serverSsl.cert .Values.serverSsl.key) - }}
+{{- if or .Values.serverSslSecret (and .Values.serverSsl.cert .Values.serverSsl.key) }}
 server_tls_cert_file = /etc/ssl/server/tls.crt
 server_tls_key_file  = /etc/ssl/server/tls.key
 {{- end }}
