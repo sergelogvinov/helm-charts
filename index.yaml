@@ -1247,6 +1247,22 @@ entries:
   link-common:
   - apiVersion: v2
     appVersion: 2.7.10-alpine3.18
+    created: "2023-11-13T20:51:21.006075092Z"
+    description: Simple vpn-p2p-link service
+    digest: 8945661ab543a58c71ade4195f41b1a9a7308125d903584c36e3525d2d74d929
+    home: https://github.com/sergelogvinov/helm-charts
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: link-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/link-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/link-common-0.3.0/link-common-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
+    appVersion: 2.7.10-alpine3.18
     created: "2023-10-30T13:11:42.320060752Z"
     description: Simple vpn-p2p-link service
     digest: 6ed1d49a167501d528ee4d1add74a63020e0645cc92a7909d84a65d17541aa2e
@@ -3438,4 +3454,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-11-13T20:44:54.153814996Z"
+generated: "2023-11-13T20:51:21.006508656Z"
