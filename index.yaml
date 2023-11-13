@@ -1865,6 +1865,25 @@ entries:
   pgbouncer:
   - apiVersion: v2
     appVersion: "15.4"
+    created: "2023-11-13T21:04:05.412884446Z"
+    description: Postgres connection poller
+    digest: ed9c2f1394c5855af01549903a461f1ad5f06a7accfde3a66189898128a5e42f
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - pgbouncer
+    - postgresql
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: pgbouncer
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/pgbouncer
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.2.2/pgbouncer-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: "15.4"
     created: "2023-11-13T20:38:49.935026293Z"
     description: Postgres connection poller
     digest: 5cbad847c2343f0dfe3c61afb66feb8c6639cae5a00876feac8018af216bf36b
@@ -3454,4 +3473,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-11-13T20:51:21.006508656Z"
+generated: "2023-11-13T21:04:05.413322246Z"
