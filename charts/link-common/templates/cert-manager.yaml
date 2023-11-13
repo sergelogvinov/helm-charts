@@ -1,0 +1,130 @@
+{{- if .Values.certManager.createCerts }}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "link-common.fullname" . }}
+  labels:
+    {{- include "link-common.labels" . | nindent 4 }}
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "link-common.fullname" . }}-ca
+  labels:
+    {{- include "link-common.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "link-common.fullname" . }}-ca
+  secretTemplate:
+    labels:
+      {{- include "link-common.labels" . | nindent 6 }}
+  issuerRef:
+    name: {{ include "link-common.fullname" . }}
+    kind: Issuer
+  commonName: {{ include "link-common.fullname" . }}
+  duration: 26280h # 3y
+  renewBefore: 26000h # ~3y
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - server auth
+    - client auth
+    - crl sign
+  isCA: true
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "link-common.fullname" . }}-issuer
+  labels:
+    {{- include "link-common.labels" . | nindent 4 }}
+spec:
+  ca:
+    secretName: {{ include "link-common.fullname" . }}-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "link-common.fullname" . }}
+  labels:
+    {{- include "link-common.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "link-common.fullname" . }}-server
+  secretTemplate:
+    labels:
+      {{- include "link-common.labels" . | nindent 6 }}
+  commonName: {{ include "link-common.fullname" . }}-server
+  duration: 26280h # 3y
+  renewBefore: 26000h # ~3y
+  privateKey:
+    rotationPolicy: Always
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - digital signature
+    - server auth
+  dnsNames:
+    - {{ include "link-common.fullname" . }}
+  issuerRef:
+    name: {{ include "link-common.fullname" . }}-issuer
+{{- if .Values.certManager.clients }}
+{{- range $k := .Values.certManager.clients }}
+{{ $client := ($k | trunc 63 | replace "@" "-" | replace "." "-" ) }}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "link-common.fullname" $ }}-client-{{ $client }}
+  labels:
+    {{- include "link-common.labels" $ | nindent 4 }}
+spec:
+  secretName: {{ include "link-common.fullname" $ }}-client-{{ $client }}
+  secretTemplate:
+    labels:
+      {{- include "link-common.labels" $ | nindent 6 }}
+  commonName: {{ $k | trunc 63 | replace "@" "." }}
+  duration: 8760h # 12m
+  renewBefore: 2190h # 3m
+  privateKey:
+    rotationPolicy: Always
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - digital signature
+    - client auth
+  dnsNames:
+    - {{ $k | trunc 63 | replace "@" "." }}
+  issuerRef:
+    name: {{ include "link-common.fullname" $ }}-issuer
+{{- end }}
+{{- else }}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "link-common.fullname" . }}-client
+  labels:
+    {{- include "link-common.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "link-common.fullname" . }}-client
+  secretTemplate:
+    labels:
+      {{- include "link-common.labels" . | nindent 6 }}
+  commonName: client
+  duration: 17520h # 24m
+  renewBefore: 2190h # 3m
+  privateKey:
+    rotationPolicy: Always
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - digital signature
+    - client auth
+  dnsNames:
+    - client
+  issuerRef:
+    name: {{ include "link-common.fullname" . }}-issuer
+{{- end }}
+{{- end }}

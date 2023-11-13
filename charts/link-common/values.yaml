@@ -56,6 +56,14 @@ service:
     # - name: postgres
     #   port: 5432
     #   backend: postgres.default.svc.cluster.local:5432
+    #   tls: true
+
+certManager:
+  createCerts: false
+
+  clients: []
+    # - user1
+    # - user2
 
 wireguard:
   enabled: false

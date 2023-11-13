@@ -1,0 +1,9 @@
+{{- if .Values.certManager.createCerts }}
+{{- if .Values.certManager.clients }}
+{{- range $k := .Values.certManager.clients }}
+{{ $client := ($k | trunc 63 | replace "@" "-" | replace "." "-" ) }}
+kubectl --namespace {{ $.Release.Namespace }} get secret {{ include "link-common.fullname" $ }}-client-{{ $client }} -o jsonpath="{.data.ca\.crt}"  | base64 --decode > ca.crt
+kubectl --namespace {{ $.Release.Namespace }} get secret {{ include "link-common.fullname" $ }}-client-{{ $client }} -o jsonpath="{.data.tls\.crt}" | base64 --decode > client.crt
+kubectl --namespace {{ $.Release.Namespace }} get secret {{ include "link-common.fullname" $ }}-client-{{ $client }} -o jsonpath="{.data.tls\.key}" | base64 --decode > client.key
+{{- end }}{{- end }}
+{{- end }}

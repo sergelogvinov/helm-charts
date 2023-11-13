@@ -91,9 +91,13 @@ spec:
               readOnly: true
             - name: config
               mountPath: /usr/local/etc/haproxy
+            {{- if .Values.certManager.createCerts }}
+            - name: tlscerts
+              mountPath: /etc/ssl/tlscerts
+            {{- end }}
             - name: run
               mountPath: /run
-        {{- if .Values.wireguard.metrics.enabled }}
+        {{- if and .Values.wireguard.enabled .Values.wireguard.metrics.enabled }}
         - name: wireguard-metrics
           securityContext:
             runAsUser: 0
@@ -132,6 +136,12 @@ spec:
             items:
               - key: haproxy.cfg
                 path: haproxy.cfg
+        {{- if .Values.certManager.createCerts }}
+        - name: tlscerts
+          secret:
+            secretName: {{ include "link-common.fullname" . }}-server
+            defaultMode: 288
+        {{- end }}
         {{- if .Values.wireguard.enabled }}
         - name: wireguard
           secret:
