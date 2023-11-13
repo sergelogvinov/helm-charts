@@ -3,7 +3,9 @@
 
 kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "postgresql-single.fullname" . }}-backup {{ include "postgresql-single.fullname" . }}-backup-manual
 
+{{ if .Values.backupCheck.enabled }}
 2. Backup check command:
 
 kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "postgresql-single.fullname" . }}-backup-check {{ include "postgresql-single.fullname" . }}-backup-check-manual
+{{ end }}
 {{- end }}
