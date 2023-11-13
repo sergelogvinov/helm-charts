@@ -24,8 +24,9 @@ spec:
       {{- include "pgbouncer.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        checksum/config: {{ include "pgbouncer.ini" . | sha256sum }}
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -71,10 +72,8 @@ spec:
               mountPath: /etc/pgbouncer
             - name: users
               mountPath: /etc/private
-          {{- if .Values.serverSslSecret }}
             - name: servertls
               mountPath: /etc/ssl/server
-          {{- end }}
           {{- if .Values.clientSslSecret }}
             - name: clienttls
               mountPath: /etc/ssl/client
@@ -109,6 +108,18 @@ spec:
           secret:
             secretName: {{ .Values.serverSslSecret }}
             defaultMode: 256
+      {{- else }}
+        - name: servertls
+          secret:
+            secretName: {{ include "pgbouncer.fullname" . }}
+            defaultMode: 256
+            items:
+              - key: serverTLSca
+                path: ca.crt
+              - key: serverTLScert
+                path: tls.crt
+              - key: serverTLSkey
+                path: tls.key
       {{- end }}
       {{- if .Values.clientSslSecret }}
         - name: clienttls

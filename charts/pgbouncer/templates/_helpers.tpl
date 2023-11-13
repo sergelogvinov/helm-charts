@@ -146,16 +146,13 @@ min_pool_size = 0
 unix_socket_dir = /var/run/postgresql
 
 server_tls_sslmode   = {{ .Values.serverSslMode }}
-{{ if .Values.serverSslSecret -}}
 server_tls_ca_file   = /etc/ssl/server/ca.crt
+{{- if or .Values.serverSslSecret (and .Values.serverSsl.cert .Values.serverSsl.key) - }}
 server_tls_cert_file = /etc/ssl/server/tls.crt
 server_tls_key_file  = /etc/ssl/server/tls.key
-{{ else -}}
-server_tls_key_file  = /etc/ssl/private/ssl-cert-snakeoil.key
-server_tls_cert_file = /etc/ssl/certs/ssl-cert-snakeoil.pem
-{{ end -}}
+{{- end }}
 server_tls_protocols = secure
-server_tls_ciphers   = fast
+server_tls_ciphers   = secure
 
 client_tls_sslmode   = {{ .Values.clientSslMode }}
 {{ if .Values.clientSslSecret -}}
