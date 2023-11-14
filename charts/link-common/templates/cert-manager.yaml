@@ -67,6 +67,9 @@ spec:
     - server auth
   dnsNames:
     - {{ include "link-common.fullname" . }}
+    {{- if .Values.certManager.dnsName }}
+    - {{ .Values.certManager.dnsName }}
+    {{- end }}
   issuerRef:
     name: {{ include "link-common.fullname" . }}-issuer
 {{- if .Values.certManager.clients }}
