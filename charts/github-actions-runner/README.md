@@ -1,6 +1,6 @@
 # github-actions-runner
 
-![Version: 1.2.4](https://img.shields.io/badge/Version-1.2.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.311.0](https://img.shields.io/badge/AppVersion-2.311.0-informational?style=flat-square)
+![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.311.0](https://img.shields.io/badge/AppVersion-2.311.0-informational?style=flat-square)
 
 Github Actions with container registry and mirrors
 
@@ -15,6 +15,7 @@ Github Actions with container registry and mirrors
 ## Source Code
 
 * <https://github.com/sergelogvinov/helm-charts/tree/master/charts/github-actions-runner>
+* <https://github.com/actions/actions-runner-controller.git>
 
 ```yaml
 # helm values
@@ -105,6 +106,14 @@ nodeSelector:
 | registry.nodeSelector | object | `{}` | Node labels for local registry deploy assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | registry.tolerations | list | `[]` | Tolerations for local registry deploy assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | registry.affinity | object | `{}` | Affinity for local registry deploy assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
+| registry.cleaner.image.repository | string | `"ghcr.io/sergelogvinov/deckschrubber"` |  |
+| registry.cleaner.image.pullPolicy | string | `"IfNotPresent"` |  |
+| registry.cleaner.image.tag | string | `"0.7.0"` |  |
+| registry.cleaner.args[0] | string | `"-insecure"` |  |
+| registry.cleaner.args[1] | string | `"-registry=https://{{ include \"github-actions-runner.fullname\" . }}-registry"` |  |
+| registry.cleaner.args[2] | string | `"-day=1"` |  |
+| registry.cleaner.args[3] | string | `"-repos=50"` |  |
+| registry.cleaner.resources | object | `{"limits":{"cpu":"100m","memory":"128Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | metrics.enabled | bool | `true` |  |
 | metrics.image.repository | string | `"ghcr.io/sergelogvinov/github-actions-exporter"` |  |
 | metrics.image.pullPolicy | string | `"IfNotPresent"` |  |

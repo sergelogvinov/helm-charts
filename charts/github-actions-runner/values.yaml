@@ -160,6 +160,28 @@ registry:
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
 
+  cleaner:
+    image:
+      repository: ghcr.io/sergelogvinov/deckschrubber
+      pullPolicy: IfNotPresent
+      tag: 0.7.0
+
+    args:
+      - -insecure
+      - -registry=https://{{ include "github-actions-runner.fullname" . }}-registry
+      - -day=1
+      - -repos=50
+
+    # -- Resource requests and limits.
+    # ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+
 metrics:
   enabled: true
 

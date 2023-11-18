@@ -1,0 +1,5 @@
+{{- if .Values.registry.enabled }}
+1. Clean registry
+
+kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "github-actions-runner.fullname" . }}-registry-cleaner {{ include "github-actions-runner.fullname" . }}-registry-cleaner-manual
+{{- end }}
