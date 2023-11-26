@@ -26,15 +26,67 @@ data:
     healthz: Path("/healthz") -> inlineContent("ok")
         -> disableAccessLog() -> <shunt>;
 
-    {{- range $inx, $val := .Values.mirrors.registry }}
-    {{ $val.host | replace "." "" }}: PathSubtree("/{{ $val.host | replace "." "-" }}/v2/") -> modPath("/{{ $val.host | replace "." "-" }}/", "/")
-        -> enableAccessLog() -> "http://127.0.0.1:{{ add 5000 $inx }}";
-    {{- end }}
+    default: PathSubtree("/")
+        -> enableAccessLog() -> "http://127.0.0.1:8080";
 
-    docker: PathSubtree("/v2/")
-        -> enableAccessLog() -> "http://127.0.0.1:5000";
-
-    default: * -> status(404) -> <shunt>;
+  mirrors.json: |-
+    {
+      "distSpecVersion": "1.1.0-dev",
+      "storage": {
+        "rootDirectory": "/var/lib/registry",
+        "commit": true,
+        "gc": true,
+        "gcDelay": "30m",
+        "gcInterval": "6h"
+      },
+      "http": { "address": "0.0.0.0", "port": "8080" },
+      "log": { "level": "debug" },
+      "extensions": {
+        "metrics": {
+          "enable": true,
+          "prometheus": {
+            "path": "/metrics"
+          }
+        },
+        "sync": {
+          "enable": true,
+          "credentialsFile": "/etc/credentials/credentials.json",
+          "registries": [
+            {{- range $inx, $val := .Values.mirrors.registry }}{{- if ne $val.host "docker.io" }}
+            {
+              "urls": ["https://{{ $val.host }}"],
+              "tlsVerify": true,
+              "onDemand": true,
+              "maxRetries": 2,
+              "retryDelay": "5m",
+              "content": [
+                {
+                  "prefix": "**",
+                  "destination": "/{{ $val.host | replace "." "-" }}"
+                }
+              ]
+            },
+            {{- end }}{{- end }}
+            {
+              "urls": ["https://docker.io","https://index.docker.io"],
+              "tlsVerify": true,
+              "onDemand": true,
+              "maxRetries": 2,
+              "retryDelay": "5m",
+              "content": [
+                {
+                  "prefix": "**",
+                  "destination": "/docker-io"
+                },
+                {
+                  "prefix": "**"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
 
   registry.yaml: |-
     version: 0.1
@@ -53,12 +105,59 @@ data:
       filesystem:
         rootdirectory: /var/lib/registry
         maxthreads: 100
+      delete:
+        enabled: true
     http:
       addr: :8443
       host: https://{{ include "github-actions-runner.fullname" . }}-registry.{{ .Release.Namespace }}.svc
       tls:
         certificate: /etc/registry/registry.crt
         key: /etc/registry/registry.key
+
+  registry.json: |-
+    {
+      "distSpecVersion": "1.1.0-dev",
+      "storage": {
+        "rootDirectory": "/var/lib/registry",
+        "commit": true,
+        "gc": true,
+        "gcDelay": "2h",
+        "gcInterval": "1h"
+      },
+      "http": {
+        "address": "0.0.0.0", "port": "8443",
+        "tls": {
+          "cert":"/etc/registry/registry.crt",
+          "key":"/etc/registry/registry.key"
+        },
+        "accessControl": {
+          "repositories": {
+            "**": {
+              "anonymousPolicy": ["read", "create", "update", "delete"]
+            }
+          }
+        }
+      },
+      "log": { "level": "debug" },
+      "extensions": {
+        "search": {
+          "enable": true,
+          "cve": {
+            "updateInterval": "12h"
+          }
+        },
+        "scrub": {
+          "enable": true,
+          "interval": "24h"
+        },
+        "metrics": {
+          "enable": true,
+          "prometheus": {
+            "path": "/metrics"
+          }
+        }
+      }
+    }
 
   {{- $size := default 10 (include "resource-mb" .Values.dind.persistence.size) }}
   buildkitd.toml: |-
@@ -90,19 +189,14 @@ data:
     [registry."{{ $val.host }}"]
       capabilities = ["pull", "resolve"]
       mirrors = ["{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc/{{ $val.host | replace "." "-" }}"]
-      http = true
-      insecure = true
     {{- end }}
-    {{- range $inx, $val := .Values.mirrors.registry }}
-    [registry."{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc/{{ $val.host | replace "." "-" }}"]
-      http = true
-      insecure = true
-    {{- end }}
+    [registry."{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc"]
+      ca = ["/etc/docker-config/ca.crt"]
     {{- end }}
 
     {{- if .Values.registry.enabled }}
     [registry."{{ include "github-actions-runner.fullname" . }}-registry.{{ $.Release.Namespace }}.svc"]
-      insecure = true
+      ca = ["/etc/docker-config/ca.crt"]
     {{- end }}
 
   daemon.json: |-
@@ -119,7 +213,7 @@ data:
       "hosts": ["unix:///var/run/docker.sock","tcp://127.0.0.1:2376"],
       "mtu": 1280,
       {{- if .Values.mirrors.enabled }}
-      "registry-mirrors": ["http://{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc"],
+      "registry-mirrors": ["https://{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc"],
       {{- end }}
       "insecure-registries": [
         "{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc",
@@ -131,5 +225,6 @@ data:
   mirrors.sh: |
     #!/bin/sh
     until docker ps; do sleep 1; done
+    docker pull moby/buildkit:buildx-stable-1
     docker buildx create --name multiarch --driver docker-container --config /etc/docker-config/buildkitd.toml --use
     docker buildx inspect --bootstrap multiarch

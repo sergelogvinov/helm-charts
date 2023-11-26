@@ -18,11 +18,11 @@ spec:
   ports:
     - name: http
       port: 80
-      targetPort: 9080
+      targetPort: 8080
       protocol: TCP
     - name: https
       port: 443
-      targetPort: 9443
+      targetPort: 8443
       protocol: TCP
   selector:
     {{- include "github-actions-runner.selectorLabels" . | nindent 4 }}
