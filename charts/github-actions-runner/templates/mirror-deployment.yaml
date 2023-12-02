@@ -43,8 +43,8 @@ spec:
           command: ['skipper']
           args:
             - -address=:8443
-            - -tls-cert=/etc/skipper/tls.crt
-            - -tls-key=/etc/skipper/tls.key
+            - -tls-cert=/etc/server-tls/tls.crt
+            - -tls-key=/etc/server-tls/tls.key
             - -routes-file=/etc/skipper/mirrors.eskip
             - -access-log-json-enabled
             - -application-log-level=WARN
@@ -70,6 +70,8 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/skipper
+            - name: tls
+              mountPath: /etc/server-tls
         - name: {{ include "github-actions-runner.fullname" . }}-mirrors-registry
           securityContext:
             allowPrivilegeEscalation: false
@@ -131,6 +133,10 @@ spec:
                 path: tls.crt
               - key: tls.key
                 path: tls.key
+        - name: tls
+          secret:
+            secretName:  {{ include "github-actions-runner.fullname" . }}-server-tls
+            defaultMode: 256
         - name: credentials
           secret:
             secretName:  {{ include "github-actions-runner.fullname" . }}-mirrors

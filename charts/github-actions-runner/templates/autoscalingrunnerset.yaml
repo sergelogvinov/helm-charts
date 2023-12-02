@@ -64,6 +64,8 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/docker-config
+            - name: tls
+              mountPath: /etc/docker-tls
             - name: docker
               mountPath: /var/lib/docker
             - name: run
@@ -128,6 +130,10 @@ spec:
         - name: config
           configMap:
             name: {{ include "github-actions-runner.fullname" . }}
+        - name: tls
+          secret:
+            secretName:  {{ include "github-actions-runner.fullname" . }}-client-tls
+            defaultMode: 256
       {{- if .Values.dind.enabled }}
         - name: modules
           hostPath:

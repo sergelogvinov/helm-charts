@@ -59,6 +59,8 @@ spec:
               mountPath: /var/lib/registry
             - name: config
               mountPath: /etc/registry
+            - name: tls
+              mountPath: /etc/registry-tls
           {{- if .Values.registry.extraVolumeMounts }}
             {{ toYaml .Values.registry.extraVolumeMounts | nindent 12 }}
           {{- end }}
@@ -81,10 +83,10 @@ spec:
             items:
               - key: registry.yaml
                 path: config.yaml
-              - key: registry.crt
-                path: registry.crt
-              - key: registry.key
-                path: registry.key
+        - name: tls
+          secret:
+            secretName:  {{ include "github-actions-runner.fullname" . }}-server-tls
+            defaultMode: 256
         - name: data
       {{- if not .Values.registry.persistence.enabled }}
           emptyDir: {}
