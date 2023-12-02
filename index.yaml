@@ -578,6 +578,28 @@ entries:
   github-actions-runner:
   - apiVersion: v2
     appVersion: 2.311.0
+    created: "2023-12-02T10:44:15.441200785Z"
+    description: Github Actions with container registry and mirrors
+    digest: 8be802ff7f4a50a834ae960e1806f7f462ae5169d30510be0400ff5399e08d03
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - github-actions
+    - conteiner
+    - docker-registry
+    - docker-mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: github-actions-runner
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/github-actions-runner
+    - https://github.com/actions/actions-runner-controller.git
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/github-actions-runner-1.4.1/github-actions-runner-1.4.1.tgz
+    version: 1.4.1
+  - apiVersion: v2
+    appVersion: 2.311.0
     created: "2023-11-26T13:12:30.269324033Z"
     description: Github Actions with container registry and mirrors
     digest: f95832435258bc9a845eabfdbb0328f578a881408e60e365429c64e5a356a56c
@@ -3592,4 +3614,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-11-26T13:12:30.269763686Z"
+generated: "2023-12-02T10:44:15.441600574Z"
