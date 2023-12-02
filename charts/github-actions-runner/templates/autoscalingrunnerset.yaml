@@ -101,6 +101,8 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/docker-config
+            - name: tls
+              mountPath: /etc/docker-tls
           {{- if .Values.extraVolumeMounts }}
             {{ toYaml .Values.extraVolumeMounts | nindent 12 }}
           {{- end }}
@@ -133,7 +135,7 @@ spec:
         - name: tls
           secret:
             secretName:  {{ include "github-actions-runner.fullname" . }}-client-tls
-            defaultMode: 256
+            defaultMode: 288
       {{- if .Values.dind.enabled }}
         - name: modules
           hostPath:
