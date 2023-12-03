@@ -298,6 +298,14 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+  - metrics.k8s.io
+  resources:
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
 ####
 - apiGroups:
   - cilium.io
