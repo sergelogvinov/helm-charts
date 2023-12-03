@@ -48,6 +48,15 @@ data:
                 <show_named_collections_secrets>1</show_named_collections_secrets>
             </default>
         {{- end }}
+            <backup>
+                <password_sha256_hex>{{ include "clickhouse.backupPassword" . | sha256sum }}</password_sha256_hex>
+                <profile>default</profile>
+                <quota>default</quota>
+                <networks>
+                    <ip>::/0</ip>
+                    <ip>0.0.0.0/0</ip>
+                </networks>
+            </backup>
         {{- range .Values.clickhouse.users }}
             <{{ .name }}>
                 {{- if .password_plain }}
@@ -209,6 +218,16 @@ data:
         </backups>
         {{- end }}
     </clickhouse>
+
+  clickhouse-backup.yaml: |-
+    general:
+      log_level: warn
+      allow_empty_backups: false
+      retries_on_failure: 3
+      retries_pause: 30s
+    {{- if .Values.backup.config }}
+    {{- toYaml .Values.backup.config | nindent 4 }}
+    {{- end }}
 
 {{ range $key, $val := .Values.cronjobs }}
   command-{{ $key }}: |-

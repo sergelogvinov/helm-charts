@@ -1,0 +1,138 @@
+{{- if .Values.backup.enabled }}
+{{- $instance := sub (int .Values.replicaCount) 1 }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "clickhouse.fullname" . }}-backup
+  labels:
+    {{- with .Values.podlabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- include "clickhouse.crontab.labels" . | nindent 4 }}
+    app.kubernetes.io/component: backup
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: {{ default 2 .Values.backup.history }}
+  suspend: {{ eq .Values.backup.schedule "" }}
+  schedule: {{ default "15 4 * * *" .Values.backup.schedule | quote }}
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 43200 # 12h
+      backoffLimit: 0
+      template:
+        metadata:
+          name: {{ include "clickhouse.fullname" . }}
+          labels:
+            {{- with .Values.podlabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- include "clickhouse.crontab.labels" . | nindent 12 }}
+            app.kubernetes.io/component: backup
+        spec:
+          restartPolicy: Never
+          enableServiceLinks: false
+          {{- if .Values.backup.priorityClassName }}
+          priorityClassName: {{ .Values.backup.priorityClassName }}
+          {{- end }}
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "clickhouse.serviceAccountName" . }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          containers:
+            - name: {{ .Chart.Name }}-backup
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              image: "{{ .Values.backup.image.repository }}:{{ .Values.backup.image.tag }}"
+              imagePullPolicy: {{ .Values.backup.image.pullPolicy }}
+              # command: ["sleep","600000"]
+              {{- with .Values.backup.args }}
+              args: {{ . | toYaml | nindent 16 }}
+              {{- else }}
+              args:
+                - create
+                - --schema
+              {{- end }}
+              env:
+                - name: CLICKHOUSE_BACKUP_CONFIG
+                  value: "/etc/clickhouse-backup/config.yml"
+                - name: CLICKHOUSE_USERNAME
+                  value: "backup"
+                - name: CLICKHOUSE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "clickhouse.fullname" . }}
+                      key: backupPassword
+                - name: CLICKHOUSE_HOST
+                  value: "{{ include "clickhouse.fullname" . }}-{{ $instance }}.{{ include "clickhouse.fullname" . }}-headless"
+                - name: CLICKHOUSE_PORT
+                  value: "9000"
+                - name: CLICKHOUSE_CONFIG_DIR
+                  value: "/etc/clickhouse-server"
+                {{- range $name, $value := .Values.backup.envs }}
+                - name: {{ $name | quote }}
+                  value: {{ $value | quote }}
+                {{- end }}
+              volumeMounts:
+                - name: config-backup
+                  mountPath: /etc/clickhouse-backup
+                - name: users
+                  mountPath: /etc/clickhouse-server/users.d
+                - name: dictionaries
+                  mountPath: /etc/clickhouse-server/dictionaries.d
+                - name: config
+                  mountPath: /etc/clickhouse-server/config.d
+                - name: data
+                  mountPath: /var/lib/clickhouse
+              resources:
+                {{- toYaml .Values.backup.resources | nindent 16 }}
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      {{- include "clickhouse.selectorLabels" . | nindent 22 }}
+                      statefulset.kubernetes.io/pod-name: {{ include "clickhouse.fullname" . }}-{{ $instance }}
+                  topologyKey: kubernetes.io/hostname
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumes:
+            - name: config-backup
+              configMap:
+                name: {{ include "clickhouse.fullname" . }}
+                items:
+                  - key: clickhouse-backup.yaml
+                    path: config.yml
+            - name: users
+              configMap:
+                name: {{ include "clickhouse.fullname" . }}
+                items:
+                  - key: users.xml
+                    path: users.xml
+            - name: dictionaries
+              configMap:
+                name: {{ include "clickhouse.fullname" . }}
+                items:
+                  - key: dictionaries.xml
+                    path: dictionaries.xml
+            - name: config
+              configMap:
+                name: {{ include "clickhouse.fullname" . }}
+                items:
+                  - key: config.xml
+                    path: config.xml
+                  - key: collections.xml
+                    path: collections.xml
+                  - key: storage.xml
+                    path: storage.xml
+                  - key: backups.xml
+                    path: backups.xml
+            - name: data
+              persistentVolumeClaim:
+                claimName: data-{{ include "clickhouse.fullname" . }}-{{ $instance }}
+{{- end }}

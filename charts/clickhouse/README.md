@@ -1,6 +1,6 @@
 # clickhouse
 
-![Version: 0.5.5](https://img.shields.io/badge/Version-0.5.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 23.10.3](https://img.shields.io/badge/AppVersion-23.10.3-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 23.10.5](https://img.shields.io/badge/AppVersion-23.10.5-informational?style=flat-square)
 
 Clickhouse chart for Kubernetes
 
@@ -83,6 +83,16 @@ metrics:
 | tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | metrics.enabled | bool | `false` |  |
+| backup.enabled | bool | `false` |  |
+| backup.image.repository | string | `"altinity/clickhouse-backup"` |  |
+| backup.image.pullPolicy | string | `"IfNotPresent"` |  |
+| backup.image.tag | string | `"2.4.9"` |  |
+| backup.schedule | string | `"15 4 * * *"` |  |
+| backup.args | list | `[]` |  |
+| backup.envs | object | `{}` |  |
+| backup.config | object | `{}` |  |
+| backup.resources | object | `{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| backup.priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
 | cronjobs | object | `{}` |  |
 | tlsCerts.create | bool | `false` |  |
 | files | object | `{}` |  |

@@ -74,3 +74,18 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Create the backupPassword
+*/}}
+{{- define "clickhouse.backupPassword" -}}
+{{- $sname := include "clickhouse.fullname" . }}
+{{- $previous := lookup "v1" "Secret" .Release.Namespace $sname }}
+{{- if .Values.backup.backupPassword }}
+{{- .Values.backup.backupPassword }}
+{{- else if $previous }}
+{{- default (randAlphaNum 16) ($previous.data.backupPassword | b64dec ) }}
+{{- else }}
+{{- randAlphaNum 16 }}
+{{- end }}
+{{- end }}
