@@ -2,6 +2,26 @@ apiVersion: v1
 entries:
   bitwarden:
   - apiVersion: v2
+    appVersion: 1.30.1
+    created: "2023-12-03T17:36:57.328345731Z"
+    description: A Helm chart to deploy Bitwarden.
+    digest: 3cb485f43661d3103f14081d54e5c87e4db49419ff49a400c23d00e8c30d6f3e
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - vaultwarden
+    - bitwarden
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: bitwarden
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/bitwarden
+    - https://github.com/dani-garcia/vaultwarden
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/bitwarden-0.3.2/bitwarden-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v2
     appVersion: 1.29.2
     created: "2023-10-17T09:41:13.163936046Z"
     description: A Helm chart to deploy Bitwarden.
@@ -3674,4 +3694,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-12-03T16:32:55.323553979Z"
+generated: "2023-12-03T17:36:57.32879539Z"
