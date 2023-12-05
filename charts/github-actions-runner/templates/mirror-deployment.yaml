@@ -39,7 +39,7 @@ spec:
               type: RuntimeDefault
             capabilities:
               drop: ["ALL"]
-          image: registry.opensource.zalan.do/teapot/skipper:v0.16.1
+          image: ghcr.io/zalando/skipper:v0.18.63
           command: ['skipper']
           args:
             - -address=:8443
@@ -129,10 +129,6 @@ spec:
                 path: mirrors.eskip
               - key: mirrors.json
                 path: config.json
-              - key: tls.crt
-                path: tls.crt
-              - key: tls.key
-                path: tls.key
         - name: tls
           secret:
             secretName:  {{ include "github-actions-runner.fullname" . }}-server-tls

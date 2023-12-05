@@ -302,10 +302,12 @@ rules:
   - metrics.k8s.io
   resources:
   - pods
+  {{- if not .Values.rbac.singleNamespace }}
+  - nodes
+  {{- end }}
   verbs:
   - get
   - list
-  - watch
 ####
 - apiGroups:
   - cilium.io

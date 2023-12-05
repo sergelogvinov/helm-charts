@@ -23,7 +23,7 @@ data:
         "gcInterval": "6h"
       },
       "http": { "address": "0.0.0.0", "port": "8080" },
-      "log": { "level": "debug" },
+      "log": { "level": "info" },
       "extensions": {
         "metrics": {
           "enable": true,
@@ -42,6 +42,7 @@ data:
               "onDemand": true,
               "maxRetries": 2,
               "retryDelay": "5m",
+              "onlySigned": false,
               "content": [
                 {
                   "prefix": "**",
@@ -51,18 +52,16 @@ data:
             },
             {{- end }}{{- end }}
             {
-              "urls": ["https://docker.io","https://index.docker.io"],
+              "urls": ["https://docker.io","https://registry-1.docker.io"],
               "tlsVerify": true,
               "onDemand": true,
               "maxRetries": 2,
-              "retryDelay": "5m",
+              "retryDelay": "15m",
+              "onlySigned": false,
               "content": [
                 {
-                  "prefix": "**",
+                  "prefix": "library/**",
                   "destination": "/docker-io"
-                },
-                {
-                  "prefix": "**"
                 }
               ]
             }

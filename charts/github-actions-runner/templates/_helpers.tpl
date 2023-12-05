@@ -139,7 +139,10 @@ spec:
 {{- end }}
 
 {{- define "github-actions-runner.credentialsFile" -}}
-{{- range $inx, $val := .Values.mirrors.registry }}{{ if and $val.auth $val.auth.username }}
+{{- range $inx, $val := .Values.mirrors.registry }}{{- if and $val.auth $val.auth.username }}
 {{- $val.host }}: {{- toYaml $val.auth | nindent 2 }}
-{{- end }}{{- end }}
+{{- if eq $val.host "docker.io" }}
+registry-1.docker.io: {{- toYaml $val.auth | nindent 2 }}
+{{- end }}
+{{ end }}{{- end }}
 {{- end }}
