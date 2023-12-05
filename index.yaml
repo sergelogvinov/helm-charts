@@ -618,6 +618,28 @@ entries:
   github-actions-runner:
   - apiVersion: v2
     appVersion: 2.311.0
+    created: "2023-12-05T14:49:44.33747317Z"
+    description: Github Actions with container registry and mirrors
+    digest: ad30cdfdeab81de107bd18f768ffd029f087aba6e80b1aae40785d6cbf3f5d81
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - github-actions
+    - conteiner
+    - docker-registry
+    - docker-mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: github-actions-runner
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/github-actions-runner
+    - https://github.com/actions/actions-runner-controller.git
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/github-actions-runner-1.4.3/github-actions-runner-1.4.3.tgz
+    version: 1.4.3
+  - apiVersion: v2
+    appVersion: 2.311.0
     created: "2023-12-02T15:46:35.273629692Z"
     description: Github Actions with container registry and mirrors
     digest: 6b4b2002481822ede49f04214f02f27eb25efefef8e754454d536502eabc737b
@@ -2781,6 +2803,24 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2023-12-05T14:49:44.491748679Z"
+    description: Static prometheus rules
+    digest: 587c35f13dde6b0300be1aec4b87a546bd12eae8e3a0108ebb3d42c78043a208
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - prometheus
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: prometheus-rules
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.27/prometheus-rules-0.1.27.tgz
+    version: 0.1.27
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2023-09-14T16:13:42.566457477Z"
     description: Static prometheus rules
     digest: 969fd52a5cb693ff1fbd9f3439156668be8db6fd247628dd447672068e493d9e
@@ -3056,6 +3096,24 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.0/prometheus-rules-0.1.0.tgz
     version: 0.1.0
   rbac-common:
+  - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2023-12-05T14:49:44.664631956Z"
+    description: Kubernetes RBAC
+    digest: 52a2a6230d934d9e0d8d9dd8f4bf42e11f757e8b425e0a8552d95fff271cac1e
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - rbac
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: rbac-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/rbac-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/rbac-common-0.2.4/rbac-common-0.2.4.tgz
+    version: 0.2.4
   - apiVersion: v2
     appVersion: 0.1.1
     created: "2023-12-03T08:24:02.870099235Z"
@@ -3694,4 +3752,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-12-03T17:36:57.32879539Z"
+generated: "2023-12-05T14:49:44.665282969Z"
