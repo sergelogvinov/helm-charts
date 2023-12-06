@@ -618,6 +618,28 @@ entries:
   github-actions-runner:
   - apiVersion: v2
     appVersion: 2.311.0
+    created: "2023-12-06T07:39:24.42322687Z"
+    description: Github Actions with container registry and mirrors
+    digest: ace3405e76427e40b5f04fbb5709401802c15e0b935f598ee9acd09e70e397b8
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - github-actions
+    - conteiner
+    - docker-registry
+    - docker-mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: github-actions-runner
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/github-actions-runner
+    - https://github.com/actions/actions-runner-controller.git
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/github-actions-runner-1.4.4/github-actions-runner-1.4.4.tgz
+    version: 1.4.4
+  - apiVersion: v2
+    appVersion: 2.311.0
     created: "2023-12-05T14:49:44.33747317Z"
     description: Github Actions with container registry and mirrors
     digest: ad30cdfdeab81de107bd18f768ffd029f087aba6e80b1aae40785d6cbf3f5d81
@@ -2803,6 +2825,24 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2023-12-06T07:39:24.55777229Z"
+    description: Static prometheus rules
+    digest: 08d2b36c6b63efb4b9b7ee26bb8a762a96a102fd272070730b4e1ad59b9dd0dd
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - prometheus
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: prometheus-rules
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.28/prometheus-rules-0.1.28.tgz
+    version: 0.1.28
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2023-12-05T14:49:44.491748679Z"
     description: Static prometheus rules
     digest: 587c35f13dde6b0300be1aec4b87a546bd12eae8e3a0108ebb3d42c78043a208
@@ -3752,4 +3792,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-12-05T14:49:44.665282969Z"
+generated: "2023-12-06T07:39:24.558685459Z"
