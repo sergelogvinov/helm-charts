@@ -8,9 +8,7 @@ data:
   mirrors.eskip: |-
     healthz: Path("/healthz") -> inlineContent("ok")
         -> disableAccessLog() -> <shunt>;
-
-    default: PathSubtree("/")
-        -> enableAccessLog() -> "http://127.0.0.1:8080";
+    default: * -> redirectTo(301) -> <shunt>;
 
   mirrors.json: |-
     {
@@ -22,7 +20,13 @@ data:
         "gcDelay": "30m",
         "gcInterval": "6h"
       },
-      "http": { "address": "0.0.0.0", "port": "8080" },
+      "http": {
+        "address": "0.0.0.0", "port": "8443",
+        "tls": {
+          "cert":"/etc/registry-tls/tls.crt",
+          "key":"/etc/registry-tls/tls.key"
+        }
+      },
       "log": { "level": "info" },
       "extensions": {
         "metrics": {
@@ -62,6 +66,22 @@ data:
                 {
                   "prefix": "library/**",
                   "destination": "/docker-io"
+                },
+                {
+                  "prefix": "**",
+                  "destination": "/docker-io"
+                },
+                {
+                  "prefix": "library/**"
+                },
+                {
+                  "prefix": "moby/**"
+                },
+                {
+                  "prefix": "docker/**"
+                },
+                {
+                  "prefix": "multiarch/**"
                 }
               ]
             }

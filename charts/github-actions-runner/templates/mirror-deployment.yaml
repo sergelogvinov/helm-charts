@@ -17,7 +17,8 @@ spec:
       annotations:
         checksum/config: {{ toJson .Values.mirrors.registry | sha256sum }}
         prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
+        prometheus.io/scheme: https
+        prometheus.io/port: "8443"
       labels:
         {{- include "github-actions-runner.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: mirrors
@@ -32,7 +33,30 @@ spec:
         fsGroupChangePolicy: "OnRootMismatch"
       terminationGracePeriodSeconds: 1
       containers:
-        - name: {{ include "github-actions-runner.fullname" . }}-mirrors-tls
+        - name: {{ include "github-actions-runner.fullname" . }}-mirrors-registry
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
+          image: "{{ $.Values.mirrors.image.repository }}:{{ $.Values.mirrors.image.tag }}"
+          imagePullPolicy: {{ $.Values.mirrors.image.pullPolicy }}
+          ports:
+            - name: https
+              containerPort: 8443
+          resources:
+            {{- toYaml $.Values.mirrors.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/registry
+            - name: config
+              mountPath: /etc/zot
+            - name: credentials
+              mountPath: /etc/credentials
+            - name: tls
+              mountPath: /etc/registry-tls
+        - name: {{ include "github-actions-runner.fullname" . }}-redirect
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:
@@ -42,23 +66,17 @@ spec:
           image: ghcr.io/zalando/skipper:v0.18.63
           command: ['skipper']
           args:
-            - -address=:8443
-            - -tls-cert=/etc/server-tls/tls.crt
-            - -tls-key=/etc/server-tls/tls.key
+            - -address=:8080
             - -routes-file=/etc/skipper/mirrors.eskip
-            - -access-log-json-enabled
             - -application-log-level=WARN
-            - -timeout-backend=5s
-            - -read-timeout-server=30s
-            - -write-timeout-server=30s
           ports:
-            - name: https
-              containerPort: 8443
+            - name: http
+              containerPort: 8080
           startupProbe:
             httpGet:
               path: /healthz
-              port: https
-              scheme: HTTPS
+              port: http
+              scheme: HTTP
             initialDelaySeconds: 5
             timeoutSeconds: 3
             failureThreshold: 30
@@ -70,26 +88,6 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/skipper
-            - name: tls
-              mountPath: /etc/server-tls
-        - name: {{ include "github-actions-runner.fullname" . }}-mirrors-registry
-          securityContext:
-            allowPrivilegeEscalation: false
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop: ["ALL"]
-          image: "{{ $.Values.mirrors.image.repository }}:{{ $.Values.mirrors.image.tag }}"
-          imagePullPolicy: {{ $.Values.mirrors.image.pullPolicy }}
-          resources:
-            {{- toYaml $.Values.mirrors.resources | nindent 12 }}
-          volumeMounts:
-            - name: data
-              mountPath: /var/lib/registry
-            - name: config
-              mountPath: /etc/zot
-            - name: credentials
-              mountPath: /etc/credentials
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

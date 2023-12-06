@@ -254,6 +254,9 @@ data:
             target_label: kubernetes_pod_name
 
       - job_name: 'kubernetes-services'
+        tls_config:
+          insecure_skip_verify: true
+
         kubernetes_sd_configs:
           - role: service
 
@@ -280,6 +283,9 @@ data:
             target_label: kubernetes_name
 
       - job_name: 'kubernetes-pods'
+        tls_config:
+          insecure_skip_verify: true
+
         kubernetes_sd_configs:
           - role: pod
 
@@ -326,6 +332,9 @@ data:
             action: drop
 
       - job_name: 'kubernetes-pods-slow'
+        tls_config:
+          insecure_skip_verify: true
+
         kubernetes_sd_configs:
           - role: pod
 
