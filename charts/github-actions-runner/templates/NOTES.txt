@@ -1,5 +1,22 @@
+{{- if not (.Capabilities.APIVersions.Has "actions.github.com/v1alpha1") }}
+1. Do not forget to add this rules to prometheus adapter:
+    {{- $configUrl := trimSuffix "/" .Values.githubConfigUrl }}
+    {{- if eq (len (regexSplit "/" $configUrl -1)) 4 }}
+    - seriesQuery: '{__name__="github_runner_organization_status",app_kubernetes_io_name="{{ include "github-actions-runner.fullname" . }}"}'
+    {{- else }}
+    - seriesQuery: '{__name__="github_runner_status",app_kubernetes_io_name="{{ include "github-actions-runner.fullname" . }}"}'
+    {{- end }}
+      resources:
+        overrides:
+          kubernetes_namespace: {resource: "namespace"}
+          app_kubernetes_io_instance: {group: "apps", resource: "deployment"}
+      name:
+        as: "github_actions_worker_usage_ratio"
+      metricsQuery: 'sum(<<.Series>>{<<.LabelMatchers>>,busy="true"}) BY (<<.GroupBy>>,repo) / sum(<<.Series>>{}) BY (<<.GroupBy>>,repo) * 100 OR on () topk(1, <<.Series>>{<<.LabelMatchers>>})'
+
+{{- end }}
 {{- if .Values.registry.enabled }}
-1. Clean registry
+2. Clean registry manually
 
 kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "github-actions-runner.fullname" . }}-registry-cleaner {{ include "github-actions-runner.fullname" . }}-registry-cleaner-manual
 {{- end }}

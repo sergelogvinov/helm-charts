@@ -111,7 +111,7 @@ data:
         enabled: true
     http:
       addr: :8443
-      host: https://{{ include "github-actions-runner.fullname" . }}-registry.{{ .Release.Namespace }}.svc
+      # host: https://{{ include "github-actions-runner.fullname" . }}-registry.{{ .Release.Namespace }}.svc
       tls:
         certificate: /etc/registry-tls/tls.crt
         key: /etc/registry-tls/tls.key

@@ -1,6 +1,6 @@
 # github-actions-runner
 
-![Version: 1.4.4](https://img.shields.io/badge/Version-1.4.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.311.0](https://img.shields.io/badge/AppVersion-2.311.0-informational?style=flat-square)
+![Version: 1.5.0](https://img.shields.io/badge/Version-1.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.311.0](https://img.shields.io/badge/AppVersion-2.311.0-informational?style=flat-square)
 
 Github Actions with container registry and mirrors
 
@@ -71,8 +71,12 @@ nodeSelector:
 | imagePullSecrets | list | `[]` |  |
 | nameOverride | string | `""` |  |
 | fullnameOverride | string | `""` |  |
-| maxRunners | int | `8` |  |
-| minRunners | int | `1` |  |
+| autoscaling.enabled | bool | `false` |  |
+| autoscaling.minReplicas | int | `1` |  |
+| autoscaling.maxReplicas | int | `9` |  |
+| autoscaling.targetUtilizationPercentage | int | `90` |  |
+| autoscaling.scaleDown.stabilizationWindowSeconds | int | `600` |  |
+| autoscaling.scaleUp.stabilizationWindowSeconds | int | `30` |  |
 | runnerGroup | string | `"default"` |  |
 | runnerScaleSetName | string | `""` |  |
 | runnerVersion | string | `"0.6.1"` |  |
@@ -80,10 +84,10 @@ nodeSelector:
 | githubConfigSecret | object | `{}` |  |
 | controllerServiceAccount.name | string | `"arc"` |  |
 | dind.enabled | bool | `true` |  |
-| dind.image.repository | string | `"docker"` |  |
-| dind.image.pullPolicy | string | `"IfNotPresent"` |  |
-| dind.image.tag | string | `"23.0-dind"` |  |
+| dind.image | object | `{"pullPolicy":"IfNotPresent","repository":"docker","tag":"24.0-dind"}` | Docker in Docker image. ref: https://hub.docker.com/_/docker/tags?page=1&name=dind |
 | dind.resources | object | `{"limits":{"cpu":1,"memory":"1Gi"},"requests":{"cpu":"500m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| dind.extraVolumeMounts | list | `[]` | Additional container volume mounts. |
+| dind.extraVolumes | list | `[]` | Additional volumes. |
 | dind.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"100Gi"}` | Persistence parameters for source code ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
 | mirrors.enabled | bool | `true` |  |
 | mirrors.image.repository | string | `"ghcr.io/project-zot/zot-linux-amd64"` |  |
@@ -99,6 +103,7 @@ nodeSelector:
 | registry.image.repository | string | `"registry"` |  |
 | registry.image.pullPolicy | string | `"IfNotPresent"` |  |
 | registry.image.tag | float | `2.8` |  |
+| registry.ingress | object | `{"annotations":{"nginx.ingress.kubernetes.io/proxy-body-size":0},"className":"","enabled":false,"hosts":[],"tls":[]}` | Registry ingress parameters ref: http://kubernetes.io/docs/user-guide/ingress/ |
 | registry.resources | object | `{"limits":{"cpu":1,"memory":"512Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | registry.extraVolumeMounts | list | `[]` |  |
 | registry.extraVolumes | list | `[]` |  |
@@ -129,8 +134,11 @@ nodeSelector:
 | service | object | `{"ipFamilies":["IPv4"]}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
 | resources | object | `{"requests":{"cpu":"200m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"8Gi"}` | Persistence parameters for source code ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
+| extraVolumeMounts | list | `[]` | Additional container volume mounts. |
+| extraVolumes | list | `[]` | Additional volumes. |
 | nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| podAntiAffinityPreset | string | `"soft"` | Anti-affinity for pod assignment. options: soft, hard |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 
 ----------------------------------------------

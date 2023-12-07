@@ -41,12 +41,12 @@ spec:
             - serve
             - /etc/registry/config.yaml
           ports:
-            - name: http
+            - name: https
               containerPort: 8443
           startupProbe:
             httpGet:
               path: /
-              port: http
+              port: https
               scheme: HTTPS
             initialDelaySeconds: 5
             timeoutSeconds: 3

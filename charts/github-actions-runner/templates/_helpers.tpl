@@ -74,7 +74,9 @@ Return a soft podAffinity/podAntiAffinity definition
 preferredDuringSchedulingIgnoredDuringExecution:
   - podAffinityTerm:
       labelSelector:
-        matchLabels: {{- (include "github-actions.selectorLabels" .) | nindent 10 }}
+        matchLabels:
+          {{- (include "github-actions-runner.selectorLabels" .) | nindent 10 }}
+          app.kubernetes.io/component: autoscaling-runner-set
       namespaces:
         - {{ .Release.Namespace | quote }}
       topologyKey: kubernetes.io/hostname
@@ -87,7 +89,9 @@ Return a hard podAffinity/podAntiAffinity definition
 {{- define "affinities.pods.hard" -}}
 requiredDuringSchedulingIgnoredDuringExecution:
   - labelSelector:
-      matchLabels: {{- (include "github-actions.selectorLabels" .) | nindent 8 }}
+      matchLabels:
+        {{- (include "github-actions-runner.selectorLabels" .) | nindent 8 }}
+        app.kubernetes.io/component: autoscaling-runner-set
     namespaces:
       - {{ .Release.Namespace | quote }}
     topologyKey: kubernetes.io/hostname

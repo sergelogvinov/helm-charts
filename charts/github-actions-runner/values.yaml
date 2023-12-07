@@ -12,8 +12,16 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-maxRunners: 8
-minRunners: 1
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 9
+  targetUtilizationPercentage: 90
+  scaleDown:
+    stabilizationWindowSeconds: 600
+  scaleUp:
+    stabilizationWindowSeconds: 30
+
 runnerGroup: "default"
 runnerScaleSetName: ""
 runnerVersion: "0.6.1"
@@ -31,10 +39,12 @@ controllerServiceAccount:
 dind:
   enabled: true
 
+  # -- Docker in Docker image.
+  # ref: https://hub.docker.com/_/docker/tags?page=1&name=dind
   image:
     repository: docker
     pullPolicy: IfNotPresent
-    tag: 23.0-dind
+    tag: 24.0-dind
 
   # -- Resource requests and limits.
   # ref: https://kubernetes.io/docs/user-guide/compute-resources/
@@ -45,6 +55,11 @@ dind:
     requests:
       cpu: 500m
       memory: 256Mi
+
+  # -- Additional container volume mounts.
+  extraVolumeMounts: []
+  # -- Additional volumes.
+  extraVolumes: []
 
   # -- Persistence parameters for source code
   # ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -128,6 +143,23 @@ registry:
     repository: registry
     pullPolicy: IfNotPresent
     tag: 2.8
+
+  # -- Registry ingress parameters
+  # ref: http://kubernetes.io/docs/user-guide/ingress/
+  ingress:
+    enabled: false
+    className: ""
+
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: 0
+
+    hosts: []
+      # - host: chart-example.local
+
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
 
   # -- Resource requests and limits.
   # ref: https://kubernetes.io/docs/user-guide/compute-resources/
@@ -279,6 +311,25 @@ persistence:
   size: 8Gi
   annotations: {}
 
+# -- Additional container volume mounts.
+extraVolumeMounts: []
+#   - name: tlscerts
+#     mountPath: /home/runner/.docker
+
+# -- Additional volumes.
+extraVolumes: []
+#   - name: tlscerts
+#     secret:
+#       secretName: cnt-builder
+#       defaultMode: 256
+#       items:
+#         - key: ca.crt
+#           path: ca.pem
+#         - key: tls.crt
+#           path: cert.pem
+#         - key: tls.key
+#           path: key.pem
+
 # -- Node labels for pod assignment.
 # ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
@@ -286,6 +337,10 @@ nodeSelector: {}
 # -- Tolerations for pod assignment.
 # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
+
+# -- Anti-affinity for pod assignment.
+# options: soft, hard
+podAntiAffinityPreset: soft
 
 # -- Affinity for pod assignment.
 # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity

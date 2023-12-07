@@ -1,32 +1,29 @@
-{{- if .Capabilities.APIVersions.Has "actions.github.com/v1alpha1" }}
-apiVersion: actions.github.com/v1alpha1
-kind: AutoscalingRunnerSet
+{{- if not (.Capabilities.APIVersions.Has "actions.github.com/v1alpha1") }}
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: {{ include "github-actions-runner.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "github-actions-runner.labels" . | nindent 4 }}
     app.kubernetes.io/component: autoscaling-runner-set
-  annotations:
-    actions.github.com/cleanup-github-secret-name: {{ include "github-actions-runner.fullname" . }}-github
-    actions.github.com/cleanup-manager-role-binding: {{ include "github-actions-runner.managerRoleName" . }}
-    actions.github.com/cleanup-manager-role-name: {{ include "github-actions-runner.managerRoleName" . }}
 spec:
-  githubConfigUrl: {{ required ".Values.githubConfigUrl is required" (trimSuffix "/" .Values.githubConfigUrl) }}
-  githubConfigSecret: {{ include "github-actions-runner.fullname" . }}-github
-
-  {{- with .Values.runnerGroup }}
-  runnerGroup: {{ . }}
+  serviceName: {{ include "github-actions-runner.fullname" . }}
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ max 1 .Values.minRunners }}
   {{- end }}
-  {{- with .Values.runnerScaleSetName }}
-  runnerScaleSetName: {{ . }}
-  {{- end }}
-  maxRunners: {{ default 2 .Values.autoscaling.maxReplicas | int }}
-  minRunners: {{ default 0 .Values.autoscaling.maxReplicas | int }}
-
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: Parallel
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      {{- include "github-actions-runner.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: autoscaling-runner-set
   template:
     metadata:
       annotations:
+        kubectl.kubernetes.io/default-container: runner
       {{- if .Values.mirrors.enabled }}
         checksum/config: {{ toJson .Values.mirrors.registry | sha256sum }}
       {{- end }}
@@ -45,7 +42,7 @@ spec:
       serviceAccountName: {{ include "github-actions-runner.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      terminationGracePeriodSeconds: 5
+      terminationGracePeriodSeconds: 3600
       dnsConfig:
         options:
           - name: ndots
@@ -85,7 +82,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["/home/runner/run.sh"]
+          command: ["/bin/bash", "/entrypoint.sh"]
           env:
             - name: ACTIONS_RUNNER_POD_NAME
               valueFrom:
@@ -95,6 +92,23 @@ spec:
               value: "false"
             - name: RUNNER_WORK_FOLDER
               value: /builds
+            - name: RUNNER_ORGANIZATION_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "github-actions-runner.fullname" . }}-github
+                  key: RUNNER_ORGANIZATION_URL
+                  optional: true
+            - name: RUNNER_REPOSITORY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "github-actions-runner.fullname" . }}-github
+                  key: RUNNER_REPOSITORY_URL
+                  optional: true
+            - name: GITHUB_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "github-actions-runner.fullname" . }}-github
+                  key: GITHUB_ACCESS_TOKEN
           envFrom:
             - secretRef:
                 name: "{{ include "github-actions-runner.fullname" . }}"
@@ -145,7 +159,7 @@ spec:
           hostPath:
             path: /lib/modules
         - name: docker
-        {{- if .Values.dind.persistence.storageClass }}
+        {{- if and .Values.dind.persistence.enabled .Values.dind.persistence.storageClass }}
           ephemeral:
             volumeClaimTemplate:
               metadata:
@@ -163,7 +177,7 @@ spec:
         {{- end }}
       {{- end }}
         - name: builds
-        {{- if .Values.persistence.storageClass }}
+        {{- if and .Values.persistence.enabled .Values.persistence.storageClass }}
           ephemeral:
             volumeClaimTemplate:
               metadata:

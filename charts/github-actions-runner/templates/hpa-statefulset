@@ -1,0 +1,44 @@
+{{- if not (.Capabilities.APIVersions.Has "actions.github.com/v1alpha1") }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "github-actions-runner.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "github-actions-runner.labels" . | nindent 4 }}
+    app.kubernetes.io/component: autoscaling-runner-set
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: {{ include "github-actions-runner.fullname" . }}
+  minReplicas: {{ .Values.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  behavior:
+    scaleDown:
+      selectPolicy: Min
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 120
+      stabilizationWindowSeconds:  {{ .Values.autoscaling.scaleDown.stabilizationWindowSeconds }}
+    scaleUp:
+      selectPolicy: Min
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 120
+      stabilizationWindowSeconds: {{ .Values.autoscaling.scaleUp.stabilizationWindowSeconds }}
+  metrics:
+    - type: Object
+      object:
+        metric:
+          name: github_actions_worker_usage_ratio
+        describedObject:
+          apiVersion: apps/v1
+          kind: Deployment
+          name: {{ include "github-actions-runner.fullname" . }}
+        target:
+          type: Value
+          value: {{ .Values.autoscaling.targetUtilizationPercentage }}
+{{- end }}
