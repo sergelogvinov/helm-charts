@@ -70,10 +70,10 @@
 
   - alert: RabbitmqUnroutableMessages
     expr: |
-      sum by(kubernetes_namespace, rabbitmq_cluster) (increase(rabbitmq_channel_messages_unroutable_dropped_total[5m]) * on(instance)
+      sum by(kubernetes_namespace, rabbitmq_cluster) (delta(rabbitmq_channel_messages_unroutable_dropped_total[5m]) * on(instance)
       group_left(rabbitmq_cluster) rabbitmq_identity_info) >= 2000
       or
-      sum by(kubernetes_namespace, rabbitmq_cluster) (increase(rabbitmq_channel_messages_unroutable_returned_total[5m]) * on(instance)
+      sum by(kubernetes_namespace, rabbitmq_cluster) (delta(rabbitmq_channel_messages_unroutable_returned_total[5m]) * on(instance)
       group_left(rabbitmq_cluster) rabbitmq_identity_info) >= 2000
     for: 2m
     labels:
