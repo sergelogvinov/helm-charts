@@ -24,7 +24,7 @@ autoscaling:
 
 runnerGroup: "default"
 runnerScaleSetName: ""
-runnerVersion: "0.6.1"
+runnerVersion: "0.7.0"
 
 githubConfigUrl: "https://github.com/..."
 githubConfigSecret: {}
@@ -80,7 +80,7 @@ mirrors:
   image:
     repository: ghcr.io/project-zot/zot-linux-amd64
     pullPolicy: IfNotPresent
-    tag: "v2.0.0-rc7"
+    tag: "v2.0.0-rc8"
 
   # -- Container registry list.
   # ref: https://docs.docker.com/registry/recipes/mirror/
@@ -251,6 +251,20 @@ metrics:
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
 
+# -- Github Actions Runner Listener parameters
+listener:
+  # -- Node labels for pod assignment.
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+
+  # -- Tolerations for pod assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+
+  # -- Affinity for pod assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+
 # -- Pods Service Account.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
@@ -292,11 +306,11 @@ service:
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:
   # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
+  #   cpu: 1
+  #   memory: 768Mi
   requests:
     cpu: 200m
-    memory: 256Mi
+    memory: 512Mi
 
 # -- Persistence parameters for source code
 # ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -339,7 +353,7 @@ nodeSelector: {}
 tolerations: []
 
 # -- Anti-affinity for pod assignment.
-# options: soft, hard
+# options: soft, hard, null
 podAntiAffinityPreset: soft
 
 # -- Affinity for pod assignment.

@@ -22,8 +22,39 @@ spec:
   runnerScaleSetName: {{ . }}
   {{- end }}
   maxRunners: {{ default 2 .Values.autoscaling.maxReplicas | int }}
-  minRunners: {{ default 0 .Values.autoscaling.maxReplicas | int }}
-
+  minRunners: {{ default 0 .Values.autoscaling.minReplicas | int }}
+  listenerTemplate:
+    spec:
+      containers:
+        - name: autoscaler
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
+            readOnlyRootFilesystem: true
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+      {{- with .Values.listener.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.listener.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.listener.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
   template:
     metadata:
       annotations:
@@ -85,6 +116,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          workingDir: /builds
           command: ["/home/runner/run.sh"]
           env:
             - name: ACTIONS_RUNNER_POD_NAME
@@ -98,15 +130,19 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ include "github-actions-runner.fullname" . }}"
+          {{- if .Values.dind.enabled }}
           lifecycle:
             postStart:
               exec:
                 command: ["/bin/sh", "/etc/docker-config/mirrors.sh"]
+          {{- end }}
           volumeMounts:
+          {{- if .Values.dind.enabled }}
             - name: config
               mountPath: /etc/docker-config
             - name: tls
               mountPath: /etc/docker-tls
+          {{- end }}
           {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
           {{- end }}
@@ -121,7 +157,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       affinity:
+      {{- if .Values.podAntiAffinityPreset }}
         podAntiAffinity: {{- include "affinities.pods" . | nindent 10 }}
+      {{- end }}
       {{- with .Values.affinity }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
