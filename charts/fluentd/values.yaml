@@ -74,6 +74,8 @@ service:
 envs: {}
   # FLUENTD_CONF: /fluentd/etc/fluent.conf
 
+logLevel: warn
+
 configMaps:
   # -- Input rules
   forward-input.conf: |

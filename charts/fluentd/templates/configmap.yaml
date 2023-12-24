@@ -12,6 +12,10 @@ data:
       </match>
     </label>
 
+    <system>
+      log_level {{ .Values.logLevel }}
+    </system>
+
     <source>
       @type http
       port 9880

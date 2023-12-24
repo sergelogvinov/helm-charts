@@ -36,8 +36,9 @@ spec:
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
-      {{- if .Values.hostNetwork }}
+      {{- if and .Values.hostNetwork .Values.useDaemonSet }}
       hostNetwork: {{ .Values.hostNetwork }}
+      dnsPolicy: "ClusterFirstWithHostNet"
       {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}

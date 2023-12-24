@@ -1,6 +1,6 @@
 # fluentd
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.15.3](https://img.shields.io/badge/AppVersion-1.15.3-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.15.3](https://img.shields.io/badge/AppVersion-1.15.3-informational?style=flat-square)
 
 Deploy fluentd as log router
 
@@ -73,6 +73,7 @@ tolerations:
 | hostNetwork | bool | `false` | Use host's network namespace. ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#host-namespaces |
 | service | object | `{"annotations":{},"ipFamilies":["IPv4"],"ports":[{"containerPort":24224,"name":"fluentd","protocol":"TCP"},{"containerPort":24224,"name":"heartbeat","protocol":"UDP"}],"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
 | envs | object | `{}` | Deployment env, example: `FLUENTD_CONF: /fluentd/etc/fluent.conf` |
+| logLevel | string | `"warn"` |  |
 | configMaps."forward-input.conf" | string | `"<source>\n  @type forward\n  port 24224\n  bind 0.0.0.0\n</source>\n"` | Input rules |
 | configMaps."output.conf" | string | `"<match **>\n  @type stdout\n</match>\n"` | Output rules |
 | metrics | object | `{"enabled":false}` | Expose prometheus metrics |

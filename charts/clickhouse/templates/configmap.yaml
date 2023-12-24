@@ -12,11 +12,15 @@ data:
                 <max_memory_usage>10000000000</max_memory_usage>
                 <use_uncompressed_cache>0</use_uncompressed_cache>
                 <load_balancing>random</load_balancing>
+                <query_profiler_real_time_period_ns>0</query_profiler_real_time_period_ns>
+                <query_profiler_cpu_time_period_ns>0</query_profiler_cpu_time_period_ns>
             </default>
             <reader>
                 <max_memory_usage>10000000000</max_memory_usage>
                 <use_uncompressed_cache>0</use_uncompressed_cache>
                 <load_balancing>random</load_balancing>
+                <query_profiler_real_time_period_ns>0</query_profiler_real_time_period_ns>
+                <query_profiler_cpu_time_period_ns>0</query_profiler_cpu_time_period_ns>
                 <readonly>2</readonly>
             </reader>
         </profiles>
