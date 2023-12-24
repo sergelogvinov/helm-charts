@@ -50,6 +50,10 @@ securityContext:
     - ALL
   # readOnlyRootFilesystem: true
 
+# -- Use host's network namespace.
+# ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#host-namespaces
+hostNetwork: false
+
 # -- Service parameters
 # ref: https://kubernetes.io/docs/user-guide/services/
 service:

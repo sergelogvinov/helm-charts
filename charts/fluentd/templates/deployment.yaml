@@ -36,6 +36,9 @@ spec:
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
+      {{- if .Values.hostNetwork }}
+      hostNetwork: {{ .Values.hostNetwork }}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
