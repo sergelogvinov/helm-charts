@@ -513,6 +513,27 @@ entries:
   fluentd:
   - apiVersion: v2
     appVersion: 1.15.3
+    created: "2023-12-24T10:59:54.086865279Z"
+    description: Deploy fluentd as log router
+    digest: 6afa2d30b11c72da0532ba16c41612dd1b67d2423cf38670c226a23d23d15228
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - fluentd
+    - logging
+    - logs
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: fluentd
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/fluentd
+    - https://www.fluentd.org
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/fluentd-0.1.2/fluentd-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 1.15.3
     created: "2023-09-20T08:11:33.568977445Z"
     description: Deploy fluentd as log router
     digest: 70e7084f934781b99514c821fb8166ec06f132c7631cde834e8e2a88480c1b6a
@@ -3854,4 +3875,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-12-17T13:55:24.698138448Z"
+generated: "2023-12-24T10:59:54.087196798Z"
