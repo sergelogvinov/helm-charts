@@ -163,6 +163,26 @@ entries:
     version: 0.1.0
   clickhouse:
   - apiVersion: v2
+    appVersion: 23.11.3
+    created: "2023-12-24T18:41:24.417172096Z"
+    description: Clickhouse chart for Kubernetes
+    digest: 4f3529b8c8d396d394e9363678981ba870e8d837751425d728b3d1b679363fe5
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - database
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: clickhouse
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/clickhouse
+    - https://github.com/ClickHouse/ClickHouse
+    - https://hub.docker.com/r/clickhouse/clickhouse-server
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-0.6.1/clickhouse-0.6.1.tgz
+    version: 0.6.1
+  - apiVersion: v2
     appVersion: 23.10.5
     created: "2023-12-03T16:32:55.323068401Z"
     description: Clickhouse chart for Kubernetes
@@ -511,6 +531,27 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-keeper-0.1.0/clickhouse-keeper-0.1.0.tgz
     version: 0.1.0
   fluentd:
+  - apiVersion: v2
+    appVersion: 1.15.3
+    created: "2023-12-24T18:41:24.529105292Z"
+    description: Deploy fluentd as log router
+    digest: bb27b5a4677be456dc7e5010b290280e76f6a1eb09638b84c7115f854f0342d1
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - fluentd
+    - logging
+    - logs
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: fluentd
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/fluentd
+    - https://www.fluentd.org
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/fluentd-0.1.3/fluentd-0.1.3.tgz
+    version: 0.1.3
   - apiVersion: v2
     appVersion: 1.15.3
     created: "2023-12-24T10:59:54.086865279Z"
@@ -3875,4 +3916,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2023-12-24T10:59:54.087196798Z"
+generated: "2023-12-24T18:41:24.529557677Z"
