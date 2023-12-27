@@ -39,6 +39,7 @@ data:
     export TS_EXTRA_ARGS="--hostname=$REGION-$NODE -advertise-exit-node --advertise-tags=$TS_TAGS --accept-dns=false --accept-routes=false"
     export TS_KUBE_SECRET=tailscale-$NODE
 
+    /bin/sleep 5
     /usr/local/bin/containerboot
 
   init-tailscale.sh: |
