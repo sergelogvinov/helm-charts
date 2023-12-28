@@ -1,6 +1,6 @@
 # github-actions-runner
 
-![Version: 1.5.1](https://img.shields.io/badge/Version-1.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.311.0](https://img.shields.io/badge/AppVersion-2.311.0-informational?style=flat-square)
+![Version: 1.5.2](https://img.shields.io/badge/Version-1.5.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.311.0](https://img.shields.io/badge/AppVersion-2.311.0-informational?style=flat-square)
 
 Github Actions with container registry and mirrors
 
@@ -92,9 +92,9 @@ nodeSelector:
 | mirrors.enabled | bool | `true` |  |
 | mirrors.image.repository | string | `"ghcr.io/project-zot/zot-linux-amd64"` |  |
 | mirrors.image.pullPolicy | string | `"IfNotPresent"` |  |
-| mirrors.image.tag | string | `"v2.0.0-rc8"` |  |
+| mirrors.image.tag | string | `"v2.0.0-rc7"` |  |
 | mirrors.registry | list | `[{"host":"docker.io","source":"https://registry-1.docker.io"},{"host":"gcr.io","source":"https://gcr.io"},{"host":"ghcr.io","source":"https://ghcr.io"},{"host":"quay.io","source":"https://quay.io"},{"host":"mcr.microsoft.com","source":"https://mcr.microsoft.com"},{"host":"registry.k8s.io","source":"https://registry.k8s.io"}]` | Container registry list. ref: https://docs.docker.com/registry/recipes/mirror/ |
-| mirrors.resources | object | `{"limits":{"cpu":"500m","memory":"4Gi"},"requests":{"cpu":"100m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| mirrors.resources | object | `{"limits":{"cpu":1,"memory":"4Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | mirrors.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"100Gi"}` | Persistence parameters for source code ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
 | mirrors.nodeSelector | object | `{}` | Node labels for mirrors deploy assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | mirrors.tolerations | list | `[]` | Tolerations for mirrors deploy assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |

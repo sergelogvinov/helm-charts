@@ -80,7 +80,7 @@ mirrors:
   image:
     repository: ghcr.io/project-zot/zot-linux-amd64
     pullPolicy: IfNotPresent
-    tag: "v2.0.0-rc8"
+    tag: "v2.0.0-rc7"
 
   # -- Container registry list.
   # ref: https://docs.docker.com/registry/recipes/mirror/
@@ -105,10 +105,10 @@ mirrors:
   # ref: https://kubernetes.io/docs/user-guide/compute-resources/
   resources:
     limits:
-      cpu: 500m
+      cpu: 1
       memory: 4Gi
     requests:
-      cpu: 100m
+      cpu: 200m
       memory: 512Mi
 
   # -- Persistence parameters for source code

@@ -88,15 +88,15 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/skipper
-      {{- with .Values.nodeSelector }}
+      {{- with default .Values.nodeSelector .Values.mirrors.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with default .Values.affinity .Values.mirrors.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.mirrors.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
