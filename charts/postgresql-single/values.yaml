@@ -18,6 +18,11 @@ fullnameOverride: ""
 command: []
   # - /pause
 
+env: []
+  # Databse backup version on restore process
+  # - name: WALG_BACKUP_VERSION
+  #   value: base_000000010000062D0000005B
+
 # -- PostgreSQL admin user
 # ref: https://hub.docker.com/_/postgres
 postgresqlUsername: postgres
@@ -275,7 +280,7 @@ metrics:
         - start_time_seconds:
             usage: "GAUGE"
             description: "Time at which postmaster started"
-    {{- if and (regexMatch "^[0-9]+\\.[0-9]+$" .Values.image.tag) (semverCompare ">=14.0" .Values.image.tag) | default .Chart.AppVersion }}
+    {{- if and (regexMatch "^[0-9]+\\.[0-9]+$" .Values.image.tag) (semverCompare ">=14.0" (default .Chart.AppVersion .Values.image.tag)) }}
     pg_stat_slow_queries:
       query: SELECT pg_get_userbyid(userid) as rolname,t3.datname,queryid,calls,max_exec_time / 1000 as max_time_seconds,REGEXP_REPLACE(substring(query,1,100),'["\n\s]','','g') as sql FROM pg_stat_statements t1 JOIN pg_database t3 ON (t1.dbid=t3.oid) WHERE rows != 0 AND max_exec_time > 1000 ORDER BY max_exec_time DESC LIMIT 10
       metrics:

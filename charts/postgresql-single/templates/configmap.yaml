@@ -163,9 +163,9 @@ data:
     #!/bin/sh
     set -e
 
-    [ -z "$VERSION" ] && export VERSION=LATEST
+    [ -z "$WALG_BACKUP_VERSION" ] && export WALG_BACKUP_VERSION=LATEST
 
-    echo "*** Star recovery from wal-g backup ($VERSION)"
+    echo "*** Star recovery from wal-g backup ($WALG_BACKUP_VERSION)"
     start=`date +%s`
     pg_ctl -D "$PGDATA" -m fast -w stop >/dev/null 2>/dev/null ||:
 
@@ -173,7 +173,7 @@ data:
 
     touch {{ .Values.persistence.mountPath }}/postgresql-local.conf
     mkdir -p {{ .Values.persistence.mountPath }}/data
-    /usr/bin/wal-g --config /etc/walg/walg.yaml backup-fetch {{ .Values.persistence.mountPath }}/data $VERSION
+    /usr/bin/wal-g --config /etc/walg/walg.yaml backup-fetch {{ .Values.persistence.mountPath }}/data $WALG_BACKUP_VERSION
 
     echo "# bootstrap addons" > $PGDATA/postgresql.auto.conf
     echo "archive_command = '/bin/true'" >> $PGDATA/postgresql.auto.conf

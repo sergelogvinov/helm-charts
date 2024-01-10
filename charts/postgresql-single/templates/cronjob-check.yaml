@@ -52,7 +52,7 @@ spec:
               command: ["/bin/sh","-e","/usr/backup/restore-checker.sh"]
               env:
                 - name: POSTGRES_INITDB_ARGS
-                  value: --data-checksums --auth-host=scram-sha-256
+                  value: {{ .Values.initdb.args | quote }}
                 - name: PGAPPNAME
                   valueFrom:
                     fieldRef:
@@ -66,6 +66,9 @@ spec:
                     secretKeyRef:
                       name: {{ include "postgresql-single.fullname" . }}
                       key: postgresqlPassword
+              {{- with .Values.env }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
               volumeMounts:
                 - name: data
                   mountPath: {{ .Values.persistence.mountPath }}

@@ -101,6 +101,9 @@ spec:
               value: /etc/ssl/tlscerts/tls.key
             - name: PGDATA
               value: {{ .Values.persistence.mountPath }}/data
+          {{- with .Values.env }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           ports:
             - name: postgresql
               containerPort: 5432
