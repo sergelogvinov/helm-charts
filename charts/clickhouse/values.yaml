@@ -157,7 +157,7 @@ backup:
   # ref: https://kubernetes.io/docs/user-guide/compute-resources/
   resources:
     limits:
-      cpu: 500m
+      cpu: 1200m
       memory: 512Mi
     requests:
       cpu: 100m
