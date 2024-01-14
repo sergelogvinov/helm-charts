@@ -160,7 +160,7 @@ data:
     {{- end }}
 
   restore.sh: |
-    #!/bin/sh
+    #!/bin/sh -e
     set -e
 
     [ -z "$WALG_BACKUP_VERSION" ] && export WALG_BACKUP_VERSION=LATEST
@@ -196,16 +196,27 @@ data:
     touch {{ .Values.persistence.mountPath }}/data/recovery.signal
     chmod 0700 {{ .Values.persistence.mountPath }}/data
 
-    pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -w start
-    sleep 10
+    pg_ctl -D "$PGDATA" -t 600 -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off"  -o "-c recovery_end_command='touch /tmp/recovery.finish'" -w start
+    sleep 30
 
     TRIES=30
     while [ "$TRIES" != "0" ]
     do
-        echo "* Trying to connect... #$TRIES"
-        psql -U postgres postgres -tAc "SELECT pg_is_in_recovery();" >/dev/null 2>/dev/null && break || sleep 60 && TRIES=`expr "$TRIES" - 1`
+        echo "*** Trying to connect... #$TRIES"
+        recovery=`psql -U postgres postgres -tAc "SELECT pg_is_in_recovery();" 2>/dev/null ||:`
+        [ "$recovery" = "f" ] && break || echo -n "recovering... "
+
+        lag=`psql -U postgres postgres -tAc "SELECT CASE WHEN NOT pg_is_in_recovery() THEN 0 ELSE GREATEST (0, EXTRACT(EPOCH FROM (now() - pg_last_xact_replay_timestamp()))::int) END" ||:`
+        echo "lag=${lag}s"
+
+        [ -f /tmp/recovery.finish ] && break ||:
+        [ "$lag" -lt "600" ] && break ||:
+
+        sleep 60
+        TRIES=`expr "$TRIES" - 1`
     done
 
+    echo "*** Finish recovery"
     end=`date +%s`
     runtime=$((end-start))
     echo "*** Recovery time - ${runtime}s"
@@ -244,7 +255,7 @@ data:
     touch {{ .Values.persistence.mountPath }}/data/recovery.signal
     chmod 0700 {{ .Values.persistence.mountPath }}/data
 
-    pg_ctl -D "$PGDATA" -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -w start
+    pg_ctl -D "$PGDATA" -t 600 -o "--config-file=/postgresql/conf/postgresql.conf" -o "-c listen_addresses=''" -o "-c archive_mode=off" -w start
     sleep 60
 
     TRIES=30
@@ -265,7 +276,7 @@ data:
     echo "*** Start tests"
     START=`date +%s`
 
-    {{- if and (regexMatch "^[0-9]+\\.[0-9]+$" .Values.image.tag) (semverCompare ">=14.0" .Values.image.tag) | default .Chart.AppVersion }}
+    {{- if and (regexMatch "^[0-9]+\\.[0-9]+$" .Values.image.tag) (semverCompare ">=14.0" (default .Chart.AppVersion .Values.image.tag)) }}
     echo "*** AMCheck"
     pg_amcheck -a --install-missing --parent-check --heapallindexed
     {{- end }}

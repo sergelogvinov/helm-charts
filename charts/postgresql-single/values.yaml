@@ -208,7 +208,7 @@ backup:
       memory: 1Gi
     requests:
       cpu: 1500m
-      memory: 512Mi
+      memory: 768Mi
 
   # -- Priority Class Name
   # ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
@@ -282,7 +282,7 @@ metrics:
             description: "Time at which postmaster started"
     {{- if and (regexMatch "^[0-9]+\\.[0-9]+$" .Values.image.tag) (semverCompare ">=14.0" (default .Chart.AppVersion .Values.image.tag)) }}
     pg_stat_slow_queries:
-      query: SELECT pg_get_userbyid(userid) as rolname,t3.datname,queryid,calls,max_exec_time / 1000 as max_time_seconds,REGEXP_REPLACE(substring(query,1,100),'["\n\s]','','g') as sql FROM pg_stat_statements t1 JOIN pg_database t3 ON (t1.dbid=t3.oid) WHERE rows != 0 AND max_exec_time > 1000 ORDER BY max_exec_time DESC LIMIT 10
+      query: SELECT pg_get_userbyid(userid) as rolname,t3.datname,queryid,calls,max_exec_time / 1000 as max_time_seconds,REGEXP_REPLACE(substring(query,1,100),'["\n\s]','','g') as sql FROM pg_stat_statements t1 JOIN pg_database t3 ON (t1.dbid=t3.oid) WHERE datname != 'postgres' AND rows != 0 AND max_exec_time > 1000 ORDER BY max_exec_time DESC LIMIT 10
       metrics:
         - rolname:
             usage: "LABEL"
