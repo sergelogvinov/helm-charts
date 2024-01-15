@@ -198,9 +198,8 @@ global
   ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
   ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384
   ssl-default-bind-options prefer-client-ciphers no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets
+
   stats socket /var/run/haproxy.sock mode 600 level admin
-  server-state-file haproxy_state
-  server-state-base /run
   log stdout len 65535 format raw local0 info
 
 resolvers clusterdns
@@ -218,10 +217,11 @@ resolvers clusterdns
 defaults
   mode tcp
   option  dontlognull
-  timeout connect  4s
-  timeout server   86400s
-  timeout client   86400s
-  default-server   init-addr libc,none
+  timeout connect         4s
+  timeout server          86400s
+  timeout client          86400s
+  timeout http-keep-alive 1m
+  default-server init-addr libc,none
 
   # log global
   # log-format '{"remote_addr":"%ci","backend":"%b","retries":%rc,"bytes_read":%B,"bytes_write":%U,"cons":%fc}'

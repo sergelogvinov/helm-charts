@@ -27,7 +27,7 @@ data:
     fi
   {{- end }}
 
-  {{- if and .Values.backup.enabled .Values.backup.recovery }}
+  {{- if .Values.backup.recovery }}
     [ -f /data/keydb.rdb ] || /entrypoint.d/restore.sh
   {{- end }}
 
