@@ -91,7 +91,7 @@ data:
 
     [ "`cat {{ .Values.persistence.mountPath }}/data/PG_VERSION`" = "$PG_MAJOR" ] && (echo "*** Postgres already migrated"; exit 1)
     [ "`cat {{ .Values.persistence.mountPath }}/data/PG_VERSION`" = "$PG_MAJOR_OLD" ] || (echo "*** Do not support database version"; exit 1)
-    [ -f {{ .Values.persistence.mountPath }}/data/standby.signal ] && (echo "*** Database in recovery mode, use rsync -av --delete --exclude=postgresql.auto.conf --exlude='*.signal' rsync://{{ include "postgresql-single.fullname" . }}-0.{{ include "postgresql-single.fullname" . }}-headless:1873/database/ {{ .Values.persistence.mountPath }}/data/"; exit 1)
+    [ -f {{ .Values.persistence.mountPath }}/data/standby.signal ] && (echo "*** Database in recovery mode, use rsync -av --delete --exclude=postgresql.auto.conf --exclude='*.signal' rsync://{{ include "postgresql-single.fullname" . }}-0.{{ include "postgresql-single.fullname" . }}-headless:1873/database/ {{ .Values.persistence.mountPath }}/data/"; exit 1)
 
     echo "*** Start migration"
 
