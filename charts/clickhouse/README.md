@@ -1,6 +1,6 @@
 # clickhouse
 
-![Version: 0.6.2](https://img.shields.io/badge/Version-0.6.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 23.12.2](https://img.shields.io/badge/AppVersion-23.12.2-informational?style=flat-square)
+![Version: 0.6.3](https://img.shields.io/badge/Version-0.6.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 23.12.2](https://img.shields.io/badge/AppVersion-23.12.2-informational?style=flat-square)
 
 Clickhouse chart for Kubernetes
 
@@ -91,7 +91,7 @@ metrics:
 | backup.args | list | `[]` |  |
 | backup.envs | object | `{}` |  |
 | backup.config | object | `{}` |  |
-| backup.resources | object | `{"limits":{"cpu":"1200m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| backup.resources | object | `{"limits":{"cpu":"1200m","memory":"512Mi"},"requests":{"cpu":"500m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | backup.priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
 | cronjobs | object | `{}` |  |
 | tlsCerts.create | bool | `false` |  |

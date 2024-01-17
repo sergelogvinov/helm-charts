@@ -18,7 +18,7 @@ spec:
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
-      activeDeadlineSeconds: 43200 # 12h
+      activeDeadlineSeconds: 86400 # 24h
       backoffLimit: 0
       template:
         metadata:

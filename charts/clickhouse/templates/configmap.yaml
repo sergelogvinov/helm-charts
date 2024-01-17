@@ -153,6 +153,12 @@ data:
             <log>/var/log/clickhouse/clickhouse-server.log</log>
             <errorlog>/var/log/clickhouse/clickhouse-server.err.log</errorlog>
         </logger>
+        <query_log>
+            <database>system</database>
+            <table>query_log</table>
+            <ttl>event_date + INTERVAL 7 DAY DELETE</ttl>
+            <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+        </query_log>
 
         {{- if .Values.metrics.enabled }}
         <prometheus>
@@ -225,9 +231,13 @@ data:
 
   clickhouse-backup.yaml: |-
     general:
-      log_level: warn
+      log_level: info
       retries_on_failure: 3
       retries_pause: 60s
+      #   download_concurrency: 2
+      #   upload_concurrency: 4
+      #   max_file_size:  2147483648
+      upload_by_part: true
       #
       backups_to_keep_local: 3
       backups_to_keep_remote: 14

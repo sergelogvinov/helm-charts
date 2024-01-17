@@ -160,7 +160,7 @@ backup:
       cpu: 1200m
       memory: 512Mi
     requests:
-      cpu: 100m
+      cpu: 500m
       memory: 256Mi
 
   # -- Priority Class Name
