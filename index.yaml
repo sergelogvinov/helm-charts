@@ -1858,6 +1858,27 @@ entries:
     version: 0.1.0
   mongosqld:
   - apiVersion: v2
+    appVersion: 2.14.12
+    created: "2024-01-22T09:49:06.833985912Z"
+    description: Mongo to SQL bridge
+    digest: ce4917c584a75af941bc6de9a87fe0a0db14ecfa73a60c4b5e808e130acab341
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - mongodb
+    - mongosqld
+    - powerbi
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongosqld
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongosqld
+    - https://www.mongodb.com/docs/bi-connector/current/reference/mongosqld
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongosqld-0.3.3/mongosqld-0.3.3.tgz
+    version: 0.3.3
+  - apiVersion: v2
     appVersion: 2.14.11
     created: "2023-09-22T14:38:43.121330001Z"
     description: Mongo to SQL bridge
@@ -1992,6 +2013,26 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/mongosqld-0.1.0/mongosqld-0.1.0.tgz
     version: 0.1.0
   mongosync:
+  - apiVersion: v2
+    appVersion: 1.7.1
+    created: "2024-01-22T09:49:07.030300323Z"
+    description: Mongo Cluster-to-Cluster Sync
+    digest: f52fc10d6dc5cf4fd5490cf6b13d08ecefa072368f85d334ff2bf3c587345313
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - mongodb
+    - mongosync
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongosync
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongosync
+    - https://www.mongodb.com/docs/cluster-to-cluster-sync
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongosync-0.1.4/mongosync-0.1.4.tgz
+    version: 0.1.4
   - apiVersion: v2
     appVersion: 1.5.0
     created: "2023-08-27T05:06:01.038619971Z"
@@ -4085,4 +4126,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2024-01-17T03:51:59.175738268Z"
+generated: "2024-01-22T09:49:07.030815313Z"
