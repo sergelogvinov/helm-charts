@@ -124,11 +124,20 @@ securityContext:
 # ref: https://kubernetes.io/docs/user-guide/services/
 service:
   type: ClusterIP
+  ipFamilies: [IPv4]
+
   proto: UDP
   port: 1190
   # nodePort: 1190
 
   annotations: {}
+
+  ports: []
+    # - name: postgres
+    #   port: 5432
+    #   backend: postgres.default.svc.cluster.local:5432
+    #   tls: true
+
 
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/

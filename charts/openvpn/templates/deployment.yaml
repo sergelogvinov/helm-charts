@@ -121,6 +121,36 @@ spec:
             readOnlyRootFilesystem: true
             runAsUser: 0
             runAsGroup: 53
+        {{- if ne (len .Values.service.ports) 0 }}
+        - name: {{ .Chart.Name }}-service
+          securityContext:
+            capabilities:
+              add: ["NET_BIND_SERVICE"]
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 99
+            runAsGroup: 99
+          image: "ghcr.io/sergelogvinov/haproxy:2.8.3-alpine3.18"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/usr/local/sbin/haproxy","-f","/usr/local/etc/haproxy/haproxy.cfg"]
+          ports:
+            - name: stats
+              containerPort: 8404
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 50m
+              memory: 32Mi
+          volumeMounts:
+            - name: config
+              mountPath: /usr/local/etc/haproxy
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -153,6 +183,10 @@ spec:
             {{- if .Values.certManager.clients }}
               - key: users.list
                 path: users.list
+            {{- end }}
+            {{- if ne (len .Values.service.ports) 0 }}
+              - key: haproxy.cfg
+                path: haproxy.cfg
             {{- end }}
         - name: users
           configMap:
