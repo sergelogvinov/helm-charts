@@ -75,6 +75,11 @@ data:
                     <ip>::/0</ip>
                     <ip>0.0.0.0/0</ip>
                 </networks>
+                {{- if and $.Values.clickhouse.accessManagement (not .accessManagement) }}
+                <access_management>1</access_management>
+                <named_collection_control>1</named_collection_control>
+                <show_named_collections>1</show_named_collections>
+                {{- end }}
             </{{ .name }}>
         {{- end }}
         </users>
