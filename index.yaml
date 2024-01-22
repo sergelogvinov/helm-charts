@@ -2134,6 +2134,25 @@ entries:
   openvpn:
   - apiVersion: v2
     appVersion: 2.6.5
+    created: "2024-01-22T12:53:57.105664278Z"
+    description: OpenVPN in kubernetes
+    digest: e6db384cccd993b2535b4b7f9719ea60c3104615c551cdf220a0f6212a074229
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - openvpn
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: openvpn
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/openvpn
+    - https://openvpn.net
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/openvpn-0.4.0/openvpn-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
+    appVersion: 2.6.5
     created: "2023-09-08T18:07:42.190169331Z"
     description: OpenVPN in kubernetes
     digest: ff92e154c62640a32ecf71553eab3d67139ef2e5624681e75fa82282c3ca3052
@@ -4146,4 +4165,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2024-01-22T09:59:06.581404977Z"
+generated: "2024-01-22T12:53:57.106079687Z"
