@@ -57,6 +57,8 @@ data:
       stats enable
       stats uri /
       stats refresh 10s
+      stats admin if LOCALHOST
+      stats hide-version
       monitor-uri /healthz
       option dontlognull
       option clitcpka
