@@ -228,10 +228,11 @@ Create the walg configuration
 WALG_TAR_SIZE_THRESHOLD: 274877906944
 WALG_TAR_DISABLE_FSYNC: true
 WALG_UPLOAD_WAL_METADATA: INDIVIDUAL
+WALG_PREVENT_WAL_OVERWRITE: true
 WALG_COMPRESSION_METHOD: brotli
 WALG_DELTA_MAX_STEPS: 1
 WALG_FILE_PREFIX: {{ .Values.persistence.mountPath }}/backup
 {{- else }}
-{{ .Values.backup.walg | toYaml }}
+{{- .Values.backup.walg | toYaml }}
 {{- end }}
 {{- end }}
