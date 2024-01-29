@@ -163,14 +163,12 @@ spec:
           ephemeral:
             volumeClaimTemplate:
               metadata:
-                labels:
-                  {{- include "github-actions-runner.labels" . | nindent 22 }}
-              {{- with .Values.dind.persistence.annotations }}
+                {{- with .Values.dind.persistence.annotations }}
                 annotations:
-                {{- range $key, $value := . }}
-                  {{ $key }}: {{ $value }}
+                  {{- toYaml . | nindent 18 }}
                 {{- end }}
-              {{- end }}
+                labels:
+                  {{- include "github-actions-runner.labels" . | nindent 18 }}
               {{- include "volumeClaimTemplate.spec.render" .Values.dind.persistence | nindent 14 }}
         {{- else }}
           emptyDir: {}
@@ -181,14 +179,12 @@ spec:
           ephemeral:
             volumeClaimTemplate:
               metadata:
-                labels:
-                  {{- include "github-actions-runner.labels" . | nindent 22 }}
-              {{- with .Values.persistence.annotations }}
+                {{- with .Values.persistence.annotations }}
                 annotations:
-                {{- range $key, $value := . }}
-                  {{ $key }}: {{ $value }}
+                  {{- toYaml . | nindent 18 }}
                 {{- end }}
-              {{- end }}
+                labels:
+                  {{- include "github-actions-runner.labels" . | nindent 18 }}
               {{- include "volumeClaimTemplate.spec.render" .Values.persistence | nindent 14 }}
         {{- else }}
           emptyDir: {}

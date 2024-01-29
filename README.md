@@ -26,6 +26,7 @@ helm upgrade -i ${PKG_NAME} --version=${CHART_VERSION} oci://ghcr.io/sergelogvin
 * [keydb](charts/keydb/) - master-master redis cluster
 * [mongodb-backup](charts/mongodb-backup/) - mongo logical backup with restore checks
 * [mongosqld](charts/mongosqld/) - mongo to sql gateway
+* [mongosync](charts/mongosync/) - mongo replication
 * [pgbouncer](charts/pgbouncer/) - postgres connection pooler
 * [postgresql-single](charts/postgresql-single/) - postgres one node with backup/restore checks
 * [prometheus-rules](charts/prometheus-rules/) - prometheus operator replacer
@@ -37,6 +38,9 @@ helm upgrade -i ${PKG_NAME} --version=${CHART_VERSION} oci://ghcr.io/sergelogvin
 * [openvpn](charts/openvpn/) - openvpn with/without OTP auth
 * [ipsec](charts/ipsec/) - access kubernetes services throughth ipsec link
 * [tailscale](charts/tailscale/) - exit-node mesh network
+
+* [link-common](charts/link-common/) - tool to link kubernetes services to p2p network
+* [service-common](charts/service-common/) - tool to open services with TLS auth
 
 ## RnD
 

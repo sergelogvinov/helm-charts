@@ -183,36 +183,32 @@ spec:
           hostPath:
             path: /lib/modules
         - name: docker
-        {{- if .Values.dind.persistence.storageClass }}
+        {{- if and .Values.dind.persistence.enabled .Values.dind.persistence.storageClass }}
           ephemeral:
             volumeClaimTemplate:
               metadata:
-                labels:
-                  {{- include "github-actions-runner.labels" . | nindent 22 }}
-              {{- with .Values.dind.persistence.annotations }}
+                {{- with .Values.dind.persistence.annotations }}
                 annotations:
-                {{- range $key, $value := . }}
-                  {{ $key }}: {{ $value }}
+                  {{- toYaml . | nindent 18 }}
                 {{- end }}
-              {{- end }}
+                labels:
+                  {{- include "github-actions-runner.labels" . | nindent 18 }}
               {{- include "volumeClaimTemplate.spec.render" .Values.dind.persistence | nindent 14 }}
         {{- else }}
           emptyDir: {}
         {{- end }}
       {{- end }}
         - name: builds
-        {{- if .Values.persistence.storageClass }}
+        {{- if and .Values.persistence.enabled .Values.persistence.storageClass }}
           ephemeral:
             volumeClaimTemplate:
               metadata:
-                labels:
-                  {{- include "github-actions-runner.labels" . | nindent 22 }}
-              {{- with .Values.persistence.annotations }}
+                {{- with .Values.persistence.annotations }}
                 annotations:
-                {{- range $key, $value := . }}
-                  {{ $key }}: {{ $value }}
+                  {{- toYaml . | nindent 18 }}
                 {{- end }}
-              {{- end }}
+                labels:
+                  {{- include "github-actions-runner.labels" . | nindent 18 }}
               {{- include "volumeClaimTemplate.spec.render" .Values.persistence | nindent 14 }}
         {{- else }}
           emptyDir: {}

@@ -108,15 +108,13 @@ spec:
           ephemeral:
             volumeClaimTemplate:
               metadata:
+                {{- with .Values.mirrors.persistence.annotations }}
+                annotations:
+                  {{- toYaml . | nindent 18 }}
+                {{- end }}
                 labels:
                   {{- include "github-actions-runner.selectorLabels" . | nindent 18 }}
                   app.kubernetes.io/component: mirrors
-              {{- with .Values.mirrors.persistence.annotations }}
-                annotations:
-                {{- range $key, $value := . }}
-                  {{ $key }}: {{ $value }}
-                {{- end }}
-              {{- end }}
               {{- include "volumeClaimTemplate.spec.render" .Values.mirrors.persistence | nindent 14 }}
       {{- end }}
         - name: config
