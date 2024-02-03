@@ -1,0 +1,24 @@
+{{- if and .Values.rbac.create (not .Values.rbac.singleNamespace) }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "rbac-common.fullname" . }}:superadmin
+  labels:
+    {{- include "rbac-common.labels" . | nindent 4 }}
+rules:
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterroles
+  - clusterrolebindings
+  - roles
+  - rolebindings
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+{{- end }}
