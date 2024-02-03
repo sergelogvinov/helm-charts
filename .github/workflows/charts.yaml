@@ -3,7 +3,7 @@ name: HelmChart Check
 on:
   pull_request:
     branches:
-      - master
+      - main
     paths:
       - 'charts/**'
 

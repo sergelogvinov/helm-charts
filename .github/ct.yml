@@ -5,4 +5,4 @@ chart-dirs:
 validate-maintainers: true
 namespace: default
 release-label: test
-target-branch: master
+target-branch: main
