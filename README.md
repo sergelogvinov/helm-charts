@@ -39,6 +39,8 @@ helm upgrade -i ${PKG_NAME} --version=${CHART_VERSION} oci://ghcr.io/sergelogvin
 * [ipsec](charts/ipsec/) - access kubernetes services throughth ipsec link
 * [tailscale](charts/tailscale/) - exit-node mesh network
 
+## Servics p2p links
+
 * [link-common](charts/link-common/) - tool to link kubernetes services to p2p network
 * [service-common](charts/service-common/) - tool to open services with TLS auth
 
