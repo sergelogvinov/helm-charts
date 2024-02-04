@@ -1,0 +1,160 @@
+{{- if .Values.agent.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "teamcity.fullname" . }}-agent
+  labels:
+    {{- include "teamcity.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.agent.replicaCount }}
+  strategy:
+    type: {{ .Values.agent.updateStrategy.type }}
+  selector:
+    matchLabels:
+      {{- include "teamcity.selectorLabels" . | nindent 6 }}
+      type: agent
+  template:
+    metadata:
+    {{- with .Values.agent.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "teamcity.selectorLabels" . | nindent 8 }}
+        type: agent
+    spec:
+      enableServiceLinks: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "teamcity.agent.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.agent.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-agent
+          securityContext:
+            {{- toYaml .Values.agent.securityContext | nindent 12 }}
+          image: "{{ .Values.agent.image.repository }}:{{ .Values.agent.image.tag | default (printf "%s-agent" .Chart.AppVersion) }}"
+          imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
+          env:
+            - name: SERVER_URL
+              value: http://{{ include "teamcity.fullname" . }}:{{ .Values.service.port }}
+            - name: OWN_ADDRESS
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: OWN_PORT
+              value: "9090"
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          envFrom:
+            - secretRef:
+                name: "{{ include "teamcity.fullname" . }}-agent-envs"
+          ports:
+            - name: http
+              containerPort: 9090
+              protocol: TCP
+          volumeMounts:
+          {{- if .Values.agent.extraFilesMounts }}
+            - name: files
+              mountPath: {{ .Values.agent.extraFilesMounts.mountPath }}
+          {{- end }}
+          {{- if .Values.agent.extraVolumeMounts }}
+            {{- toYaml .Values.agent.extraVolumeMounts | nindent 12 }}
+          {{- end }}
+            - name: work
+              mountPath: /opt/buildagent/work
+          {{- if .Values.dind.enabled }}
+            - name: run
+              mountPath: /run
+          {{- end }}
+          resources:
+            {{- toYaml .Values.agent.resources | nindent 12 }}
+        {{- if .Values.dind.enabled }}
+        - name: {{ .Chart.Name }}-dind
+          securityContext:
+            privileged: true
+            seccompProfile:
+              type: Unconfined
+          image: "{{ .Values.dind.image.repository }}:{{ .Values.dind.image.tag }}"
+          imagePullPolicy: {{ .Values.dind.image.pullPolicy }}
+          command: ["dockerd"]
+          args:
+            - --config-file=/etc/docker-config/daemon.json
+            - --group={{ .Values.agent.securityContext.runAsGroup }}
+          env:
+            - name: DOCKER_HOST
+              value: unix:///tmp/docker.sock
+          volumeMounts:
+            - name: config
+              mountPath: /etc/docker-config
+            - name: docker
+              mountPath: /var/lib/docker
+            - name: run
+              mountPath: /tmp
+            - name: modules
+              mountPath: /lib/modules
+              readOnly: true
+          {{- if .Values.dind.extraVolumeMounts }}
+            {{- toYaml .Values.dind.extraVolumeMounts | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.dind.resources | nindent 12 }}
+        {{- end }}
+      {{- with .Values.agent.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.agent.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.agent.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+      {{- if .Values.dind.enabled }}
+        - name: config
+          configMap:
+            name: {{ include "teamcity.fullname" . }}-agent
+        - name: docker
+        {{- if and .Values.dind.persistence.enabled .Values.dind.persistence.storageClass }}
+          ephemeral:
+            volumeClaimTemplate:
+              metadata:
+                {{- with .Values.dind.persistence.annotations }}
+                annotations:
+                  {{- toYaml . | nindent 18 }}
+                {{- end }}
+                labels:
+                  {{- include "teamcity.labels" . | nindent 18 }}
+              {{- include "volumeClaimTemplate.spec.render" .Values.dind.persistence | nindent 14 }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
+        - name: run
+          emptyDir:
+            medium: Memory
+        - name: modules
+          hostPath:
+            path: /lib/modules
+      {{- end }}
+      {{- if .Values.agent.extraFilesMounts }}
+        - name: files
+          secret:
+            secretName: {{ include "teamcity.fullname" . }}-agent
+            defaultMode: 256
+      {{- end }}
+        - name: work
+          emptyDir: {}
+      {{- if .Values.agent.extraVolumes }}
+        {{- toYaml .Values.agent.extraVolumes | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dind.extraVolumes }}
+        {{- toYaml .Values.dind.extraVolumes | nindent 8 }}
+      {{- end }}
+{{- end }}

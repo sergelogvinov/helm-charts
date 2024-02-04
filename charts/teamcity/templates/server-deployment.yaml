@@ -1,0 +1,123 @@
+{{- if .Values.server.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "teamcity.fullname" . }}
+  labels:
+    {{- include "teamcity.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: {{ .Values.server.updateStrategy.type }}
+  selector:
+    matchLabels:
+      {{- include "teamcity.selectorLabels" . | nindent 6 }}
+      type: server
+  template:
+    metadata:
+      annotations:
+      {{- with .Values.server.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.enabled }}
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/app/metrics"
+        prometheus.io/port: "9180"
+      {{- end}}
+      labels:
+        {{- include "teamcity.selectorLabels" . | nindent 8 }}
+        type: server
+    spec:
+      enableServiceLinks: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "teamcity.server.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.server.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-server
+          securityContext:
+            {{- toYaml .Values.server.securityContext | nindent 12 }}
+          image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+          env:
+            - name: TEAMCITY_DATA_PATH
+              value: /data/datadir
+          ports:
+            - name: http
+              containerPort: 8111
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          volumeMounts:
+            - name: logs
+              mountPath: /opt/teamcity/logs
+            - name: temp
+              mountPath: /opt/teamcity/temp
+            - name: data
+              mountPath: /data
+          {{- if or .Values.server.configDb .Values.postgresql.enabled }}
+            - name: config
+              mountPath: /data/datadir/config/database.properties
+              subPath: database.properties
+              readOnly: true
+          {{- end }}
+          resources:
+            {{- toYaml .Values.server.resources | nindent 12 }}
+        {{- if .Values.metrics.enabled }}
+        - name: {{ .Chart.Name }}-monitoring
+          securityContext:
+            {{- toYaml .Values.metrics.securityContext | nindent 12 }}
+          image: "{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}"
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy }}
+          # command: ["sleep","600000"]
+          volumeMounts:
+            - name: metrics
+              mountPath: /etc/nginx
+              readOnly: true
+        {{- end }}
+      {{- with .Values.server.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.server.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.server.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: logs
+          emptyDir: {}
+        - name: temp
+          emptyDir: {}
+        - name: data
+      {{- if .Values.server.persistentVolume.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.server.persistentVolume.existingClaim }}{{ .Values.server.persistentVolume.existingClaim }}{{- else }}{{ template "teamcity.fullname" . }}{{- end }}
+      {{- else }}
+          emptyDir: {}
+      {{- end }}
+      {{- if or .Values.server.configDb .Values.postgresql.enabled }}
+        - name: config
+          secret:
+            secretName: {{ template "teamcity.fullname" . }}-db
+            defaultMode: 256
+      {{- end }}
+      {{- if .Values.metrics.enabled }}
+        - name: metrics
+          secret:
+            secretName: {{ include "teamcity.fullname" . }}
+            defaultMode: 256
+      {{- end }}
+{{- end }}

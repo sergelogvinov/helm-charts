@@ -33,6 +33,11 @@ helm upgrade -i ${PKG_NAME} --version=${CHART_VERSION} oci://ghcr.io/sergelogvin
 * [registry-mirrors](charts/registry-mirrors/) - container registry mirrors
 * [tabix](charts/tabix/) - clickhouse web GUI
 
+## CICD
+
+* [Github actions runner](charts/github-actions-runner/) - github actions runner
+* [Teamcity](charts/teamcity/) - jetbrains teamcity
+
 ## P2P/VPN
 
 * [openvpn](charts/openvpn/) - openvpn with/without OTP auth

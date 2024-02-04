@@ -1,0 +1,49 @@
+{{- if .Values.agent.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "teamcity.fullname" . }}-agent
+  labels:
+    {{- include "teamcity.labels" . | nindent 4 }}
+data:
+  {{- $size := default 10 (include "resource-mb" .Values.dind.persistence.size) }}
+  buildkitd.toml: |-
+    root = "/var/lib/buildkit"
+    debug = false
+
+    [grpc]
+      address = [ "unix:///run/buildkit/buildkitd.sock" ]
+      uid = 0
+      gid = 0
+
+    [worker.containerd]
+      enabled = false
+
+    [worker.oci]
+      enabled = true
+      gc = true
+      gckeepstorage = "{{ int64 (divf $size 2) }}MB"
+    [[worker.oci.gcpolicy]]
+      keepBytes = "{{ int64 (divf $size 2) }}MB"
+      keepDuration = "24h"
+      filters = [ "type==source.local", "type==exec.cachemount", "type==source.git.checkout"]
+    [[worker.oci.gcpolicy]]
+      all = true
+      keepBytes = "{{ int64 (divf $size 2) }}MB"
+
+  daemon.json: |-
+    {
+      "features": {
+        "buildkit" : true
+      },
+      "builder": {
+        "gc": {
+          "enabled": true,
+          "defaultKeepStorage": "{{ int64 (divf $size 2) }}MB"
+        }
+      },
+      "hosts": ["unix:///tmp/docker.sock"],
+      "mtu": 1280,
+      "log-level": "warn"
+    }
+{{- end }}
