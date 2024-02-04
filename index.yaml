@@ -4285,4 +4285,29 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
-generated: "2024-02-03T21:52:30.583098502Z"
+  teamcity:
+  - apiVersion: v2
+    appVersion: 2023.11.3
+    created: "2024-02-04T07:39:22.129573201Z"
+    description: Teamcity chart
+    digest: 899215a7cb4d0e9e7d9ba2fda4079a90d918f1370e95191e44d0d2928927df3a
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - ci
+    - continuous integration
+    - continuous delivery
+    - continuous deployment
+    - devops
+    - automation
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: teamcity
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/teamcity
+    - https://www.jetbrains.com/teamcity
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
+    version: 0.6.4
+generated: "2024-02-04T07:39:22.129997344Z"
