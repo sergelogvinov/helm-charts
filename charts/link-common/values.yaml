@@ -78,6 +78,10 @@ wireguard:
   wireguardIP: 172.30.1.1/32
   wireguardMTU: 1280
 
+  # -- WireGuard incoming port.
+  # uses as container hostPort.
+  wireguardPort: ~ # 51820
+
   # -- WireGuard private key.
   # ref: https://www.wireguard.com/quickstart/
   #   wg genkey | tee privatekey | wg pubkey > publickey

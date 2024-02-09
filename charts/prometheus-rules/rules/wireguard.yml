@@ -1,0 +1,10 @@
+- name: wireguard.alerts
+  rules:
+  - alert: WireguardHandshakeStalled
+    expr: changes(wireguard_latest_handshake_seconds{}[5m]) < 1
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Wireguard handshake with peer {{ $labels.app_kubernetes_io_name }}/{{ $labels.friendly_name }} has not occurred in the last 5 minutes"
+      description: "This alert fires if the wireguard_latest_handshake_seconds metric has not changed for 5 minutes, indicating potential connectivity issues."

@@ -15,6 +15,9 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- if .Values.wireguard.enabled }}
+        checksum/wg: {{ include "link-common-wireguard.conf" . | sha256sum }}
+      {{- end }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -71,11 +74,15 @@ spec:
             {{- if .Values.wireguard.enabled }}
             - name: wg
               containerPort: 51820
-              # hostPort: 51820
+              {{- if .Values.wireguard.wireguardPort }}
+              hostPort: {{ .Values.wireguard.wireguardPort | int }}
+              {{- end }}
               protocol: UDP
             - name: wg-health
               containerPort: 51820
-              # hostPort: 51820
+              {{- if .Values.wireguard.wireguardPort }}
+              hostPort: {{ .Values.wireguard.wireguardPort | int }}
+              {{- end }}
               protocol: TCP
             {{- end }}
             {{- range $key, $value := .Values.service.ports }}
