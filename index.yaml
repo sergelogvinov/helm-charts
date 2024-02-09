@@ -1693,6 +1693,22 @@ entries:
   link-common:
   - apiVersion: v2
     appVersion: 2.8.3-alpine3.18
+    created: "2024-02-09T15:56:45.96116087Z"
+    description: Simple vpn-p2p-link service
+    digest: 534b25bb797436122b4d1bdd05c2fed2477e6696e24e88a1584eaeb51c440056
+    home: https://github.com/sergelogvinov/helm-charts
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: link-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/link-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/link-common-0.3.2/link-common-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v2
+    appVersion: 2.8.3-alpine3.18
     created: "2023-11-14T04:53:54.637742517Z"
     description: Simple vpn-p2p-link service
     digest: 72e976f3ce82570425b3d1495f2f92921ecb22f3517f32115f21e5f8e0becfeb
@@ -3247,6 +3263,24 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2024-02-09T15:56:46.075322564Z"
+    description: Static prometheus rules
+    digest: 6143e09d7f5fba8fce97573e9e278b5ff279ebcef0079f8f49dc65efd913f36c
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - prometheus
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: prometheus-rules
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.30/prometheus-rules-0.1.30.tgz
+    version: 0.1.30
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2023-12-14T12:18:05.866785248Z"
     description: Static prometheus rules
     digest: de72942998af8855ac6479f32db3e2e292c7d77196ab108b34f0bd8c25d5dc96
@@ -4310,4 +4344,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-02-04T07:39:22.129997344Z"
+generated: "2024-02-09T15:56:46.075848465Z"
