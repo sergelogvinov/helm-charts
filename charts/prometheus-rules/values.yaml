@@ -5,6 +5,19 @@
 nameOverride: ""
 fullnameOverride: ""
 
+victoriaMetricsConfig:
+  enabled: false
+
+  global:
+    ## How frequently to scrape targets by default
+    ##
+    scrape_interval: 1m
+    ## How long until a scrape request times out
+    ##
+    scrape_timeout: 10s
+
+    external_labels: {}
+
 prometheusConfig:
   enabled: false
 
