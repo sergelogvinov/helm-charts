@@ -27,7 +27,7 @@ spec:
   listenerTemplate:
     spec:
       containers:
-        - name: autoscaler
+        - name: listener
           resources:
             requests:
               cpu: 10m
@@ -59,6 +59,7 @@ spec:
   template:
     metadata:
       annotations:
+        kubectl.kubernetes.io/default-container: runner
       {{- if .Values.mirrors.enabled }}
         checksum/config: {{ toJson .Values.mirrors.registry | sha256sum }}
       {{- end }}
@@ -101,6 +102,9 @@ spec:
           command: ["dockerd"]
           args:
             - --config-file=/etc/docker-config/daemon.json
+          env:
+            - name: DOCKER_HOST
+              value: unix:///tmp/docker.sock
           volumeMounts:
             - name: config
               mountPath: /etc/docker-config
@@ -109,7 +113,7 @@ spec:
             - name: docker
               mountPath: /var/lib/docker
             - name: run
-              mountPath: /run
+              mountPath: /tmp
             - name: modules
               mountPath: /lib/modules
               readOnly: true

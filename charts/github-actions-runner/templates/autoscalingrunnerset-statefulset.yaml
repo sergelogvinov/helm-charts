@@ -127,15 +127,19 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ include "github-actions-runner.fullname" . }}"
+          {{- if .Values.dind.enabled }}
           lifecycle:
             postStart:
               exec:
                 command: ["/bin/sh", "/etc/docker-config/mirrors.sh"]
+          {{- end }}
           volumeMounts:
+          {{- if .Values.dind.enabled }}
             - name: config
               mountPath: /etc/docker-config
             - name: tls
               mountPath: /etc/docker-tls
+          {{- end }}
           {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
           {{- end }}

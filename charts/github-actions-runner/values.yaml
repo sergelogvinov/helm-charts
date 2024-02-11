@@ -24,7 +24,7 @@ autoscaling:
 
 runnerGroup: "default"
 runnerScaleSetName: ""
-runnerVersion: "0.8.1"
+runnerVersion: "0.8.2"
 
 githubConfigUrl: "https://github.com/..."
 githubConfigSecret: {}
