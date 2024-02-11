@@ -760,6 +760,28 @@ entries:
   github-actions-runner:
   - apiVersion: v2
     appVersion: 2.312.0
+    created: "2024-02-11T06:54:22.57595602Z"
+    description: Github Actions with container registry and mirrors
+    digest: bb951b2a5625304c054e7fd131cd96fefdb32a8568de7a141f0c506fcdd40586
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - github-actions
+    - conteiner
+    - docker-registry
+    - docker-mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: github-actions-runner
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/github-actions-runner
+    - https://github.com/actions/actions-runner-controller.git
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/github-actions-runner-1.5.5/github-actions-runner-1.5.5.tgz
+    version: 1.5.5
+  - apiVersion: v2
+    appVersion: 2.312.0
     created: "2024-01-29T07:46:56.82235815Z"
     description: Github Actions with container registry and mirrors
     digest: 5b24414f5924b5e4f93a8dc13aed980cf342e1e611adffd26fb9bf903a9fb262
@@ -4340,6 +4362,30 @@ entries:
   teamcity:
   - apiVersion: v2
     appVersion: 2023.11.3
+    created: "2024-02-11T06:54:22.76460175Z"
+    description: Teamcity chart
+    digest: c34da066751585bcd2846ac5adcb5f8877c0905ebe4317603be686a7e3e8ab11
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - ci
+    - continuous integration
+    - continuous delivery
+    - continuous deployment
+    - devops
+    - automation
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: teamcity
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/teamcity
+    - https://www.jetbrains.com/teamcity
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.5/teamcity-0.6.5.tgz
+    version: 0.6.5
+  - apiVersion: v2
+    appVersion: 2023.11.3
     created: "2024-02-04T07:39:22.129573201Z"
     description: Teamcity chart
     digest: 899215a7cb4d0e9e7d9ba2fda4079a90d918f1370e95191e44d0d2928927df3a
@@ -4362,4 +4408,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-02-10T15:49:32.738554737Z"
+generated: "2024-02-11T06:54:22.765127896Z"
