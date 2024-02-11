@@ -212,7 +212,7 @@ data:
           "defaultKeepStorage": "{{ int64 (divf $size 2) }}MB"
         }
       },
-      "hosts": ["unix:///var/run/docker.sock","tcp://127.0.0.1:2376"],
+      "hosts": ["unix:///tmp/docker.sock"],
       "mtu": 1280,
       {{- if .Values.mirrors.enabled }}
       "registry-mirrors": ["https://{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc"],

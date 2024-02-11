@@ -1,4 +1,5 @@
 {{- if .Capabilities.APIVersions.Has "actions.github.com/v1alpha1" }}
+{{ $sidecar := semverCompare ">=1.29-0" .Capabilities.KubeVersion.GitVersion }}
 apiVersion: actions.github.com/v1alpha1
 kind: AutoscalingRunnerSet
 metadata:
@@ -81,9 +82,16 @@ spec:
         options:
           - name: ndots
             value: "3"
+      {{- if $sidecar }}
+      initContainers:
+      {{- else }}
       containers:
+      {{- end }}
         {{- if .Values.dind.enabled }}
         - name: {{ .Chart.Name }}-dind
+          {{- if $sidecar }}
+          restartPolicy: Always
+          {{- end }}
           securityContext:
             privileged: true
             seccompProfile:
@@ -111,6 +119,9 @@ spec:
           resources:
             {{- toYaml .Values.dind.resources | nindent 12 }}
         {{- end }}
+      {{- if $sidecar }}
+      containers:
+      {{- end }}
         - name: runner
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}

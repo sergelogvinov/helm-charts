@@ -1,4 +1,5 @@
 {{- if .Values.agent.enabled -}}
+{{ $sidecar := semverCompare ">=1.29-0" .Capabilities.KubeVersion.GitVersion }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -31,7 +32,46 @@ spec:
       serviceAccountName: {{ include "teamcity.agent.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.agent.podSecurityContext | nindent 8 }}
+      {{- if $sidecar }}
+      initContainers:
+      {{- else }}
       containers:
+      {{- end }}
+        {{- if .Values.dind.enabled }}
+        - name: {{ .Chart.Name }}-dind
+          restartPolicy: Always
+          securityContext:
+            privileged: true
+            seccompProfile:
+              type: Unconfined
+          image: "{{ .Values.dind.image.repository }}:{{ .Values.dind.image.tag }}"
+          imagePullPolicy: {{ .Values.dind.image.pullPolicy }}
+          command: ["dockerd"]
+          args:
+            - --config-file=/etc/docker-config/daemon.json
+            - --group={{ .Values.agent.securityContext.runAsGroup }}
+          env:
+            - name: DOCKER_HOST
+              value: unix:///tmp/docker.sock
+          volumeMounts:
+            - name: config
+              mountPath: /etc/docker-config
+            - name: docker
+              mountPath: /var/lib/docker
+            - name: run
+              mountPath: /tmp
+            - name: modules
+              mountPath: /lib/modules
+              readOnly: true
+          {{- if .Values.dind.extraVolumeMounts }}
+            {{- toYaml .Values.dind.extraVolumeMounts | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.dind.resources | nindent 12 }}
+        {{- end }}
+      {{- if $sidecar }}
+      containers:
+      {{- end }}
         - name: {{ .Chart.Name }}-agent
           securityContext:
             {{- toYaml .Values.agent.securityContext | nindent 12 }}
@@ -73,37 +113,6 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.agent.resources | nindent 12 }}
-        {{- if .Values.dind.enabled }}
-        - name: {{ .Chart.Name }}-dind
-          securityContext:
-            privileged: true
-            seccompProfile:
-              type: Unconfined
-          image: "{{ .Values.dind.image.repository }}:{{ .Values.dind.image.tag }}"
-          imagePullPolicy: {{ .Values.dind.image.pullPolicy }}
-          command: ["dockerd"]
-          args:
-            - --config-file=/etc/docker-config/daemon.json
-            - --group={{ .Values.agent.securityContext.runAsGroup }}
-          env:
-            - name: DOCKER_HOST
-              value: unix:///tmp/docker.sock
-          volumeMounts:
-            - name: config
-              mountPath: /etc/docker-config
-            - name: docker
-              mountPath: /var/lib/docker
-            - name: run
-              mountPath: /tmp
-            - name: modules
-              mountPath: /lib/modules
-              readOnly: true
-          {{- if .Values.dind.extraVolumeMounts }}
-            {{- toYaml .Values.dind.extraVolumeMounts | nindent 12 }}
-          {{- end }}
-          resources:
-            {{- toYaml .Values.dind.resources | nindent 12 }}
-        {{- end }}
       {{- with .Values.agent.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
