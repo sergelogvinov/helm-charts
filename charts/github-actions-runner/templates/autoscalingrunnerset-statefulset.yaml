@@ -67,6 +67,7 @@ spec:
           command: ["dockerd"]
           args:
             - --config-file=/etc/docker-config/daemon.json
+            - --group={{ default "0" .Values.securityContext.runAsGroup }}
           env:
             - name: DOCKER_HOST
               value: unix:///tmp/docker.sock
