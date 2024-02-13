@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "prometheus-rules.labels" . | nindent 4 }}
 data:
-  rules.yml: |
+  {{- include "prometheus-rules.rules" . | nindent 2 }}: |
     groups:
     {{- include "rules" . | nindent 4 }}
 

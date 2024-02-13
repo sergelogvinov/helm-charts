@@ -48,7 +48,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         (
           rate(alertmanager_notifications_failed_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}"}[5m])
         /
-          rate(alertmanager_notifications_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}"}[5m])
+          ignoring (reason) group_left rate(alertmanager_notifications_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}"}[5m])
         )
         > 0.01
       for: 5m
@@ -65,7 +65,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         min by (namespace,service, integration) (
           rate(alertmanager_notifications_failed_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}", integration=~`.*`}[5m])
         /
-          rate(alertmanager_notifications_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}", integration=~`.*`}[5m])
+          ignoring (reason) group_left rate(alertmanager_notifications_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}", integration=~`.*`}[5m])
         )
         > 0.01
       for: 5m
@@ -82,7 +82,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         min by (namespace,service, integration) (
           rate(alertmanager_notifications_failed_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}", integration!~`.*`}[5m])
         /
-          rate(alertmanager_notifications_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}", integration!~`.*`}[5m])
+          ignoring (reason) group_left rate(alertmanager_notifications_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}", integration!~`.*`}[5m])
         )
         > 0.01
       for: 5m

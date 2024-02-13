@@ -46,8 +46,19 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
       annotations:
         description: '{{`{{`}} $value | humanizePercentage {{`}}`}} of reconciling operations failed for {{`{{`}} $labels.controller {{`}}`}} controller in {{`{{`}} $labels.namespace {{`}}`}} namespace.'
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus-operator/prometheusoperatorreconcileerrors
-        summary: Errors while reconciling controller.
+        summary: Errors while reconciling objects.
       expr: (sum by (cluster,controller,namespace) (rate(prometheus_operator_reconcile_errors_total{job="prometheus-operator",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]))) / (sum by (cluster,controller,namespace) (rate(prometheus_operator_reconcile_operations_total{job="prometheus-operator",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]))) > 0.1
+      for: 10m
+      labels:
+        severity: warning
+{{- end }}
+{{- if not (.Values.defaultRules.disabled.PrometheusOperatorStatusUpdateErrors | default false) }}
+    - alert: PrometheusOperatorStatusUpdateErrors
+      annotations:
+        description: '{{`{{`}} $value | humanizePercentage {{`}}`}} of status update operations failed for {{`{{`}} $labels.controller {{`}}`}} controller in {{`{{`}} $labels.namespace {{`}}`}} namespace.'
+        runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus-operator/prometheusoperatorstatusupdateerrors
+        summary: Errors while updating objects status.
+      expr: (sum by (cluster,controller,namespace) (rate(prometheus_operator_status_update_errors_total{job="prometheus-operator",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]))) / (sum by (cluster,controller,namespace) (rate(prometheus_operator_status_update_operations_total{job="prometheus-operator",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]))) > 0.1
       for: 10m
       labels:
         severity: warning

@@ -62,12 +62,12 @@ charts = [
         'destination': '../templates/rules-1.14',
         'min_kubernetes': '1.14.0-0'
     },
-    {
-        'source': 'https://raw.githubusercontent.com/etcd-io/etcd/main/contrib/mixin/mixin.libsonnet',
-        'destination': '../templates/rules-1.14',
-        'min_kubernetes': '1.14.0-0',
-        'is_mixin': True
-    },
+    # {
+    #     'source': 'https://raw.githubusercontent.com/etcd-io/etcd/main/contrib/mixin/mixin.libsonnet',
+    #     'destination': '../templates/rules-1.14',
+    #     'min_kubernetes': '1.14.0-0',
+    #     'is_mixin': True
+    # },
 ]
 
 # Additional conditions map
