@@ -32,6 +32,24 @@ tlsCerts:
 loadbalancer:
   enabled: false
 
+  service:
+    # -- Extra labels for load balancer service.
+    # ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+    labels: {}
+
+    # -- Extra annotations for load balancer service.
+    # ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    annotations: {}
+
+    # -- Traffic policies.
+    # ref: https://kubernetes.io/docs/reference/networking/virtual-ips/#traffic-policies
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+
+    # -- Services external IPs.
+    # ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+    externalIPs: []
+
   # -- Type of loadbalancer.
   # Can be dynamic or static
   type: static

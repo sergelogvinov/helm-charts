@@ -59,12 +59,17 @@ metadata:
   name: {{ include "keydb.fullname" . }}-loadbalancer
   labels:
     {{- include "keydb.loadbalancer.labels" . | nindent 4 }}
-  {{- with .Values.service.annotations }}
+  {{- with .Values.loadbalancer.service.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.loadbalancer.service.annotations }}
   annotations:
-    {{- toYaml . | nindent 8 }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
+  externalTrafficPolicy: {{ .Values.loadbalancer.service.externalTrafficPolicy }}
+  internalTrafficPolicy: {{ .Values.loadbalancer.service.internalTrafficPolicy }}
   {{- with .Values.service.ipFamilies }}
   ipFamilies:
     {{- toYaml . | nindent 4 }}
@@ -83,4 +88,8 @@ spec:
     {{- end}}
   selector:
     {{- include "keydb.loadbalancer.selectorLabels" . | nindent 4 }}
+  {{- with .Values.loadbalancer.service.externalIPs }}
+  externalIPs:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 {{- end }}

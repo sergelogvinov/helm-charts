@@ -1,6 +1,6 @@
 # keydb
 
-![Version: 0.6.4](https://img.shields.io/badge/Version-0.6.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.4](https://img.shields.io/badge/AppVersion-6.3.4-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.4](https://img.shields.io/badge/AppVersion-6.3.4-informational?style=flat-square)
 
 KeyDB with TLS, backup/restore support
 
@@ -82,6 +82,11 @@ metrics:
 | keydb.save[1] | string | `"120 100000"` |  |
 | tlsCerts.create | bool | `false` |  |
 | loadbalancer.enabled | bool | `false` |  |
+| loadbalancer.service.labels | object | `{}` | Extra labels for load balancer service. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ |
+| loadbalancer.service.annotations | object | `{}` | Extra annotations for load balancer service. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
+| loadbalancer.service.externalTrafficPolicy | string | `"Cluster"` | Traffic policies. ref: https://kubernetes.io/docs/reference/networking/virtual-ips/#traffic-policies |
+| loadbalancer.service.internalTrafficPolicy | string | `"Cluster"` |  |
+| loadbalancer.service.externalIPs | list | `[]` | Services external IPs. ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips |
 | loadbalancer.type | string | `"static"` | Type of loadbalancer. Can be dynamic or static |
 | loadbalancer.replicaCount | int | `1` |  |
 | loadbalancer.image.repository | string | `"haproxy"` |  |
