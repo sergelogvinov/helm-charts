@@ -16,10 +16,11 @@ spec:
       type: agent
   template:
     metadata:
-    {{- with .Values.agent.podAnnotations }}
       annotations:
+        kubectl.kubernetes.io/default-container: {{ .Chart.Name }}-agent
+      {{- with .Values.agent.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-    {{- end }}
+      {{- end }}
       labels:
         {{- include "teamcity.selectorLabels" . | nindent 8 }}
         type: agent
@@ -39,8 +40,12 @@ spec:
       {{- end }}
         {{- if .Values.dind.enabled }}
         - name: {{ .Chart.Name }}-dind
+          {{- if $sidecar }}
           restartPolicy: Always
+          {{- end }}
           securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
             privileged: true
             seccompProfile:
               type: Unconfined
