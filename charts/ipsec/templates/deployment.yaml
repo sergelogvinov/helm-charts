@@ -1,5 +1,9 @@
 apiVersion: apps/v1
+{{- if .Values.useDaemonSet }}
+kind: DaemonSet
+{{- else }}
 kind: Deployment
+{{- end }}
 metadata:
   name: {{ include "ipsec.fullname" . }}
   labels:
