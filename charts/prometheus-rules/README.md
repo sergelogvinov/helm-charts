@@ -1,6 +1,6 @@
 # prometheus-rules
 
-![Version: 0.1.32](https://img.shields.io/badge/Version-0.1.32-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.40.0](https://img.shields.io/badge/AppVersion-2.40.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.40.0](https://img.shields.io/badge/AppVersion-2.40.0-informational?style=flat-square)
 
 Static prometheus rules
 
@@ -23,16 +23,40 @@ Base on projects:
 * [prometheus-operator](https://github.com/prometheus-operator/kube-prometheus/tree/main/manifests)
 * https://github.com/roaldnefs/awesome-prometheus
 
+### Prometheus setup
+
+helm upgrade -i -n monitoring -f prometheus-rules.yaml prometheus-rules oci://ghcr.io/sergelogvinov/charts/prometheus-rules
+
 ```yaml
-# prometheus-community/prometheus values
+# prometheus-rules.yaml
+
+prometheusConfig:
+  enabled: true
+
+  ruleFiles:
+    - /etc/prometheus-rules/*.yml
+```
+
+helm upgrade -i -n monitoring -f prometheus.yaml prometheus prometheus-community/prometheus
+
+```yaml
+# prometheus.yaml
 
 server:
-  # configMapOverrideName: ""
+  podAnnotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '9090'
 
+  configMapOverrideName: rules-config
   extraConfigmapMounts:
     - name: rules-configmap
       mountPath: /etc/prometheus-rules
       configMap: prometheus-rules
+      readOnly: true
+  extraSecretMounts:
+    - name: scrape
+      mountPath: /etc/secrets/scrape
+      secretName: prometheus-rules-scrape
       readOnly: true
 
 configmapReload:
@@ -46,6 +70,48 @@ configmapReload:
         readOnly: true
 ```
 
+### VictoriaMetrics setup
+
+helm upgrade -i -n monitoring -f prometheus-rules.yaml prometheus-rules oci://ghcr.io/sergelogvinov/charts/prometheus-rules
+
+```yaml
+# prometheus-rules.yaml
+
+victoriaMetricsConfig:
+  enabled: true
+
+  ruleFiles:
+    - /etc/prometheus-rules/*.yml
+```
+
+kubectl apply -f vm.yaml
+
+```yaml
+# vm.yaml
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlert
+spec:
+  podMetadata:
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '8080'
+  configMaps:
+    - prometheus-rules
+  rulePath:
+    - /etc/vm/configs/prometheus-rules/*.yml
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAgent
+spec:
+  podMetadata:
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '8429'
+  additionalScrapeConfigs:
+    name: prometheus-rules-scrape
+    key: scrape.yml
+```
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -56,6 +122,7 @@ configmapReload:
 | victoriaMetricsConfig.global.scrape_interval | string | `"1m"` |  |
 | victoriaMetricsConfig.global.scrape_timeout | string | `"10s"` |  |
 | victoriaMetricsConfig.global.external_labels | object | `{}` |  |
+| victoriaMetricsConfig.recordingRules | string | `nil` |  |
 | victoriaMetricsConfig.extraScrapeConfigs | list | `[]` |  |
 | prometheusConfig.enabled | bool | `false` |  |
 | prometheusConfig.global.scrape_interval | string | `"1m"` |  |

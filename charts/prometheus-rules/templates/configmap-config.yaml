@@ -1,0 +1,85 @@
+{{- if or .Values.prometheusConfig.enabled .Values.victoriaMetricsConfig.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "prometheus-rules.fullname" . }}-config
+  labels:
+    {{- include "prometheus-rules.labels" . | nindent 4 }}
+data:
+  {{- if .Values.prometheusConfig.alertingRules }}
+  alerting_rules.yml: |
+    {{- .Values.prometheusConfig.alertingRules | toYaml | nindent 4 }}
+  {{- end }}
+  {{- if or .Values.victoriaMetricsConfig.recordingRules .Values.prometheusConfig.recordingRules }}
+  recording_rules.yml: |
+    {{- with .Values.victoriaMetricsConfig.recordingRules }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .Values.prometheusConfig.recordingRules }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  {{- if .Values.victoriaMetricsConfig.enabled }}
+  scrape.yml: |
+    global:
+      scrape_interval: {{ default "1m" .Values.victoriaMetricsConfig.global.scrape_interval }}
+      scrape_timeout: {{ default "10s" .Values.victoriaMetricsConfig.global.scrape_timeout }}
+      {{- with .Values.victoriaMetricsConfig.global.external_labels }}
+      external_labels:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+    scrape_config_files:
+      - /etc/vm/secrets/scrape/scrape.yml
+
+  {{- else }}
+  prometheus.yml: |
+    global:
+      evaluation_interval: {{ default "1m" .Values.prometheusConfig.global.evaluation_interval }}
+      scrape_interval: {{ default "1m" .Values.prometheusConfig.global.scrape_interval }}
+      scrape_timeout: {{ default "10s" .Values.prometheusConfig.global.scrape_timeout }}
+      {{- with .Values.prometheusConfig.global.external_labels }}
+      external_labels:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+    {{- if .Values.prometheusConfig.remoteWrite }}
+    remote_write:
+      {{ .Values.prometheusConfig.remoteWrite | toYaml | nindent 6 }}
+    {{- end }}
+
+    {{- if .Values.prometheusConfig.remoteRead }}
+    remote_read:
+      {{ .Values.prometheusConfig.remoteRead | toYaml | nindent 6 }}
+    {{- end }}
+
+    alerting:
+      alertmanagers:
+      - kubernetes_sd_configs:
+          - role: pod
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_namespace]
+          regex: {{ .Release.Namespace }}
+          action: keep
+        - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_instance]
+          regex: prometheus
+          action: keep
+        - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_name]
+          regex: alertmanager
+          action: keep
+        - source_labels: [__meta_kubernetes_pod_container_port_number]
+          regex: "9093"
+          action: keep
+
+    rule_files:
+      - /etc/config/recording_rules.yml
+      - /etc/config/alerting_rules.yml
+      {{- .Values.prometheusConfig.ruleFiles | toYaml | nindent 6 }}
+
+    scrape_config_files:
+      - /etc/secrets/scrape/scrape.yml
+  {{- end }}
+{{- end }}

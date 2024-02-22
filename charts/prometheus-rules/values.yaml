@@ -18,6 +18,10 @@ victoriaMetricsConfig:
 
     external_labels: {}
 
+  ## Records configuration
+  ## Ref: https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/
+  recordingRules: ~
+
   extraScrapeConfigs: []
     # - job_name: 'prometheus-blackbox-exporter'
     #   metrics_path: /probe
