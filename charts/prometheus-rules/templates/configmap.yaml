@@ -9,7 +9,9 @@ data:
     groups:
     {{- include "rules" . | nindent 4 }}
 
-{{- range $path, $bytes := .Files.Glob "rules/*.yml" }}
-      # {{ base $path }}
-{{ $.Files.Get $path | indent 6 }}
-{{- end }}
+  static-rules.yml: |
+    groups:
+    {{- range $path, $bytes := .Files.Glob "rules/*.yml" }}
+    # {{ base $path }}
+    {{- $.Files.Get $path | nindent 4 }}
+    {{- end }}

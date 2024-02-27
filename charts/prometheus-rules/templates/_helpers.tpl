@@ -63,7 +63,7 @@ Create the name of the service account to use
 
 {{- define "prometheus-rules.rules" -}}
 {{- if .Values.victoriaMetricsConfig.enabled }}
-alert-rules.yaml
+alert-rules.yml
 {{- else }}
 prometheus.yml
 {{- end }}
