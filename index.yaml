@@ -612,6 +612,27 @@ entries:
     version: 0.1.0
   fluentd:
   - apiVersion: v2
+    appVersion: 1.16.2
+    created: "2024-02-27T16:04:06.400032762Z"
+    description: Deploy fluentd as log router
+    digest: ddb5fcaa12b00ade957ae32d26944cdc170760ea5f9da4cfab173ba6832d16de
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - fluentd
+    - logging
+    - logs
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: fluentd
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/fluentd
+    - https://www.fluentd.org
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/fluentd-0.1.4/fluentd-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
     appVersion: 1.15.3
     created: "2023-12-24T18:41:24.529105292Z"
     description: Deploy fluentd as log router
@@ -3370,6 +3391,24 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2024-02-27T16:04:06.511793036Z"
+    description: Static prometheus rules
+    digest: 0238003e091056e65629afe110e1a747860de33c303aa7d96c63a5cd66da3f04
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - prometheus
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: prometheus-rules
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.2.1/prometheus-rules-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2024-02-22T07:02:26.26247527Z"
     description: Static prometheus rules
     digest: 40f4d3847993b926afeae4581cf3ec43a9a6b4e8976e509e73bd64b8af32f02c
@@ -4577,4 +4616,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-02-22T07:02:26.263008933Z"
+generated: "2024-02-27T16:04:06.512382128Z"
