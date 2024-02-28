@@ -59,6 +59,11 @@ spec:
               containerPort: 8123
             - name: native
               containerPort: 9000
+            {{- if .Values.metrics.enabled }}
+            - name: metrics
+              containerPort: 9363
+              protocol: TCP
+            {{- end }}
             {{- if .Values.tlsCerts.create }}
             - name: nativetls
               containerPort: 9440

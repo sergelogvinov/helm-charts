@@ -77,24 +77,23 @@ rules:
   - pods/exec
   - pods/portforward
   - pods/proxy
+  - pods/eviction
+  - configmaps
   - secrets
+  - services
   - services/proxy
   verbs:
   - get
   - list
   - watch
+  - create
+  - delete
+  - deletecollection
+  - patch
+  - update
 - apiGroups:
   - ""
   resources:
-  - pods
-  - pods/attach
-  - pods/exec
-  - pods/portforward
-  - pods/proxy
-  - configmaps
-  - secrets
-  - services
-  - services/proxy
   - serviceaccounts
   - persistentvolumeclaims
   verbs:
@@ -324,6 +323,7 @@ rules:
   - certificates
   - certificaterequests
   - issuers
+  - clusterissuers
   verbs:
   - get
   - list

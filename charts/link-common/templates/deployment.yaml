@@ -121,6 +121,10 @@ spec:
             - --port=9586
             - --interfaces=wg0
             - --extract_names_config_files=/etc/wireguard/wg0.conf
+          ports:
+            - name: metrics
+              containerPort: 9586
+              protocol: TCP
           volumeMounts:
             - name: wireguard
               mountPath: /etc/wireguard

@@ -92,6 +92,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "pgbouncer.fullname" . }}
                   key: pgmetricsURL
+          ports:
+            - name: metrics
+              containerPort: 9127
+              protocol: TCP
           resources:
             {{ toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}

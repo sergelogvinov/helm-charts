@@ -105,6 +105,10 @@ spec:
             runAsGroup: 99
           image: "{{ .Values.ipsecService.image.repository }}:{{ .Values.ipsecService.image.tag }}"
           imagePullPolicy: {{ .Values.ipsecService.image.pullPolicy }}
+          ports:
+            - name: metrics
+              containerPort: 8404
+              protocol: TCP
           resources:
             limits:
               cpu: 100m
