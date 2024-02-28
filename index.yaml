@@ -184,6 +184,26 @@ entries:
   clickhouse:
   - apiVersion: v2
     appVersion: 23.12.2
+    created: "2024-02-28T16:32:22.530695429Z"
+    description: Clickhouse chart for Kubernetes
+    digest: 0084903faf1a83488e5817985658a282c939a6f242a1d36be430f09ff0b6c168
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - database
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: clickhouse
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/clickhouse
+    - https://github.com/ClickHouse/ClickHouse
+    - https://hub.docker.com/r/clickhouse/clickhouse-server
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-0.6.5/clickhouse-0.6.5.tgz
+    version: 0.6.5
+  - apiVersion: v2
+    appVersion: 23.12.2
     created: "2024-01-22T09:59:06.580778337Z"
     description: Clickhouse chart for Kubernetes
     digest: 553a56ed9c28d7ae8f3fb8e9c19321d0aaba546bd0ad92f9267b0e86d47b8d30
@@ -1279,6 +1299,25 @@ entries:
   ipsec:
   - apiVersion: v2
     appVersion: "4.12"
+    created: "2024-02-28T16:32:22.716631125Z"
+    description: IPSec link for Kubernetes
+    digest: 59ac74049ad60e22a7199a803349b9996f118959cf444b99164fe4bc05dc7621
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - ipsec
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: ipsec
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/ipsec
+    - https://libreswan.org/
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/ipsec-0.3.4/ipsec-0.3.4.tgz
+    version: 0.3.4
+  - apiVersion: v2
+    appVersion: "4.12"
     created: "2024-02-21T16:30:52.863059754Z"
     description: IPSec link for Kubernetes
     digest: 90e1564f249d48e132e4483ff00e16db1e440b448b4a5ff0d695ea7e2ccc1b0a
@@ -1819,6 +1858,22 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.2.3/keydb-0.2.3.tgz
     version: 0.2.3
   link-common:
+  - apiVersion: v2
+    appVersion: 2.8.3-alpine3.18
+    created: "2024-02-28T16:32:22.917396969Z"
+    description: Simple vpn-p2p-link service
+    digest: 98719437b9c6b1039e0e4fb885e702182990babb08b24dd9599d30c62e04f521
+    home: https://github.com/sergelogvinov/helm-charts
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: link-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/link-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/link-common-0.3.3/link-common-0.3.3.tgz
+    version: 0.3.3
   - apiVersion: v2
     appVersion: 2.8.3-alpine3.18
     created: "2024-02-09T15:56:45.96116087Z"
@@ -2529,6 +2584,25 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/overprovisioner-0.1.0/overprovisioner-0.1.0.tgz
     version: 0.1.0
   pgbouncer:
+  - apiVersion: v2
+    appVersion: "15.5"
+    created: "2024-02-28T16:32:23.100349482Z"
+    description: Postgres connection poller
+    digest: d8592c2333761fe9563349b825aac676dbfb6c81f258f6eeb8cae8497854318e
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - pgbouncer
+    - postgresql
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: pgbouncer
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/pgbouncer
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.2.4/pgbouncer-0.2.4.tgz
+    version: 0.2.4
   - apiVersion: v2
     appVersion: "15.5"
     created: "2023-11-14T06:10:09.077640697Z"
@@ -3812,6 +3886,24 @@ entries:
   rbac-common:
   - apiVersion: v2
     appVersion: 0.1.1
+    created: "2024-02-28T16:32:23.297279684Z"
+    description: Kubernetes RBAC
+    digest: 1a2f72f2a877d8a91b0286e6a0a72850c1f87e5b1ffd011da73148590291d1b8
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - rbac
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: rbac-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/rbac-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/rbac-common-0.2.6/rbac-common-0.2.6.tgz
+    version: 0.2.6
+  - apiVersion: v2
+    appVersion: 0.1.1
     created: "2024-02-03T21:52:30.582595106Z"
     description: Kubernetes RBAC
     digest: 07c07e47710f8a39bdf3513c5da132bb97f20a31cf488884a929b9f428f997f3
@@ -4522,6 +4614,30 @@ entries:
   teamcity:
   - apiVersion: v2
     appVersion: 2023.11.3
+    created: "2024-02-28T16:32:23.473639178Z"
+    description: Teamcity chart
+    digest: 4f96aed70c98626e88f941e107b5cb0be379cc394d4d5e22615e6b6cef3909fc
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - ci
+    - continuous integration
+    - continuous delivery
+    - continuous deployment
+    - devops
+    - automation
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: teamcity
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/teamcity
+    - https://www.jetbrains.com/teamcity
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.8/teamcity-0.6.8.tgz
+    version: 0.6.8
+  - apiVersion: v2
+    appVersion: 2023.11.3
     created: "2024-02-15T18:50:35.655967237Z"
     description: Teamcity chart
     digest: fd875fe7ba60b2bcaa2507c9eb1be6486a04005f7051b59e9c906edf13510518
@@ -4616,4 +4732,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-02-27T16:04:06.512382128Z"
+generated: "2024-02-28T16:32:23.47439618Z"
