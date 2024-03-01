@@ -154,8 +154,9 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
           ports:
-            - name: scrape
+            - name: metrics
               containerPort: 9121
+              protocol: TCP
           resources:
             limits:
               cpu: 100m
