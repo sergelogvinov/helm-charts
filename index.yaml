@@ -1473,6 +1473,28 @@ entries:
   keydb:
   - apiVersion: v2
     appVersion: 6.3.4
+    created: "2024-03-01T16:59:47.18683461Z"
+    description: KeyDB with TLS, backup/restore support
+    digest: 0bca6f742cacbe20b3e639f7aafdfe28bc1717cab3d5a0cef191a8ffaa4a1803
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - keydb
+    - redis
+    - wal-g
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: keydb
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/keydb
+    - https://docs.keydb.dev
+    - https://github.com/wal-g/wal-g
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.7.1/keydb-0.7.1.tgz
+    version: 0.7.1
+  - apiVersion: v2
+    appVersion: 6.3.4
     created: "2024-02-14T13:31:40.282835782Z"
     description: KeyDB with TLS, backup/restore support
     digest: bf01da5b4340fb37664b2d37c7d496427a93913b0708604082b601b87d8e6b7a
@@ -4732,4 +4754,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-02-28T16:32:23.47439618Z"
+generated: "2024-03-01T16:59:47.187409803Z"
