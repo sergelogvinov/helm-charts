@@ -25,9 +25,10 @@ spec:
   template:
     metadata:
       annotations:
-      {{- if .Values.config }}
+      {{- if .Values.openvpn.config }}
         checksum/config: {{ .Values.openvpn.config | sha256sum }}
       {{- end }}
+        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
