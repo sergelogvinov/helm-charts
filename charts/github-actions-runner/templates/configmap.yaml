@@ -213,6 +213,9 @@ data:
         }
       },
       "hosts": ["unix:///tmp/docker.sock"],
+      "default-address-pools": [
+        {"base": "198.18.9.0/16","size": 24}
+      ],
       "mtu": 1280,
       {{- if .Values.mirrors.enabled }}
       "registry-mirrors": ["https://{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc"],
