@@ -2871,6 +2871,28 @@ entries:
   postgresql-single:
   - apiVersion: v2
     appVersion: "14.10"
+    created: "2024-03-07T20:19:46.322524401Z"
+    description: Postgres with backup/restore checks
+    digest: e01b8cc6517b12cd19f02844d4b4b49b71d256ccfba2197f6c8409297a42548e
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: postgresql-single
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.10.7/postgresql-single-0.10.7.tgz
+    version: 0.10.7
+  - apiVersion: v2
+    appVersion: "14.10"
     created: "2024-01-26T11:34:25.451666247Z"
     description: Postgres with backup/restore checks
     digest: 3c991b50e411e063848273d1b509c44ea50358d32cd153928cf0e93b8689d214
@@ -4676,6 +4698,30 @@ entries:
     version: 0.1.1
   teamcity:
   - apiVersion: v2
+    appVersion: 2023.11.4
+    created: "2024-03-07T20:19:46.408843746Z"
+    description: Teamcity chart
+    digest: 517c1568f1482423ab98ec66b27bb3b21e4233fe695980c2e525d5720276eb26
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - ci
+    - continuous integration
+    - continuous delivery
+    - continuous deployment
+    - devops
+    - automation
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: teamcity
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/teamcity
+    - https://www.jetbrains.com/teamcity
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.9/teamcity-0.6.9.tgz
+    version: 0.6.9
+  - apiVersion: v2
     appVersion: 2023.11.3
     created: "2024-02-28T16:32:23.473639178Z"
     description: Teamcity chart
@@ -4795,4 +4841,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-03-05T16:23:42.075891137Z"
+generated: "2024-03-07T20:19:46.409482378Z"
