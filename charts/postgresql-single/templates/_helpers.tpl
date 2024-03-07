@@ -117,8 +117,8 @@ lc_time = 'en_US.UTF-8'
 log_timezone = 'UTC'
 
 # Connectivity
-max_connections = 150
-superuser_reserved_connections = 3
+max_connections = {{ .Values.postgresqlMaxConnections }}
+superuser_reserved_connections = 5
 
 ssl = on
 ssl_ciphers = 'EECDH+AESGCM:EDH+AESGCM'

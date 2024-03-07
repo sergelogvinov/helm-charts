@@ -35,6 +35,7 @@ postgresqlUsername: postgres
 # ref: https://hub.docker.com/_/postgres
 # postgresqlDatabase:
 
+postgresqlMaxConnections: 150
 # postgresqlConfiguration:
 # postgresqlConfigurationExtra:
 # postgresqlConfigurationLogs:
