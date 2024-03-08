@@ -3550,6 +3550,24 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2024-03-08T07:07:06.34834397Z"
+    description: Static prometheus rules
+    digest: b50b9485ac970ca26426442524bfc28e03c29d94b9a63b9c1492063945590e55
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - prometheus
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: prometheus-rules
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.2.2/prometheus-rules-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2024-02-27T16:04:06.511793036Z"
     description: Static prometheus rules
     digest: 0238003e091056e65629afe110e1a747860de33c303aa7d96c63a5cd66da3f04
@@ -3969,6 +3987,24 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.0/prometheus-rules-0.1.0.tgz
     version: 0.1.0
   rbac-common:
+  - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2024-03-08T07:07:06.546563178Z"
+    description: Kubernetes RBAC
+    digest: 2b75fbbe492d686b9fe7d1454f379dda13096f27256513352fdd29c9145d1210
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - rbac
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: rbac-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/rbac-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/rbac-common-0.2.7/rbac-common-0.2.7.tgz
+    version: 0.2.7
   - apiVersion: v2
     appVersion: 0.1.1
     created: "2024-02-28T16:32:23.297279684Z"
@@ -4841,4 +4877,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-03-07T20:19:46.409482378Z"
+generated: "2024-03-08T07:07:06.547137047Z"
