@@ -3550,6 +3550,24 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2024-03-08T13:32:51.638011848Z"
+    description: Static prometheus rules
+    digest: 67392191fd15178f379580d8db4bb2a20565eef2c21aa108823b6582cdf03b0d
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - prometheus
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: prometheus-rules
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.2.3/prometheus-rules-0.2.3.tgz
+    version: 0.2.3
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2024-03-08T07:07:06.34834397Z"
     description: Static prometheus rules
     digest: b50b9485ac970ca26426442524bfc28e03c29d94b9a63b9c1492063945590e55
@@ -4877,4 +4895,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-03-08T07:07:06.547137047Z"
+generated: "2024-03-08T13:32:51.638557291Z"
