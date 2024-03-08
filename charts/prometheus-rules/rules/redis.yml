@@ -61,12 +61,12 @@
       summary: Missing backup
 
   - alert: RedisConnections
-    expr: redis_connected_clients > 512
+    expr: redis_connected_clients > redis_config_maxclients * 0.8
     for: 1m
     labels:
       severity: critical
     annotations:
-      description: Redis connections {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} limit reached
+      description: Redis connections {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} limit almost reached
       summary: Redis connections limit
   - alert: RedisError
     expr: increase(redis_errors_total{err="ERR"}[10m]) > 15

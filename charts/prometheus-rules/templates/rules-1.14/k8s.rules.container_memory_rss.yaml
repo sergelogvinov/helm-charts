@@ -1,0 +1,18 @@
+{{- /*
+Generated from 'k8s.rules.container_memory_rss' group from https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/kubernetesControlPlane-prometheusRule.yaml
+Do not change in-place! In order to change this file first read following link:
+https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack/hack
+*/ -}}
+{{- define "k8s.rules.container_memory_rss" }}
+{{- $kubeTargetVersion := default .Capabilities.KubeVersion.GitVersion .Values.kubeTargetVersionOverride }}
+{{- if and (semverCompare ">=1.14.0-0" $kubeTargetVersion) (semverCompare "<9.9.9-9" $kubeTargetVersion) .Values.defaultRules.create .Values.defaultRules.rules.kubeContainerMemory }}
+  - name: k8s.rules.container_memory_rss
+    rules:
+    - expr: |-
+        container_memory_rss{job="kubernetes-nodes-cadvisor", metrics_path="/metrics/cadvisor", container!=""}
+        * on (cluster, namespace, pod) group_left(node) topk by(cluster, namespace, pod) (1,
+          max by(cluster, namespace, pod, node) (kube_pod_info{node!=""})
+        )
+      record: node_namespace_pod_container:container_memory_rss
+{{- end }}
+{{- end }}

@@ -97,15 +97,14 @@ defaultRules:
 
   rules:
     alertmanager: true
-    etcd: false
     configReloaders: false
     general: true
-    k8s: true
     kubeApiserverAvailability: true
     kubeApiserverBurnrate: true
     kubeApiserverHistogram: true
     kubeApiserverSlos: true
     kubeControllerManager: true
+    kubeContainerMemory: true
     kubelet: true
     kubePrometheusGeneral: true
     kubePrometheusNodeRecording: true

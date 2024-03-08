@@ -5,9 +5,14 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- define "rules" }}
 {{- include "alertmanager.rules" . }}
 {{- include "config-reloaders" . }}
-{{- include "etcd" . }}
 {{- include "general.rules" . }}
-{{- include "k8s.rules" . }}
+{{- include "k8s.rules.container_cpu_usage_seconds_total" . }}
+{{- include "k8s.rules.container_memory_cache" . }}
+{{- include "k8s.rules.container_memory_rss" . }}
+{{- include "k8s.rules.container_memory_swap" . }}
+{{- include "k8s.rules.container_memory_working_set_bytes" . }}
+{{- include "k8s.rules.container_resource" . }}
+{{- include "k8s.rules.pod_owner" . }}
 {{- include "kube-apiserver-availability.rules" . }}
 {{- include "kube-apiserver-burnrate.rules" . }}
 {{- include "kube-apiserver-histogram.rules" . }}

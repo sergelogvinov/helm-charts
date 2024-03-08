@@ -74,9 +74,14 @@ charts = [
 condition_map = {
     'alertmanager.rules': ' .Values.defaultRules.rules.alertmanager',
     'config-reloaders': ' .Values.defaultRules.rules.configReloaders',
-    'etcd': ' .Values.defaultRules.rules.etcd',
     'general.rules': ' .Values.defaultRules.rules.general',
-    'k8s.rules': ' .Values.defaultRules.rules.k8s',
+    'k8s.rules.container_cpu_usage_seconds_total': ' .Values.defaultRules.rules.kubeContainerMemory',
+    'k8s.rules.container_memory_cache': ' .Values.defaultRules.rules.kubeContainerMemory',
+    'k8s.rules.container_memory_rss': ' .Values.defaultRules.rules.kubeContainerMemory',
+    'k8s.rules.container_memory_swap': ' .Values.defaultRules.rules.kubeContainerMemory',
+    'k8s.rules.container_memory_working_set_bytes': ' .Values.defaultRules.rules.kubeContainerMemory',
+    'k8s.rules.container_resource': ' .Values.defaultRules.rules.kubeContainerMemory',
+    'k8s.rules.pod_owner': ' .Values.defaultRules.rules.kubeContainerMemory',
     'kube-apiserver-availability.rules': ' .Values.defaultRules.rules.kubeApiserverAvailability',
     'kube-apiserver-burnrate.rules': ' .Values.defaultRules.rules.kubeApiserverBurnrate',
     'kube-apiserver-histogram.rules': ' .Values.defaultRules.rules.kubeApiserverHistogram',
@@ -135,8 +140,11 @@ replacement_map = {
     'job="apiserver"': {
         'replacement': 'job="kubernetes-apiservers"',
         'init': ''},
-    'job="kubelet"': {
-        'replacement': 'job="kubernetes-nodes"',
+    'job="kubelet", metrics_path="/metrics"': {
+        'replacement': 'job="kubernetes-nodes", metrics_path="/metrics"',
+        'init': ''},
+    'job="kubelet", metrics_path="/metrics/cadvisor", image!=""': {
+        'replacement': 'job="kubernetes-nodes-cadvisor", metrics_path="/metrics/cadvisor", container!=""',
         'init': ''},
     'job="node-exporter"': {
         'replacement': 'job="prometheus-node-exporter"',
