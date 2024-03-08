@@ -320,4 +320,41 @@ rules:
   - list
   - watch
   - patch
+# Victoria Metrics
+- apiGroups:
+  - operator.victoriametrics.com
+  resources:
+  - vmrules
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+  - update
+- apiGroups:
+  - operator.victoriametrics.com
+  resources:
+  - vmrules/status
+  verbs:
+  - get
+  - list
+  - watch
+# Percona Server for MongoDB
+- apiGroups:
+  - psmdb.percona.com
+  resources:
+  - perconaservermongodbs
+  - perconaservermongodbbackups
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+  - update
+- apiGroups:
+  - psmdb.percona.com
+  resources:
+  - perconaservermongodbbackups
+  verbs:
+  - create
 {{- end }}
