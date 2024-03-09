@@ -144,6 +144,19 @@ registry:
     pullPolicy: IfNotPresent
     tag: 2.8
 
+  storage: ~
+    # maintenance:
+    #   uploadpurging:
+    #     enabled: true
+    #     age: 72h
+    #     interval: 4h
+    #     dryrun: false
+    # filesystem:
+    #   rootdirectory: /var/lib/registry
+    #   maxthreads: 100
+    # delete:
+    #   enabled: true
+
   # -- Registry ingress parameters
   # ref: http://kubernetes.io/docs/user-guide/ingress/
   ingress:
@@ -186,6 +199,17 @@ registry:
       - ReadWriteOnce
     size: 100Gi
     annotations: {}
+
+  # -- Registry Service Account.
+  # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: false
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
 
   # -- Node labels for local registry deploy assignment.
   # ref: https://kubernetes.io/docs/user-guide/node-selection/

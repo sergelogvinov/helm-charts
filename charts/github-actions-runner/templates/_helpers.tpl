@@ -23,6 +23,19 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 
+{{- define "github-actions-runner.registry.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}-registry
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}-registry
+{{- else }}
+{{- printf "%s-%s-registry" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
+
 {{/*
 Create chart name and version as used by the chart label.
 */}}
@@ -56,6 +69,17 @@ Create the name of the service account to use
 {{- default (include "github-actions-runner.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "github-actions-runner.registry.serviceAccountName" -}}
+{{- if .Values.registry.serviceAccount.create }}
+{{- default (include "github-actions-runner.registry.fullname" .) .Values.registry.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.registry.serviceAccount.name }}
 {{- end }}
 {{- end }}
 

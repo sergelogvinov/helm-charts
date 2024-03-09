@@ -1,6 +1,6 @@
 # github-actions-runner
 
-![Version: 1.5.8](https://img.shields.io/badge/Version-1.5.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.314.1](https://img.shields.io/badge/AppVersion-2.314.1-informational?style=flat-square)
+![Version: 1.5.9](https://img.shields.io/badge/Version-1.5.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.314.1](https://img.shields.io/badge/AppVersion-2.314.1-informational?style=flat-square)
 
 Github Actions with container registry and mirrors
 
@@ -103,11 +103,13 @@ nodeSelector:
 | registry.image.repository | string | `"registry"` |  |
 | registry.image.pullPolicy | string | `"IfNotPresent"` |  |
 | registry.image.tag | float | `2.8` |  |
+| registry.storage | string | `nil` |  |
 | registry.ingress | object | `{"annotations":{"nginx.ingress.kubernetes.io/proxy-body-size":0},"className":"","enabled":false,"hosts":[],"tls":[]}` | Registry ingress parameters ref: http://kubernetes.io/docs/user-guide/ingress/ |
 | registry.resources | object | `{"limits":{"cpu":1,"memory":"512Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | registry.extraVolumeMounts | list | `[]` |  |
 | registry.extraVolumes | list | `[]` |  |
 | registry.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"100Gi"}` | Persistence parameters for source code ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
+| registry.serviceAccount | object | `{"annotations":{},"create":false,"name":""}` | Registry Service Account. ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
 | registry.nodeSelector | object | `{}` | Node labels for local registry deploy assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | registry.tolerations | list | `[]` | Tolerations for local registry deploy assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | registry.affinity | object | `{}` | Affinity for local registry deploy assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |

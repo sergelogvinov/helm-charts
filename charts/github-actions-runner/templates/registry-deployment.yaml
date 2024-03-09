@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "github-actions-runner.fullname" . }}-registry
+  name: {{ include "github-actions-runner.registry.fullname" . }}
   labels:
     {{- include "github-actions-runner.labels" . | nindent 4 }}
     app.kubernetes.io/component: registry
@@ -18,14 +18,19 @@ spec:
         {{- include "github-actions-runner.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: registry
     spec:
-      enableServiceLinks: false
+      {{- if .Values.registry.serviceAccount.create }}
+      serviceAccountName: {{ include "github-actions-runner.registry.serviceAccountName" . }}
+      automountServiceAccountToken: true
+      {{- else }}
       automountServiceAccountToken: false
+      {{- end }}
+      enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
         fsGroup: 65534
         fsGroupChangePolicy: "OnRootMismatch"
       containers:
-        - name: {{ include "github-actions-runner.fullname" . }}-registry
+        - name: {{ include "github-actions-runner.registry.fullname" . }}
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:

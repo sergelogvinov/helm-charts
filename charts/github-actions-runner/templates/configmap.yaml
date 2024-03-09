@@ -98,6 +98,9 @@ data:
       level: warn
       formatter: json
     storage:
+      {{- if .Values.registry.storage }}
+      {{- .Values.registry.storage | toYaml | nindent 6 }}
+      {{- else }}
       maintenance:
         uploadpurging:
           enabled: true
@@ -109,6 +112,7 @@ data:
         maxthreads: 100
       delete:
         enabled: true
+      {{- end }}
     http:
       addr: :8443
       # host: https://{{ include "github-actions-runner.fullname" . }}-registry.{{ .Release.Namespace }}.svc
