@@ -251,7 +251,7 @@ frontend keydb_master
 backend keydb_master
   mode tcp
   balance  first
-  fullconn 4096
+  fullconn 6144
 
   option tcp-check
   option log-health-checks
