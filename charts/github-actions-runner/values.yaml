@@ -78,9 +78,9 @@ mirrors:
   enabled: true
 
   image:
-    repository: ghcr.io/project-zot/zot-linux-amd64
+    repository: ghcr.io/project-zot/zot
     pullPolicy: IfNotPresent
-    tag: "v2.0.1"
+    tag: "v2.0.2"
 
   # -- Container registry list.
   # ref: https://docs.docker.com/registry/recipes/mirror/
