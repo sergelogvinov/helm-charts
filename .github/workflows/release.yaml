@@ -34,7 +34,7 @@ jobs:
           version: v3.12.2
 
       - name: Github registry login
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
