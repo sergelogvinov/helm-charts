@@ -52,6 +52,7 @@ data:
                 <show_named_collections_secrets>1</show_named_collections_secrets>
             </default>
         {{- end }}
+        {{- if .Values.backup.enabled }}
             <backup>
                 <password_sha256_hex>{{ include "clickhouse.backupPassword" . | sha256sum }}</password_sha256_hex>
                 <profile>default</profile>
@@ -61,6 +62,7 @@ data:
                     <ip>0.0.0.0/0</ip>
                 </networks>
             </backup>
+        {{- end }}
         {{- range .Values.clickhouse.users }}
             <{{ .name }}>
                 {{- if .password_plain }}
