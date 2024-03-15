@@ -1,0 +1,15 @@
+---
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    commit-message:
+      prefix: "chore:"
+    open-pull-requests-limit: 8
+    rebase-strategy: disabled
+    schedule:
+      interval: "monthly"
+      day: "monday"
+      time: "08:00"
+      timezone: "UTC"
