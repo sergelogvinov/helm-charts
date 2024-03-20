@@ -184,6 +184,26 @@ entries:
   clickhouse:
   - apiVersion: v2
     appVersion: 23.12.2
+    created: "2024-03-20T10:55:33.906718256Z"
+    description: Clickhouse chart for Kubernetes
+    digest: 9064baa9aee29d37a7b3ee39b425f1893375af9e35bafb53cc82d265d5d784c0
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - database
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: clickhouse
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/clickhouse
+    - https://github.com/ClickHouse/ClickHouse
+    - https://hub.docker.com/r/clickhouse/clickhouse-server
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-0.6.6/clickhouse-0.6.6.tgz
+    version: 0.6.6
+  - apiVersion: v2
+    appVersion: 23.12.2
     created: "2024-02-28T16:32:22.530695429Z"
     description: Clickhouse chart for Kubernetes
     digest: 0084903faf1a83488e5817985658a282c939a6f242a1d36be430f09ff0b6c168
@@ -2715,6 +2735,25 @@ entries:
   pgbouncer:
   - apiVersion: v2
     appVersion: "15.5"
+    created: "2024-03-20T10:55:34.077561417Z"
+    description: Postgres connection poller
+    digest: 9f856853016245dd88f65700a48063b79912396bfa0cec6b2aaebcddea1fe1b7
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - pgbouncer
+    - postgresql
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: pgbouncer
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/pgbouncer
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.2.6/pgbouncer-0.2.6.tgz
+    version: 0.2.6
+  - apiVersion: v2
+    appVersion: "15.5"
     created: "2024-02-28T16:32:23.100349482Z"
     description: Postgres connection poller
     digest: d8592c2333761fe9563349b825aac676dbfb6c81f258f6eeb8cae8497854318e
@@ -2935,6 +2974,28 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.0/pgbouncer-0.1.0.tgz
     version: 0.1.0
   postgresql-single:
+  - apiVersion: v2
+    appVersion: "14.10"
+    created: "2024-03-20T10:55:34.278633852Z"
+    description: Postgres with backup/restore checks
+    digest: 19f9a96480dcf43352768d0bfab1119462689a5cb6de31b7273ff9852481c861
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: postgresql-single
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.10.8/postgresql-single-0.10.8.tgz
+    version: 0.10.8
   - apiVersion: v2
     appVersion: "14.10"
     created: "2024-03-07T20:19:46.322524401Z"
@@ -4961,4 +5022,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-03-14T06:00:13.971430157Z"
+generated: "2024-03-20T10:55:34.279479512Z"
