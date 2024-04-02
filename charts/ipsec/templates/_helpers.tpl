@@ -77,7 +77,7 @@ config setup
     protostack=netkey
     virtual-private={{ .Values.ipsecService.networks }}
     uniqueids=no
-    # plutodebug=all
+    # plutodebug=base
 
 conn service
     left=%defaultroute

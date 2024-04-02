@@ -21,6 +21,7 @@ databases: {}
   #   user: user
   #   dbname: dbname
   #   poolmode: session
+  #   poolsize: 100
 
 users: {}
   # name:

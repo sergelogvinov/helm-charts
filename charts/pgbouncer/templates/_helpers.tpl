@@ -126,7 +126,7 @@ Create config file pgbouncer.ini
 [databases]
 {{- range $k, $v := .Values.databases }}
 {{- $requiredMsg := printf ".Values.databases.%v needs to include .dbname" $k }}
-{{ $k }} = host={{ $v.host }} port={{ $v.port }} {{ if $v.user }}user={{ $v.user }}{{end}} {{ if $v.password }}password={{ $v.password }}{{end}} dbname={{ $v.dbname }}{{ if $v.poolmode }} pool_mode={{ $v.poolmode }}{{end}}
+{{ $k }} = host={{ $v.host }} port={{ $v.port }} {{ if $v.user }}user={{ $v.user }}{{end}} {{ if $v.password }}password={{ $v.password }}{{end}} dbname={{ $v.dbname }}{{ if $v.poolmode }} pool_mode={{ $v.poolmode }} {{end}}{{ if $v.poolsize }}pool_size={{ $v.poolsize }} {{end}}
 {{- end }}
 
 [users]
