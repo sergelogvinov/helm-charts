@@ -1385,6 +1385,25 @@ entries:
   ipsec:
   - apiVersion: v2
     appVersion: "4.12"
+    created: "2024-04-03T15:37:26.441477165Z"
+    description: IPSec link for Kubernetes
+    digest: 953fdcb9c1bc60cf81eee4539692f261eddd741f399b06ff202caa22853ad43b
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - ipsec
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: ipsec
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/ipsec
+    - https://libreswan.org/
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/ipsec-0.3.5/ipsec-0.3.5.tgz
+    version: 0.3.5
+  - apiVersion: v2
+    appVersion: "4.12"
     created: "2024-02-28T16:32:22.716631125Z"
     description: IPSec link for Kubernetes
     digest: 59ac74049ad60e22a7199a803349b9996f118959cf444b99164fe4bc05dc7621
@@ -2525,6 +2544,25 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/mongosync-0.1.0/mongosync-0.1.0.tgz
     version: 0.1.0
   openvpn:
+  - apiVersion: v2
+    appVersion: 2.6.8
+    created: "2024-04-03T15:37:26.565802123Z"
+    description: OpenVPN in kubernetes
+    digest: 4fb4796033dbc7eb95cb63a8663cdb2b7cd0604c451b49d5b1b98cb5b9cfe0ab
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - openvpn
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: openvpn
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/openvpn
+    - https://openvpn.net
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/openvpn-0.4.2/openvpn-0.4.2.tgz
+    version: 0.4.2
   - apiVersion: v2
     appVersion: 2.6.8
     created: "2024-03-03T09:26:24.682898713Z"
@@ -4879,6 +4917,30 @@ entries:
     version: 0.1.1
   teamcity:
   - apiVersion: v2
+    appVersion: "2024.03"
+    created: "2024-04-03T15:37:26.677257569Z"
+    description: Teamcity chart
+    digest: 4310537aa755447584ab63828715a10ce5c8099b6724afa8eb923cfc3f772f89
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - ci
+    - continuous integration
+    - continuous delivery
+    - continuous deployment
+    - devops
+    - automation
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: teamcity
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/teamcity
+    - https://www.jetbrains.com/teamcity
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.10/teamcity-0.6.10.tgz
+    version: 0.6.10
+  - apiVersion: v2
     appVersion: 2023.11.4
     created: "2024-03-07T20:19:46.408843746Z"
     description: Teamcity chart
@@ -5022,4 +5084,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-03-20T10:55:34.279479512Z"
+generated: "2024-04-03T15:37:26.677792019Z"
