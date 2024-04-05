@@ -112,7 +112,7 @@ data:
 
     {{- if .Values.openvpn.revoke }}
     <crl-verify>
-    {{ .Values.openvpn.revoke | nindent 4 }}
+    {{- .Values.openvpn.revoke | nindent 4 -}}
     </crl-verify>
     {{- end }}
 
