@@ -68,14 +68,14 @@
     annotations:
       description: Redis connections {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} limit almost reached
       summary: Redis connections limit
-  - alert: RedisError
-    expr: increase(redis_errors_total{err="ERR"}[10m]) > 15
-    for: 1m
-    labels:
-      severity: warning
-    annotations:
-      description: Redis has undefined error {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} check the logs
-      summary: Redis error
+  # - alert: RedisError
+  #   expr: increase(redis_errors_total{err="ERR"}[10m]) > 15
+  #   for: 1m
+  #   labels:
+  #     severity: warning
+  #   annotations:
+  #     description: Redis has undefined error {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} check the logs
+  #     summary: Redis error
   - alert: RedisAuthError
     expr: increase(redis_errors_total{err="NOAUTH"}[10m]) > 5
     for: 1m
