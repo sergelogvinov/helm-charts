@@ -51,6 +51,11 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           # command: ["sleep","600000"]
+          {{- if .Values.clickhouse.envs }}
+          envFrom:
+            - secretRef:
+                name: {{ include "clickhouse.fullname" . }}-envs
+          {{- end }}
           env:
             - name: HOME
               value: /tmp

@@ -48,7 +48,7 @@ securityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
     # add:
     # - SYS_NICE
     # - IPC_LOCK
@@ -66,11 +66,12 @@ service:
 ingress:
   enabled: false
   className: ""
-  annotations: {}
+  annotations:
+    {}
     # nginx.ingress.kubernetes.io/rewrite-target: "/$1"
   hosts:
     - host: chart-example.local
-      paths: ['/clickhouse']
+      paths: ["/clickhouse"]
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -131,16 +132,19 @@ backup:
   # set value "" to disable cron backup
   schedule: "15 4 * * *"
 
-  args: []
+  args:
+    []
     # - create_remote
     # - --schema
 
-  envs: {}
+  envs:
+    {}
     # BACKUPS_TO_KEEP_REMOTE: "10"
     # LOG_LEVEL: info
     # REMOTE_STORAGE: sftp
 
-  config: {}
+  config:
+    {}
     # sftp:
     #   address: ""                  # SFTP_ADDRESS
     #   username: ""                 # SFTP_USERNAME
@@ -167,7 +171,8 @@ backup:
   # ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   priorityClassName: ~
 
-cronjobs: {}
+cronjobs:
+  {}
   # backup:
   #   schedule: "0 0 * * *"
   #   command: |
@@ -195,7 +200,8 @@ files: {}
 
 config: ~
 
-storage: {}
+storage:
+  {}
   # disks:
   #   storage_s3:
   #     type: s3
@@ -237,10 +243,16 @@ clickhouse:
       password: 3d0941964aa3ebdcb00ccef58b1bb399f9f898465e9886d5aec7f31090a0fb30 # echo -n "reader" | shasum -a 256
 
   # -- Clickhouse named collections
-  collections: []
+  collections:
+    []
     # - name: postgres
     #   host: 127.0.0.1
     #   username: user
     #   password: pwd
     #   database: db
     #   schema: public
+  envs:
+    {}
+    # AWS_REGION: eu-central-1
+    # AWS_ACCESS_KEY_ID: XXXX
+    # AWS_SECRET_ACCESS_KEY: YYYY
