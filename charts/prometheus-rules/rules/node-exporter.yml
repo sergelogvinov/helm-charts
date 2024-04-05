@@ -19,7 +19,7 @@
 
   - alert: NodeUptime
     expr: node_time_seconds - node_boot_time_seconds > 6*30*24*60*60
-    for: 1s
+    for: 10m
     labels:
       severity: warning
     annotations:
@@ -27,7 +27,7 @@
       summary: Node maintenance requared.
   - alert: NodeUptime
     expr: min by (kubernetes_node_name) (node_time_seconds - node_boot_time_seconds) < 60*60*2 unless count(up{job="prometheus-node-exporter"} offset 1h) by (kubernetes_node_name)
-    for: 1s
+    for: 2m
     labels:
       severity: warning
     annotations:
@@ -35,7 +35,7 @@
       summary: The new node has been added.
   - alert: NodeUptime
     expr: min by (kubernetes_node_name) (node_time_seconds - node_boot_time_seconds) < 60*60*2 and count(up{job="prometheus-node-exporter"} offset 6h) by (kubernetes_node_name)
-    for: 1s
+    for: 2m
     labels:
       severity: warning
     annotations:
