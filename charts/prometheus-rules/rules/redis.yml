@@ -2,7 +2,7 @@
   rules:
   - alert: RedisMultiMaster
     expr: count(redis_connected_slaves{role="master"}) by (kubernetes_namespace, project, name) > 1
-    for: 1s
+    for: 1m
     labels:
       severity: critical
     annotations:
@@ -10,7 +10,7 @@
       summary: Redis cluster has more then one master
   - alert: RedisLostMaster
     expr: redis_master_link_up{role="slave"} != 1
-    for: 5s
+    for: 1m
     labels:
       severity: warning
     annotations:
@@ -26,7 +26,7 @@
       summary: Replication broken lost a slave
   - alert: RedisClientConnections
     expr: redis_config_maxclients - redis_connected_clients < 10
-    for: 5s
+    for: 1m
     labels:
       severity: warning
       source: application
