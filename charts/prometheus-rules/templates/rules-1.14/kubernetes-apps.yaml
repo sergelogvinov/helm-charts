@@ -228,6 +228,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         kube_job_status_active{job="kubernetes-service-endpoints"} > 0) > 43200
       labels:
         severity: warning
+      for: 1m
 {{- end }}
 {{- if not (.Values.defaultRules.disabled.KubeJobFailed | default false) }}
     - alert: KubeJobFailed

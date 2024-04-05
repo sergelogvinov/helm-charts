@@ -2,7 +2,7 @@
   rules:
   - alert: BarmanLastBackup
     expr: barman_last_backup_age_seconds > 3 * 3600 * 24
-    for: 1s
+    for: 5m
     labels:
       severity: warning
     annotations:
