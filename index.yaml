@@ -183,6 +183,26 @@ entries:
     version: 0.1.0
   clickhouse:
   - apiVersion: v2
+    appVersion: 23.12.6
+    created: "2024-04-10T13:12:01.775065787Z"
+    description: Clickhouse chart for Kubernetes
+    digest: 61069cf769d2de9b1faf38bbedc5e2418f863547d3e23e3a7ec847d673d9bf13
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - database
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: clickhouse
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/clickhouse
+    - https://github.com/ClickHouse/ClickHouse
+    - https://hub.docker.com/r/clickhouse/clickhouse-server
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-0.6.7/clickhouse-0.6.7.tgz
+    version: 0.6.7
+  - apiVersion: v2
     appVersion: 23.12.2
     created: "2024-03-20T10:55:33.906718256Z"
     description: Clickhouse chart for Kubernetes
@@ -5186,4 +5206,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-04-10T12:50:38.809988718Z"
+generated: "2024-04-10T13:12:01.775670857Z"
