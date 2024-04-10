@@ -156,7 +156,7 @@ multi-master {{ .Values.keydb.multiMaster }}
 {{- if .Values.keydb.replBacklogSize }}
 repl-backlog-size {{ .Values.keydb.replBacklogSize }}
 {{- else if .Values.resources.requests.memory }}
-repl-backlog-size {{ if le 1000000000 (int64 (include "resource-bytes" .Values.resources.requests.memory)) }}256mb{{ else }}50mb{{ end }}
+repl-backlog-size {{ if le 1000000000 (int64 (include "resource-bytes" .Values.resources.requests.memory)) }}1024mb{{ else }}50mb{{ end }}
 {{- end }}
 
 loglevel notice
@@ -188,6 +188,12 @@ maxmemory {{ .Values.keydb.maxmemory }}
 {{- /*  Reserve 64m to keydb daemon */}}
 maxmemory {{ sub (int64 (include "resource-bytes" (default .Values.resources.limits.memory .Values.resources.requests.memory))) 67108864 }}b
 {{- end }}
+
+client-output-buffer-limit normal 0 0 0
+{{- if .Values.resources.requests.memory }}
+client-output-buffer-limit replica {{ if le 1000000000 (int64 (include "resource-bytes" .Values.resources.requests.memory)) }}1024mb{{ else }}256mb{{ end }} 128mb 60
+{{- end }}
+client-output-buffer-limit pubsub 32mb 8mb 60
 {{ end }}
 
 
@@ -282,9 +288,9 @@ backend keydb_master
   tcp-check expect string +OK
 
 {{- if .Values.tlsCerts.create }}
-  default-server check check-ssl inter 15s fastinter 10s downinter 5s fall 3 rise 8 on-marked-down shutdown-sessions resolve-prefer ipv4 ssl crt /run/server.pem ca-file /etc/ssl/tlscerts/ca.crt
+  default-server check check-ssl inter 15s fastinter 10s downinter 5s fall 3 rise 8 on-marked-down shutdown-sessions on-marked-up shutdown-backup-sessions resolve-prefer ipv4 ssl crt /run/server.pem ca-file /etc/ssl/tlscerts/ca.crt
 {{- else }}
-  default-server check inter 15s fastinter 10s downinter 5s fall 3 rise 8 on-marked-down shutdown-sessions resolve-prefer ipv4
+  default-server check inter 15s fastinter 10s downinter 5s fall 3 rise 8 on-marked-down shutdown-sessions on-marked-up shutdown-backup-sessions resolve-prefer ipv4
 {{- end }}
 
   server RS {{ printf "%s.%s:%s" $name $domain $port }} backup no-check resolvers clusterdns
