@@ -153,9 +153,11 @@ maxclients 8192
 server-threads {{ .Values.keydb.threads | int }}
 active-replica {{ .Values.keydb.activeReplica }}
 multi-master {{ .Values.keydb.multiMaster }}
-{{- if .Values.resources.requests.memory }}
-repl-backlog-size {{ include "resource-bytes" .Values.resources.requests.memory }}b
-{{ end }}
+{{- if .Values.keydb.replBacklogSize }}
+repl-backlog-size {{ .Values.keydb.replBacklogSize }}
+{{- else if .Values.resources.requests.memory }}
+repl-backlog-size {{ if le 1000000000 (int64 (include "resource-bytes" .Values.resources.requests.memory)) }}256mb{{ else }}50mb{{ end }}
+{{- end }}
 
 loglevel notice
 logfile ""
@@ -176,11 +178,16 @@ stop-writes-on-bgsave-error yes
 rdbcompression yes
 rdbchecksum yes
 
-{{ if or .Values.resources.requests.memory .Values.resources.limits.memory }}
-maxmemory-policy noeviction
-{{- /*  Reserve 1m to keydb daemon */}}
-maxmemory {{ sub (int64 (include "resource-bytes" (default .Values.resources.requests.memory .Values.resources.limits.memory))) 1048576 }}b
-{{ end }}
+crash-memcheck-enabled no
+{{- if .Values.keydb.maxmemoryPolicy }}
+maxmemory-policy {{ .Values.keydb.maxmemoryPolicy }}
+{{- end }}
+{{- if .Values.keydb.maxmemory }}
+maxmemory {{ .Values.keydb.maxmemory }}
+{{- else if or .Values.resources.requests.memory .Values.resources.limits.memory }}
+{{- /*  Reserve 64m to keydb daemon */}}
+maxmemory {{ sub (int64 (include "resource-bytes" (default .Values.resources.limits.memory .Values.resources.requests.memory))) 67108864 }}b
+{{- end }}
 {{ end }}
 
 

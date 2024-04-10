@@ -1,6 +1,6 @@
 # keydb
 
-![Version: 0.7.4](https://img.shields.io/badge/Version-0.7.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.4](https://img.shields.io/badge/AppVersion-6.3.4-informational?style=flat-square)
+![Version: 0.7.5](https://img.shields.io/badge/Version-0.7.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.4](https://img.shields.io/badge/AppVersion-6.3.4-informational?style=flat-square)
 
 KeyDB with TLS, backup/restore support
 
@@ -78,6 +78,9 @@ metrics:
 | keydb.threads | int | `2` |  |
 | keydb.activeReplica | string | `"yes"` |  |
 | keydb.multiMaster | string | `"yes"` |  |
+| keydb.maxmemory | string | `nil` |  |
+| keydb.maxmemoryPolicy | string | `"noeviction"` |  |
+| keydb.replBacklogSize | string | `nil` |  |
 | keydb.save[0] | string | `"900 1"` |  |
 | keydb.save[1] | string | `"120 100000"` |  |
 | tlsCerts.create | bool | `false` |  |
@@ -96,9 +99,9 @@ metrics:
 | loadbalancer.podSecurityContext.runAsUser | int | `99` |  |
 | loadbalancer.podSecurityContext.runAsGroup | int | `99` |  |
 | loadbalancer.podSecurityContext.fsGroup | int | `99` |  |
-| loadbalancer.resources.limits.cpu | string | `"100m"` |  |
+| loadbalancer.resources.limits.cpu | string | `"500m"` |  |
 | loadbalancer.resources.limits.memory | string | `"64Mi"` |  |
-| loadbalancer.resources.requests.cpu | string | `"50m"` |  |
+| loadbalancer.resources.requests.cpu | string | `"100m"` |  |
 | loadbalancer.resources.requests.memory | string | `"32Mi"` |  |
 | loadbalancer.livenessProbe.initialDelaySeconds | int | `10` |  |
 | loadbalancer.livenessProbe.timeoutSeconds | int | `1` |  |
@@ -135,12 +138,12 @@ metrics:
 | priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
 | terminationGracePeriodSeconds | int | `30` |  |
 | livenessProbe | object | `{}` |  |
-| readinessProbe.initialDelaySeconds | int | `15` |  |
+| readinessProbe.initialDelaySeconds | int | `30` |  |
 | readinessProbe.timeoutSeconds | int | `1` |  |
 | readinessProbe.failureThreshold | int | `2` |  |
 | readinessProbe.successThreshold | int | `3` |  |
 | readinessProbe.periodSeconds | int | `30` |  |
-| startupProbe.initialDelaySeconds | int | `15` |  |
+| startupProbe.initialDelaySeconds | int | `30` |  |
 | startupProbe.timeoutSeconds | int | `1` |  |
 | startupProbe.failureThreshold | int | `60` |  |
 | startupProbe.successThreshold | int | `1` |  |
