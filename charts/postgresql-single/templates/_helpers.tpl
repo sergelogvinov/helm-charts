@@ -104,6 +104,33 @@ Create the postgresqlPassword
 {{- end }}
 
 {{/*
+Create the postgresql primary service selector
+*/}}
+{{- define "postgresql-single.primary" -}}
+{{- $sname := include "postgresql-single.fullname" . }}
+{{- $previous := lookup "v1" "Service" .Release.Namespace $sname }}
+{{- if $previous }}
+{{- default (printf "%s-0" $sname) (get $previous.spec.selector "statefulset.kubernetes.io/pod-name") -}}
+{{- else }}
+{{- printf "%s-0" $sname -}}
+{{- end }}
+{{- end }}
+
+{{/*
+Create the postgresql folover service selector
+*/}}
+{{- define "postgresql-single.folover" -}}
+{{- $pname := include "postgresql-single.primary" . }}
+{{- if eq (int .Values.replicaCount) 1 }}
+{{- 0 -}}
+{{- else if eq $pname (printf "%s-0" (include "postgresql-single.fullname" .)) }}
+{{- sub (int .Values.replicaCount) 1 -}}
+{{- else }}
+{{- 0 -}}
+{{- end }}
+{{- end }}
+
+{{/*
 Create the postgresqlConfiguration
 */}}
 {{- define "postgresql-single.postgresqlConfiguration" -}}

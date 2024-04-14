@@ -282,7 +282,7 @@ data:
     echo "*** Start tests"
     START=`date +%s`
 
-    {{- if and (regexMatch "^[0-9]+\\.[0-9]+$" .Values.image.tag) (semverCompare ">=14.0" (default .Chart.AppVersion .Values.image.tag)) }}
+    {{- if and (regexMatch "^[0-9]+(\\.[0-9]+)?$" .Values.image.tag) (semverCompare ">=14.0" (default .Chart.AppVersion .Values.image.tag)) }}
     echo "*** AMCheck"
     pg_amcheck -a --install-missing --parent-check --heapallindexed
     {{- end }}

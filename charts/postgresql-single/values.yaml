@@ -50,8 +50,8 @@ pgHbaConfiguration: |-
   #
   local   all         all                                 trust
   local   replication postgres                            trust
-  host    all         all                   localhost     trust
-  host    postgres    postgres              10.0.0.0/8    md5
+  host    all         all                   localhost     md5
+  hostssl all         postgres              10.0.0.0/8    md5
   hostssl postgres    postgres              10.0.0.0/8    md5
   host    replication postgres              10.0.0.0/8    md5
   hostssl replication postgres              10.0.0.0/8    md5

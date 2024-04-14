@@ -18,7 +18,7 @@ spec:
       name: postgresql
   selector:
     {{- include "postgresql-single.selectorLabels" . | nindent 4 }}
-    statefulset.kubernetes.io/pod-name: {{ include "postgresql-single.fullname" . }}-0
+    statefulset.kubernetes.io/pod-name: {{ include "postgresql-single.primary" . }}
 ---
 apiVersion: v1
 kind: Service
