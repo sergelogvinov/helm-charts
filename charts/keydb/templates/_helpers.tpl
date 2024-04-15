@@ -98,6 +98,18 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
+{{/*
+Create the keydb primary pod selector
+*/}}
+{{- define "keydb.primary" -}}
+{{- $sname := include "keydb.fullname" . }}
+{{- $previous := lookup "v1" "Service" .Release.Namespace $sname }}
+{{- if $previous }}
+{{- default (printf "%s-0" $sname) (get $previous.spec.selector "statefulset.kubernetes.io/pod-name") -}}
+{{- else }}
+{{- printf "%s-0" $sname -}}
+{{- end }}
+{{- end }}
 
 {{/*
 Common port
@@ -310,7 +322,7 @@ Backup wal-g config
 {{- define "keydb.walgYaml" -}}
 WALG_COMPRESSION_METHOD: brotli
 WALG_DELTA_MAX_STEPS: 4
-WALG_STREAM_CREATE_COMMAND: "redis-cli -h {{ include "keydb.fullname" . }}-0.{{ include "keydb.fullname" . }}-headless.{{ .Release.Namespace }}.svc --rdb -"
+WALG_STREAM_CREATE_COMMAND: "redis-cli -h {{ include "keydb.primary" . }}.{{ include "keydb.fullname" . }}-headless.{{ .Release.Namespace }}.svc --rdb -"
 WALG_STREAM_RESTORE_COMMAND: "cat > /data/dump.rdb"
 {{- if .Values.keydb.password }}
 WALG_REDIS_PASSWORD: "{{ .Values.keydb.password  }}"
@@ -387,7 +399,7 @@ podAffinity:
     - podAffinityTerm:
         labelSelector:
           matchLabels: {{- (include "keydb.selectorLabels" .) | nindent 12 }}
-            statefulset.kubernetes.io/pod-name: {{ include "keydb.fullname" . }}-0
+            statefulset.kubernetes.io/pod-name: {{ include "keydb.primary" . }}
         topologyKey: kubernetes.io/hostname
       weight: 1
 {{- end -}}
@@ -415,7 +427,7 @@ podAffinity:
     - podAffinityTerm:
         labelSelector:
           matchLabels: {{- (include "keydb.selectorLabels" .) | nindent 12 }}
-            statefulset.kubernetes.io/pod-name: {{ include "keydb.fullname" . }}-0
+            statefulset.kubernetes.io/pod-name: {{ include "keydb.primary" . }}
         topologyKey: kubernetes.io/hostname
       weight: 1
 {{- end -}}
