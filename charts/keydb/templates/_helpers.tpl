@@ -168,7 +168,7 @@ multi-master {{ .Values.keydb.multiMaster }}
 {{- if .Values.keydb.replBacklogSize }}
 repl-backlog-size {{ .Values.keydb.replBacklogSize }}
 {{- else if .Values.resources.requests.memory }}
-repl-backlog-size {{ if le 1000000000 (int64 (include "resource-bytes" .Values.resources.requests.memory)) }}1024mb{{ else }}50mb{{ end }}
+repl-backlog-size {{ if lt 1000000000 (int64 (include "resource-bytes" .Values.resources.requests.memory)) }}1024mb{{ else }}256mb{{ end }}
 {{- end }}
 
 loglevel notice
