@@ -44,7 +44,7 @@ dind:
   image:
     repository: docker
     pullPolicy: IfNotPresent
-    tag: 24.0-dind
+    tag: 25.0-dind
 
   # -- Resource requests and limits.
   # ref: https://kubernetes.io/docs/user-guide/compute-resources/
@@ -80,7 +80,7 @@ mirrors:
   image:
     repository: ghcr.io/project-zot/zot
     pullPolicy: IfNotPresent
-    tag: "v2.0.2"
+    tag: "v2.0.3"
 
   # -- Container registry list.
   # ref: https://docs.docker.com/registry/recipes/mirror/
@@ -94,6 +94,9 @@ mirrors:
       source: https://gcr.io
     - host: ghcr.io
       source: https://ghcr.io
+      # auth:
+      #   username: ""
+      #   password: ""
     - host: quay.io
       source: https://quay.io
     - host: mcr.microsoft.com
