@@ -119,7 +119,7 @@ Create the postgresql primary service selector
 {{/*
 Create the postgresql folover service selector
 */}}
-{{- define "postgresql-single.folover" -}}
+{{- define "postgresql-single.folover-number" -}}
 {{- $pname := include "postgresql-single.primary" . }}
 {{- if eq (int .Values.replicaCount) 1 }}
 {{- 0 -}}

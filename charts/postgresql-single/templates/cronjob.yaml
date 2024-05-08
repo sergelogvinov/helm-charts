@@ -1,5 +1,5 @@
 {{- if .Values.backup.enabled }}
-{{- $instance := include "postgresql-single.folover" . }}
+{{- $instance := include "postgresql-single.folover-number" . }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
