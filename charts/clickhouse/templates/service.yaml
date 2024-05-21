@@ -42,6 +42,7 @@ metadata:
     {{- include "clickhouse.labels" . | nindent 4 }}
 spec:
   clusterIP: None
+  publishNotReadyAddresses: true
   ports:
     - name: http
       port: 8123
