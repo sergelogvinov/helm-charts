@@ -1,0 +1,157 @@
+{{- range $key, $val := .Values.workers }}
+{{ $fullname := include "backend-common.deployment" (dict "name" $key "context" $) }}
+{{- if $val.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullname }}
+  labels:
+    {{- include "backend-common.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $key | quote }}
+spec:
+  {{- if not (and .autoscaling .autoscaling.enabled) }}
+  replicas: {{ default "1" .replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: 2
+  {{- with (default $.Values.updateStrategy .strategy) }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "backend-common.selectorLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: {{ $key }}
+  template:
+    metadata:
+      {{- with (default $.Values.podAnnotations .podAnnotations) }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "backend-common.labels" $ | nindent 8 }}
+        app.kubernetes.io/component: {{ $key }}
+    spec:
+      {{- with $.Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      enableServiceLinks: false
+      automountServiceAccountToken: false
+      serviceAccountName: {{ include "backend-common.serviceAccountName" $ }}
+      securityContext:
+        {{- toYaml $.Values.podSecurityContext | nindent 8 }}
+      priorityClassName: {{ default $.Values.priorityClassName .priorityClassName }}
+      {{- with $val.hostAliases }}
+      hostAliases:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      {{- if .containers }}{{- range .containers }}
+        - name: {{ printf "%s-%s" $fullname .name }}
+          securityContext:
+            {{- toYaml $.Values.securityContext | nindent 12 }}
+          image: "{{ default $.Values.image.repository .image }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          command:
+            {{- toYaml .command | nindent 12 }}
+          env:
+          {{- if or $.Values.env .env }}
+            {{- default $.Values.env .env | toYaml | nindent 12 }}
+          {{- end }}
+            - name: PGAPPNAME
+              value: {{ printf "%s-%s" $key .name }}
+          {{- if .startupProbe }}
+          startupProbe: {{- toYaml (merge .startupProbe $.Values.startupProbe) | nindent 12 }}
+          {{- end }}
+          {{- if .livenessProbe }}
+          livenessProbe: {{- toYaml (merge .livenessProbe $.Values.livenessProbe) | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml (default $.Values.resources .resources) | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: {{ $.Values.configMountPath }}
+            {{- if $.Values.secrets }}
+            - name: secrets
+              mountPath: {{ $.Values.secretsMountPath }}
+            {{- end }}
+          {{- with .volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- end }}{{- else }}
+        - name: {{ $fullname }}
+          securityContext:
+            {{- toYaml $.Values.securityContext | nindent 12 }}
+          image: "{{ default $.Values.image.repository .image }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          command:
+            {{- toYaml .command | nindent 12 }}
+          env:
+          {{- if or $.Values.env .env }}
+            {{- default $.Values.env .env | toYaml | nindent 12 }}
+          {{- end }}
+            - name: PGAPPNAME
+              value: {{ $key | quote }}
+          {{- if .startupProbe }}
+          startupProbe: {{- toYaml (merge .startupProbe $.Values.startupProbe) | nindent 12 }}
+          {{- end }}
+          {{- if .livenessProbe }}
+          livenessProbe: {{- toYaml (merge .livenessProbe $.Values.livenessProbe) | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml (default $.Values.resources .resources) | nindent 12 }}
+          volumeMounts:
+            {{- if or $.Values.configConfigMap $.Values.config }}
+            - name: config
+              mountPath: {{ $.Values.configMountPath }}
+            {{- end }}
+            {{- if $.Values.secrets }}
+            - name: secrets
+              mountPath: {{ $.Values.secretsMountPath }}
+            {{- end }}
+          {{- with .volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- end }}
+      volumes:
+        {{- if or $.Values.configConfigMap $.Values.config }}
+        - name: config
+          configMap:
+            name: {{ include "backend-common.configConfigMap" $ }}
+        {{- end }}
+        {{- if $.Values.secrets }}
+        - name: secrets
+          secret:
+            secretName: {{ include "backend-common.fullname" $ }}
+            defaultMode: 288
+        {{- end }}
+      {{- if .volumeMounts }}{{- with $.Values.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- end }}
+      {{- with (default $.Values.nodeSelector .nodeSelector) }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+        {{- if .podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .podAntiAffinityPreset "component" $key "context" $) | nindent 10 }}
+        {{- else if $.Values.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.podAntiAffinityPreset "component" $key "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .podAffinityPreset }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .podAffinityPreset.type "topologyKey" .podAffinityPreset.topologyKey "labels" .podAffinityPreset.labels "context" $) | nindent 10 }}
+        {{- else if $.Values.podAffinityPreset }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.podAffinityPreset.type "topologyKey" $.Values.podAffinityPreset.topologyKey "labels" $.Values.podAffinityPreset.labels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .nodeAffinityPreset }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" (merge .nodeAffinityPreset $.Values.nodeAffinityPreset).type "expressions" (concat (default (list) .nodeAffinityPreset.expressions) (default (list) $.Values.nodeAffinityPreset.expressions)) ) | nindent 10 }}
+        {{- else if $.Values.nodeAffinityPreset }}
+        nodeAffinity: {{- include "common.affinities.nodes" $.Values.nodeAffinityPreset | nindent 10 }}
+        {{- end }}
+      {{- with $.Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
+{{- end }}

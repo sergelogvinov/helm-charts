@@ -1,0 +1,62 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/example/backend
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+envs: {}
+envSecrets: {}
+
+services:
+  back:
+    enabled: true
+    command: ["uwsgi","--ini","uwsgi.ini","--http11-socket",":8000"]
+    resources: {}
+
+workers:
+  bot:
+    enabled: true
+    command: ["python", "manage.py", "server"]
+    resources: {}
+
+jobs:
+  migrate:
+    enabled: true
+    command: ["python", "manage.py", "-p", "migrate", "--noinput"]
+    resources:
+      limits:
+        cpu: 1
+        memory: 1024Mi
+      requests:
+        cpu: 500m
+        memory: 256Mi
+
+ingress:
+  enabled: true
+  className: nginx
+
+  hosts:
+    - host: example.com
+      paths:
+        - name: back
+          path: /api
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: example.com-tls
+      hosts:
+        - example.com
+
+resources:
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+nodeSelector: {}
+nodeAffinityPreset: {}
+podAntiAffinityPreset: soft
