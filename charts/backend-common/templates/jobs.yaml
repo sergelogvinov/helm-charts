@@ -63,8 +63,10 @@ spec:
           resources:
             {{- toYaml (default $.Values.resources .resources) | nindent 12 }}
           volumeMounts:
+            {{- if or $.Values.configConfigMap $.Values.config }}
             - name: config
               mountPath: {{ $.Values.configMountPath }}
+            {{- end }}
             {{- if $.Values.secrets }}
             - name: secrets
               mountPath: {{ $.Values.secretsMountPath }}
@@ -73,9 +75,11 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
       volumes:
+        {{- if or $.Values.configConfigMap $.Values.config }}
         - name: config
           configMap:
             name: {{ include "backend-common.configConfigMap" $ }}
+        {{- end }}
         {{- if $.Values.secrets }}
         - name: secrets
           secret:
