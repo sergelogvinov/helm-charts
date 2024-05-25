@@ -112,6 +112,10 @@ spec:
             - name: metrics
               containerPort: {{ .metricsPort }}
             {{- end }}
+          {{- if .lifecycle }}
+          lifecycle:
+            {{- toYaml .lifecycle | nindent 12 }}
+          {{- end }}
           {{- if .startupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .startupProbe "context" $) | nindent 12 }}
           {{- end }}
