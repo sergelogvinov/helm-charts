@@ -1,6 +1,6 @@
 # github-actions-runner
 
-![Version: 1.5.11](https://img.shields.io/badge/Version-1.5.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.315.0](https://img.shields.io/badge/AppVersion-2.315.0-informational?style=flat-square)
+![Version: 1.5.12](https://img.shields.io/badge/Version-1.5.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.316.1](https://img.shields.io/badge/AppVersion-2.316.1-informational?style=flat-square)
 
 Github Actions with container registry and mirrors
 
@@ -79,7 +79,7 @@ nodeSelector:
 | autoscaling.scaleUp.stabilizationWindowSeconds | int | `30` |  |
 | runnerGroup | string | `"default"` |  |
 | runnerScaleSetName | string | `""` |  |
-| runnerVersion | string | `"0.8.2"` |  |
+| runnerVersion | string | `"0.9.2"` |  |
 | githubConfigUrl | string | `"https://github.com/..."` |  |
 | githubConfigSecret | object | `{}` |  |
 | controllerServiceAccount.name | string | `"arc"` |  |
@@ -92,7 +92,7 @@ nodeSelector:
 | mirrors.enabled | bool | `true` |  |
 | mirrors.image.repository | string | `"ghcr.io/project-zot/zot"` |  |
 | mirrors.image.pullPolicy | string | `"IfNotPresent"` |  |
-| mirrors.image.tag | string | `"v2.0.3"` |  |
+| mirrors.image.tag | string | `"v2.0.4"` |  |
 | mirrors.registry | list | `[{"host":"docker.io","source":"https://registry-1.docker.io"},{"host":"gcr.io","source":"https://gcr.io"},{"host":"ghcr.io","source":"https://ghcr.io"},{"host":"quay.io","source":"https://quay.io"},{"host":"mcr.microsoft.com","source":"https://mcr.microsoft.com"},{"host":"registry.k8s.io","source":"https://registry.k8s.io"}]` | Container registry list. ref: https://docs.docker.com/registry/recipes/mirror/ |
 | mirrors.resources | object | `{"limits":{"cpu":1,"memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | mirrors.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"100Gi"}` | Persistence parameters for source code ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |

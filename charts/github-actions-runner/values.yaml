@@ -24,7 +24,7 @@ autoscaling:
 
 runnerGroup: "default"
 runnerScaleSetName: ""
-runnerVersion: "0.8.2"
+runnerVersion: "0.9.2"
 
 githubConfigUrl: "https://github.com/..."
 githubConfigSecret: {}
@@ -80,7 +80,7 @@ mirrors:
   image:
     repository: ghcr.io/project-zot/zot
     pullPolicy: IfNotPresent
-    tag: "v2.0.3"
+    tag: "v2.0.4"
 
   # -- Container registry list.
   # ref: https://docs.docker.com/registry/recipes/mirror/
