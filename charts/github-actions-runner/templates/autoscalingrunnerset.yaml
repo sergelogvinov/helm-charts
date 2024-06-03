@@ -143,6 +143,10 @@ spec:
               value: "false"
             - name: RUNNER_WORK_FOLDER
               value: /builds
+            {{- if .Values.proxy.enabled }}
+            - name: HTTP_PROXY
+              value: "http://{{ include "github-actions-runner.fullname" . }}-proxy:3128"
+            {{- end }}
           envFrom:
             - secretRef:
                 name: "{{ include "github-actions-runner.fullname" . }}"

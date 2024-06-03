@@ -72,6 +72,9 @@ spec:
     - {{ include "github-actions-runner.fullname" . }}
     - {{ include "github-actions-runner.fullname" . }}-mirrors.{{ .Release.Namespace }}.svc
     - {{ include "github-actions-runner.fullname" . }}-registry.{{ .Release.Namespace }}.svc
+    {{- range $inx, $val := .Values.registry.ingress.hosts }}
+    - {{ $val.host }}
+    {{- end }}
   issuerRef:
     name: {{ include "github-actions-runner.fullname" . }}-ca-issuer
 ---

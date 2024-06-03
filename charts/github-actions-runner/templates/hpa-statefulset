@@ -1,4 +1,4 @@
-{{- if not (.Capabilities.APIVersions.Has "actions.github.com/v1alpha1") }}
+{{- if and (not (.Capabilities.APIVersions.Has "actions.github.com/v1alpha1")) .Values.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:

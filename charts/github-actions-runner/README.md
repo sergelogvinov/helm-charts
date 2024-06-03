@@ -1,6 +1,6 @@
 # github-actions-runner
 
-![Version: 1.5.12](https://img.shields.io/badge/Version-1.5.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.316.1](https://img.shields.io/badge/AppVersion-2.316.1-informational?style=flat-square)
+![Version: 1.6.0](https://img.shields.io/badge/Version-1.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.316.1](https://img.shields.io/badge/AppVersion-2.316.1-informational?style=flat-square)
 
 Github Actions with container registry and mirrors
 
@@ -89,6 +89,18 @@ nodeSelector:
 | dind.extraVolumeMounts | list | `[]` | Additional container volume mounts. |
 | dind.extraVolumes | list | `[]` | Additional volumes. |
 | dind.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"100Gi"}` | Persistence parameters for source code ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
+| proxy.enabled | bool | `true` |  |
+| proxy.image.repository | string | `"ubuntu/squid"` |  |
+| proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
+| proxy.image.tag | string | `"4.13-21.10_beta"` |  |
+| proxy.command[0] | string | `"/bin/sh"` |  |
+| proxy.command[1] | string | `"/etc/proxy/proxy.sh"` |  |
+| proxy.resources | object | `{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| proxy.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"10Gi"}` | Persistence parameters for source code ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
+| proxy.nodeSelector | object | `{}` | Node labels for mirrors deploy assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| proxy.tolerations | list | `[]` | Tolerations for mirrors deploy assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| proxy.podAntiAffinityPreset | string | `"soft"` | Anti-affinity for pod assignment. options: soft, hard, null |
+| proxy.affinity | object | `{}` | Affinity for mirrors deploy assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | mirrors.enabled | bool | `true` |  |
 | mirrors.image.repository | string | `"ghcr.io/project-zot/zot"` |  |
 | mirrors.image.pullPolicy | string | `"IfNotPresent"` |  |
@@ -104,7 +116,7 @@ nodeSelector:
 | registry.image.pullPolicy | string | `"IfNotPresent"` |  |
 | registry.image.tag | float | `2.8` |  |
 | registry.storage | string | `nil` |  |
-| registry.ingress | object | `{"annotations":{"nginx.ingress.kubernetes.io/proxy-body-size":0},"className":"","enabled":false,"hosts":[],"tls":[]}` | Registry ingress parameters ref: http://kubernetes.io/docs/user-guide/ingress/ |
+| registry.ingress | object | `{"annotations":{"nginx.ingress.kubernetes.io/proxy-body-size":0},"auth":{},"className":"","enabled":false,"hosts":[],"tls":null}` | Registry ingress parameters ref: http://kubernetes.io/docs/user-guide/ingress/ |
 | registry.resources | object | `{"limits":{"cpu":1,"memory":"512Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | registry.extraVolumeMounts | list | `[]` |  |
 | registry.extraVolumes | list | `[]` |  |
