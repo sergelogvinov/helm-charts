@@ -6,7 +6,7 @@ metadata:
     {{- include "pgbouncer.labels" . | nindent 4 }}
   {{- with .Values.service.annotations }}
   annotations:
-    {{- toYaml . | nindent 8 }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
