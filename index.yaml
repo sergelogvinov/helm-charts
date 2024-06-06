@@ -5095,6 +5095,25 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/service-common-0.1.0/service-common-0.1.0.tgz
     version: 0.1.0
+  skipper:
+  - apiVersion: v2
+    appVersion: v0.21.107
+    created: "2024-06-06T15:19:12.859313204Z"
+    description: Ingress controller for Kubernetes
+    digest: 91a577d083409d2203bc46b246e3e34aa281b1f51103b8fb2599bb335a8aa07b
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - ingress-controller
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: skipper
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/skipper
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/skipper-0.1.0/skipper-0.1.0.tgz
+    version: 0.1.0
   tabix:
   - apiVersion: v2
     appVersion: 22.05.17
@@ -5567,4 +5586,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-06-06T15:08:27.242878494Z"
+generated: "2024-06-06T15:19:12.859882898Z"
