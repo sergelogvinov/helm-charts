@@ -3032,6 +3032,25 @@ entries:
   pgbouncer:
   - apiVersion: v2
     appVersion: "15.5"
+    created: "2024-06-06T15:08:27.061255356Z"
+    description: Postgres connection poller
+    digest: 8e12d18d3608db4b98886f81d8638769058aa77adab898d85c39f94ff0a4146b
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - pgbouncer
+    - postgresql
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: pgbouncer
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/pgbouncer
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.2.8/pgbouncer-0.2.8.tgz
+    version: 0.2.8
+  - apiVersion: v2
+    appVersion: "15.5"
     created: "2024-05-24T12:29:38.339131752Z"
     description: Postgres connection poller
     digest: 62830aa2e719b54b37810e390048193b898ce3a53274f946974038d4752f22da
@@ -3290,6 +3309,28 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.0/pgbouncer-0.1.0.tgz
     version: 0.1.0
   postgresql-single:
+  - apiVersion: v2
+    appVersion: "15.6"
+    created: "2024-06-06T15:08:27.242161002Z"
+    description: Postgres with backup/restore checks
+    digest: 968f14dde3f437da5f561814ac8d7f0313a2fbfb8f01e755b71aea952415b0ed
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: postgresql-single
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.11.2/postgresql-single-0.11.2.tgz
+    version: 0.11.2
   - apiVersion: v2
     appVersion: "15.6"
     created: "2024-05-08T12:49:10.240357672Z"
@@ -5526,4 +5567,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-06-04T04:49:05.786640051Z"
+generated: "2024-06-06T15:08:27.242878494Z"
