@@ -1,0 +1,133 @@
+apiVersion: apps/v1
+{{- if .Values.useDaemonSet }}
+kind: DaemonSet
+{{- else }}
+kind: Deployment
+{{- end }}
+metadata:
+  name: {{ include "skipper.fullname" . }}
+  labels:
+    {{- include "skipper.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  {{- if not .Values.useDaemonSet }}
+  strategy:
+    type: {{ .Values.updateStrategy.type }}
+  {{- else }}
+  updateStrategy:
+    type: {{ .Values.updateStrategy.type }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "skipper.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "skipper.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.metrics.enabled }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9911"
+        prometheus.io/path: /metrics
+      {{- end}}
+    spec:
+      enableServiceLinks: false
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "skipper.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - "-address=:{{ .Values.hostPort.ports.https }}"
+            - "-insecure-address=:{{ .Values.hostPort.ports.http }}"
+            - "-tls-cert=/etc/ssl/tlscerts/tls.crt"
+            - "-tls-key=/etc/ssl/tlscerts/tls.key"
+            - "-kubernetes"
+            - "-kubernetes-in-cluster"
+            - "-kubernetes-path-mode=path-prefix"
+            - "-kubernetes-ingress-class={{ .Values.ingressClass }}"
+            - "-kubernetes-enable-tls"
+            # - "-application-log-level=WARN"
+            - "-application-log-json-enabled"
+            - "-wait-first-route-load"
+            - "-runtime-metrics=false"
+            - "-disable-metrics-compat"
+            - "-metrics-flavour=prometheus"
+            - "-enable-connection-metrics"
+            - "-enable-route-lifo-metrics"
+            - "-enable-route-fifo-metrics"
+            - "-expect-continue-timeout-backend=30s"
+            - "-keepalive-backend=30s"
+            - "-response-header-timeout-backend=1m"
+            - "-idle-timeout-server=62s"
+            - "-read-timeout-server=5m"
+            - "-write-timeout-server=60s"
+            - "-default-filters-prepend=enableAccessLog(4,5) -> tlsPassClientCertificates()"
+          ports:
+            - name: http
+              containerPort: {{ .Values.hostPort.ports.http }}
+              protocol: TCP
+            - name: https
+              containerPort: {{ .Values.hostPort.ports.https }}
+              protocol: TCP
+            - name: metrics
+              containerPort: 9911
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /kube-system/healthz
+              port: {{ .Values.hostPort.ports.http }}
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: tlscerts
+              mountPath: /etc/ssl/tlscerts
+          {{- with .Values.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: tlscerts
+          secret:
+            secretName: {{ include "skipper.fullname" . }}-tls
+            defaultMode: 256
+      {{- with .Values.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+        {{- include "affinities.pods" . | nindent 8 }}
+      {{- with .Values.affinity }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
