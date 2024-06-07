@@ -9,7 +9,7 @@ metadata:
   labels:
     {{- include "skipper.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
+  {{- if not (or .Values.autoscaling.enabled .Values.useDaemonSet) }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   {{- if not .Values.useDaemonSet }}
@@ -41,6 +41,10 @@ spec:
       {{- end}}
     spec:
       enableServiceLinks: false
+      {{- if and .Values.hostNetwork .Values.useDaemonSet }}
+      hostNetwork: {{ .Values.hostNetwork }}
+      dnsPolicy: "ClusterFirstWithHostNet"
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
@@ -70,8 +74,11 @@ spec:
             - "-kubernetes-path-mode=path-prefix"
             - "-kubernetes-ingress-class={{ .Values.ingressClass }}"
             - "-kubernetes-enable-tls"
-            # - "-application-log-level=WARN"
+            - "-proxy-preserve-host"
+            # - "-passive-health-check=period=5s"
+            - "-application-log-level=WARN"
             - "-application-log-json-enabled"
+            - "-access-log-json-enabled"
             - "-wait-first-route-load"
             - "-runtime-metrics=false"
             - "-disable-metrics-compat"
@@ -79,13 +86,14 @@ spec:
             - "-enable-connection-metrics"
             - "-enable-route-lifo-metrics"
             - "-enable-route-fifo-metrics"
-            - "-expect-continue-timeout-backend=30s"
             - "-keepalive-backend=30s"
+            - "-expect-continue-timeout-backend=30s"
             - "-response-header-timeout-backend=1m"
             - "-idle-timeout-server=62s"
             - "-read-timeout-server=5m"
             - "-write-timeout-server=60s"
-            - "-default-filters-prepend=enableAccessLog(4,5) -> tlsPassClientCertificates()"
+            - "-default-filters-prepend=enableAccessLog(2,4,5) -> tlsPassClientCertificates()"
+            # - "-insecure"
           ports:
             - name: http
               containerPort: {{ .Values.hostPort.ports.http }}
