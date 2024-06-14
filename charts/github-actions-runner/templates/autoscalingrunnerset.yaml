@@ -134,7 +134,11 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           workingDir: /builds
+          {{- if .Values.dind.enabled }}
+          command: ["/bin/sh", "/etc/docker-config/mirrors.sh"]
+          {{- else }}
           command: ["/home/runner/run.sh"]
+          {{- end }}
           env:
             - name: ACTIONS_RUNNER_POD_NAME
               valueFrom:
@@ -151,12 +155,6 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ include "github-actions-runner.fullname" . }}"
-          {{- if .Values.dind.enabled }}
-          lifecycle:
-            postStart:
-              exec:
-                command: ["/bin/sh", "/etc/docker-config/mirrors.sh"]
-          {{- end }}
           volumeMounts:
           {{- if .Values.dind.enabled }}
             - name: config
