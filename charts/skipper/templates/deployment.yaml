@@ -74,12 +74,12 @@ spec:
             - "-kubernetes-path-mode=path-prefix"
             - "-kubernetes-ingress-class={{ .Values.ingressClass }}"
             - "-kubernetes-enable-tls"
+            - "-kubernetes-https-redirect"
             - "-proxy-preserve-host"
             # - "-passive-health-check=period=5s"
             - "-application-log-level=WARN"
             - "-application-log-json-enabled"
             - "-access-log-json-enabled"
-            - "-wait-first-route-load"
             - "-runtime-metrics=false"
             - "-disable-metrics-compat"
             - "-metrics-flavour=prometheus"
@@ -92,7 +92,8 @@ spec:
             - "-idle-timeout-server=62s"
             - "-read-timeout-server=5m"
             - "-write-timeout-server=60s"
-            - "-default-filters-prepend=enableAccessLog(2,4,5) -> tlsPassClientCertificates()"
+            - "-wait-first-route-load"
+            - "-default-filters-prepend=enableAccessLog(2,4,5)->flowId()->xforward()->tlsPassClientCertificates()"
             # - "-insecure"
           ports:
             - name: http
