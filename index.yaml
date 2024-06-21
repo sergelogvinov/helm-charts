@@ -3352,6 +3352,27 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.1.0/pgbouncer-0.1.0.tgz
     version: 0.1.0
+  plausible:
+  - apiVersion: v2
+    appVersion: v2.1.1
+    created: "2024-06-21T03:28:03.54812958Z"
+    description: A Helm Chart for Plausible Analytics
+    digest: 6c229438263803678abdcc75ee9ec69c0777800eb937cdf746bd646886cc6508
+    home: https://plausible.io/
+    icon: https://docs.plausible.io/img/logo.svg
+    keywords:
+    - analytics
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: plausible
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/plausible
+    - https://github.com/plausible/analytics
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/plausible-0.1.0/plausible-0.1.0.tgz
+    version: 0.1.0
   postgresql-single:
   - apiVersion: v2
     appVersion: "15.6"
@@ -5648,4 +5669,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-06-14T08:41:39.122583997Z"
+generated: "2024-06-21T03:28:03.548713921Z"
