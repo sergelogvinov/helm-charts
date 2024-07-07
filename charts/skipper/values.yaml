@@ -60,7 +60,8 @@ hostPort:
 
 ingressClass: skipper
 ingressClassResource:
-  name: skipper
+  enabled: false
+  controllerValue: "k8s.io/ingress-skipper"
 
 service:
   type: ClusterIP

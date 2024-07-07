@@ -1,6 +1,6 @@
 # skipper
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.21.107](https://img.shields.io/badge/AppVersion-v0.21.107-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.21.107](https://img.shields.io/badge/AppVersion-v0.21.107-informational?style=flat-square)
 
 Ingress controller for Kubernetes
 
@@ -39,7 +39,8 @@ Ingress controller for Kubernetes
 | hostPort.ports.http | int | `8080` |  |
 | hostPort.ports.https | int | `8443` |  |
 | ingressClass | string | `"skipper"` |  |
-| ingressClassResource.name | string | `"skipper"` |  |
+| ingressClassResource.enabled | bool | `false` |  |
+| ingressClassResource.controllerValue | string | `"k8s.io/ingress-skipper"` |  |
 | service.type | string | `"ClusterIP"` |  |
 | service.annotations | object | `{}` |  |
 | service.ipFamilies[0] | string | `"IPv4"` |  |

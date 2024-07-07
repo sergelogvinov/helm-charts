@@ -64,6 +64,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["skipper"]
           args:
             - "-address=:{{ .Values.hostPort.ports.https }}"
             - "-insecure-address=:{{ .Values.hostPort.ports.http }}"
@@ -93,7 +94,7 @@ spec:
             - "-read-timeout-server=5m"
             - "-write-timeout-server=60s"
             - "-wait-first-route-load"
-            - "-default-filters-prepend=enableAccessLog(2,4,5)->flowId()->xforward()->tlsPassClientCertificates()"
+            - "-default-filters-prepend=enableAccessLog(2,4,5)->flowId()->xforward()"
             # - "-insecure"
           ports:
             - name: http
