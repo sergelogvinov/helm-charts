@@ -5163,6 +5163,24 @@ entries:
   skipper:
   - apiVersion: v2
     appVersion: v0.21.107
+    created: "2024-07-07T15:58:38.555875991Z"
+    description: Ingress controller for Kubernetes
+    digest: 025ddda30c97b7157094efccc3b39c45ac91fce82ca09cac021460b281e9f578
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - ingress-controller
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: skipper
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/skipper
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/skipper-0.1.3/skipper-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: v0.21.107
     created: "2024-06-21T03:29:20.21131331Z"
     description: Ingress controller for Kubernetes
     digest: 7102ff01cecddb307be7b26d058f4208be691416906de9fbc560017f28ce3474
@@ -5687,4 +5705,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-06-21T03:29:20.211835246Z"
+generated: "2024-07-07T15:58:38.556302654Z"
