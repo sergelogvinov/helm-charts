@@ -69,6 +69,8 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/clickhouse-keeper
+            - name: logs
+              mountPath: /var/log/clickhouse
             - name: data
               mountPath: /var/lib/clickhouse-keeper
           resources:
@@ -89,5 +91,7 @@ spec:
         - name: config
           configMap:
             name: {{ include "clickhouse-keeper.fullname" . }}
+        - name: logs
+          emptyDir: {}
         - name: data
           emptyDir: {}
