@@ -27,7 +27,7 @@ data:
           "key":"/etc/registry-tls/tls.key"
         }
       },
-      "log": { "level": "info" },
+      "log": { "level": "warn" },
       "extensions": {
         "metrics": {
           "enable": true,
@@ -56,7 +56,7 @@ data:
             },
             {{- end }}{{- end }}
             {
-              "urls": ["https://docker.io","https://registry-1.docker.io","https://index.docker.io"],
+              "urls": ["https://index.docker.io"],
               "tlsVerify": true,
               "onDemand": true,
               "maxRetries": 2,
