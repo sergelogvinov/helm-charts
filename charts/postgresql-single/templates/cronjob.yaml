@@ -1,10 +1,6 @@
 {{- if .Values.backup.enabled }}
-{{- $instance := sub (int .Values.replicaCount) 1 }}
-{{- if semverCompare ">=1.22" .Capabilities.KubeVersion.GitVersion -}}
+{{- $instance := include "postgresql-single.folover-number" . }}
 apiVersion: batch/v1
-{{- else -}}
-apiVersion: batch/v1beta1
-{{- end }}
 kind: CronJob
 metadata:
   name: {{ include "postgresql-single.fullname" . }}-backup
@@ -105,8 +101,15 @@ spec:
                     labelSelector:
                       matchLabels:
                         {{- include "postgresql-single.selectorLabels" . | nindent 24 }}
-                    topologyKey: kubernetes.io/hostname
+                    topologyKey: topology.kubernetes.io/zone
                   weight: 1
+                - podAffinityTerm:
+                    labelSelector:
+                      matchLabels:
+                        {{- include "postgresql-single.selectorLabels" . | nindent 24 }}
+                        statefulset.kubernetes.io/pod-name: {{ include "postgresql-single.fullname" . }}-{{ $instance }}
+                    topologyKey: kubernetes.io/hostname
+                  weight: 5
             {{- end }}
           {{- with .Values.tolerations }}
           tolerations:

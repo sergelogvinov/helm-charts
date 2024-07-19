@@ -96,7 +96,7 @@ spec:
         - name: data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.existingClaim | default (printf "data-%s" (include "bitwarden.fullname" . )) }}
+            claimName: {{ .Values.persistence.existingClaim | default (printf "data-%s" (include "bitwarden.fullname" . )) }}
         {{- else }}
           emptyDir: {}
         {{- end }}

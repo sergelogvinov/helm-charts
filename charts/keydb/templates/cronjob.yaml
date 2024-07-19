@@ -65,7 +65,7 @@ spec:
                 - labelSelector:
                     matchLabels:
                       {{- include "keydb.selectorLabels" . | nindent 22 }}
-                      statefulset.kubernetes.io/pod-name: {{ include "keydb.fullname" . }}-0
+                      statefulset.kubernetes.io/pod-name: {{ include "keydb.primary" . }}
                   topologyKey: kubernetes.io/hostname
           {{- with .Values.tolerations }}
           tolerations:

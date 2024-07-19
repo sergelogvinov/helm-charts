@@ -83,7 +83,7 @@ Create the backupPassword
 {{- $previous := lookup "v1" "Secret" .Release.Namespace $sname }}
 {{- if .Values.backup.backupPassword }}
 {{- .Values.backup.backupPassword }}
-{{- else if $previous }}
+{{- else if and $previous $previous.data.backupPassword }}
 {{- default (randAlphaNum 16) ($previous.data.backupPassword | b64dec ) }}
 {{- else }}
 {{- randAlphaNum 16 }}

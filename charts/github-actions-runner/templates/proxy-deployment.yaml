@@ -1,0 +1,98 @@
+{{- if .Values.proxy.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "github-actions-runner.fullname" . }}-proxy
+  labels:
+    {{- include "github-actions-runner.labels" . | nindent 4 }}
+    app.kubernetes.io/component: proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "github-actions-runner.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: proxy
+  template:
+    metadata:
+      labels:
+        {{- include "github-actions-runner.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: proxy
+    spec:
+      enableServiceLinks: false
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: "OnRootMismatch"
+      terminationGracePeriodSeconds: 1
+      containers:
+        - name: {{ include "github-actions-runner.fullname" . }}-proxy
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
+          image: "{{ .Values.proxy.image.repository }}:{{ .Values.proxy.image.tag }}"
+          imagePullPolicy: {{ .Values.proxy.image.pullPolicy }}
+          command: {{- toYaml .Values.proxy.command | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: 3128
+            - name: https
+              containerPort: 3129
+          livenessProbe:
+            tcpSocket:
+              port: 3128
+            initialDelaySeconds: 5
+            periodSeconds: 30
+          resources:
+            {{- toYaml $.Values.proxy.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/proxy
+            - name: data
+              mountPath: /cache
+      {{- with default .Values.nodeSelector .Values.proxy.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+      {{- if .Values.proxy.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.proxy.podAntiAffinityPreset "component" "proxy" "context" .) | nindent 10 }}
+      {{- end }}
+      {{- with default .Values.affinity .Values.proxy.affinity }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.proxy.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: data
+      {{- if not .Values.proxy.persistence.enabled }}
+          emptyDir: {}
+      {{- else }}
+          ephemeral:
+            volumeClaimTemplate:
+              metadata:
+                {{- with .Values.proxy.persistence.annotations }}
+                annotations:
+                  {{- toYaml . | nindent 18 }}
+                {{- end }}
+                labels:
+                  {{- include "github-actions-runner.selectorLabels" . | nindent 18 }}
+                  app.kubernetes.io/component: proxy
+              {{- include "volumeClaimTemplate.spec.render" .Values.proxy.persistence | nindent 14 }}
+      {{- end }}
+        - name: config
+          configMap:
+            name: {{ include "github-actions-runner.fullname" . }}
+            items:
+              - key: proxy.conf
+                path: proxy.conf
+              - key: proxy.sh
+                path: proxy.sh
+{{- end }}

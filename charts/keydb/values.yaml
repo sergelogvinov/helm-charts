@@ -22,6 +22,13 @@ keydb:
   activeReplica: "yes"
   multiMaster: "yes"
 
+  # 1gb 1mb 1kb
+  maxmemory: ~
+  maxmemoryPolicy: noeviction
+
+  # replBacklogSize: 1gb
+  replBacklogSize: ~
+
   save:
     - 900 1
     - 120 100000
@@ -69,10 +76,10 @@ loadbalancer:
 
   resources:
     limits:
-      cpu: 100m
+      cpu: 500m
       memory: 64Mi
     requests:
-      cpu: 50m
+      cpu: 100m
       memory: 32Mi
 
   livenessProbe:
@@ -138,7 +145,7 @@ metrics:
   image:
     repository: oliver006/redis_exporter
     pullPolicy: IfNotPresent
-    tag: v1.51.0
+    tag: v1.58.0
 
 # -- Pods Service Account.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -192,14 +199,14 @@ livenessProbe: {}
 #   periodSeconds: 60
 
 readinessProbe:
-  initialDelaySeconds: 15
+  initialDelaySeconds: 30
   timeoutSeconds: 1
   failureThreshold: 2
   successThreshold: 3
   periodSeconds: 30
 
 startupProbe:
-  initialDelaySeconds: 15
+  initialDelaySeconds: 30
   timeoutSeconds: 1
   failureThreshold: 60
   successThreshold: 1

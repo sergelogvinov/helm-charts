@@ -12,7 +12,7 @@ data:
 
   mirrors.json: |-
     {
-      "distSpecVersion": "1.1.0-dev",
+      "distSpecVersion": "1.1.0",
       "storage": {
         "rootDirectory": "/var/lib/registry",
         "commit": true,
@@ -27,7 +27,7 @@ data:
           "key":"/etc/registry-tls/tls.key"
         }
       },
-      "log": { "level": "info" },
+      "log": { "level": "warn" },
       "extensions": {
         "metrics": {
           "enable": true,
@@ -56,7 +56,7 @@ data:
             },
             {{- end }}{{- end }}
             {
-              "urls": ["https://docker.io","https://registry-1.docker.io"],
+              "urls": ["https://index.docker.io"],
               "tlsVerify": true,
               "onDemand": true,
               "maxRetries": 2,
@@ -122,7 +122,7 @@ data:
 
   registry.json: |-
     {
-      "distSpecVersion": "1.1.0-dev",
+      "distSpecVersion": "1.1.0",
       "storage": {
         "rootDirectory": "/var/lib/registry",
         "commit": true,
@@ -203,6 +203,16 @@ data:
     {{- if .Values.registry.enabled }}
     [registry."{{ include "github-actions-runner.fullname" . }}-registry.{{ $.Release.Namespace }}.svc"]
       ca = ["/etc/docker-tls/ca.crt"]
+    {{- if .Values.registry.ingress.enabled }}{{ range $inx, $val := .Values.registry.ingress.hosts }}
+    [registry."{{ $val.host }}"]
+      capabilities = ["pull", "resolve", "push"]
+      mirrors = ["{{ include "github-actions-runner.fullname" $ }}-registry.{{ $.Release.Namespace }}.svc"]
+      {{- if and $.Values.registry.ingress.auth (hasKey $.Values.registry.ingress.auth "key") }}
+      [[registry."{{ $val.host }}".keypair]]
+        key="{{ $.Values.registry.ingress.auth.key }}"
+        cert="{{ $.Values.registry.ingress.auth.cert }}"
+      {{- end }}
+    {{- end }}{{- end }}
     {{- end }}
 
   daemon.json: |-
@@ -237,3 +247,61 @@ data:
     docker pull moby/buildkit:buildx-stable-1
     docker buildx create --name multiarch --driver docker-container --config /etc/docker-config/buildkitd.toml --use
     docker buildx inspect --bootstrap multiarch
+
+    exec /home/runner/run.sh
+
+  proxy.sh: |
+    #!/bin/sh
+    rm -f /cache/squid.pid
+
+    [ ! -d /cache/00 ] && squid -Nz -f /etc/proxy/proxy.conf
+    exec squid -NY -f /etc/proxy/proxy.conf
+
+  {{- $cachemem := default 256 (include "resource-mb" .Values.proxy.resources.requests.memory) }}
+  {{- $cachesize := default 100 (include "resource-mb" .Values.proxy.persistence.size) }}
+  proxy.conf: |
+    acl clientnet src 10.0.0.0/8
+    acl clientnet src 172.16.0.0/12
+    acl clientnet src 192.168.0.0/16
+    acl clientnet src fc00::/7
+
+    acl SSL_ports port 443
+    acl Safe_ports port 80
+    acl Safe_ports port 443
+    acl CONNECT method CONNECT
+
+    httpd_suppress_version_string on
+    forwarded_for off
+    via off
+
+    http_access deny !Safe_ports
+    http_access deny CONNECT !SSL_Ports
+    http_access allow localhost manager
+    http_access deny manager
+    http_access deny to_localhost
+
+    http_access allow clientnet
+    http_access deny all
+
+    http_port 3128
+    # https_port 3129 tls-cert=/etc/certs/tls.crt tls-key=/etc/certs/tls.key
+
+    cache_mem {{ sub $cachemem 32 }} MB
+    cache_dir ufs /cache {{ $cachesize }} 16 256
+    maximum_object_size 512 MB
+    maximum_object_size_in_memory 8 MB
+
+    # refresh_pattern [-i] regex min percent max
+    refresh_pattern (InRelease|Release|Packages(.gz)*)$ 60     20%  2880
+    refresh_pattern (\.deb|\.udeb|\.rpm)$               129600 100% 129600 ignore-reload ignore-no-store override-expire
+    refresh_pattern .                                   0      20%  2880
+
+    shutdown_lifetime 5 seconds
+
+    logfile_rotate 0
+    access_log stdio:/dev/stdout
+    cache_log stdio:/dev/stdout
+    pid_filename /cache/squid.pid
+    netdb_filename stdio:/cache/netdb.state
+    pinger_enable off
+    coredump_dir /tmp

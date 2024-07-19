@@ -98,6 +98,18 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
+{{/*
+Create the keydb primary pod selector
+*/}}
+{{- define "keydb.primary" -}}
+{{- $sname := include "keydb.fullname" . }}
+{{- $previous := lookup "v1" "Service" .Release.Namespace $sname }}
+{{- if $previous }}
+{{- default (printf "%s-0" $sname) (get $previous.spec.selector "statefulset.kubernetes.io/pod-name") -}}
+{{- else }}
+{{- printf "%s-0" $sname -}}
+{{- end }}
+{{- end }}
 
 {{/*
 Common port
@@ -153,9 +165,11 @@ maxclients 8192
 server-threads {{ .Values.keydb.threads | int }}
 active-replica {{ .Values.keydb.activeReplica }}
 multi-master {{ .Values.keydb.multiMaster }}
-{{- if .Values.resources.requests.memory }}
-repl-backlog-size {{ include "resource-bytes" .Values.resources.requests.memory }}b
-{{ end }}
+{{- if .Values.keydb.replBacklogSize }}
+repl-backlog-size {{ .Values.keydb.replBacklogSize }}
+{{- else if .Values.resources.requests.memory }}
+repl-backlog-size {{ if lt 1000000000 (int64 (include "resource-bytes" .Values.resources.requests.memory)) }}1024mb{{ else }}256mb{{ end }}
+{{- end }}
 
 loglevel notice
 logfile ""
@@ -176,11 +190,22 @@ stop-writes-on-bgsave-error yes
 rdbcompression yes
 rdbchecksum yes
 
-{{ if or .Values.resources.requests.memory .Values.resources.limits.memory }}
-maxmemory-policy noeviction
-{{- /*  Reserve 1m to keydb daemon */}}
-maxmemory {{ sub (int64 (include "resource-bytes" (default .Values.resources.requests.memory .Values.resources.limits.memory))) 1048576 }}b
-{{ end }}
+crash-memcheck-enabled no
+{{- if .Values.keydb.maxmemoryPolicy }}
+maxmemory-policy {{ .Values.keydb.maxmemoryPolicy }}
+{{- end }}
+{{- if .Values.keydb.maxmemory }}
+maxmemory {{ .Values.keydb.maxmemory }}
+{{- else if or .Values.resources.requests.memory .Values.resources.limits.memory }}
+{{- /*  Reserve 64m to keydb daemon */}}
+maxmemory {{ sub (int64 (include "resource-bytes" (default .Values.resources.limits.memory .Values.resources.requests.memory))) 67108864 }}b
+{{- end }}
+
+client-output-buffer-limit normal 0 0 0
+{{- if .Values.resources.requests.memory }}
+client-output-buffer-limit replica {{ if le 1000000000 (int64 (include "resource-bytes" .Values.resources.requests.memory)) }}1024mb{{ else }}256mb{{ end }} 128mb 60
+{{- end }}
+client-output-buffer-limit pubsub 32mb 8mb 60
 {{ end }}
 
 
@@ -275,9 +300,9 @@ backend keydb_master
   tcp-check expect string +OK
 
 {{- if .Values.tlsCerts.create }}
-  default-server check check-ssl inter 15s fastinter 10s downinter 5s fall 3 rise 8 on-marked-down shutdown-sessions resolve-prefer ipv4 ssl crt /run/server.pem ca-file /etc/ssl/tlscerts/ca.crt
+  default-server check check-ssl inter 15s fastinter 10s downinter 5s fall 3 rise 8 on-marked-down shutdown-sessions on-marked-up shutdown-backup-sessions resolve-prefer ipv4 ssl crt /run/server.pem ca-file /etc/ssl/tlscerts/ca.crt
 {{- else }}
-  default-server check inter 15s fastinter 10s downinter 5s fall 3 rise 8 on-marked-down shutdown-sessions resolve-prefer ipv4
+  default-server check inter 15s fastinter 10s downinter 5s fall 3 rise 8 on-marked-down shutdown-sessions on-marked-up shutdown-backup-sessions resolve-prefer ipv4
 {{- end }}
 
   server RS {{ printf "%s.%s:%s" $name $domain $port }} backup no-check resolvers clusterdns
@@ -297,7 +322,7 @@ Backup wal-g config
 {{- define "keydb.walgYaml" -}}
 WALG_COMPRESSION_METHOD: brotli
 WALG_DELTA_MAX_STEPS: 4
-WALG_STREAM_CREATE_COMMAND: "redis-cli -h {{ include "keydb.fullname" . }}-0.{{ include "keydb.fullname" . }}-headless.{{ .Release.Namespace }}.svc --rdb -"
+WALG_STREAM_CREATE_COMMAND: "redis-cli -h {{ include "keydb.primary" . }}.{{ include "keydb.fullname" . }}-headless.{{ .Release.Namespace }}.svc --rdb -"
 WALG_STREAM_RESTORE_COMMAND: "cat > /data/dump.rdb"
 {{- if .Values.keydb.password }}
 WALG_REDIS_PASSWORD: "{{ .Values.keydb.password  }}"
@@ -374,7 +399,7 @@ podAffinity:
     - podAffinityTerm:
         labelSelector:
           matchLabels: {{- (include "keydb.selectorLabels" .) | nindent 12 }}
-            statefulset.kubernetes.io/pod-name: {{ include "keydb.fullname" . }}-0
+            statefulset.kubernetes.io/pod-name: {{ include "keydb.primary" . }}
         topologyKey: kubernetes.io/hostname
       weight: 1
 {{- end -}}
@@ -402,7 +427,7 @@ podAffinity:
     - podAffinityTerm:
         labelSelector:
           matchLabels: {{- (include "keydb.selectorLabels" .) | nindent 12 }}
-            statefulset.kubernetes.io/pod-name: {{ include "keydb.fullname" . }}-0
+            statefulset.kubernetes.io/pod-name: {{ include "keydb.primary" . }}
         topologyKey: kubernetes.io/hostname
       weight: 1
 {{- end -}}

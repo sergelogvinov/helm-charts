@@ -7,11 +7,20 @@ metadata:
 data:
   keeper-config.xml: |
     <clickhouse>
-        <logger>
-            <level>trace</level>
-            <console>true</console>
-        </logger>
+        <display_name>{{ include "clickhouse-keeper.fullname" . }}</display_name>
         <listen_host>0.0.0.0</listen_host>
+        <listen_host>::</listen_host>
+        <listen_try>1</listen_try>
+
+        <logger>
+            <level>information</level>
+            <console>false</console>
+            <size>1000M</size>
+            <count>2</count>
+            <log>/var/log/clickhouse/clickhouse-keeper.log</log>
+            <errorlog>/var/log/clickhouse/clickhouse-keeper.err.log</errorlog>
+        </logger>
+
         <keeper_server>
             <path>/var/lib/clickhouse-keeper</path>
             <tcp_port>2181</tcp_port>
@@ -28,6 +37,5 @@ data:
                     <port>9444</port>
                 </server>
             </raft_configuration>
-
         </keeper_server>
     </clickhouse>

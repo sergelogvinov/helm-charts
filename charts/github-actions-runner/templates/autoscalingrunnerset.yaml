@@ -79,6 +79,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       terminationGracePeriodSeconds: 5
+      restartPolicy: Never
       dnsConfig:
         options:
           - name: ndots
@@ -133,7 +134,11 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           workingDir: /builds
+          {{- if .Values.dind.enabled }}
+          command: ["/bin/sh", "/etc/docker-config/mirrors.sh"]
+          {{- else }}
           command: ["/home/runner/run.sh"]
+          {{- end }}
           env:
             - name: ACTIONS_RUNNER_POD_NAME
               valueFrom:
@@ -143,15 +148,13 @@ spec:
               value: "false"
             - name: RUNNER_WORK_FOLDER
               value: /builds
+            {{- if .Values.proxy.enabled }}
+            - name: HTTP_PROXY
+              value: "http://{{ include "github-actions-runner.fullname" . }}-proxy:3128"
+            {{- end }}
           envFrom:
             - secretRef:
                 name: "{{ include "github-actions-runner.fullname" . }}"
-          {{- if .Values.dind.enabled }}
-          lifecycle:
-            postStart:
-              exec:
-                command: ["/bin/sh", "/etc/docker-config/mirrors.sh"]
-          {{- end }}
           volumeMounts:
           {{- if .Values.dind.enabled }}
             - name: config

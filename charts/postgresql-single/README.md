@@ -1,6 +1,6 @@
 # postgresql-single
 
-![Version: 0.10.8](https://img.shields.io/badge/Version-0.10.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 14.10](https://img.shields.io/badge/AppVersion-14.10-informational?style=flat-square)
+![Version: 0.11.2](https://img.shields.io/badge/Version-0.11.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 15.6](https://img.shields.io/badge/AppVersion-15.6-informational?style=flat-square)
 
 Postgres with backup/restore checks
 
@@ -91,7 +91,7 @@ metrics:
 | env | list | `[]` |  |
 | postgresqlUsername | string | `"postgres"` | PostgreSQL admin user ref: https://hub.docker.com/_/postgres |
 | postgresqlMaxConnections | int | `150` | Create a database ref: https://hub.docker.com/_/postgres postgresqlDatabase: |
-| pgHbaConfiguration | string | `"# host  database    user                  address       auth-method\n#\nlocal   all         all                                 trust\nlocal   replication postgres                            trust\nhost    all         all                   localhost     trust\nhost    postgres    postgres              10.0.0.0/8    md5\nhostssl postgres    postgres              10.0.0.0/8    md5\nhost    replication postgres              10.0.0.0/8    md5\nhostssl replication postgres              10.0.0.0/8    md5"` | Postgres auth ref: https://www.postgresql.org/docs/current/auth-pg-hba-conf.html |
+| pgHbaConfiguration | string | `"# host  database    user                  address       auth-method\n#\nlocal   all         all                                 trust\nlocal   replication postgres                            trust\nhost    all         all                   localhost     md5\nhostssl all         postgres              10.0.0.0/8    md5\nhostssl postgres    postgres              10.0.0.0/8    md5\nhost    replication postgres              10.0.0.0/8    md5\nhostssl replication postgres              10.0.0.0/8    md5"` | Postgres auth ref: https://www.postgresql.org/docs/current/auth-pg-hba-conf.html |
 | initdb.args | string | `"--data-checksums --auth-host=scram-sha-256"` |  |
 | initdb.script | string | `""` |  |
 | tlsCerts.create | bool | `false` |  |

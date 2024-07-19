@@ -28,7 +28,7 @@ spec:
     {{- end}}
   selector:
     {{- include "keydb.selectorLabels" . | nindent 4 }}
-    statefulset.kubernetes.io/pod-name: {{ include "keydb.fullname" . }}-0
+    statefulset.kubernetes.io/pod-name: {{ include "keydb.primary" . }}
 ---
 apiVersion: v1
 kind: Service
@@ -38,6 +38,7 @@ metadata:
     {{- include "keydb.labels" . | nindent 4 }}
 spec:
   clusterIP: None
+  publishNotReadyAddresses: true
   ports:
     - port: 6379
       targetPort: 6379
@@ -68,7 +69,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
+  {{- if has .Values.service.type (list "NodePort" "LoadBalancer") }}
   externalTrafficPolicy: {{ .Values.loadbalancer.service.externalTrafficPolicy }}
+  {{- end }}
   internalTrafficPolicy: {{ .Values.loadbalancer.service.internalTrafficPolicy }}
   {{- with .Values.service.ipFamilies }}
   ipFamilies:

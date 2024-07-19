@@ -1,0 +1,113 @@
+{{- range $key, $val := .Values.cronjobs }}
+{{ $fullname := include "backend-common.deployment" (dict "name" $key "context" $) }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $fullname }}
+  labels:
+    {{- include "backend-common.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $key }}-cronjob
+spec:
+  suspend: {{ not .enabled }}
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  schedule: "{{ default "5 3 * * *" .schedule }}"
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 3600 # 1h
+      activeDeadlineSeconds: {{ default 360 .activeDeadline }}
+      backoffLimit: {{ default 0 .backoffLimit }}
+      template:
+        metadata:
+          name: {{ $fullname }}-cronjob
+          {{- with (default $.Values.podAnnotations .podAnnotations) }}
+          annotations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          labels:
+            {{- include "backend-common.labels" $ | nindent 12 }}
+            app.kubernetes.io/component: {{ $key }}-cronjob
+        spec:
+          restartPolicy: Never
+          {{- with $.Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          enableServiceLinks: false
+          automountServiceAccountToken: false
+          serviceAccountName: {{ include "backend-common.serviceAccountName" $ }}
+          securityContext:
+            {{- toYaml $.Values.podSecurityContext | nindent 12 }}
+          priorityClassName: {{ default $.Values.priorityClassName .priorityClassName }}
+          {{- with $val.hostAliases }}
+          hostAliases:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          containers:
+            - name: {{ $fullname }}
+              securityContext:
+                {{- toYaml $.Values.securityContext | nindent 16 }}
+              image: "{{ default $.Values.image.repository .image }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+              imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              command:
+                {{- toYaml .command | nindent 16 }}
+              env:
+              {{- if or $.Values.env .env }}
+                {{- default $.Values.env .env | toYaml | nindent 16 }}
+              {{- end }}
+                - name: PGAPPNAME
+                  value: {{ $key }}-cronjob
+              resources:
+                {{- toYaml (default $.Values.resources .resources) | nindent 16 }}
+              volumeMounts:
+                {{- if or $.Values.configConfigMap $.Values.config }}
+                - name: config
+                  mountPath: {{ $.Values.configMountPath }}
+                {{- end }}
+                {{- if $.Values.secrets }}
+                - name: secrets
+                  mountPath: {{ $.Values.secretsMountPath }}
+                {{- end }}
+              {{- with .volumeMounts }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          volumes:
+            {{- if or $.Values.configConfigMap $.Values.config }}
+            - name: config
+              configMap:
+                name: {{ include "backend-common.configConfigMap" $ }}
+            {{- end }}
+            {{- if $.Values.secrets }}
+            - name: secrets
+              secret:
+                secretName: {{ include "backend-common.fullname" $ }}
+                defaultMode: 288
+            {{- end }}
+          {{- if .volumeMounts }}{{- with $.Values.volumes }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}{{- end }}
+          {{- with (default $.Values.nodeSelector .nodeSelector) }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          affinity:
+            {{- if .podAntiAffinityPreset }}
+            podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .podAntiAffinityPreset "component" $key "context" $) | nindent 14 }}
+            {{- end }}
+            {{- if .podAffinityPreset }}
+            podAffinity: {{- include "common.affinities.pods" (dict "type" .podAffinityPreset.type "topologyKey" .podAffinityPreset.topologyKey "labels" .podAffinityPreset.labels "context" $) | nindent 14 }}
+            {{- else if $.Values.podAffinityPreset }}
+            podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.podAffinityPreset.type "topologyKey" $.Values.podAffinityPreset.topologyKey "labels" $.Values.podAffinityPreset.labels "context" $) | nindent 14 }}
+            {{- end }}
+            {{- if .nodeAffinityPreset }}
+            nodeAffinity: {{- include "common.affinities.nodes" (dict "type" (merge .nodeAffinityPreset $.Values.nodeAffinityPreset).type "expressions" (concat (default (list) .nodeAffinityPreset.expressions) (default (list) $.Values.nodeAffinityPreset.expressions)) ) | nindent 14 }}
+            {{- else if $.Values.nodeAffinityPreset }}
+            nodeAffinity: {{- include "common.affinities.nodes" $.Values.nodeAffinityPreset | nindent 14 }}
+            {{- end }}
+          {{- with $.Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+{{- end }}

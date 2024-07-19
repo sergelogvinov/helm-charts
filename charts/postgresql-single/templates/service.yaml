@@ -4,6 +4,10 @@ metadata:
   name: {{ include "postgresql-single.fullname" . }}
   labels:
     {{- include "postgresql-single.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   {{- with .Values.service.ipFamilies }}
@@ -18,7 +22,30 @@ spec:
       name: postgresql
   selector:
     {{- include "postgresql-single.selectorLabels" . | nindent 4 }}
-    statefulset.kubernetes.io/pod-name: {{ include "postgresql-single.fullname" . }}-0
+    statefulset.kubernetes.io/pod-name: {{ include "postgresql-single.primary" . }}
+---
+{{- $instance := include "postgresql-single.folover-number" . }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}-replica
+  labels:
+    {{- include "postgresql-single.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  {{- with .Values.service.ipFamilies }}
+  ipFamilies:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  ipFamilyPolicy: {{ if eq (len .Values.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: postgresql
+      protocol: TCP
+      name: postgresql
+  selector:
+    {{- include "postgresql-single.selectorLabels" . | nindent 4 }}
+    statefulset.kubernetes.io/pod-name: {{ include "postgresql-single.fullname" . }}-{{ $instance }}
 ---
 apiVersion: v1
 kind: Service
@@ -28,6 +55,7 @@ metadata:
     {{- include "postgresql-single.labels" . | nindent 4 }}
 spec:
   clusterIP: None
+  publishNotReadyAddresses: true
   ports:
     - port: {{ .Values.service.port }}
       targetPort: postgresql
