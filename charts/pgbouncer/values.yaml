@@ -156,7 +156,7 @@ metrics:
 
   image:
     repository: jbub/pgbouncer_exporter
-    tag: v0.15.0
+    tag: v0.17.0
     pullPolicy: IfNotPresent
 
   resources:

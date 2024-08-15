@@ -140,7 +140,9 @@ listen_addr = *
 listen_port = 5432
 
 max_client_conn = 1024
+{{- if and (regexMatch "^[0-9]+(\\.[0-9]+)?$" .Values.image.tag) (semverCompare ">=15.0" (default .Chart.AppVersion .Values.image.tag)) }}
 max_prepared_statements = 256
+{{- end }}
 default_pool_size = 200
 min_pool_size = 0
 
