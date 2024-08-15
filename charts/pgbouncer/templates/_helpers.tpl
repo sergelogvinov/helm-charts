@@ -140,6 +140,7 @@ listen_addr = *
 listen_port = 5432
 
 max_client_conn = 1024
+max_prepared_statements = 256
 default_pool_size = 200
 min_pool_size = 0
 
