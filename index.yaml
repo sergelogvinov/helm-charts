@@ -3201,6 +3201,25 @@ entries:
     version: 0.1.0
   pgbouncer:
   - apiVersion: v2
+    appVersion: "15.8"
+    created: "2024-08-15T07:44:47.614089397Z"
+    description: Postgres connection poller
+    digest: 6e1b6c3752532615e65bd238a94f78d3894f1f95eee9eda1d135c0e4a7153dcd
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - pgbouncer
+    - postgresql
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: pgbouncer
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/pgbouncer
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.2.9/pgbouncer-0.2.9.tgz
+    version: 0.2.9
+  - apiVersion: v2
     appVersion: "15.5"
     created: "2024-06-06T15:08:27.061255356Z"
     description: Postgres connection poller
@@ -5855,4 +5874,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-08-12T07:03:25.2113076Z"
+generated: "2024-08-15T07:44:47.614563832Z"
