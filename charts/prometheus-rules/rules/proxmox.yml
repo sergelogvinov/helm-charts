@@ -1,0 +1,10 @@
+- name: proxmox.rules
+  rules:
+  - alert: ProxmoxCSIAPI
+    expr: count(proxmox_api_request_errors_total) > 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: Last proxmox api call has errors {{ $labels.request }}
+      summary: Proxmox CSI API call has errors
