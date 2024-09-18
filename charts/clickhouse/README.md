@@ -4,6 +4,8 @@
 
 Clickhouse chart for Kubernetes
 
+Clickhouse is a fast open-source OLAP database management system.
+
 **Homepage:** <https://github.com/sergelogvinov/helm-charts>
 
 ## Maintainers
