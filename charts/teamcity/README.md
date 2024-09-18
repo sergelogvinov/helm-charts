@@ -1,92 +1,107 @@
-# Teamcity
+# teamcity
 
-## Introduction
+![Version: 0.6.15](https://img.shields.io/badge/Version-0.6.15-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2024.07.2](https://img.shields.io/badge/AppVersion-2024.07.2-informational?style=flat-square)
 
-This chart bootstraps the Teamcity deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+Teamcity on Kubernetes
 
-## Installing the Chart
+TeamCity is a build management and CI/CD server from JetBrains.
+Self-hosted version of TeamCity is available for free for small teams.
+You can run TeamCity on Kubernetes using this Helm chart.
 
-To install the chart with the release name `private-teamcity`:
+**Homepage:** <https://github.com/sergelogvinov/helm-charts>
 
-```console
-$ helm install sergelogvinov/teamcity --name private-teamcity
-```
+## Maintainers
 
-The command deploys teamcity on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+| Name | Email | Url |
+| ---- | ------ | --- |
+| sergelogvinov |  | <https://github.com/sergelogvinov> |
 
-## Uninstalling the Chart
+## Source Code
 
-To uninstall/delete the `private-teamcity` deployment:
+* <https://github.com/sergelogvinov/helm-charts/tree/master/charts/teamcity>
+* <https://www.jetbrains.com/teamcity>
 
-```console
-$ helm delete private-teamcity
-```
+## Values
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
-
-## Configuration
-
-The following table lists the configurable parameters of the teamcity chart and their default values.
-
-### Teamcity server
-
-Parameter | Description | Default
---------- | ----------- | -------
-`server.enabled` | if true, create teamcity server | `true`
-`server.image.repository` | server container image repository | `sergelog/teamcity`
-`server.image.tag` | server container image tag | `release_2020.1.3-2`
-`server.image.pullPolicy` | server container image pull policy | `IfNotPresent`
-`server.updateStrategy` | deployment strategy | `{ "type": "Recreate" }`
-`server.podAnnotations` | annotations to be added to server pods | `{}` |
-`server.podSecurityContext` | specify pod annotations in the pod security policy | `{fsGroup: 1000}` |
-`server.securityContext` | custom [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for Teamcity containers | `{runAsUser: 1000, runAsGroup: 1000}` |
-`server.serviceAccount.create` | if true, create the server service account | `true`
-`server.serviceAccount.name` | name of the server service account to use or create | `{{ teamcity.fullname }}`
-`server.serviceAccount.annotations` | annotations for the server service account | `{}`
-`server.resources` | server pod resource requests & limits | `{requests: {cpu: 500m, memory: 1Gi} }`
-`server.nodeSelector` | node labels for server pod assignment | `{}`
-`server.tolerations` | node taints to tolerate | `[]`
-`server.affinity` | pod affinity | `{}`
-`server.persistentVolume.enabled` | if true, server will create a Persistent Volume Claim | `true`
-`server.persistentVolume.accessModes` | server data Persistent Volume access modes | `[ReadWriteOnce]`
-`server.persistentVolume.annotations` | annotations for server Persistent Volume Claim | `{}`
-`server.persistentVolume.existingClaim` | server data Persistent Volume existing claim name | `""`
-`server.persistentVolume.size` | server data Persistent Volume size | `10Gi`
-`server.persistentVolume.storageClass` | server data Persistent Volume Storage Class | `""`
-`server.configDb` | server [database properties](https://www.jetbrains.com/help/teamcity/setting-up-an-external-database.html) | `""`
-`ingress.enabled` | if true, teamcity server Ingress will be created | `false`
-`ingress.annotations` | teamcity server Ingress annotations | `[]`
-`ingress.hosts` | teamcity server Ingress hostnames | `[]`
-`ingress.tls` | teamcity server Ingress https certs | `[]`
-`service.port` | teamcity server service port | `80`
-`service.type` | teamcity server service type | `ClusterIP`
-`postgresql.enabled` | if true, the `stable/postgresql` chart is used | `false`
-`postgresql.postgresqlDatabase` | the postgres database to use | `teamcity`
-`postgresql.postgresqlUsername` | the postgres user to create | `teamcity`
-`postgresql.postgresqlPassword` | the postgres user's password | `teamcity`
-
-### Teamcity agent
-
-Parameter | Description | Default
---------- | ----------- | -------
-`agent.enabled` | if true, create teamcity agent | `true`
-`agent.image.repository` | agent container image repository | `sergelog/teamcity-agent`
-`agent.image.tag` | agent container image tag | `release_2020.1.3-2`
-`agent.image.pullPolicy` | agent container image pull policy | `IfNotPresent`
-`agent.replicaCount` | desired number of agent pods | `0`
-`agent.updateStrategy` | deployment strategy | `{ "type": "Recreate" }`
-`agent.podAnnotations` | annotations to be added to agent pods | `{}` |
-`agent.podSecurityContext` | specify pod annotations in the pod security policy | `{fsGroup: 1000}` |
-`agent.securityContext` | custom [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for Teamcity agent containers | `{runAsUser: 1000, runAsGroup: 1000, runAsNonRoot: true}` |
-`agent.serviceAccount.create` | if true, create the agent service account | `true`
-`agent.serviceAccount.name` | name of the agent service account to use or create | `{{ teamcity.fullname }}-agent`
-`agent.serviceAccount.annotations` | annotations for the agent service account | `{}`
-`agent.resources` | agent pod resource requests & limits | `{requests: {cpu: 500m, memory: 512Mi} }`
-`agent.nodeSelector` | node labels for agent pod assignment | `{}`
-`agent.tolerations` | node taints to tolerate | `[]`
-`agent.affinity` | pod affinity | `{}`
-`agent.extraVolumeMounts` | extra volume mounts for the pod | `[]`
-`agent.extraVolumes` | additional volumes for the pod | `[]`
-`agent.envs` | agent environment variables | `{}`
-`agent.rbac.create` | if true, create & use RBAC resources | `false`
-`agent.rbac.rules` | RBAC rules | `[]`
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| imagePullSecrets | list | `[]` |  |
+| nameOverride | string | `""` |  |
+| fullnameOverride | string | `""` |  |
+| server.enabled | bool | `true` |  |
+| server.image.repository | string | `"ghcr.io/sergelogvinov/teamcity"` |  |
+| server.image.pullPolicy | string | `"IfNotPresent"` |  |
+| server.image.tag | string | `""` |  |
+| server.configDb | list | `[]` |  |
+| server.updateStrategy.type | string | `"Recreate"` |  |
+| server.serviceAccount.create | bool | `true` |  |
+| server.serviceAccount.annotations | object | `{}` |  |
+| server.serviceAccount.name | string | `""` |  |
+| server.podAnnotations | object | `{}` |  |
+| server.podSecurityContext.fsGroup | int | `1000` |  |
+| server.podSecurityContext.fsGroupChangePolicy | string | `"OnRootMismatch"` |  |
+| server.securityContext.runAsUser | int | `1000` |  |
+| server.securityContext.runAsGroup | int | `1000` |  |
+| server.resources.requests.cpu | string | `"500m"` |  |
+| server.resources.requests.memory | string | `"1Gi"` |  |
+| server.persistentVolume.enabled | bool | `true` |  |
+| server.persistentVolume.annotations | object | `{}` |  |
+| server.persistentVolume.accessModes[0] | string | `"ReadWriteOnce"` |  |
+| server.persistentVolume.size | string | `"10Gi"` |  |
+| server.persistentVolume.storageClass | string | `""` |  |
+| server.persistentVolume.existingClaim | string | `""` |  |
+| server.nodeSelector | object | `{}` |  |
+| server.tolerations | list | `[]` |  |
+| server.affinity | object | `{}` |  |
+| agent.enabled | bool | `true` |  |
+| agent.image.repository | string | `"ghcr.io/sergelogvinov/teamcity"` |  |
+| agent.image.pullPolicy | string | `"IfNotPresent"` |  |
+| agent.image.tag | string | `""` |  |
+| agent.replicaCount | int | `0` |  |
+| agent.envs | object | `{}` |  |
+| agent.updateStrategy.type | string | `"Recreate"` |  |
+| agent.serviceAccount.create | bool | `true` |  |
+| agent.serviceAccount.annotations | object | `{}` |  |
+| agent.serviceAccount.name | string | `""` |  |
+| agent.rbac.create | bool | `false` |  |
+| agent.rbac.rules | list | `[]` |  |
+| agent.podAnnotations | object | `{}` |  |
+| agent.podSecurityContext.fsGroup | int | `1000` |  |
+| agent.podSecurityContext.fsGroupChangePolicy | string | `"OnRootMismatch"` |  |
+| agent.securityContext.runAsNonRoot | bool | `true` |  |
+| agent.securityContext.runAsUser | int | `1000` |  |
+| agent.securityContext.runAsGroup | int | `1000` |  |
+| agent.resources.requests.cpu | string | `"500m"` |  |
+| agent.resources.requests.memory | string | `"512Mi"` |  |
+| agent.extraVolumeMounts | list | `[]` |  |
+| agent.extraVolumes | list | `[]` |  |
+| agent.nodeSelector | object | `{}` |  |
+| agent.tolerations | list | `[]` |  |
+| agent.affinity | object | `{}` |  |
+| dind.enabled | bool | `true` |  |
+| dind.image | object | `{"pullPolicy":"IfNotPresent","repository":"docker","tag":"25.0-dind"}` | Docker in Docker image. ref: https://hub.docker.com/_/docker/tags?page=1&name=dind |
+| dind.resources | object | `{"limits":{"cpu":1,"memory":"2Gi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| dind.extraVolumeMounts | list | `[]` | Additional container volume mounts. |
+| dind.extraVolumes | list | `[]` | Additional volumes. |
+| dind.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"100Gi"}` | Persistence parameters for source code ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
+| service.type | string | `"ClusterIP"` |  |
+| service.port | int | `80` |  |
+| ingress.enabled | bool | `false` |  |
+| ingress.className | string | `""` |  |
+| ingress.annotations | object | `{}` |  |
+| ingress.hosts[0].host | string | `"chart-example.local"` |  |
+| ingress.hosts[0].paths | list | `[]` |  |
+| ingress.tls | list | `[]` |  |
+| metrics.enabled | bool | `false` |  |
+| metrics.username | string | `"prometheus"` |  |
+| metrics.password | string | `"prometheus"` |  |
+| metrics.image.repository | string | `"nginx"` |  |
+| metrics.image.pullPolicy | string | `"IfNotPresent"` |  |
+| metrics.image.tag | string | `"1.23.0-alpine"` |  |
+| metrics.securityContext.runAsNonRoot | bool | `true` |  |
+| metrics.securityContext.runAsUser | int | `101` |  |
+| metrics.securityContext.runAsGroup | int | `101` |  |
+| postgresql.enabled | bool | `false` |  |
+| postgresql.postgresqlDatabase | string | `"teamcity"` |  |
+| postgresql.postgresqlUsername | string | `"teamcity"` |  |
+| postgresql.postgresqlPassword | string | `"teamcity"` |  |
