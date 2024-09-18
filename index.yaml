@@ -5531,6 +5531,31 @@ entries:
     version: 0.1.1
   teamcity:
   - apiVersion: v2
+    appVersion: 2024.07.2
+    created: "2024-09-18T14:55:58.458101454Z"
+    description: Teamcity chart
+    digest: 9e4c1b78b6ccb77ddc0362e4ff3ce4a039a51bd5544dcd7ccd6d7298c59feb58
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/teamcity/icon.svg
+    keywords:
+    - ci
+    - continuous integration
+    - continuous delivery
+    - continuous deployment
+    - devops
+    - automation
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: teamcity
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/teamcity
+    - https://www.jetbrains.com/teamcity
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.14/teamcity-0.6.14.tgz
+    version: 0.6.14
+  - apiVersion: v2
     appVersion: 2024.07.1
     created: "2024-08-12T07:03:25.21080895Z"
     description: Teamcity chart
@@ -5770,4 +5795,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-09-18T14:36:23.378942677Z"
+generated: "2024-09-18T14:55:58.458575379Z"
