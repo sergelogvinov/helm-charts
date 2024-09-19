@@ -29,12 +29,13 @@ allowed-unsafe-sysctls: net.ipv6.conf.all.forwarding
 Install the Tailscale client on each Kubernetes `VPN` node role.
 
 ```shell
-helm upgrade -i -n vpn -f vars/tailscale.yaml tailscale sinextra/tailscale
+helm upgrade -i -n vpn -f vars/tailscale.yaml tailscale oci://ghcr.io/sergelogvinov/charts/tailscale
 ```
 
 Helm values vars/tailscale.yaml
 
 ```yaml
+# helm values
 tailscale:
   # Tailscale authentication key
   TS_AUTH_KEY: tskey-auth-XXX
@@ -96,5 +97,3 @@ It's important to note that Tailscale exit nodes are intended for personal use o
 and should not be used for commercial purposes or to violate the terms of service of any websites or services you are accessing through the exit node.
 
 {{ template "chart.valuesSection" . }}
-
-{{ template "helm-docs.versionFooter" . }}
