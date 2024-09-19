@@ -4727,6 +4727,27 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2024-09-19T13:55:04.031963474Z"
+    description: Static prometheus/victoria metrics common rules
+    digest: 63cf93a07a5135f44c0e34fdbcc66ead21d437baec894878b5ca8bc425be7ecc
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - prometheus
+    - victoria-metrics
+    - metrics
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: prometheus-rules
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.2.9/prometheus-rules-0.2.9.tgz
+    version: 0.2.9
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2024-09-07T07:17:43.527211038Z"
     description: Static prometheus rules
     digest: 3442045ea49e3c13eef7cb72d8d07be0827d241d93b8eb7d66cbd103d8f48608
@@ -6137,4 +6158,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-09-19T13:43:58.221369312Z"
+generated: "2024-09-19T13:55:04.032582649Z"
