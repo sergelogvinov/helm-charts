@@ -2625,6 +2625,29 @@ entries:
     version: 0.2.2
   mongodb-backup:
   - apiVersion: v2
+    appVersion: 6.0.13
+    created: "2024-09-19T05:53:59.021804881Z"
+    description: Mongo backup with restore checks
+    digest: b050c9bf8e4dfebadf01d8895fec2c8e98210974d8408f8f5fc8fbb873409f72
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/mongodb-backup/icon.png
+    keywords:
+    - mongodb
+    - backup
+    - wal-g
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongodb-backup
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongodb-backup
+    - https://www.mongodb.com
+    - https://github.com/wal-g/wal-g
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongodb-backup-0.4.2/mongodb-backup-0.4.2.tgz
+    version: 0.4.2
+  - apiVersion: v2
     appVersion: 6.0.9
     created: "2023-09-07T06:53:05.481462459Z"
     description: Mongo backup with restore checks
@@ -5839,4 +5862,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-09-18T15:30:33.95259252Z"
+generated: "2024-09-19T05:53:59.022345414Z"
