@@ -2849,6 +2849,28 @@ entries:
     version: 0.1.0
   mongosqld:
   - apiVersion: v2
+    appVersion: 2.14.16
+    created: "2024-09-19T07:15:17.500951117Z"
+    description: Mongo to SQL bridge
+    digest: 54890bc93433d23d2b5d0bcb1c736415a92e72ab7169fdac811ab92b429613c1
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/mongosqld/icon.png
+    keywords:
+    - mongodb
+    - mongosqld
+    - powerbi
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongosqld
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongosqld
+    - https://www.mongodb.com/docs/bi-connector/current/reference/mongosqld
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongosqld-0.3.4/mongosqld-0.3.4.tgz
+    version: 0.3.4
+  - apiVersion: v2
     appVersion: 2.14.12
     created: "2024-01-22T09:49:06.833985912Z"
     description: Mongo to SQL bridge
@@ -5883,4 +5905,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-09-19T06:35:22.868988939Z"
+generated: "2024-09-19T07:15:17.501462566Z"
