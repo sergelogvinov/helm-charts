@@ -45,6 +45,13 @@ workers:
     enabled: true
     command: ["celery", "-A", "core.celery", "worker", "-l", "info"]
 
+cronjobs:
+  # Cronjob to run runcrons management command
+  runcrons:
+    enabled: true
+    schedule: "5 * * * *"
+    command: ["python", "manage.py", "runcrons"]
+
 jobs:
   # Job to run migrations, runs by helm install or helm upgrade
   migrate:
