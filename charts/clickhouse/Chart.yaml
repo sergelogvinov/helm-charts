@@ -18,7 +18,7 @@ maintainers:
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.6.13
+version: 0.6.14
 
 # https://hub.docker.com/r/clickhouse/clickhouse-server/tags
 appVersion: 24.8
