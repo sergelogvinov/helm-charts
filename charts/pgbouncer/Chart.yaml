@@ -4,8 +4,9 @@ name: pgbouncer
 description: Postgres connection poller
 type: application
 home: https://github.com/sergelogvinov/helm-charts
+icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/pgbouncer/icon.png
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/master/charts/pgbouncer
+- https://github.com/sergelogvinov/helm-charts/tree/main/charts/pgbouncer
 keywords:
 - pgbouncer
 - postgresql
@@ -16,10 +17,7 @@ maintainers:
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.2.10
+version: 0.2.11
 
-# This is the version number of the application being deployed. This version number should be
-# incremented each time you make changes to the application. Versions are not expected to
-# follow Semantic Versioning. They should reflect the version the application is using.
-# It is recommended to use it with quotes.
-appVersion: "15.8"
+# https://github.com/sergelogvinov/containers/pkgs/container/pgbouncer
+appVersion: "16.4"

@@ -1,8 +1,11 @@
 # pgbouncer
 
-![Version: 0.2.10](https://img.shields.io/badge/Version-0.2.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 15.8](https://img.shields.io/badge/AppVersion-15.8-informational?style=flat-square)
+![Version: 0.2.11](https://img.shields.io/badge/Version-0.2.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.4](https://img.shields.io/badge/AppVersion-16.4-informational?style=flat-square)
 
 Postgres connection poller
+
+PgBouncer is a lightweight connection pooler for PostgreSQL.
+It is designed to manage and optimize database connections by limiting the number of active connections to a PostgreSQL database, which helps improve performance and resource usage, especially in high-traffic environments.
 
 **Homepage:** <https://github.com/sergelogvinov/helm-charts>
 
@@ -14,7 +17,7 @@ Postgres connection poller
 
 ## Source Code
 
-* <https://github.com/sergelogvinov/helm-charts/tree/master/charts/pgbouncer>
+* <https://github.com/sergelogvinov/helm-charts/tree/main/charts/pgbouncer>
 
 ```yaml
 # helm values
@@ -30,7 +33,7 @@ databases:
     host: pg-0.pg-headless
     port: 5432
     user: username
-    dbname: databse
+    dbname: database
     poolmode: session
 
 users:
