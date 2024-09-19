@@ -1,8 +1,11 @@
 # prometheus-rules
 
-![Version: 0.2.8](https://img.shields.io/badge/Version-0.2.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.40.0](https://img.shields.io/badge/AppVersion-2.40.0-informational?style=flat-square)
+![Version: 0.2.9](https://img.shields.io/badge/Version-0.2.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.40.0](https://img.shields.io/badge/AppVersion-2.40.0-informational?style=flat-square)
 
-Static prometheus rules
+Static prometheus/victoria metrics common rules
+
+Helm chart containing Prometheus/VictoriaMetrics basic kubernetes rules.
+It's stores as configMap and mounted to Prometheus/VictoriaMetrics pods.
 
 **Homepage:** <https://github.com/sergelogvinov/helm-charts>
 
@@ -14,7 +17,7 @@ Static prometheus rules
 
 ## Source Code
 
-* <https://github.com/sergelogvinov/helm-charts/tree/master/charts/prometheus-rules>
+* <https://github.com/sergelogvinov/helm-charts/tree/main/charts/prometheus-rules>
 
 Static configmap.
 
