@@ -1,6 +1,6 @@
 # openvpn
 
-![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.6.8](https://img.shields.io/badge/AppVersion-2.6.8-informational?style=flat-square)
+![Version: 0.4.3](https://img.shields.io/badge/Version-0.4.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.6.8](https://img.shields.io/badge/AppVersion-2.6.8-informational?style=flat-square)
 
 OpenVPN in kubernetes
 
@@ -81,6 +81,26 @@ openvpn:
     push "route 8.8.8.8"
 ```
 
+Useful `Makefile` to download user certificates:
+
+```Makefile
+ifeq (vpn,$(firstword $(MAKECMDGOALS)))
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  USER := $(subst .,-,$(subst @,-,$(lastword $(MAKECMDGOALS))))
+  $(eval $(RUN_ARGS):;@:)
+endif
+
+.PHONY: vpn
+vpn: vpn-$(USER) ## create certificate for vpn
+vpn-clean:
+	rm -f ca.crt ca.key client.crt client.key client.ovpn
+
+vpn-%: ## create certificate for vpn
+	kubectl --namespace vpn get secret openvpn-client-$(USER) -o jsonpath="{.data.tls\.crt}" | base64 --decode > client.crt
+	kubectl --namespace vpn get secret openvpn-client-$(USER) -o jsonpath="{.data.tls\.key}" | base64 --decode > client.key
+	kubectl --namespace vpn get configmap openvpn -o jsonpath="{.data.client\.conf}" > client.ovpn
+```
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -109,4 +129,3 @@ openvpn:
 | nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-
