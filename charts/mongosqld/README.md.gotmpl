@@ -6,6 +6,10 @@
 
 {{ template "chart.description" . }}
 
+MongoSQLD is a MongoDB connector for BI tools.
+It allows you to use SQL queries to access MongoDB data.
+It supports pre-defined or dynamic schemas.
+
 {{ template "chart.homepageLine" . }}
 
 {{ template "chart.maintainersSection" . }}
@@ -25,7 +29,19 @@ db.createUser({user: 'mongosql', pwd:"mongosql", roles: [{ 'role': 'read', 'db':
 ## Deploy chart
 
 ```yaml
-# helm values
+# Predefined schema
+schemaMode: custom
+schema:
+  - db: db
+    tables:
+    - table: table
+      collection: table
+      pipeline: []
+      columns:
+      - Name: _id
+        MongoType: bson.ObjectId
+        SqlName: _id
+        SqlType: objectid
 
 auth:
   host: mongo-rs0:27017
@@ -35,5 +51,3 @@ auth:
 ```
 
 {{ template "chart.valuesSection" . }}
-
-{{ template "helm-docs.versionFooter" . }}
