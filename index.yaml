@@ -3915,6 +3915,29 @@ entries:
     version: 0.1.0
   postgresql-single:
   - apiVersion: v2
+    appVersion: "15.8"
+    created: "2024-09-19T13:29:53.185069595Z"
+    description: Postgres with backup/restore and replication
+    digest: 91374fd20a80b182dcbc01564bdd100256c2f011a5f5e5670d976ab45d50c13d
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/postgresql-single/icon.png
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: postgresql-single
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-0.11.3/postgresql-single-0.11.3.tgz
+    version: 0.11.3
+  - apiVersion: v2
     appVersion: "15.6"
     created: "2024-06-06T15:08:27.242161002Z"
     description: Postgres with backup/restore checks
@@ -6093,4 +6116,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-09-19T13:20:09.043288457Z"
+generated: "2024-09-19T13:29:53.18618804Z"
