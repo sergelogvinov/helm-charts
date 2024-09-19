@@ -6,6 +6,9 @@
 
 {{ template "chart.description" . }}
 
+Plausible Analytics is an easy to use, lightweight (< 1 KB), open source and privacy-friendly alternative to Google Analytics.
+It doesnt use cookies and is fully compliant with GDPR, CCPA and PECR.
+
 {{ template "chart.homepageLine" . }}
 
 {{ template "chart.maintainersSection" . }}
@@ -13,5 +16,22 @@
 {{ template "chart.sourcesSection" . }}
 
 {{ template "chart.requirementsSection" . }}
+
+```yaml
+# Helm values
+config:
+  # openssl rand -base64 48, it creates automatically if not set
+  secretKeyBase: ""
+  # openssl rand -base64 32, it creates automatically if not set
+  totpVaultKey: ""
+
+envs:
+  # The database URL for the PostgreSQL/Clickhouse database.
+  DATABASE_URL: "postgres://plausible:plausible@plausible-pg/plausible"
+  CLICKHOUSE_DATABASE_URL: "http://clickhouse:clickhouse@clickhouse.logs.svc:8123/plausible"
+  #
+  DISABLE_REGISTRATION: invite_only
+  ENABLE_EMAIL_VERIFICATION: "false"
+```
 
 {{ template "chart.valuesSection" . }}

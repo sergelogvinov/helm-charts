@@ -1,8 +1,11 @@
 # plausible
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.1.1](https://img.shields.io/badge/AppVersion-v2.1.1-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.1.1](https://img.shields.io/badge/AppVersion-v2.1.1-informational?style=flat-square)
 
 Plausible Analytics
+
+Plausible Analytics is an easy to use, lightweight (< 1 KB), open source and privacy-friendly alternative to Google Analytics.
+It doesnt use cookies and is fully compliant with GDPR, CCPA and PECR.
 
 **Homepage:** <https://plausible.io/>
 
@@ -14,8 +17,25 @@ Plausible Analytics
 
 ## Source Code
 
-* <https://github.com/sergelogvinov/helm-charts/tree/master/charts/plausible>
+* <https://github.com/sergelogvinov/helm-charts/tree/main/charts/plausible>
 * <https://github.com/plausible/analytics>
+
+```yaml
+# Helm values
+config:
+  # openssl rand -base64 48, it creates automatically if not set
+  secretKeyBase: ""
+  # openssl rand -base64 32, it creates automatically if not set
+  totpVaultKey: ""
+
+envs:
+  # The database URL for the PostgreSQL/Clickhouse database.
+  DATABASE_URL: "postgres://plausible:plausible@plausible-pg/plausible"
+  CLICKHOUSE_DATABASE_URL: "http://clickhouse:clickhouse@clickhouse.logs.svc:8123/plausible"
+  #
+  DISABLE_REGISTRATION: invite_only
+  ENABLE_EMAIL_VERIFICATION: "false"
+```
 
 ## Values
 

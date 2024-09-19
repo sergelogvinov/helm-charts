@@ -4,8 +4,9 @@ name: plausible
 description: Plausible Analytics
 type: application
 home: https://plausible.io/
+icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/plausible/icon.png
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/master/charts/plausible
+- https://github.com/sergelogvinov/helm-charts/tree/main/charts/plausible
 - https://github.com/plausible/analytics
 keywords:
 - plausible
@@ -17,5 +18,7 @@ maintainers:
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.1.1
+version: 0.1.2
+
+# https://github.com/plausible/analytics/pkgs/container/community-edition
 appVersion: v2.1.1
