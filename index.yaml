@@ -3,6 +3,25 @@ entries:
   backend-common:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2024-09-19T09:48:36.650096386Z"
+    description: Deploy common backend services with workers and jobs
+    digest: ff3438d0a422aae0717981f780b5c4cc5718a98d999845f436d8f502b0e646e4
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/backend-common/icon.png
+    keywords:
+    - backend
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: backend-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/backend-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/backend-common-0.1.3/backend-common-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2024-05-25T08:37:46.485020676Z"
     description: A Helm chart for Kubernetes
     digest: d7b8ba46036ede1573e07af23553ccf47e541a35f32088966078f721c4cac02a
@@ -5928,4 +5947,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-09-19T07:31:30.334470939Z"
+generated: "2024-09-19T09:48:36.821298075Z"
