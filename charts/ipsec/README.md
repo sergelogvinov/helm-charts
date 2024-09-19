@@ -1,8 +1,11 @@
 # ipsec
 
-![Version: 0.3.5](https://img.shields.io/badge/Version-0.3.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.12](https://img.shields.io/badge/AppVersion-4.12-informational?style=flat-square)
+![Version: 0.3.6](https://img.shields.io/badge/Version-0.3.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.0](https://img.shields.io/badge/AppVersion-5.0-informational?style=flat-square)
 
 IPSec link for Kubernetes
+
+The main idea of the project is to make it easy to connect Kubernetes services through an IPsec tunnel.
+This tunnel provides a secure way for external clients or other networks to access services inside a Kubernetes cluster.
 
 **Homepage:** <https://github.com/sergelogvinov/helm-charts>
 
@@ -14,7 +17,7 @@ IPSec link for Kubernetes
 
 ## Source Code
 
-* <https://github.com/sergelogvinov/helm-charts/tree/master/charts/ipsec>
+* <https://github.com/sergelogvinov/helm-charts/tree/main/charts/ipsec>
 * <https://libreswan.org/>
 
 Example:
@@ -27,6 +30,8 @@ users:
 secrets: |
   : PSK "ExampleSecret123"
 
+# Exported service
+# The 172.30.1.1:5432 will be available from the external network
 ipsecService:
   enabled: true
 
@@ -105,4 +110,3 @@ config: |
 | nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-
