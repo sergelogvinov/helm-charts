@@ -6,6 +6,8 @@
 
 {{ template "chart.description" . }}
 
+The mongodb-backup chart provides a way to backup and restore a MongoDB database to an external storage using [wal-g](https://github.com/wal-g)
+
 {{ template "chart.homepageLine" . }}
 
 {{ template "chart.maintainersSection" . }}
@@ -14,7 +16,7 @@
 
 {{ template "chart.requirementsSection" . }}
 
-* Support backup/restore to the extrernal storage, using [wal-g](https://github.com/wal-g)
+* Support backup to the extrernal storage, using [wal-g](https://github.com/wal-g)
 * Daily backup check by restoring process
 
 ```yaml
@@ -41,5 +43,3 @@ backupCheck:
 ```
 
 {{ template "chart.valuesSection" . }}
-
-{{ template "helm-docs.versionFooter" . }}
