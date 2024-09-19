@@ -3132,6 +3132,27 @@ entries:
   mongosync:
   - apiVersion: v2
     appVersion: 1.8.0
+    created: "2024-09-19T13:57:32.428022798Z"
+    description: Mongo Cluster-to-Cluster Sync
+    digest: 968ae7c4ef6865c0e8daaacd9360aeb9cd189af933b8bfb3e719b21ec4b0b3a0
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/mongosync/icon.png
+    keywords:
+    - mongodb
+    - mongosync
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongosync
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongosync
+    - https://www.mongodb.com/docs/cluster-to-cluster-sync
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongosync-0.1.6/mongosync-0.1.6.tgz
+    version: 0.1.6
+  - apiVersion: v2
+    appVersion: 1.8.0
     created: "2024-09-19T06:35:22.868445337Z"
     description: Mongo Cluster-to-Cluster Sync
     digest: 8cc98c21aac037e103302087d831f402d619371b53631989e702767603b2a654
@@ -6158,4 +6179,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-09-19T13:55:04.032582649Z"
+generated: "2024-09-19T13:57:32.42858096Z"
