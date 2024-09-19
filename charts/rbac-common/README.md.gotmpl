@@ -1,0 +1,39 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+The chart automatically creates default roles and role bindings for users, either in a specific namespace or across the entire cluster.
+It has default permissions for the admins, developers, and viewers.
+
+- ClusterAdmins have permission to read everything and can also create, change, or delete less important resources. The default Kubernetes cluster-admin role is very powerful and can be risky if not used carefully.
+- Developers can see all resources in the cluster and delete pods, but they cannot create or change any other resources.
+- Viewers can only look at resources in the cluster but cannot make any changes.
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+```yaml
+rbac:
+  create: true
+  singleNamespace: false
+
+clusterAdmins:
+  - admin-1
+
+developers:
+  - dev-1
+
+viewers:
+  - viewer-1
+```
+
+{{ template "chart.valuesSection" . }}
