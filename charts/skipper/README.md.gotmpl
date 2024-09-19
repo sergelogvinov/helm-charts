@@ -1,0 +1,35 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+```yaml
+ingressClass: skipper
+ingressClassResource:
+  enabled: true
+  name: skipper
+
+# hostNetwork: true
+hostPort:
+  ports:
+    http: 8080
+    https: 8443
+
+priorityClassName: system-cluster-critical
+
+useDaemonSet: true
+terminationGracePeriodSeconds: 120
+```
+
+{{ template "chart.valuesSection" . }}
