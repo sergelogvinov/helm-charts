@@ -5527,6 +5527,28 @@ entries:
     version: 0.1.0
   tailscale:
   - apiVersion: v2
+    appVersion: v1.74.1
+    created: "2024-09-19T11:13:52.621759383Z"
+    description: Tailscale mesh network.
+    digest: e82a9cce49c7deae99f43654f9ffb951eb38aa29aadf86e015e8561805f50dd4
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/tailscale/icon.png
+    keywords:
+    - tailscale
+    - vpn
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: tailscale
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/tailscale
+    - https://github.com/tailscale/tailscale
+    - https://tailscale.com
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.2.4/tailscale-0.2.4.tgz
+    version: 0.2.4
+  - apiVersion: v2
     appVersion: v1.56.1
     created: "2023-12-27T15:42:47.590569784Z"
     description: Tailscale mesh network.
@@ -6010,4 +6032,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-09-19T10:25:43.731353279Z"
+generated: "2024-09-19T11:13:52.622209304Z"
