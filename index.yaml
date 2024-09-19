@@ -2628,6 +2628,26 @@ entries:
     version: 0.2.3
   link-common:
   - apiVersion: v2
+    appVersion: 2.8.6-alpine3.19
+    created: "2024-09-19T12:28:52.945351769Z"
+    description: Simple vpn-p2p-link service
+    digest: 8a2e7f73c93327a7e99c4bee46345d060f2a790fe2900f16542b572584e317f6
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/link-common/icon.png
+    keywords:
+    - networking
+    - vpn
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: link-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/link-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/link-common-0.3.4/link-common-0.3.4.tgz
+    version: 0.3.4
+  - apiVersion: v2
     appVersion: 2.8.3-alpine3.18
     created: "2024-02-28T16:32:22.917396969Z"
     description: Simple vpn-p2p-link service
@@ -6053,4 +6073,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-09-19T12:07:24.758150615Z"
+generated: "2024-09-19T12:28:52.94582644Z"
