@@ -3877,6 +3877,27 @@ entries:
   plausible:
   - apiVersion: v2
     appVersion: v2.1.1
+    created: "2024-09-19T13:43:58.220906708Z"
+    description: Plausible Analytics
+    digest: 6d5ff21062113bff985ae2688037c9886c40d4b77986fb5770457c0b6a8a2382
+    home: https://plausible.io/
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/plausible/icon.png
+    keywords:
+    - plausible
+    - analytics
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: plausible
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/plausible
+    - https://github.com/plausible/analytics
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/plausible-0.1.2/plausible-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: v2.1.1
     created: "2024-09-07T07:23:03.66849034Z"
     description: A Helm Chart for Plausible Analytics
     digest: 847e196ebaf3a5ed1b4452c394fbed930515fa0b4a6035d4b4f4eddb7e1c4e79
@@ -6116,4 +6137,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-09-19T13:29:53.18618804Z"
+generated: "2024-09-19T13:43:58.221369312Z"
