@@ -84,6 +84,7 @@ spec:
             - "-runtime-metrics=false"
             - "-disable-metrics-compat"
             - "-metrics-flavour=prometheus"
+            - "-metrics-exp-decay-sample"
             - "-enable-connection-metrics"
             - "-enable-route-lifo-metrics"
             - "-enable-route-fifo-metrics"
@@ -93,7 +94,9 @@ spec:
             - "-idle-timeout-server=62s"
             - "-read-timeout-server=5m"
             - "-write-timeout-server=60s"
+            - "-max-audit-body=0"
             - "-wait-first-route-load"
+            - "-experimental-upgrade"
             - "-default-filters-prepend=enableAccessLog(2,4,5)->flowId()->xforward()"
             # - "-insecure"
           ports:
