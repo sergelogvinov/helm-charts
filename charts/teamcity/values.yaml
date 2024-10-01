@@ -73,6 +73,10 @@ server:
       cpu: 500m
       memory: 1Gi
 
+  # -- Priority Class Name
+  # ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ~
+
   persistentVolume:
     ## If true, teamcity will create/use a Persistent Volume Claim
     ## If false, use emptyDir
@@ -211,6 +215,10 @@ agent:
     requests:
       cpu: 500m
       memory: 512Mi
+
+  # -- Priority Class Name
+  # ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ~
 
   ## extraVolumes and extraVolumeMounts allows you to mount other volumes to agent pod
   ##

@@ -22,10 +22,10 @@ maintainers:
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.6.15
+version: 0.6.16
 
 # https://hub.docker.com/r/jetbrains/teamcity-server/tags
-appVersion: 2024.07.2
+appVersion: 2024.07.3
 
 # dependencies:
 #   - name: postgresql-single

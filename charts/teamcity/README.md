@@ -1,6 +1,6 @@
 # teamcity
 
-![Version: 0.6.15](https://img.shields.io/badge/Version-0.6.15-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2024.07.2](https://img.shields.io/badge/AppVersion-2024.07.2-informational?style=flat-square)
+![Version: 0.6.16](https://img.shields.io/badge/Version-0.6.16-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2024.07.3](https://img.shields.io/badge/AppVersion-2024.07.3-informational?style=flat-square)
 
 Teamcity on Kubernetes
 
@@ -44,6 +44,7 @@ You can run TeamCity on Kubernetes using this Helm chart.
 | server.securityContext.runAsGroup | int | `1000` |  |
 | server.resources.requests.cpu | string | `"500m"` |  |
 | server.resources.requests.memory | string | `"1Gi"` |  |
+| server.priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
 | server.persistentVolume.enabled | bool | `true` |  |
 | server.persistentVolume.annotations | object | `{}` |  |
 | server.persistentVolume.accessModes[0] | string | `"ReadWriteOnce"` |  |
@@ -73,6 +74,7 @@ You can run TeamCity on Kubernetes using this Helm chart.
 | agent.securityContext.runAsGroup | int | `1000` |  |
 | agent.resources.requests.cpu | string | `"500m"` |  |
 | agent.resources.requests.memory | string | `"512Mi"` |  |
+| agent.priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
 | agent.extraVolumeMounts | list | `[]` |  |
 | agent.extraVolumes | list | `[]` |  |
 | agent.nodeSelector | object | `{}` |  |
