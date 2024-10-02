@@ -18,6 +18,8 @@ spec:
   {{- else }}
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
+    rollingUpdate:
+      maxUnavailable: 30%
   {{- end }}
   selector:
     matchLabels:
