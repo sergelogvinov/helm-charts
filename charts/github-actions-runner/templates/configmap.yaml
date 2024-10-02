@@ -248,7 +248,7 @@ data:
     docker buildx create --name multiarch --driver docker-container --config /etc/docker-config/buildkitd.toml --use
     docker buildx inspect --bootstrap multiarch
 
-    exec /home/runner/run.sh
+    [ -n "$1" ] && exec $1 || /home/runner/run.sh
 
   proxy.sh: |
     #!/bin/sh

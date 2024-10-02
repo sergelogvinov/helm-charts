@@ -6,6 +6,12 @@
 
 {{ template "chart.description" . }}
 
+Github Actions runners with:
+- docker as sidecar for running docker-in-docker
+- docker registry to cache images between builds
+- oci mirror to pull images and avoid hitting rate limits
+- http proxy to reduce external traffic
+
 {{ template "chart.homepageLine" . }}
 
 {{ template "chart.maintainersSection" . }}
@@ -13,6 +19,14 @@
 {{ template "chart.sourcesSection" . }}
 
 {{ template "chart.requirementsSection" . }}
+
+Before starting, you need to deploy the controller:
+
+```bash
+helm upgrade -i arc oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller
+```
+
+Then, you can deploy the runner using the following values:
 
 ```yaml
 # helm values
