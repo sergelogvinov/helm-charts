@@ -8,23 +8,24 @@ data:
   Corefile: |
     .:53 {
         errors
-        health {
-           lameduck 5s
+        bind 127.0.0.1 ::1
+
+        health :8080 {
+          lameduck 5s
         }
 
         kubernetes cluster.local in-addr.arpa ip6.arpa {
-            pods insecure
-            ttl 60
+          pods insecure
+          ttl 60
         }
 
         forward . tls://9.9.9.9 tls://149.112.112.112 1.1.1.1 {
-            health_check 60s
-            tls_servername dns.quad9.net
-            policy sequential
-            expire 30s
+          health_check 60s
+          tls_servername dns.quad9.net
+          policy sequential
+          expire 30s
         }
 
-        rewrite stop type AAAA A
         cache 300
         loop
         reload
@@ -36,16 +37,12 @@ data:
     set -e
 
     source /tmp/labels
-    export TS_EXTRA_ARGS="--hostname=$REGION-$NODE -advertise-exit-node --advertise-tags=$TS_TAGS --accept-dns=false --accept-routes=false"
+    export TS_HOSTNAME=$REGION-$NODE
     export TS_KUBE_SECRET=tailscale-$NODE
+    export TS_EXTRA_ARGS="--hostname=$REGION-$NODE --advertise-exit-node --advertise-tags=$TS_TAGS --accept-dns=false --accept-routes=false"
 
     /bin/sleep 5
     /usr/local/bin/containerboot
-
-  init-tailscale.sh: |
-    #!/bin/sh
-    ip6tables-save -t nat ||:
-    ip6tables -A FORWARD -o eth0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1221:1600 -j TCPMSS --set-mss 1220 ||:
 
   init.sh: |
     #!/bin/sh
