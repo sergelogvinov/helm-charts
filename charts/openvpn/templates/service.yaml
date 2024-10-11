@@ -20,13 +20,15 @@ spec:
   {{- end }}
   ipFamilyPolicy: {{ if eq (len .Values.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: openvpn
-      protocol: {{ .Values.service.proto | upper }}
-      name: openvpn
-{{- if eq "NodePort" .Values.service.type }}
-      nodePort: {{ default "30190" .Values.service.nodePort }}
-{{- end }}
+    {{- range (eq .Values.service.proto "All" | ternary (list "tcp" "udp") (list .Values.service.proto)) }}
+    - port: {{ $.Values.service.port }}
+      targetPort: openvpn-{{ . }}
+      protocol: {{ . | upper }}
+      name: openvpn-{{ . }}
+      {{- if eq "NodePort" $.Values.service.type }}
+      nodePort: {{ default "30190" $.Values.service.nodePort }}
+      {{- end }}
+    {{- end }}
 {{- with .Values.service.externalIPs  }}
   externalIPs:
 {{ toYaml . | indent 4 }}
