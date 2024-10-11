@@ -3296,6 +3296,27 @@ entries:
   openvpn:
   - apiVersion: v2
     appVersion: 2.6.11
+    created: "2024-10-11T15:49:34.334574365Z"
+    description: OpenVPN in kubernetes
+    digest: fb02f51890c7e1c2f7dffd67f818f38e5e3d0cae33deaf9e63d72049b034ae31
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/openvpn/icon.png
+    keywords:
+    - openvpn
+    - vpn
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: openvpn
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/openvpn
+    - https://openvpn.net
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/openvpn-0.4.5/openvpn-0.4.5.tgz
+    version: 0.4.5
+  - apiVersion: v2
+    appVersion: 2.6.11
     created: "2024-09-19T10:25:43.730873864Z"
     description: OpenVPN in kubernetes
     digest: f4d659f99e440c28ea52141068bf4701dc191670ac12980089527e958242aaab
@@ -6371,4 +6392,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-10-10T19:43:48.414867889Z"
+generated: "2024-10-11T15:49:34.335238881Z"
