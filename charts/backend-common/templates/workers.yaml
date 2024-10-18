@@ -61,6 +61,11 @@ spec:
           {{- end }}
             - name: PGAPPNAME
               value: {{ printf "%s-%s" $key .name }}
+          envFrom:
+          {{- if ne (len $.Values.envSecrets) 0 }}
+            - secretRef:
+                name: {{ include "backend-common.fullname" $ }}
+          {{- end }}
           {{- if .startupProbe }}
           startupProbe: {{- toYaml (merge .startupProbe $.Values.startupProbe) | nindent 12 }}
           {{- end }}
@@ -95,6 +100,11 @@ spec:
           {{- end }}
             - name: PGAPPNAME
               value: {{ $key | quote }}
+          envFrom:
+          {{- if ne (len $.Values.envSecrets) 0 }}
+            - secretRef:
+                name: {{ include "backend-common.fullname" $ }}
+          {{- end }}
           {{- if .startupProbe }}
           startupProbe: {{- toYaml (merge .startupProbe $.Values.startupProbe) | nindent 12 }}
           {{- end }}

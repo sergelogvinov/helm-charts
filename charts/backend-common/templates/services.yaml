@@ -92,6 +92,56 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
+      {{- if .containers }}{{- range .containers }}
+        {{- $containerName := ternary $fullname (printf "%s-%s" $fullname .name) (empty .name) }}
+        - name: {{ $containerName }}
+          securityContext:
+            {{- toYaml $.Values.securityContext | nindent 12 }}
+          image: "{{ default $.Values.image.repository .image }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          command:
+            {{- toYaml .command | nindent 12 }}
+          env:
+          {{- if or $.Values.env .env }}
+            {{- default $.Values.env .env | toYaml | nindent 12 }}
+          {{- end }}
+            - name: PGAPPNAME
+              value: {{ $containerName }}
+          envFrom:
+          {{- if ne (len $.Values.envSecrets) 0 }}
+            - secretRef:
+                name: {{ include "backend-common.fullname" $ }}
+          {{- end }}
+          {{- if not .name }}
+          ports:
+            - name: http
+              containerPort: {{ .port | default 5200 }}
+            {{- if .metricsPort }}
+            - name: metrics
+              containerPort: {{ .metricsPort }}
+            {{- end }}
+          {{- end }}
+          {{- if .startupProbe }}
+          startupProbe: {{- toYaml (merge .startupProbe $.Values.startupProbe) | nindent 12 }}
+          {{- end }}
+          {{- if .livenessProbe }}
+          livenessProbe: {{- toYaml (merge .livenessProbe $.Values.livenessProbe) | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml (default $.Values.resources .resources) | nindent 12 }}
+          volumeMounts:
+            {{- if or $.Values.configConfigMap $.Values.config }}
+            - name: config
+              mountPath: {{ $.Values.configMountPath }}
+            {{- end }}
+            {{- if $.Values.secrets }}
+            - name: secrets
+              mountPath: {{ $.Values.secretsMountPath }}
+            {{- end }}
+          {{- with .volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- end }}{{- else }}
         - name: {{ $fullname }}
           securityContext:
             {{- toYaml $.Values.securityContext | nindent 12 }}
@@ -105,6 +155,11 @@ spec:
           {{- end }}
             - name: PGAPPNAME
               value: {{ $key | quote }}
+          envFrom:
+          {{- if ne (len $.Values.envSecrets) 0 }}
+            - secretRef:
+                name: {{ include "backend-common.fullname" $ }}
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .port | default 5200 }}
@@ -136,6 +191,7 @@ spec:
           {{- with .volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
+      {{- end }}
       volumes:
         {{- if or $.Values.configConfigMap $.Values.config }}
         - name: config

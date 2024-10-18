@@ -74,6 +74,13 @@ config: ~
   #   # python config file
 
 env: []
+  # - name: PUBLIC_API_URL
+  #   value: "https://example.com/api"
+
+envSecrets: {}
+  # POSTGRES_PASSWORD: "123"
+  # MONGO_PASSWORD: "123"
+  # CLICKHOUSE_PASSWORD: "123"
 
 services: {}
 workers: {}
