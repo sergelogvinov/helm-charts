@@ -156,7 +156,7 @@ service:
 
   # -- Protocol for service.
   # Can be TCP, UDP or All.
-  proto: All
+  proto: udp
   port: 1190
   # nodePort: 1190
 
@@ -182,7 +182,7 @@ resources:
 # -- Use a daemonset instead of a deployment
 useDaemonSet: false
 
-# -- pod deployment update stategy type.
+# -- pod deployment update strategy type.
 # ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
   type: RollingUpdate
