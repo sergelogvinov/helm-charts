@@ -110,7 +110,7 @@ spec:
           envFrom:
           {{- if ne (len $.Values.envSecrets) 0 }}
             - secretRef:
-                name: {{ include "backend-common.fullname" $ }}
+                name: {{ include "backend-common.fullname" $ }}-env
           {{- end }}
           {{- if not .name }}
           ports:
@@ -158,7 +158,7 @@ spec:
           envFrom:
           {{- if ne (len $.Values.envSecrets) 0 }}
             - secretRef:
-                name: {{ include "backend-common.fullname" $ }}
+                name: {{ include "backend-common.fullname" $ }}-env
           {{- end }}
           ports:
             - name: http

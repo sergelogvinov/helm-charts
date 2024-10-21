@@ -64,7 +64,7 @@ spec:
           envFrom:
           {{- if ne (len $.Values.envSecrets) 0 }}
             - secretRef:
-                name: {{ include "backend-common.fullname" $ }}
+                name: {{ include "backend-common.fullname" $ }}-env
           {{- end }}
           {{- if .startupProbe }}
           startupProbe: {{- toYaml (merge .startupProbe $.Values.startupProbe) | nindent 12 }}
@@ -103,7 +103,7 @@ spec:
           envFrom:
           {{- if ne (len $.Values.envSecrets) 0 }}
             - secretRef:
-                name: {{ include "backend-common.fullname" $ }}
+                name: {{ include "backend-common.fullname" $ }}-env
           {{- end }}
           {{- if .startupProbe }}
           startupProbe: {{- toYaml (merge .startupProbe $.Values.startupProbe) | nindent 12 }}

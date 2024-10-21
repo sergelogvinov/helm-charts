@@ -59,6 +59,11 @@ spec:
               {{- end }}
                 - name: PGAPPNAME
                   value: {{ $key }}-cronjob
+              envFrom:
+              {{- if ne (len $.Values.envSecrets) 0 }}
+                - secretRef:
+                    name: {{ include "backend-common.fullname" $ }}-env
+              {{- end }}
               resources:
                 {{- toYaml (default $.Values.resources .resources) | nindent 16 }}
               volumeMounts:
