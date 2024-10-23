@@ -146,6 +146,8 @@ mirrors:
       # auth:
       #   username: ""
       #   password: ""
+    - host: registry.gitlab.com
+      source: https://registry.gitlab.com
     - host: quay.io
       source: https://quay.io
     - host: mcr.microsoft.com
