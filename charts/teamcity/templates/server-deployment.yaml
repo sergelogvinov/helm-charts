@@ -48,6 +48,12 @@ spec:
           env:
             - name: TEAMCITY_DATA_PATH
               value: /data/datadir
+            - name: TEAMCITY_LOGS_PATH
+              value: /opt/teamcity/logs
+            # - name: TEAMCITY_SERVER_OPTS
+            #   value: "-Dteamcity.server.nodeId=${HOSTNAME} -Dteamcity.server.rootURL=${NODE_URL}"
+            # - name: NODE_URL
+            #   value: "http://{{ include "teamcity.fullname" . }}:{{ .Values.service.port }}"
           ports:
             - name: http
               containerPort: 8111
@@ -57,14 +63,21 @@ spec:
               containerPort: 9180
               protocol: TCP
             {{- end }}
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
+          startupProbe:
+            httpGet:
+              path: /healthCheck/healthy
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 30
+            failureThreshold: 3
+            periodSeconds: 15
           # readinessProbe:
           #   httpGet:
-          #     path: /
+          #     path: /healthCheck/ready
           #     port: http
+          #   initialDelaySeconds: 120
+          #   failureThreshold: 3
+          #   periodSeconds: 60
           volumeMounts:
             - name: logs
               mountPath: /opt/teamcity/logs

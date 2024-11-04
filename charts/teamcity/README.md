@@ -1,6 +1,6 @@
 # teamcity
 
-![Version: 0.6.16](https://img.shields.io/badge/Version-0.6.16-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2024.07.3](https://img.shields.io/badge/AppVersion-2024.07.3-informational?style=flat-square)
+![Version: 0.6.17](https://img.shields.io/badge/Version-0.6.17-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2024.07.3](https://img.shields.io/badge/AppVersion-2024.07.3-informational?style=flat-square)
 
 Teamcity on Kubernetes
 
@@ -20,6 +20,76 @@ You can run TeamCity on Kubernetes using this Helm chart.
 
 * <https://github.com/sergelogvinov/helm-charts/tree/master/charts/teamcity>
 * <https://www.jetbrains.com/teamcity>
+
+Example:
+
+```yaml
+server:
+  resources:
+    limits:
+      cpu: 4
+      memory: 8Gi
+    requests:
+      cpu: 500m
+      memory: 4Gi
+  persistentVolume:
+    storageClass: proxmox-xfs
+    size: 20Gi
+
+agent:
+  replicaCount: 2
+
+  resources:
+    limits:
+      cpu: 2
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+  envs:
+    DOCKER_BUILDKIT: "1"
+    DOCKER_HOST: unix:///var/run/docker.sock
+    GOOGLE_APPLICATION_CREDENTIALS: /home/buildagent/.gcp/sa.json
+
+  # GCP service account key
+  extraVolumeMounts:
+    - name: gcp
+      mountPath: /home/buildagent/.gcp
+
+  extraVolumes:
+    - name: gcp
+      secret:
+        secretName: gcp
+        defaultMode: 432
+
+# Add docker-in-docker to the Teamcity agent
+dind:
+  resources:
+    limits:
+      cpu: 2
+      memory: 16Gi
+    requests:
+      cpu: 500m
+      memory: 2Gi
+
+  persistence:
+    enabled: true
+
+    storageClass: proxmox-xfs
+    size: 150Gi
+
+ingress:
+  enabled: true
+
+  hosts:
+    - host: ci.example.com
+      paths: ["/"]
+  tls:
+    - secretName: ci.example.com-ssl
+      hosts:
+        - ci.example.com
+```
 
 ## Values
 
@@ -81,7 +151,7 @@ You can run TeamCity on Kubernetes using this Helm chart.
 | agent.tolerations | list | `[]` |  |
 | agent.affinity | object | `{}` |  |
 | dind.enabled | bool | `true` |  |
-| dind.image | object | `{"pullPolicy":"IfNotPresent","repository":"docker","tag":"25.0-dind"}` | Docker in Docker image. ref: https://hub.docker.com/_/docker/tags?page=1&name=dind |
+| dind.image | object | `{"pullPolicy":"IfNotPresent","repository":"docker","tag":"26.1-dind"}` | Docker in Docker image. ref: https://hub.docker.com/_/docker/tags?page=1&name=dind |
 | dind.resources | object | `{"limits":{"cpu":1,"memory":"2Gi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | dind.extraVolumeMounts | list | `[]` | Additional container volume mounts. |
 | dind.extraVolumes | list | `[]` | Additional volumes. |
