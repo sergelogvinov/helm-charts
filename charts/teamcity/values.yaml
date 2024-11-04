@@ -11,6 +11,17 @@ server:
   ##
   enabled: true
 
+  replicaCount: 1
+
+  # -- Teamcity server runs as cluster
+  # ref: https://www.jetbrains.com/help/teamcity/2024.07/multinode-setup.html
+  clusterMode: false
+  clusterResponsibilities:
+    - CAN_PROCESS_BUILD_TRIGGERS
+    - CAN_PROCESS_USER_DATA_MODIFICATION_REQUESTS
+    - CAN_CHECK_FOR_CHANGES
+    - CAN_PROCESS_BUILD_MESSAGES
+
   # -- Teamcity container image
   image:
     repository: ghcr.io/sergelogvinov/teamcity
@@ -95,6 +106,7 @@ server:
     # ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
     accessModes:
       - ReadWriteOnce
+      # - ReadWriteMany
 
     # -- teamcity data Persistent Volume size
     size: 10Gi
@@ -301,6 +313,8 @@ dind:
 service:
   type: ClusterIP
   port: 80
+
+  ipFamilies: [IPv4]
 
 # -- Registry ingress parameters
 # ref: http://kubernetes.io/docs/user-guide/ingress/

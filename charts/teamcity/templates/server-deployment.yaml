@@ -1,18 +1,29 @@
 {{- if .Values.server.enabled -}}
 apiVersion: apps/v1
+{{- if .Values.server.clusterMode }}
+kind: StatefulSet
+{{- else }}
 kind: Deployment
+{{- end }}
 metadata:
   name: {{ include "teamcity.fullname" . }}
   labels:
     {{- include "teamcity.labels" . | nindent 4 }}
 spec:
+  {{- if .Values.server.clusterMode }}
+  serviceName: {{ include "teamcity.fullname" . }}-headless
+  replicas: {{ .Values.server.replicaCount }}
+  updateStrategy:
+    type: RollingUpdate
+  {{- else }}
   replicas: 1
   strategy:
     type: {{ .Values.server.updateStrategy.type }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "teamcity.selectorLabels" . | nindent 6 }}
-      type: server
+      app.kubernetes.io/component: server
   template:
     metadata:
       annotations:
@@ -26,7 +37,7 @@ spec:
       {{- end}}
       labels:
         {{- include "teamcity.selectorLabels" . | nindent 8 }}
-        type: server
+        app.kubernetes.io/component: server
     spec:
       enableServiceLinks: false
       {{- if .Values.server.priorityClassName }}
@@ -45,15 +56,18 @@ spec:
             {{- toYaml .Values.server.securityContext | nindent 12 }}
           image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+          {{- if .Values.server.clusterMode }}
+          command: ["/bin/sh", "/opt/entrypoint/entrypoint.sh"]
+          {{- end }}
           env:
             - name: TEAMCITY_DATA_PATH
               value: /data/datadir
             - name: TEAMCITY_LOGS_PATH
               value: /opt/teamcity/logs
-            # - name: TEAMCITY_SERVER_OPTS
-            #   value: "-Dteamcity.server.nodeId=${HOSTNAME} -Dteamcity.server.rootURL=${NODE_URL}"
-            # - name: NODE_URL
-            #   value: "http://{{ include "teamcity.fullname" . }}:{{ .Values.service.port }}"
+            {{- if .Values.server.clusterMode }}
+            - name: TEAMCITY_SERVER_OPTS
+              value: "-Dteamcity.server.nodeId=${HOSTNAME} -Dteamcity.server.rootURL=${NODE_URL}"
+            {{- end }}
           ports:
             - name: http
               containerPort: 8111
@@ -83,6 +97,10 @@ spec:
               mountPath: /opt/teamcity/logs
             - name: temp
               mountPath: /opt/teamcity/temp
+            {{- if .Values.server.clusterMode }}
+            - name: entrypoint
+              mountPath: /opt/entrypoint
+            {{- end }}
             - name: data
               mountPath: /data
           {{- if or .Values.server.configDb .Values.postgresql.enabled }}
@@ -122,6 +140,15 @@ spec:
           emptyDir: {}
         - name: temp
           emptyDir: {}
+      {{- if .Values.server.clusterMode }}
+        - name: entrypoint
+          configMap:
+            name: {{ include "teamcity.fullname" . }}-server
+            defaultMode: 493
+            items:
+              - key: entrypoint.sh
+                path: entrypoint.sh
+      {{- end }}
         - name: data
       {{- if .Values.server.persistentVolume.enabled }}
           persistentVolumeClaim:

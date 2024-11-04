@@ -1,6 +1,6 @@
 # teamcity
 
-![Version: 0.6.18](https://img.shields.io/badge/Version-0.6.18-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2024.07.3](https://img.shields.io/badge/AppVersion-2024.07.3-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2024.07.3](https://img.shields.io/badge/AppVersion-2024.07.3-informational?style=flat-square)
 
 Teamcity on Kubernetes
 
@@ -98,6 +98,12 @@ ingress:
 | nameOverride | string | `""` |  |
 | fullnameOverride | string | `""` |  |
 | server.enabled | bool | `true` |  |
+| server.replicaCount | int | `1` |  |
+| server.clusterMode | bool | `false` | Teamcity server runs as cluster ref: https://www.jetbrains.com/help/teamcity/2024.07/multinode-setup.html |
+| server.clusterResponsibilities[0] | string | `"CAN_PROCESS_BUILD_TRIGGERS"` |  |
+| server.clusterResponsibilities[1] | string | `"CAN_PROCESS_USER_DATA_MODIFICATION_REQUESTS"` |  |
+| server.clusterResponsibilities[2] | string | `"CAN_CHECK_FOR_CHANGES"` |  |
+| server.clusterResponsibilities[3] | string | `"CAN_PROCESS_BUILD_MESSAGES"` |  |
 | server.image | object | `{"pullPolicy":"IfNotPresent","repository":"ghcr.io/sergelogvinov/teamcity","tag":""}` | Teamcity container image |
 | server.configDb | string | `""` | Teamcity database properties ref: https://www.jetbrains.com/help/teamcity/setting-up-an-external-database.html |
 | server.updateStrategy | object | `{"type":"Recreate"}` | pod deployment update strategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |
@@ -141,7 +147,7 @@ ingress:
 | dind.extraVolumeMounts | list | `[]` | Additional container volume mounts. |
 | dind.extraVolumes | list | `[]` | Additional volumes. |
 | dind.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"100Gi"}` | Persistence parameters for source code ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
-| service | object | `{"port":80,"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/concepts/services-networking/service/ |
+| service | object | `{"ipFamilies":["IPv4"],"port":80,"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/concepts/services-networking/service/ |
 | ingress | object | `{"annotations":{},"className":"","enabled":false,"hosts":[{"host":"chart-example.local","paths":[]}],"tls":[]}` | Registry ingress parameters ref: http://kubernetes.io/docs/user-guide/ingress/ |
 | ingress.enabled | bool | `false` | If true, teamcity Ingress will be created |
 | ingress.className | string | `""` | Ingress controller class name |
