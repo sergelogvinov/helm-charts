@@ -69,7 +69,7 @@ spec:
               port: http
               scheme: HTTP
             initialDelaySeconds: 30
-            failureThreshold: 3
+            failureThreshold: 20
             periodSeconds: 15
           # readinessProbe:
           #   httpGet:

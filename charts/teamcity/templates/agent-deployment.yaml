@@ -98,6 +98,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+            {{- if .Values.dind.enabled }}
+            - name: DOCKER_HOST
+              value: unix:///var/run/docker.sock
+            {{- end }}
           envFrom:
             - secretRef:
                 name: "{{ include "teamcity.fullname" . }}-agent-envs"
