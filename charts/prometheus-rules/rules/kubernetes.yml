@@ -28,7 +28,7 @@
       description: Pod {{$labels.namespace}}/{{$labels.pod}} cpu limit/usage {{$value | humanizePercentage}}
       summary: CPU limit reached
 
-  - alert: PodCPUResourcesAboveRequsted
+  - alert: PodCPUResourcesAboveRequested
     expr: topk by(cluster, namespace, pod, container) (10, (max by(cluster, namespace, pod, container) (irate(container_cpu_usage_seconds_total{container!=""}[5m])) - max by(cluster, namespace, pod, container) (kube_pod_container_resource_requests{resource="cpu",unit="core"})) > 0.2)
     for: 5m
     labels:

@@ -40,7 +40,7 @@
     labels:
       severity: notice
     annotations:
-      description: Port scan on {{ $labels.kubernetes_node }} is comming, rate {{ $value | humanize }} per minute > 360
+      description: Port scan on {{ $labels.kubernetes_node }} is coming, rate {{ $value | humanize }} per minute > 360
       summary: Network driver reports drop packet rate
 
   # - alert: CiliumPolicyImport
