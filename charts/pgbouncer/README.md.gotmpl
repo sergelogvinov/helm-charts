@@ -6,6 +6,9 @@
 
 {{ template "chart.description" . }}
 
+PgBouncer is a lightweight connection pooler for PostgreSQL.
+It is designed to manage and optimize database connections by limiting the number of active connections to a PostgreSQL database, which helps improve performance and resource usage, especially in high-traffic environments.
+
 {{ template "chart.homepageLine" . }}
 
 {{ template "chart.maintainersSection" . }}
@@ -28,7 +31,7 @@ databases:
     host: pg-0.pg-headless
     port: 5432
     user: username
-    dbname: databse
+    dbname: database
     poolmode: session
 
 users:
@@ -49,5 +52,3 @@ metrics:
 ```
 
 {{ template "chart.valuesSection" . }}
-
-{{ template "helm-docs.versionFooter" . }}

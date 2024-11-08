@@ -58,11 +58,13 @@ securityContext:
   runAsUser: 0
 
 # -- Service parameters
-# ref: https://kubernetes.io/docs/user-guide/services/
+# ref: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
-  type: ClusterIP
-  port: 1055
-  p2pPort: 30025
+  type: NodePort
+  # -- P2P endpoints port
+  port: 30025
+  # -- P2P network family
+  ipFamilies: [IPv4, IPv6]
 
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/
@@ -74,10 +76,20 @@ resources:
     cpu: 100m
     memory: 256Mi
 
+# -- DNS Policy for pod
+# ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+# ClusterFirst or Local
+dnsPolicy: Local
+
+# -- Network Policy parameters.
+# ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+networkPolicy:
+  enabled: false
+
 # -- Use a daemonset instead of a deployment
 useDaemonSet: false
 
-# -- pod deployment update stategy type.
+# -- pod deployment update strategy type.
 # ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
   type: RollingUpdate

@@ -1,8 +1,10 @@
+# yaml-language-server: $schema=https://json.schemastore.org/chart.json
 apiVersion: v2
 name: mongosync
 description: Mongo Cluster-to-Cluster Sync
 type: application
 home: https://github.com/sergelogvinov/helm-charts
+icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/mongosync/icon.png
 sources:
 - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongosync
 - https://www.mongodb.com/docs/cluster-to-cluster-sync
@@ -16,10 +18,7 @@ maintainers:
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.1.4
+version: 0.1.6
 
-# This is the version number of the application being deployed. This version number should be
-# incremented each time you make changes to the application. Versions are not expected to
-# follow Semantic Versioning. They should reflect the version the application is using.
-# It is recommended to use it with quotes.
-appVersion: "1.7.1"
+# https://github.com/sergelogvinov/containers/pkgs/container/mongosync
+appVersion: "1.8.0"

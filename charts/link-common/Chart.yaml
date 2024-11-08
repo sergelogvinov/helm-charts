@@ -1,11 +1,15 @@
+# yaml-language-server: $schema=https://json.schemastore.org/chart.json
 apiVersion: v2
 name: link-common
 description: Simple vpn-p2p-link service
 type: application
 home: https://github.com/sergelogvinov/helm-charts
+icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/link-common/icon.png
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/master/charts/link-common
+- https://github.com/sergelogvinov/helm-charts/tree/main/charts/link-common
 keywords:
+- networking
+- vpn
 maintainers:
 - name: sergelogvinov
   url: https://github.com/sergelogvinov
@@ -13,10 +17,7 @@ maintainers:
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.3.3
+version: 0.3.4
 
-# This is the version number of the application being deployed. This version number should be
-# incremented each time you make changes to the application. Versions are not expected to
-# follow Semantic Versioning. They should reflect the version the application is using.
-# It is recommended to use it with quotes.
-appVersion: "2.8.3-alpine3.18"
+# https://github.com/sergelogvinov/containers/pkgs/container/haproxy
+appVersion: "2.8.6-alpine3.19"

@@ -1,8 +1,15 @@
 # keydb
 
-![Version: 0.8.1](https://img.shields.io/badge/Version-0.8.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.3](https://img.shields.io/badge/AppVersion-6.3.3-informational?style=flat-square)
+![Version: 0.8.2](https://img.shields.io/badge/Version-0.8.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.3](https://img.shields.io/badge/AppVersion-6.3.3-informational?style=flat-square)
 
 KeyDB with TLS, backup/restore support
+
+KeyDB is a high-performance, distributed NoSQL database that is designed to be compatible with the Redis protocol. In many ways, KeyDB can be considered a drop-in replacement for Redis, as it supports the same data structures and commands.
+
+* TLS connections
+* HaProxy load balances
+* Master-master replication
+* Support backup/restore to the extrernal storage, using [wal-g](https://github.com/wal-g)
 
 **Homepage:** <https://github.com/sergelogvinov/helm-charts>
 
@@ -17,13 +24,6 @@ KeyDB with TLS, backup/restore support
 * <https://github.com/sergelogvinov/helm-charts/tree/master/charts/keydb>
 * <https://docs.keydb.dev>
 * <https://github.com/wal-g/wal-g>
-
-KeyDB is a high-performance, distributed NoSQL database that is designed to be compatible with the Redis protocol. In many ways, KeyDB can be considered a drop-in replacement for Redis, as it supports the same data structures and commands.
-
-* TLS connections
-* HaProxy load balances
-* Master-master replication
-* Support backup/restore to the extrernal storage, using [wal-g](https://github.com/wal-g)
 
 ```yaml
 # helm values
@@ -157,4 +157,3 @@ metrics:
 | podAntiAffinityPreset | string | `"soft"` | Pod Anti Affinity soft/hard |
 | podAntiAffinityPresetKey | string | `"kubernetes.io/hostname"` |  |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-

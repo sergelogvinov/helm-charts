@@ -151,6 +151,8 @@ spec:
             {{- if .Values.proxy.enabled }}
             - name: HTTP_PROXY
               value: "http://{{ include "github-actions-runner.fullname" . }}-proxy:3128"
+            - name: NO_PROXY
+              value: "cluster.local,{{ include "github-actions-runner.fullname" . }}-mirrors"
             {{- end }}
           envFrom:
             - secretRef:

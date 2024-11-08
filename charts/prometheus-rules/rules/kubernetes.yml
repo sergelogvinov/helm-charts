@@ -9,7 +9,7 @@
       description: Pod {{$labels.namespace}}/{{$labels.pod}} reached the memory limit.
       summary: Memory limit reached
 
-  - alert: PodMemoryResourcesAboveRequsted
+  - alert: PodMemoryResourcesAboveRequested
     expr: topk by(cluster, namespace, pod) (10, (max by(cluster, namespace, pod) (container_memory_working_set_bytes{container!=""}) - max by(cluster, namespace, pod) (kube_pod_container_resource_requests{resource="memory",unit="byte"})) > 100*1024*1024)
     for: 5m
     labels:
@@ -28,7 +28,7 @@
       description: Pod {{$labels.namespace}}/{{$labels.pod}} cpu limit/usage {{$value | humanizePercentage}}
       summary: CPU limit reached
 
-  - alert: PodCPUResourcesAboveRequsted
+  - alert: PodCPUResourcesAboveRequested
     expr: topk by(cluster, namespace, pod, container) (10, (max by(cluster, namespace, pod, container) (irate(container_cpu_usage_seconds_total{container!=""}[5m])) - max by(cluster, namespace, pod, container) (kube_pod_container_resource_requests{resource="cpu",unit="core"})) > 0.2)
     for: 5m
     labels:

@@ -17,8 +17,8 @@ data:
         "rootDirectory": "/var/lib/registry",
         "commit": true,
         "gc": true,
-        "gcDelay": "30m",
-        "gcInterval": "6h"
+        "gcDelay": "1h",
+        "gcInterval": "12h"
       },
       "http": {
         "address": "0.0.0.0", "port": "8443",
@@ -44,8 +44,8 @@ data:
               "urls": ["https://{{ $val.host }}"],
               "tlsVerify": true,
               "onDemand": true,
-              "maxRetries": 2,
-              "retryDelay": "5m",
+              "maxRetries": 3,
+              "retryDelay": "15m",
               "onlySigned": false,
               "content": [
                 {
@@ -59,7 +59,7 @@ data:
               "urls": ["https://index.docker.io"],
               "tlsVerify": true,
               "onDemand": true,
-              "maxRetries": 2,
+              "maxRetries": 3,
               "retryDelay": "15m",
               "onlySigned": false,
               "content": [
@@ -248,7 +248,7 @@ data:
     docker buildx create --name multiarch --driver docker-container --config /etc/docker-config/buildkitd.toml --use
     docker buildx inspect --bootstrap multiarch
 
-    exec /home/runner/run.sh
+    [ -n "$1" ] && exec $1 || /home/runner/run.sh
 
   proxy.sh: |
     #!/bin/sh

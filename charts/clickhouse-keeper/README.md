@@ -1,8 +1,11 @@
 # clickhouse-keeper
 
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 23.12.6-alpine](https://img.shields.io/badge/AppVersion-23.12.6--alpine-informational?style=flat-square)
+![Version: 0.1.5](https://img.shields.io/badge/Version-0.1.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 24.8](https://img.shields.io/badge/AppVersion-24.8-informational?style=flat-square)
 
 A Helm chart for Kubernetes
+
+Clickhouse Keeper is a zookeeper-like service for ClickHouse.
+It is used to store metadata and distribute it to ClickHouse servers.
 
 **Homepage:** <https://github.com/sergelogvinov/helm-charts>
 
@@ -48,4 +51,3 @@ A Helm chart for Kubernetes
 | nodeSelector | object | `{}` |  |
 | tolerations | list | `[]` |  |
 | affinity | object | `{}` |  |
-

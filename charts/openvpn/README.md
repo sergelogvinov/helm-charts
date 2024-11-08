@@ -1,6 +1,6 @@
 # openvpn
 
-![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.6.8](https://img.shields.io/badge/AppVersion-2.6.8-informational?style=flat-square)
+![Version: 0.4.6](https://img.shields.io/badge/Version-0.4.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.6.11](https://img.shields.io/badge/AppVersion-2.6.11-informational?style=flat-square)
 
 OpenVPN in kubernetes
 
@@ -81,6 +81,26 @@ openvpn:
     push "route 8.8.8.8"
 ```
 
+Useful `Makefile` to download user certificates:
+
+```Makefile
+ifeq (vpn,$(firstword $(MAKECMDGOALS)))
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  USER := $(subst .,-,$(subst @,-,$(lastword $(MAKECMDGOALS))))
+  $(eval $(RUN_ARGS):;@:)
+endif
+
+.PHONY: vpn
+vpn: vpn-$(USER) ## create certificate for vpn
+vpn-clean:
+	rm -f ca.crt ca.key client.crt client.key client.ovpn
+
+vpn-%: ## create certificate for vpn
+	kubectl --namespace vpn get secret openvpn-client-$(USER) -o jsonpath="{.data.tls\.crt}" | base64 --decode > client.crt
+	kubectl --namespace vpn get secret openvpn-client-$(USER) -o jsonpath="{.data.tls\.key}" | base64 --decode > client.key
+	kubectl --namespace vpn get configmap openvpn -o jsonpath="{.data.client\.conf}" > client.ovpn
+```
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -92,21 +112,34 @@ openvpn:
 | imagePullSecrets | list | `[]` |  |
 | nameOverride | string | `""` |  |
 | fullnameOverride | string | `""` |  |
-| certManager.createCerts | bool | `false` |  |
-| certManager.clientConfigRBAC | bool | `false` |  |
-| certManager.clients | list | `[]` |  |
-| clusterDomain | string | `nil` |  |
-| openvpn | object | `{"ca":null,"cert":null,"config":null,"defaultroutes":null,"dh":null,"hostName":"vpn.example.com","key":null,"otp":null,"redirectGateway":false,"revoke":null,"tlsauth":null}` | genkey secret ta.key  -----BEGIN OpenVPN Static key V1----- -----END OpenVPN Static key V1----- |
-| openvpn.cert | string | `nil` | ---END CERTIFICATE----- |
-| openvpn.key | string | `nil` | ---END CERTIFICATE----- |
+| certManager.createCerts | bool | `false` | Create certificates using cert-manager. |
+| certManager.commonName | string | `nil` | Common name for the certificate. |
+| certManager.subject | object | `{}` | Subject for the certificate. |
+| certManager.clientConfigRBAC | bool | `false` | If clientConfigRBAC = true, clients list is kubernetes username. |
+| certManager.clients | list | `[]` | List of clients. |
+| clusterDomain | string | `nil` | Kubernetes cluster domain. |
+| dns.enabled | bool | `false` | Create a DNS server in the pod. |
+| openvpn | object | `{"ca":null,"cert":null,"config":null,"defaultroutes":null,"dh":null,"hostName":"vpn.example.com","key":null,"otp":null,"redirectGateway":false,"revoke":null,"tlsauth":null,"tlsversion":{}}` | genkey secret ta.key |
+| openvpn.hostName | string | `"vpn.example.com"` | Server domain name. |
+| openvpn.config | string | `nil` | OpenVPN configuration file. |
+| openvpn.redirectGateway | bool | `false` | Route all traffic through VPN. |
+| openvpn.defaultroutes | string | `nil` | Custom routes. |
+| openvpn.otp | string | `nil` | One-time password. |
+| openvpn.ca | string | `nil` | Custom root certificate, if createCerts==false. |
+| openvpn.cert | string | `nil` | Custom server certificate, if createCerts==false. |
+| openvpn.key | string | `nil` | Custom server private key, if createCerts==false. |
+| openvpn.revoke | string | `nil` | Revoke certificates. |
+| openvpn.tlsversion | object | `{}` | TLS version and ciphers. |
+| openvpn.tlsauth | string | `nil` | TLS authentication. openvpn --genkey secret ta.key |
+| openvpn.dh | string | `nil` | Diffie-Hellman parameters. openssl dhparam -out dh2048.pem 2048 |
 | podAnnotations | object | `{}` | Annotations for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
 | podSecurityContext | object | `{"fsGroup":101,"fsGroupChangePolicy":"OnRootMismatch","runAsGroup":101,"runAsUser":0}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | securityContext | object | `{"capabilities":{"add":["NET_ADMIN","MKNOD","SETUID","SETGID"],"drop":["ALL"]},"runAsGroup":101,"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
-| service | object | `{"annotations":{},"ipFamilies":["IPv4"],"port":1190,"ports":[],"proto":"UDP","type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
+| service | object | `{"annotations":{},"ipFamilies":["IPv4"],"port":1190,"ports":[],"proto":"udp","type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
+| service.proto | string | `"udp"` | Protocol for service. Can be TCP, UDP or All. |
 | resources | object | `{"limits":{"cpu":1,"memory":"128Mi"},"requests":{"cpu":"100m","memory":"32Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | useDaemonSet | bool | `false` | Use a daemonset instead of a deployment |
-| updateStrategy | object | `{"rollingUpdate":{"maxUnavailable":1},"type":"RollingUpdate"}` | pod deployment update stategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |
+| updateStrategy | object | `{"rollingUpdate":{"maxUnavailable":1},"type":"RollingUpdate"}` | pod deployment update strategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |
 | nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-

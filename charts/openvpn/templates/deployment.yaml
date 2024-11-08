@@ -63,16 +63,19 @@ spec:
             - name: scripts
               mountPath: /entrypoint
       containers:
-        - name: {{ .Chart.Name }}
+        {{- range (eq .Values.service.proto "All" | ternary (list "tcp" "udp") (list .Values.service.proto)) }}
+        - name: {{ $.Chart.Name }}-{{ . }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["/entrypoint/start.sh"]
+            {{- toYaml $.Values.securityContext | nindent 12 }}
+          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          command: ["/entrypoint/start.sh","--proto", "{{ . }}6"]
           ports:
-            - name: openvpn
-              containerPort: {{ .Values.service.port }}
-              protocol: {{ .Values.service.proto }}
+            {{- if $.Values.service.port }}
+            - name: openvpn-{{ . }}
+              containerPort: {{ $.Values.service.port }}
+              protocol: {{ . | upper }}
+            {{- end }}
           volumeMounts:
             - name: scripts
               mountPath: /entrypoint
@@ -84,10 +87,14 @@ spec:
               mountPath: /etc/openvpn/certs
             - name: auth
               mountPath: /etc/openvpn/auth
+            - name: tmp
+              mountPath: /tmp
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml $.Values.resources | nindent 12 }}
+        {{- end }}
+        {{- if .Values.dns.enabled }}
         - name: {{ .Chart.Name }}-dns
-          image: coredns/coredns:1.11.1
+          image: registry.k8s.io/coredns/coredns:v1.11.3
           imagePullPolicy: IfNotPresent
           args: [ "-conf", "/etc/coredns/Corefile" ]
           volumeMounts:
@@ -122,6 +129,7 @@ spec:
             readOnlyRootFilesystem: true
             runAsUser: 0
             runAsGroup: 53
+        {{- end }}
         {{- if ne (len .Values.service.ports) 0 }}
         - name: {{ .Chart.Name }}-service
           securityContext:
@@ -208,3 +216,5 @@ spec:
             items:
               - key: corefile
                 path: Corefile
+        - name: tmp
+          emptyDir: {}

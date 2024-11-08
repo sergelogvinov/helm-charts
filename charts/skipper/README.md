@@ -1,6 +1,6 @@
 # skipper
 
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.21.107](https://img.shields.io/badge/AppVersion-v0.21.107-informational?style=flat-square)
+![Version: 0.1.6](https://img.shields.io/badge/Version-0.1.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.21.107](https://img.shields.io/badge/AppVersion-v0.21.107-informational?style=flat-square)
 
 Ingress controller for Kubernetes
 
@@ -14,7 +14,25 @@ Ingress controller for Kubernetes
 
 ## Source Code
 
-* <https://github.com/sergelogvinov/helm-charts/tree/master/charts/skipper>
+* <https://github.com/sergelogvinov/helm-charts/tree/main/charts/skipper>
+
+```yaml
+ingressClass: skipper
+ingressClassResource:
+  enabled: true
+  name: skipper
+
+# hostNetwork: true
+hostPort:
+  ports:
+    http: 8080
+    https: 8443
+
+priorityClassName: system-cluster-critical
+
+useDaemonSet: true
+terminationGracePeriodSeconds: 120
+```
 
 ## Values
 
@@ -59,4 +77,3 @@ Ingress controller for Kubernetes
 | podAntiAffinityPreset | string | `"soft"` | Pod Anti Affinity soft/hard |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | metrics.enabled | bool | `false` |  |
-

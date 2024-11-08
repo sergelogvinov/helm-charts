@@ -22,7 +22,11 @@ spec:
   issuerRef:
     name: {{ include "openvpn.fullname" . }}
     kind: Issuer
-  commonName: {{ include "openvpn.fullname" . }}
+  subject:
+  {{- with .Values.certManager.subject }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  commonName: {{ default (include "openvpn.fullname" .) .Values.certManager.commonName }}
   duration: 26280h # 3y
   renewBefore: 26000h # ~3y
   privateKey:
@@ -55,7 +59,7 @@ spec:
   secretTemplate:
     labels:
       {{- include "openvpn.labels" . | nindent 6 }}
-  commonName: {{ include "openvpn.fullname" . }}-server
+  commonName: {{ default (include "openvpn.fullname" .) .Values.openvpn.hostName }}
   duration: 26280h # 3y
   renewBefore: 26000h # ~3y
   privateKey:
@@ -66,7 +70,7 @@ spec:
     - digital signature
     - server auth
   dnsNames:
-    - {{ include "openvpn.fullname" . }}
+    - {{ default (include "openvpn.fullname" .) .Values.openvpn.hostName }}
   issuerRef:
     name: {{ include "openvpn.fullname" . }}-issuer
 {{- if .Values.certManager.clients }}

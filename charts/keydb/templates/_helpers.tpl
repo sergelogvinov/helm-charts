@@ -198,7 +198,7 @@ maxmemory-policy {{ .Values.keydb.maxmemoryPolicy }}
 maxmemory {{ .Values.keydb.maxmemory }}
 {{- else if or .Values.resources.requests.memory .Values.resources.limits.memory }}
 {{- /*  Reserve 64m to keydb daemon */}}
-maxmemory {{ sub (int64 (include "resource-bytes" (default .Values.resources.limits.memory .Values.resources.requests.memory))) 67108864 }}b
+maxmemory {{ sub (int64 (include "resource-bytes" (default (default (dict) .Values.resources.limits ).memory .Values.resources.requests.memory))) 67108864 }}b
 {{- end }}
 
 client-output-buffer-limit normal 0 0 0

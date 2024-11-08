@@ -1,0 +1,52 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+The main idea of the project is to make it easy to connect Kubernetes services through a wireguard tunnel.
+This tunnel provides a secure way for external clients or other networks to access pre-defined services inside a Kubernetes cluster.
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+Example:
+
+```yaml
+service:
+  ports:
+    - name: postgres
+      port: 5432
+      backend: pg-backend.databases.svc.cluster.local:5432
+    - name: mongo
+      port: 27017
+      backend: mongo-backend-rs0-0.mongo-backend-rs0.databases.svc.cluster.local:27017
+
+wireguard:
+  enabled: true
+
+  wireguardIP: 172.30.1.161/32
+  wireguardMTU: 1260
+  wireguardKey: "your-private-key"
+
+  peers:
+    link-1:
+      endpoint: 1.2.3.11:1191
+      allowedIps: 172.30.1.21/32
+      persistentKeepalive: 60
+      publicKey: "your-public-key"
+    link-2:
+      endpoint: 1.2.3.12:1191
+      allowedIps: 172.30.1.22/32
+      persistentKeepalive: 60
+      publicKey: "your-public-key"
+```
+
+{{ template "chart.valuesSection" . }}

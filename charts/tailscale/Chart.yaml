@@ -1,13 +1,17 @@
+# yaml-language-server: $schema=https://json.schemastore.org/chart.json
 apiVersion: v2
 name: tailscale
 description: Tailscale mesh network.
 type: application
 home: https://github.com/sergelogvinov/helm-charts
+icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/tailscale/icon.png
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/master/charts/tailscale
+- https://github.com/sergelogvinov/helm-charts/tree/main/charts/tailscale
+- https://github.com/tailscale/tailscale
 - https://tailscale.com
 keywords:
 - tailscale
+- vpn
 maintainers:
 - name: sergelogvinov
   url: https://github.com/sergelogvinov
@@ -15,10 +19,7 @@ maintainers:
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.2.3
+version: 0.2.6
 
-# This is the version number of the application being deployed. This version number should be
-# incremented each time you make changes to the application. Versions are not expected to
-# follow Semantic Versioning. They should reflect the version the application is using.
-# It is recommended to use it with quotes.
-appVersion: v1.56.1
+# https://github.com/tailscale/tailscale
+appVersion: v1.74.1

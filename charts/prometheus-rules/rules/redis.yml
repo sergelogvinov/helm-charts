@@ -98,8 +98,8 @@
     labels:
       severity: critical
     annotations:
-      description: Redis out of memeory issue {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
-      summary: Redis out of memeory error
+      description: Redis out of memory issue {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
+      summary: Redis out of memory error
 
   - alert: RedisLoadBalancer
     expr: haproxy_frontend_limit_sessions{app_kubernetes_io_name="keydb",proxy!="stats"} - haproxy_frontend_current_sessions < 10

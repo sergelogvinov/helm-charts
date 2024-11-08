@@ -6,6 +6,9 @@
 
 {{ template "chart.description" . }}
 
+Helm chart containing Prometheus/VictoriaMetrics basic kubernetes rules.
+It's stores as configMap and mounted to Prometheus/VictoriaMetrics pods.
+
 {{ template "chart.homepageLine" . }}
 
 {{ template "chart.maintainersSection" . }}
@@ -111,5 +114,3 @@ spec:
 ```
 
 {{ template "chart.valuesSection" . }}
-
-{{ template "helm-docs.versionFooter" . }}

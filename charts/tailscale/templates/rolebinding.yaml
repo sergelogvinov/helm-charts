@@ -16,7 +16,7 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "tailscale.fullname" . }}-cluster
+  name: {{ include "tailscale.fullname" . }}
   labels:
     {{- include "tailscale.labels" . | nindent 4 }}
 roleRef:
@@ -27,6 +27,7 @@ subjects:
 - kind: ServiceAccount
   name: {{ include "tailscale.serviceAccountName" . }}
   namespace: {{ .Release.Namespace }}
+{{- if eq .Values.dnsPolicy "Local" }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -42,3 +43,4 @@ subjects:
 - kind: ServiceAccount
   name: {{ include "tailscale.serviceAccountName" . }}
   namespace: {{ .Release.Namespace }}
+{{- end }}

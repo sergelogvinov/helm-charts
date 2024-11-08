@@ -7,6 +7,11 @@ metadata:
     {{- include "teamcity.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
+  {{- with .Values.service.ipFamilies }}
+  ipFamilies:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  ipFamilyPolicy: {{ if eq (len .Values.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: http
@@ -14,5 +19,33 @@ spec:
       name: http
   selector:
     {{- include "teamcity.selectorLabels" . | nindent 4 }}
-    type: server
+    app.kubernetes.io/component: server
+    {{- if .Values.server.clusterMode }}
+    statefulset.kubernetes.io/pod-name: {{ include "teamcity.fullname" . }}-0
+    {{- end }}
+{{- if .Values.server.clusterMode }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "teamcity.fullname" . }}-headless
+  labels:
+    {{- include "teamcity.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  {{- with .Values.service.ipFamilies }}
+  ipFamilies:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  ipFamilyPolicy: {{ if eq (len .Values.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
+  ports:
+    - port: 8111
+      targetPort: http
+      protocol: TCP
+      name: http
+  publishNotReadyAddresses: true
+  selector:
+    {{- include "teamcity.selectorLabels" . | nindent 4 }}
+{{- end }}
 {{- end }}

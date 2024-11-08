@@ -78,6 +78,24 @@ openvpn:
     push "route 8.8.8.8"
 ```
 
-{{ template "chart.valuesSection" . }}
+Useful `Makefile` to download user certificates:
 
-{{ template "helm-docs.versionFooter" . }}
+```Makefile
+ifeq (vpn,$(firstword $(MAKECMDGOALS)))
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  USER := $(subst .,-,$(subst @,-,$(lastword $(MAKECMDGOALS))))
+  $(eval $(RUN_ARGS):;@:)
+endif
+
+.PHONY: vpn
+vpn: vpn-$(USER) ## create certificate for vpn
+vpn-clean:
+	rm -f ca.crt ca.key client.crt client.key client.ovpn
+
+vpn-%: ## create certificate for vpn
+	kubectl --namespace vpn get secret openvpn-client-$(USER) -o jsonpath="{.data.tls\.crt}" | base64 --decode > client.crt
+	kubectl --namespace vpn get secret openvpn-client-$(USER) -o jsonpath="{.data.tls\.key}" | base64 --decode > client.key
+	kubectl --namespace vpn get configmap openvpn -o jsonpath="{.data.client\.conf}" > client.ovpn
+```
+
+{{ template "chart.valuesSection" . }}

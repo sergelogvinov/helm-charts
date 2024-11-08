@@ -1,8 +1,8 @@
 # postgresql-single
 
-![Version: 0.11.2](https://img.shields.io/badge/Version-0.11.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 15.6](https://img.shields.io/badge/AppVersion-15.6-informational?style=flat-square)
+![Version: 0.11.3](https://img.shields.io/badge/Version-0.11.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 15.8](https://img.shields.io/badge/AppVersion-15.8-informational?style=flat-square)
 
-Postgres with backup/restore checks
+Postgres with backup/restore and replication
 
 **Homepage:** <https://github.com/sergelogvinov/helm-charts>
 
@@ -14,7 +14,7 @@ Postgres with backup/restore checks
 
 ## Source Code
 
-* <https://github.com/sergelogvinov/helm-charts/tree/master/charts/postgresql-single>
+* <https://github.com/sergelogvinov/helm-charts/tree/main/charts/postgresql-single>
 
 A single-node PostgreSQL database is straightforward and relatively easy to maintain. You don't need to worry about configuring a distributed database or managing multiple nodes.
 
@@ -140,4 +140,3 @@ metrics:
 | nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-

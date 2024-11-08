@@ -109,7 +109,11 @@ data:
   config.xml: |-
     <clickhouse>
         <display_name>{{ include "clickhouse.fullname" . }}</display_name>
+        {{- if has "IPv6" .Values.service.ipFamilies }}
         <listen_host>::</listen_host>
+        {{- else }}
+        <listen_host>0.0.0.0</listen_host>
+        {{- end }}
         <listen_try>1</listen_try>
 
         <http_port>8123</http_port>
@@ -246,7 +250,7 @@ data:
       #   max_file_size:  2147483648
       upload_by_part: true
       #
-      backups_to_keep_local: 3
+      backups_to_keep_local: 2
       backups_to_keep_remote: 14
       allow_empty_backups: false
     clickhouse:

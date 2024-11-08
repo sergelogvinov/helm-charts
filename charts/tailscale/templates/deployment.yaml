@@ -1,3 +1,4 @@
+{{ $sidecar := semverCompare ">=1.29-0" .Capabilities.KubeVersion.GitVersion }}
 apiVersion: apps/v1
 {{- if .Values.useDaemonSet }}
 kind: DaemonSet
@@ -18,14 +19,17 @@ spec:
   {{- else }}
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
+    rollingUpdate:
+      maxUnavailable: 30%
   {{- end }}
   selector:
     matchLabels:
       {{- include "tailscale.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        kubectl.kubernetes.io/default-container: {{ .Chart.Name }}
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -39,6 +43,7 @@ spec:
       serviceAccountName: {{ include "tailscale.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if eq .Values.dnsPolicy "Local" }}
       dnsPolicy: "None"
       dnsConfig:
         nameservers:
@@ -48,25 +53,8 @@ spec:
         options:
           - name: ndots
             value: "3"
+      {{- end }}
       initContainers:
-        - name: {{ .Chart.Name }}-init-tailscale
-          securityContext:
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              add:
-                - NET_ADMIN
-                - NET_RAW
-              drop:
-                - ALL
-            runAsNonRoot: false
-            runAsUser: 0
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["/start/init-tailscale.sh"]
-          volumeMounts:
-            - name: scripts
-              mountPath: /start
         - name: {{ .Chart.Name }}-init
           securityContext:
             seccompProfile:
@@ -87,11 +75,17 @@ spec:
               mountPath: /start
             - name: state
               mountPath: /tmp
+      {{- if not $sidecar }}
       containers:
+      {{- end }}
+        {{- if eq .Values.dnsPolicy "Local" }}
         - name: {{ .Chart.Name }}-dns
-          image: coredns/coredns:1.11.1
+          image: registry.k8s.io/coredns/coredns:v1.11.3
           imagePullPolicy: IfNotPresent
           args: [ "-conf", "/etc/coredns/Corefile" ]
+          {{- if $sidecar }}
+          restartPolicy: Always
+          {{- end }}
           volumeMounts:
             - name: coredns
               mountPath: /etc/coredns
@@ -124,23 +118,25 @@ spec:
             readOnlyRootFilesystem: true
             runAsUser: 0
             runAsGroup: 53
+        {{- end }}
+      {{- if $sidecar }}
+      containers:
+      {{- end }}
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/start/entrypoint.sh"]
-          # args: ["TS_EXTRA_ARGS=\"--hostname=$HOSTNAME -advertise-exit-node --advertise-tags=$TS_TAGS\" /usr/local/bin/containerboot"]
           env:
-            # - name: TS_KUBE_SECRET
-            #   value: {{ include "tailscale.fullname" . }}-state
             - name: TS_USERSPACE
               value: "false"
-            # - name: TS_STATE_DIR
-            #   value: /tmp
-            {{- if .Values.service.p2pPort }}
+            {{- if .Values.service.port }}
             - name: TS_TAILSCALED_EXTRA_ARGS
-              value: "-no-logs-no-support -port={{ .Values.service.p2pPort }}"
+              value: "--no-logs-no-support --port={{ .Values.service.port }}"
+            {{- else}}
+            - name: TS_TAILSCALED_EXTRA_ARGS
+              value: "--no-logs-no-support"
             {{- end }}
             - name: NODE
               valueFrom:
@@ -150,12 +146,9 @@ spec:
             - secretRef:
                 name: {{ include "tailscale.fullname" . }}
           ports:
-            - name: socks
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
-            {{- if .Values.service.p2pPort }}
+            {{- if .Values.service.port }}
             - name: p2p
-              containerPort: {{ .Values.service.p2pPort }}
+              containerPort: {{ .Values.service.port }}
               protocol: UDP
             {{- end }}
           resources:

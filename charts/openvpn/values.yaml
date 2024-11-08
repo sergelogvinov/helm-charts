@@ -15,19 +15,37 @@ nameOverride: ""
 fullnameOverride: ""
 
 certManager:
+  # -- Create certificates using cert-manager.
   createCerts: false
 
-  # If clientConfigRBAC = true, clients list is kubernetes username.
+  # -- Common name for the certificate.
+  commonName: ~
+  # -- Subject for the certificate.
+  subject: {}
+    # countries:
+    #   - US
+    # organizations:
+    #   - Let's Encrypt
+
+  # -- If clientConfigRBAC = true, clients list is kubernetes username.
   clientConfigRBAC: false
+  # -- List of clients.
   clients: []
     # - user1@dmain.com
     # - user2
 
+# -- Kubernetes cluster domain.
 clusterDomain: ~
 
+dns:
+  # -- Create a DNS server in the pod.
+  enabled: false
+
 openvpn:
+  # -- Server domain name.
   hostName: vpn.example.com
 
+  # -- OpenVPN configuration file.
   config: ~
     # server 172.30.0.0 255.255.255.0
     # topology p2p
@@ -40,26 +58,33 @@ openvpn:
     # # duplicate-cn
     # # client-to-client
 
+  # -- Route all traffic through VPN.
   redirectGateway: false
+  # -- Custom routes.
   defaultroutes: ~
     # push "route 8.8.8.8   255.255.255.255"
 
+  # -- One-time password.
   otp: ~
     #
     # google-authenticator -tdfWq -r 3 -R 30
     #
 
-  ### if createCerts==false
+
+  # -- Custom root certificate, if createCerts==false.
   ca: ~
     # -----BEGIN CERTIFICATE-----
     # -----END CERTIFICATE-----
+  # -- Custom server certificate, if createCerts==false.
   cert: ~
     # -----BEGIN CERTIFICATE-----
     # -----END CERTIFICATE-----
+  # -- Custom server private key, if createCerts==false.
   key: ~
     # -----BEGIN PRIVATE KEY-----
     # -----END PRIVATE KEY-----
 
+  # -- Revoke certificates.
   revoke: ~
     ## openssl.cnf
     # [ ca ]
@@ -76,17 +101,20 @@ openvpn:
     # openssl crl -text -noout -in revoke.pem
     #
 
+  # -- TLS version and ciphers.
+  tlsversion: {}
+    # tls-version-min: 1.2
+    # tls-cipher: TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256
+
+  # -- TLS authentication.
+  # openvpn --genkey secret ta.key
   tlsauth: ~
-    #
-    # openvpn --genkey secret ta.key
-    #
     # -----BEGIN OpenVPN Static key V1-----
     # -----END OpenVPN Static key V1-----
 
+  # -- Diffie-Hellman parameters.
+  # openssl dhparam -out dh2048.pem 2048
   dh: ~
-    #
-    # openssl dhparam -out dh2048.pem 2048
-    #
     # -----BEGIN DH PARAMETERS-----
     # -----END DH PARAMETERS-----
 
@@ -126,7 +154,9 @@ service:
   type: ClusterIP
   ipFamilies: [IPv4]
 
-  proto: UDP
+  # -- Protocol for service.
+  # Can be TCP, UDP or All.
+  proto: udp
   port: 1190
   # nodePort: 1190
 
@@ -152,7 +182,7 @@ resources:
 # -- Use a daemonset instead of a deployment
 useDaemonSet: false
 
-# -- pod deployment update stategy type.
+# -- pod deployment update strategy type.
 # ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
   type: RollingUpdate

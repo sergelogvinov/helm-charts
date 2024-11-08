@@ -1,20 +1,4 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "tailscale.fullname" . }}
-  labels:
-    {{- include "tailscale.labels" . | nindent 4 }}
-spec:
-  type: {{ .Values.service.type }}
-  ports:
-    - port: {{ .Values.service.port }}
-      targetPort: socks
-      protocol: TCP
-      name: socks
-  selector:
-    {{- include "tailscale.selectorLabels" . | nindent 4 }}
-{{- if .Values.service.p2pPort }}
----
+{{- if .Values.service.port }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -22,13 +6,17 @@ metadata:
   labels:
     {{- include "tailscale.labels" . | nindent 4 }}
 spec:
-  type: NodePort
+  type: {{ .Values.service.type }}
   sessionAffinity: None
   externalTrafficPolicy: Local
-  ipFamilyPolicy: PreferDualStack
+  ipFamilyPolicy: {{ if eq (len .Values.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
+  {{- with .Values.service.ipFamilies }}
+  ipFamilies:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   ports:
-    - port: {{ .Values.service.p2pPort }}
-      nodePort: {{ .Values.service.p2pPort }}
+    - port: {{ .Values.service.port }}
+      nodePort: {{ .Values.service.port }}
       targetPort: p2p
       protocol: UDP
       name: p2p

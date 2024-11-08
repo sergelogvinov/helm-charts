@@ -1,8 +1,10 @@
 # clickhouse
 
-![Version: 0.6.9](https://img.shields.io/badge/Version-0.6.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 23.12.6](https://img.shields.io/badge/AppVersion-23.12.6-informational?style=flat-square)
+![Version: 0.6.14](https://img.shields.io/badge/Version-0.6.14-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 24.8](https://img.shields.io/badge/AppVersion-24.8-informational?style=flat-square)
 
 Clickhouse chart for Kubernetes
+
+Clickhouse is a fast open-source OLAP database management system.
 
 **Homepage:** <https://github.com/sergelogvinov/helm-charts>
 
@@ -86,7 +88,7 @@ metrics:
 | backup.enabled | bool | `false` |  |
 | backup.image.repository | string | `"altinity/clickhouse-backup"` |  |
 | backup.image.pullPolicy | string | `"IfNotPresent"` |  |
-| backup.image.tag | string | `"2.4.35"` |  |
+| backup.image.tag | string | `"2.5.29"` |  |
 | backup.schedule | string | `"15 4 * * *"` |  |
 | backup.args | list | `[]` |  |
 | backup.envs | object | `{}` |  |
@@ -103,4 +105,3 @@ metrics:
 | clickhouse.users[0] | object | `{"name":"logger","password":"2686af9f25e1a64f5e9f7290c7e457aa06b616fb31d2b4331ff6fa0857661cd5","profile":"default","quota":"default"}` | Clickhouse read write user |
 | clickhouse.users[1] | object | `{"accessManagement":false,"name":"reader","password":"3d0941964aa3ebdcb00ccef58b1bb399f9f898465e9886d5aec7f31090a0fb30","profile":"reader","quota":"default"}` | Clickhouse read only user |
 | clickhouse.collections | list | `[]` | Clickhouse named collections |
-

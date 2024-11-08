@@ -6,6 +6,13 @@
 
 {{ template "chart.description" . }}
 
+KeyDB is a high-performance, distributed NoSQL database that is designed to be compatible with the Redis protocol. In many ways, KeyDB can be considered a drop-in replacement for Redis, as it supports the same data structures and commands.
+
+* TLS connections
+* HaProxy load balances
+* Master-master replication
+* Support backup/restore to the extrernal storage, using [wal-g](https://github.com/wal-g)
+
 {{ template "chart.homepageLine" . }}
 
 {{ template "chart.maintainersSection" . }}
@@ -14,12 +21,6 @@
 
 {{ template "chart.requirementsSection" . }}
 
-KeyDB is a high-performance, distributed NoSQL database that is designed to be compatible with the Redis protocol. In many ways, KeyDB can be considered a drop-in replacement for Redis, as it supports the same data structures and commands.
-
-* TLS connections
-* HaProxy load balances
-* Master-master replication
-* Support backup/restore to the extrernal storage, using [wal-g](https://github.com/wal-g)
 
 ```yaml
 # helm values
@@ -59,5 +60,3 @@ metrics:
 ```
 
 {{ template "chart.valuesSection" . }}
-
-{{ template "helm-docs.versionFooter" . }}

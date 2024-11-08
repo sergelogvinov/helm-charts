@@ -1,92 +1,162 @@
-# Teamcity
+# teamcity
 
-## Introduction
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2024.07.3](https://img.shields.io/badge/AppVersion-2024.07.3-informational?style=flat-square)
 
-This chart bootstraps the Teamcity deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+Teamcity on Kubernetes
 
-## Installing the Chart
+TeamCity is a build management and CI/CD server from JetBrains.
+Self-hosted version of TeamCity is available for free for small teams.
+You can run TeamCity on Kubernetes using this Helm chart.
 
-To install the chart with the release name `private-teamcity`:
+**Homepage:** <https://github.com/sergelogvinov/helm-charts>
 
-```console
-$ helm install sergelogvinov/teamcity --name private-teamcity
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| sergelogvinov |  | <https://github.com/sergelogvinov> |
+
+## Source Code
+
+* <https://github.com/sergelogvinov/helm-charts/tree/master/charts/teamcity>
+* <https://www.jetbrains.com/teamcity>
+
+Example:
+
+```yaml
+server:
+  resources:
+    limits:
+      cpu: 4
+      memory: 8Gi
+    requests:
+      cpu: 500m
+      memory: 4Gi
+  persistentVolume:
+    storageClass: proxmox-xfs
+    size: 20Gi
+
+agent:
+  replicaCount: 2
+
+  resources:
+    limits:
+      cpu: 2
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+  envs:
+    DOCKER_BUILDKIT: "1"
+    GOOGLE_APPLICATION_CREDENTIALS: /home/buildagent/.gcp/sa.json
+
+  # GCP service account key
+  extraVolumeMounts:
+    - name: gcp
+      mountPath: /home/buildagent/.gcp
+
+  extraVolumes:
+    - name: gcp
+      secret:
+        secretName: gcp
+        defaultMode: 432
+
+# Add docker-in-docker to the Teamcity agent
+dind:
+  resources:
+    limits:
+      cpu: 2
+      memory: 16Gi
+    requests:
+      cpu: 500m
+      memory: 2Gi
+
+  persistence:
+    enabled: true
+
+    storageClass: proxmox-xfs
+    size: 150Gi
+
+ingress:
+  enabled: true
+
+  hosts:
+    - host: ci.example.com
+      paths: ["/"]
+  tls:
+    - secretName: ci.example.com-ssl
+      hosts:
+        - ci.example.com
 ```
 
-The command deploys teamcity on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+## Values
 
-## Uninstalling the Chart
-
-To uninstall/delete the `private-teamcity` deployment:
-
-```console
-$ helm delete private-teamcity
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release.
-
-## Configuration
-
-The following table lists the configurable parameters of the teamcity chart and their default values.
-
-### Teamcity server
-
-Parameter | Description | Default
---------- | ----------- | -------
-`server.enabled` | if true, create teamcity server | `true`
-`server.image.repository` | server container image repository | `sergelog/teamcity`
-`server.image.tag` | server container image tag | `release_2020.1.3-2`
-`server.image.pullPolicy` | server container image pull policy | `IfNotPresent`
-`server.updateStrategy` | deployment strategy | `{ "type": "Recreate" }`
-`server.podAnnotations` | annotations to be added to server pods | `{}` |
-`server.podSecurityContext` | specify pod annotations in the pod security policy | `{fsGroup: 1000}` |
-`server.securityContext` | custom [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for Teamcity containers | `{runAsUser: 1000, runAsGroup: 1000}` |
-`server.serviceAccount.create` | if true, create the server service account | `true`
-`server.serviceAccount.name` | name of the server service account to use or create | `{{ teamcity.fullname }}`
-`server.serviceAccount.annotations` | annotations for the server service account | `{}`
-`server.resources` | server pod resource requests & limits | `{requests: {cpu: 500m, memory: 1Gi} }`
-`server.nodeSelector` | node labels for server pod assignment | `{}`
-`server.tolerations` | node taints to tolerate | `[]`
-`server.affinity` | pod affinity | `{}`
-`server.persistentVolume.enabled` | if true, server will create a Persistent Volume Claim | `true`
-`server.persistentVolume.accessModes` | server data Persistent Volume access modes | `[ReadWriteOnce]`
-`server.persistentVolume.annotations` | annotations for server Persistent Volume Claim | `{}`
-`server.persistentVolume.existingClaim` | server data Persistent Volume existing claim name | `""`
-`server.persistentVolume.size` | server data Persistent Volume size | `10Gi`
-`server.persistentVolume.storageClass` | server data Persistent Volume Storage Class | `""`
-`server.configDb` | server [database properties](https://www.jetbrains.com/help/teamcity/setting-up-an-external-database.html) | `""`
-`ingress.enabled` | if true, teamcity server Ingress will be created | `false`
-`ingress.annotations` | teamcity server Ingress annotations | `[]`
-`ingress.hosts` | teamcity server Ingress hostnames | `[]`
-`ingress.tls` | teamcity server Ingress https certs | `[]`
-`service.port` | teamcity server service port | `80`
-`service.type` | teamcity server service type | `ClusterIP`
-`postgresql.enabled` | if true, the `stable/postgresql` chart is used | `false`
-`postgresql.postgresqlDatabase` | the postgres database to use | `teamcity`
-`postgresql.postgresqlUsername` | the postgres user to create | `teamcity`
-`postgresql.postgresqlPassword` | the postgres user's password | `teamcity`
-
-### Teamcity agent
-
-Parameter | Description | Default
---------- | ----------- | -------
-`agent.enabled` | if true, create teamcity agent | `true`
-`agent.image.repository` | agent container image repository | `sergelog/teamcity-agent`
-`agent.image.tag` | agent container image tag | `release_2020.1.3-2`
-`agent.image.pullPolicy` | agent container image pull policy | `IfNotPresent`
-`agent.replicaCount` | desired number of agent pods | `0`
-`agent.updateStrategy` | deployment strategy | `{ "type": "Recreate" }`
-`agent.podAnnotations` | annotations to be added to agent pods | `{}` |
-`agent.podSecurityContext` | specify pod annotations in the pod security policy | `{fsGroup: 1000}` |
-`agent.securityContext` | custom [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for Teamcity agent containers | `{runAsUser: 1000, runAsGroup: 1000, runAsNonRoot: true}` |
-`agent.serviceAccount.create` | if true, create the agent service account | `true`
-`agent.serviceAccount.name` | name of the agent service account to use or create | `{{ teamcity.fullname }}-agent`
-`agent.serviceAccount.annotations` | annotations for the agent service account | `{}`
-`agent.resources` | agent pod resource requests & limits | `{requests: {cpu: 500m, memory: 512Mi} }`
-`agent.nodeSelector` | node labels for agent pod assignment | `{}`
-`agent.tolerations` | node taints to tolerate | `[]`
-`agent.affinity` | pod affinity | `{}`
-`agent.extraVolumeMounts` | extra volume mounts for the pod | `[]`
-`agent.extraVolumes` | additional volumes for the pod | `[]`
-`agent.envs` | agent environment variables | `{}`
-`agent.rbac.create` | if true, create & use RBAC resources | `false`
-`agent.rbac.rules` | RBAC rules | `[]`
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| imagePullSecrets | list | `[]` |  |
+| nameOverride | string | `""` |  |
+| fullnameOverride | string | `""` |  |
+| server.enabled | bool | `true` |  |
+| server.replicaCount | int | `1` |  |
+| server.clusterMode | bool | `false` | Teamcity server runs as cluster ref: https://www.jetbrains.com/help/teamcity/2024.07/multinode-setup.html |
+| server.clusterResponsibilities[0] | string | `"CAN_PROCESS_BUILD_TRIGGERS"` |  |
+| server.clusterResponsibilities[1] | string | `"CAN_PROCESS_USER_DATA_MODIFICATION_REQUESTS"` |  |
+| server.clusterResponsibilities[2] | string | `"CAN_CHECK_FOR_CHANGES"` |  |
+| server.clusterResponsibilities[3] | string | `"CAN_PROCESS_BUILD_MESSAGES"` |  |
+| server.image | object | `{"pullPolicy":"IfNotPresent","repository":"ghcr.io/sergelogvinov/teamcity","tag":""}` | Teamcity container image |
+| server.configDb | string | `""` | Teamcity database properties ref: https://www.jetbrains.com/help/teamcity/setting-up-an-external-database.html |
+| server.updateStrategy | object | `{"type":"Recreate"}` | pod deployment update strategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |
+| server.serviceAccount | object | `{"annotations":{},"create":true,"name":""}` | Teamcity server Service Account. ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
+| server.podAnnotations | object | `{}` | Annotations for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
+| server.podSecurityContext | object | `{"fsGroup":1000,"fsGroupChangePolicy":"OnRootMismatch"}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
+| server.securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000,"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
+| server.resources | object | `{"requests":{"cpu":"500m","memory":"1Gi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| server.priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
+| server.persistentVolume | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":true,"existingClaim":"","size":"10Gi","storageClass":""}` | Persistence parameters ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
+| server.persistentVolume.annotations | object | `{}` | Teamcity data Persistent Volume Claim annotations |
+| server.persistentVolume.accessModes | list | `["ReadWriteOnce"]` | Teamcity data Persistent Volume access modes ref: http://kubernetes.io/docs/user-guide/persistent-volumes/ |
+| server.persistentVolume.size | string | `"10Gi"` | teamcity data Persistent Volume size |
+| server.persistentVolume.storageClass | string | `""` | Teamcity data Persistent Volume Storage Class If defined, storageClassName: <storageClass> If set to "-", storageClassName: "", which disables dynamic provisioning If undefined (the default) or set to null, no storageClassName spec is   set, choosing the default provisioner.  (gp2 on AWS, standard on   GKE, AWS & OpenStack) |
+| server.persistentVolume.existingClaim | string | `""` | Teamcity data Persistent Volume existing claim name If defined, PVC must be created manually before volume will be bound |
+| server.nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| server.tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| server.affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
+| agent.enabled | bool | `true` |  |
+| agent.image.repository | string | `"ghcr.io/sergelogvinov/teamcity"` |  |
+| agent.image.pullPolicy | string | `"IfNotPresent"` |  |
+| agent.image.tag | string | `""` |  |
+| agent.replicaCount | int | `0` | Use a deployment if you want to start teamcity agents by yourself Teamcity can run agents by demand |
+| agent.envs | object | `{}` | Teamcity agent environment variables |
+| agent.updateStrategy | object | `{"type":"Recreate"}` | pod deployment update strategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |
+| agent.serviceAccount | object | `{"annotations":{},"create":true,"name":""}` | Teamcity agent Service Account. ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
+| agent.rbac | object | `{"create":false,"rules":[]}` | Teamcity agent RBAC permission. |
+| agent.podAnnotations | object | `{}` | Annotations for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
+| agent.podSecurityContext | object | `{"fsGroup":1000,"fsGroupChangePolicy":"OnRootMismatch"}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
+| agent.securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000,"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
+| agent.resources | object | `{"requests":{"cpu":"500m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| agent.priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
+| agent.extraVolumeMounts | list | `[]` | Additional container volume mounts. |
+| agent.extraVolumes | list | `[]` | Additional volumes. |
+| agent.nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| agent.tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| agent.affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
+| dind.enabled | bool | `true` |  |
+| dind.image | object | `{"pullPolicy":"IfNotPresent","repository":"docker","tag":"26.1-dind"}` | Docker in Docker image. ref: https://hub.docker.com/_/docker/tags?page=1&name=dind |
+| dind.resources | object | `{"limits":{"cpu":1,"memory":"2Gi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| dind.extraVolumeMounts | list | `[]` | Additional container volume mounts. |
+| dind.extraVolumes | list | `[]` | Additional volumes. |
+| dind.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"100Gi"}` | Persistence parameters for source code ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
+| service | object | `{"ipFamilies":["IPv4"],"port":80,"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/concepts/services-networking/service/ |
+| ingress | object | `{"annotations":{},"className":"","enabled":false,"hosts":[{"host":"chart-example.local","paths":[]}],"tls":[]}` | Registry ingress parameters ref: http://kubernetes.io/docs/user-guide/ingress/ |
+| ingress.enabled | bool | `false` | If true, teamcity Ingress will be created |
+| ingress.className | string | `""` | Ingress controller class name |
+| ingress.annotations | object | `{}` | Ingress annotations |
+| ingress.hosts | list | `[{"host":"chart-example.local","paths":[]}]` | Ingress hosts configuration |
+| ingress.tls | list | `[]` | Ingress TLS configuration |
+| metrics | object | `{"enabled":false,"image":{"pullPolicy":"IfNotPresent","repository":"nginx","tag":"1.23.0-alpine"},"password":"prometheus","securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"runAsGroup":101,"runAsNonRoot":true,"runAsUser":101,"seccompProfile":{"type":"RuntimeDefault"}},"username":"prometheus"}` | Expose Teamcity server metrics |
+| metrics.securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"runAsGroup":101,"runAsNonRoot":true,"runAsUser":101,"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
+| postgresql.enabled | bool | `false` |  |
+| postgresql.postgresqlDatabase | string | `"teamcity"` |  |
+| postgresql.postgresqlUsername | string | `"teamcity"` |  |
+| postgresql.postgresqlPassword | string | `"teamcity"` |  |

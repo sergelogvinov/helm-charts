@@ -1,0 +1,92 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+This is a common chart for backend services.
+It includes the following components:
+- Deployment
+- Job
+- Service
+- Ingress
+- Horizontal Pod Autoscaler
+- Pod Disruption Budget
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+Example:
+
+```yaml
+# Default image for all components, can be overridden
+image:
+  repository: ghcr.io/sergelogvinov/backend-example
+
+# Default replica count for all components, can be overridden
+replicaCount: 1
+
+services:
+  # Deployment with service, default port is 5200
+  admin:
+    enabled: true
+    command: ["uwsgi","--ini","settings/uwsgi.ini","--http11-socket",":5200"]
+
+workers:
+  # Deployment do not expose service
+  celery-worker:
+    enabled: true
+    command: ["celery", "-A", "core.celery", "worker", "-l", "info"]
+
+cronjobs:
+  # Cronjob to run runcrons management command
+  runcrons:
+    enabled: true
+    schedule: "5 * * * *"
+    command: ["python", "manage.py", "runcrons"]
+
+jobs:
+  # Job to run migrations, runs by helm install or helm upgrade
+  migrate:
+    enabled: true
+    command: ["python", "manage.py", "-p", "migrate", "--noinput"]
+    # Override default resources values
+    resources:
+      limits:
+        cpu: 1
+        memory: 1024Mi
+      requests:
+        cpu: 500m
+        memory: 256Mi
+
+ingress:
+  enabled: true
+  hosts:
+    - host: example.com
+      paths:
+        # Name is the service name
+        - name: admin
+          path: /admin
+          pathType: ImplementationSpecific
+        - name: admin
+          path: /api
+          pathType: ImplementationSpecific
+
+# Default resources for all components
+resources:
+  limits:
+    cpu: 1
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+```
+
+{{ template "chart.valuesSection" . }}

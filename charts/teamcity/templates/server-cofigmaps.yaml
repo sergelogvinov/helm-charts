@@ -1,0 +1,22 @@
+{{- if .Values.server.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "teamcity.fullname" . }}-server
+  labels:
+    {{- include "teamcity.labels" . | nindent 4 }}
+data:
+  entrypoint.sh: |-
+    #!/bin/sh
+    set -e
+
+    export NODE_URL="http://`hostname -f`.{{ include "teamcity.fullname" . }}-headless.{{ .Release.Namespace }}.svc:8111"
+
+    if [ "$HOSTNAME" != "{{ include "teamcity.fullname" . }}-0" ]; then
+      export TEAMCITY_SERVER_OPTS="-Dteamcity.server.responsibilities={{ join "," .Values.server.clusterResponsibilities }} $TEAMCITY_SERVER_OPTS"
+    else
+      export TEAMCITY_SERVER_OPTS="-Dteamcity.server.responsibilities=MAIN_NODE,{{ join "," .Values.server.clusterResponsibilities }} $TEAMCITY_SERVER_OPTS"
+    fi
+
+    exec /bin/sh /opt/teamcity/bin/teamcity-server.sh run
+{{- end }}
