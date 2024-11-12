@@ -188,9 +188,9 @@ spec:
             - name: secrets
               mountPath: {{ $.Values.secretsMountPath }}
             {{- end }}
-          {{- with .volumeMounts }}
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+            {{- if $val.volumeMounts }}{{- with $.Values.volumes }}
+              {{- toYaml . | nindent 14 }}
+            {{- end }}{{- end }}
       {{- end }}
       volumes:
         {{- if or $.Values.configConfigMap $.Values.config }}
@@ -204,7 +204,7 @@ spec:
             secretName: {{ include "backend-common.fullname" $ }}
             defaultMode: 288
         {{- end }}
-      {{- if .volumeMounts }}{{- with $.Values.volumes }}
+      {{- if $val.volumeMounts }}{{- with $.Values.volumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}{{- end }}
       {{- with (.nodeSelector | default $.Values.nodeSelector) }}

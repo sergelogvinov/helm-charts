@@ -122,9 +122,9 @@ spec:
             - name: secrets
               mountPath: {{ $.Values.secretsMountPath }}
             {{- end }}
-          {{- with .volumeMounts }}
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+            {{- if $val.volumeMounts }}{{- with $.Values.volumes }}
+              {{- toYaml . | nindent 14 }}
+            {{- end }}{{- end }}
       {{- end }}
       volumes:
         {{- if or $.Values.configConfigMap $.Values.config }}
