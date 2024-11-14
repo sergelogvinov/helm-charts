@@ -134,6 +134,17 @@ Convert a memory resource like "500Mi" to the number 500000000 (bytes)
 {{- end }}
 
 {{/*
+Convert a memory resource like "500Mi" to the number 500 (Mbytes)
+*/}}
+{{- define "resource-mbytes" -}}
+{{- if . | hasSuffix "Mi" -}}
+{{- (. | trimSuffix "Mi" | int64) -}}
+{{- else if . | hasSuffix "Gi" -}}
+{{- mul (. | trimSuffix "Gi" | int64) 1000 -}}
+{{- end }}
+{{- end }}
+
+{{/*
 Common config
 */}}
 {{- define "keydb.commonConfig" -}}
@@ -203,7 +214,7 @@ maxmemory {{ sub (int64 (include "resource-bytes" (default (default (dict) .Valu
 
 client-output-buffer-limit normal 0 0 0
 {{- if .Values.resources.requests.memory }}
-client-output-buffer-limit replica {{ if le 1000000000 (int64 (include "resource-bytes" .Values.resources.requests.memory)) }}1024mb{{ else }}256mb{{ end }} 128mb 60
+client-output-buffer-limit replica {{ if le 1000 (int64 (include "resource-mbytes" .Values.resources.requests.memory)) }}{{ div (int64 (include "resource-mbytes" (default (default (dict) .Values.resources.limits ).memory .Values.resources.requests.memory))) 2 }}mb{{ else }}256mb{{ end }} 128mb 60
 {{- end }}
 client-output-buffer-limit pubsub 32mb 8mb 60
 {{ end }}

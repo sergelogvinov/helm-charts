@@ -254,7 +254,7 @@ persistence:
   size: 10Gi
   annotations: {}
 
-# -- pod deployment update stategy type.
+# -- pod deployment update strategy type.
 # ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
   type: RollingUpdate
