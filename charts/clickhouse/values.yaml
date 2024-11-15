@@ -100,7 +100,7 @@ persistence:
 # ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
 priorityClassName: ~
 
-# -- pod deployment update stategy type.
+# -- pod deployment update strategy type.
 # ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
   type: RollingUpdate
