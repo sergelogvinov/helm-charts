@@ -173,7 +173,6 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/node/nodehighnumberconntrackentriesused
         summary: Number of conntrack are getting close to the limit.
       expr: (node_nf_conntrack_entries{job="prometheus-node-exporter"} / node_nf_conntrack_entries_limit) > 0.75
-      for: 1m
       labels:
         severity: warning
 {{- end }}
@@ -184,7 +183,6 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/node/nodetextfilecollectorscrapeerror
         summary: Node Exporter text file collector failed to scrape.
       expr: node_textfile_scrape_error{job="prometheus-node-exporter"} == 1
-      for: 1m
       labels:
         severity: warning
 {{- end }}
@@ -242,7 +240,6 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/node/noderaiddiskfailure
         summary: Failed device in RAID array.
       expr: node_md_disks{state="failed",job="prometheus-node-exporter",device=~"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)"} > 0
-      for: 1m
       labels:
         severity: warning
 {{- end }}

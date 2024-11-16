@@ -15,9 +15,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
       expr: |-
-        sum(apiserver_request:burnrate1h) > (14.40 * 0.01000)
-        and
-        sum(apiserver_request:burnrate5m) > (14.40 * 0.01000)
+        sum by(cluster) (apiserver_request:burnrate1h) > (14.40 * 0.01000)
+        and on(cluster)
+        sum by(cluster) (apiserver_request:burnrate5m) > (14.40 * 0.01000)
       for: 2m
       labels:
         long: 1h
@@ -31,9 +31,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
       expr: |-
-        sum(apiserver_request:burnrate6h) > (6.00 * 0.01000)
-        and
-        sum(apiserver_request:burnrate30m) > (6.00 * 0.01000)
+        sum by(cluster) (apiserver_request:burnrate6h) > (6.00 * 0.01000)
+        and on(cluster)
+        sum by(cluster) (apiserver_request:burnrate30m) > (6.00 * 0.01000)
       for: 15m
       labels:
         long: 6h
@@ -47,9 +47,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
       expr: |-
-        sum(apiserver_request:burnrate1d) > (3.00 * 0.01000)
-        and
-        sum(apiserver_request:burnrate2h) > (3.00 * 0.01000)
+        sum by(cluster) (apiserver_request:burnrate1d) > (3.00 * 0.01000)
+        and on(cluster)
+        sum by(cluster) (apiserver_request:burnrate2h) > (3.00 * 0.01000)
       for: 1h
       labels:
         long: 1d
@@ -63,9 +63,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
       expr: |-
-        sum(apiserver_request:burnrate3d) > (1.00 * 0.01000)
-        and
-        sum(apiserver_request:burnrate6h) > (1.00 * 0.01000)
+        sum by(cluster) (apiserver_request:burnrate3d) > (1.00 * 0.01000)
+        and on(cluster)
+        sum by(cluster) (apiserver_request:burnrate6h) > (1.00 * 0.01000)
       for: 3h
       labels:
         long: 3d

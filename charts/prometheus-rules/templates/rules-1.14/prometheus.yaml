@@ -33,6 +33,17 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
       labels:
         severity: warning
 {{- end }}
+{{- if not (.Values.defaultRules.disabled.PrometheusKubernetesListWatchFailures | default false) }}
+    - alert: PrometheusKubernetesListWatchFailures
+      annotations:
+        description: Kubernetes service discovery of Prometheus {{`{{`}}$labels.namespace{{`}}`}}/{{`{{`}}$labels.pod{{`}}`}} is experiencing {{`{{`}} printf "%.0f" $value {{`}}`}} failures with LIST/WATCH requests to the Kubernetes API in the last 5 minutes.
+        runbook_url: {{ .Values.defaultRules.runbookUrl }}/prometheus/prometheuskuberneteslistwatchfailures
+        summary: Requests in Kubernetes SD are failing.
+      expr: increase(prometheus_sd_kubernetes_failures_total{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m]) > 0
+      for: 15m
+      labels:
+        severity: warning
+{{- end }}
 {{- if not (.Values.defaultRules.disabled.PrometheusNotificationQueueRunningFull | default false) }}
     - alert: PrometheusNotificationQueueRunningFull
       annotations:

@@ -14,7 +14,10 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: A client certificate used to authenticate to kubernetes apiserver is expiring in less than 7.0 days.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeclientcertificateexpiration
         summary: Client certificate is about to expire.
-      expr: apiserver_client_certificate_expiration_seconds_count{job="kubernetes-apiservers"} > 0 and on(job) histogram_quantile(0.01, sum by (job, le) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="kubernetes-apiservers"}[5m]))) < 604800
+      expr: |-
+        histogram_quantile(0.01, sum without (namespace, service, endpoint) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="kubernetes-apiservers"}[5m]))) < 604800
+        and
+        on(job, cluster, instance) apiserver_client_certificate_expiration_seconds_count{job="kubernetes-apiservers"} > 0
       for: 5m
       labels:
         severity: warning
@@ -25,7 +28,10 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: A client certificate used to authenticate to kubernetes apiserver is expiring in less than 24.0 hours.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeclientcertificateexpiration
         summary: Client certificate is about to expire.
-      expr: apiserver_client_certificate_expiration_seconds_count{job="kubernetes-apiservers"} > 0 and on(job) histogram_quantile(0.01, sum by (job, le) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="kubernetes-apiservers"}[5m]))) < 86400
+      expr: |-
+        histogram_quantile(0.01, sum without (namespace, service, endpoint) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="kubernetes-apiservers"}[5m]))) < 86400
+        and
+        on(job, cluster, instance) apiserver_client_certificate_expiration_seconds_count{job="kubernetes-apiservers"} > 0
       for: 5m
       labels:
         severity: critical
@@ -37,7 +43,6 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeaggregatedapierrors
         summary: Kubernetes aggregated API has reported errors.
       expr: sum by(name, namespace, cluster)(increase(aggregator_unavailable_apiservice_total{job="kubernetes-apiservers"}[10m])) > 4
-      for: 1m
       labels:
         severity: warning
 {{- end }}
@@ -69,7 +74,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: The kubernetes apiserver has terminated {{`{{`}} $value | humanizePercentage {{`}}`}} of its incoming requests.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeapiterminatedrequests
         summary: The kubernetes apiserver has terminated {{`{{`}} $value | humanizePercentage {{`}}`}} of its incoming requests.
-      expr: sum(rate(apiserver_request_terminations_total{job="kubernetes-apiservers"}[10m]))  / (  sum(rate(apiserver_request_total{job="kubernetes-apiservers"}[10m])) + sum(rate(apiserver_request_terminations_total{job="kubernetes-apiservers"}[10m])) ) > 0.20
+      expr: sum by(cluster) (rate(apiserver_request_terminations_total{job="kubernetes-apiservers"}[10m])) / ( sum by(cluster) (rate(apiserver_request_total{job="kubernetes-apiservers"}[10m])) + sum by(cluster) (rate(apiserver_request_terminations_total{job="kubernetes-apiservers"}[10m])) ) > 0.20
       for: 5m
       labels:
         severity: warning

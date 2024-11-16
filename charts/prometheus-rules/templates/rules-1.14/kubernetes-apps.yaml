@@ -126,7 +126,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         summary: StatefulSet update has not been rolled out.
       expr: |-
         (
-          max without (revision) (
+          max by(namespace, statefulset, job, cluster) (
             kube_statefulset_status_current_revision{job="kubernetes-service-endpoints"}
               unless
             kube_statefulset_status_update_revision{job="kubernetes-service-endpoints"}
@@ -183,10 +183,10 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeContainerWaiting | default false) }}
     - alert: KubeContainerWaiting
       annotations:
-        description: pod/{{`{{`}} $labels.pod {{`}}`}} in namespace {{`{{`}} $labels.namespace {{`}}`}} on container {{`{{`}} $labels.container{{`}}`}} has been in waiting state for longer than 1 hour.
+        description: 'pod/{{`{{`}} $labels.pod {{`}}`}} in namespace {{`{{`}} $labels.namespace {{`}}`}} on container {{`{{`}} $labels.container{{`}}`}} has been in waiting state for longer than 1 hour. (reason: "{{`{{`}} $labels.reason {{`}}`}}").'
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubecontainerwaiting
         summary: Pod container waiting longer than 1 hour
-      expr: sum by (namespace, pod, container, cluster) (kube_pod_container_status_waiting_reason{job="kubernetes-service-endpoints"}) > 0
+      expr: kube_pod_container_status_waiting_reason{reason!="CrashLoopBackOff", job="kubernetes-service-endpoints"} > 0
       for: 1h
       labels:
         severity: warning
@@ -228,7 +228,6 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         kube_job_status_active{job="kubernetes-service-endpoints"} > 0) > 43200
       labels:
         severity: warning
-      for: 1m
 {{- end }}
 {{- if not (.Values.defaultRules.disabled.KubeJobFailed | default false) }}
     - alert: KubeJobFailed
