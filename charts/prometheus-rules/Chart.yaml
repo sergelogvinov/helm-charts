@@ -6,17 +6,17 @@ type: application
 home: https://github.com/sergelogvinov/helm-charts
 icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/main/charts/prometheus-rules
+  - https://github.com/sergelogvinov/helm-charts/tree/main/charts/prometheus-rules
 keywords:
-- prometheus
-- victoria-metrics
-- metrics
+  - prometheus
+  - victoria-metrics
+  - metrics
 maintainers:
-- name: sergelogvinov
-  url: https://github.com/sergelogvinov
+  - name: sergelogvinov
+    url: https://github.com/sergelogvinov
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.2.12
+version: 0.2.13
 appVersion: "2.40.0"
