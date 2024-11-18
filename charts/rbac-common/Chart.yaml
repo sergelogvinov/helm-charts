@@ -6,16 +6,16 @@ type: application
 home: https://github.com/sergelogvinov/helm-charts
 icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/rbac-common/icon.png
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/main/charts/rbac-common
+  - https://github.com/sergelogvinov/helm-charts/tree/main/charts/rbac-common
 keywords:
-- rbac
-- security
+  - rbac
+  - security
 maintainers:
-- name: sergelogvinov
-  url: https://github.com/sergelogvinov
+  - name: sergelogvinov
+    url: https://github.com/sergelogvinov
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.2.8
+version: 0.2.9
 appVersion: "0.1.1"

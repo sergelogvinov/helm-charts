@@ -307,6 +307,17 @@ rules:
   verbs:
   - get
   - list
+#### Custom resources
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  - helm.toolkit.fluxcd.io
+  - kustomize.toolkit.fluxcd.io
+  resources:
+  - '*'
+  verbs:
+  - get
+  - list
+  - watch
 ####
 - apiGroups:
   - cilium.io
@@ -317,6 +328,7 @@ rules:
   verbs:
   - get
   - list
+####
 - apiGroups:
   - cert-manager.io
   resources:
@@ -347,6 +359,7 @@ rules:
   - get
   - list
   - watch
+#### External Secrets
 - apiGroups:
   - external-secrets.io
   resources:
