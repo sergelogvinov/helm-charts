@@ -6024,6 +6024,25 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/skipper-0.1.0/skipper-0.1.0.tgz
     version: 0.1.0
+  system-upgrade-controller:
+  - apiVersion: v2
+    appVersion: v0.14.2
+    created: "2024-11-18T15:16:57.158158502Z"
+    description: System Upgrade Controller for Talos
+    digest: ded1a3ec6f00a3b874b989369cdbc2107561fb323152948452ddfccd0ea11453
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - system-upgrade-controller
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: system-upgrade-controller
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/system-upgrade-contoller
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/system-upgrade-controller-0.1.0/system-upgrade-controller-0.1.0.tgz
+    version: 0.1.0
   tabix:
   - apiVersion: v2
     appVersion: 22.05.17
@@ -6736,4 +6755,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-11-17T22:29:01.421004932Z"
+generated: "2024-11-18T15:16:57.158741658Z"
