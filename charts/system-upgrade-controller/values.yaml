@@ -1,0 +1,126 @@
+# Default values for system-upgrade-controller.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- Replicaset count.
+# ref: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
+replicaCount: 1
+
+# -- Image details.
+# ref: https://kubernetes.io/docs/concepts/containers/images/
+image:
+  repository: rancher/system-upgrade-controller
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+# -- Secretes for pulling an image from a private repository.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# -- Environment variables
+envs:
+  SYSTEM_UPGRADE_CONTROLLER_DEBUG: false
+  SYSTEM_UPGRADE_CONTROLLER_THREADS: 2
+  SYSTEM_UPGRADE_JOB_TTL_SECONDS_AFTER_FINISH: 900
+  SYSTEM_UPGRADE_JOB_ACTIVE_DEADLINE_SECONDS: 1800
+  SYSTEM_UPGRADE_JOB_BACKOFF_LIMIT: 1
+  SYSTEM_UPGRADE_JOB_IMAGE_PULL_POLICY: IfNotPresent
+  SYSTEM_UPGRADE_JOB_KUBECTL_IMAGE: registry.k8s.io/kubectl:v1.31.2@sha256:d31de5468fb5c0943358671e3dcf8e4d8281108027efd1f211262d09aedd5519
+  SYSTEM_UPGRADE_JOB_PRIVILEGED: false
+  SYSTEM_UPGRADE_PLAN_POLLING_INTERVAL: 15m
+
+talosVersion: v1.8.3
+
+plan:
+  kubernetes:
+    enabled: true
+    version: v1.31.2
+
+# -- Pods Service Account.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Annotations for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+podAnnotations: {}
+
+# -- Labels for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+podLabels: {}
+
+# -- Pod Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+podSecurityContext:
+  fsGroupChangePolicy: "OnRootMismatch"
+  fsGroup: 65534
+
+# -- Container Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+securityContext:
+  allowPrivilegeEscalation: false
+  seccompProfile:
+    type: RuntimeDefault
+  capabilities:
+    drop: ["ALL"]
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 65534
+  runAsGroup: 65534
+
+# -- Resource requests and limits.
+# ref: https://kubernetes.io/docs/user-guide/compute-resources/
+resources:
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# -- Additional container volume mounts.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# -- Additional volumes.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+# -- Deployment update strategy type.
+# ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+
+# -- Node labels for pod assignment.
+# ref: https://kubernetes.io/docs/user-guide/node-selection/
+nodeSelector:
+  node-role.kubernetes.io/control-plane: ""
+
+# -- Tolerations for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+tolerations:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/control-plane
+    operator: Exists
+
+# -- Affinity for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}

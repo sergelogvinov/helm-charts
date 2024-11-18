@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "system-upgrade-controller.fullname" . }}-env
+  labels:
+    {{- include "system-upgrade-controller.labels" . | nindent 4 }}
+data:
+{{- range $name, $value := .Values.envs }}
+  {{ $name }}: {{ quote $value }}
+{{- end }}

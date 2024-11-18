@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "*.json5": "jsonc",
+        "*.tpl": "go-template",
+        "*.yaml": "go-template"
+    },
+    "yaml.schemas": {
+        "http://json.schemastore.org/chart.json": "Chart.yaml",
+        "kubernetes": "templates/**"
+    },
+    "git.rebaseWhenSync": true
+}
