@@ -39,7 +39,8 @@
       ],
       "postUpgradeTasks": {
         "commands": [
-          "./hack/bump-chart-version.sh '{{{parentDir}}}' '{{{isMajor}}}' '{{{isMinor}}}' '{{{isPatch}}}'"
+          "./hack/bump-chart-version.sh '{{{parentDir}}}' '{{{isMajor}}}' '{{{isMinor}}}' '{{{isPatch}}}'",
+          "make docs-{{{parentDir}}}"
         ],
         "fileFilters": [
           "**/Chart.yaml"
