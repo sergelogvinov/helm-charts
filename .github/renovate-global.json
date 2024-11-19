@@ -3,5 +3,8 @@
     "platform": "github",
     "repositories": [
         "sergelogvinov/helm-charts"
+    ],
+    "allowedPostUpgradeCommands": [
+        "^\.\/hack\/bump-chart-version\.sh"
     ]
 }
