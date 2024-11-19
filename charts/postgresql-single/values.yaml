@@ -261,7 +261,7 @@ metrics:
   image:
     repository: quay.io/prometheuscommunity/postgres-exporter
     pullPolicy: IfNotPresent
-    tag: v0.11.1
+    tag: v0.16.0
 
   database: postgres
   username: postgres
