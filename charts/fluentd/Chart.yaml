@@ -6,20 +6,18 @@ type: application
 home: https://github.com/sergelogvinov/helm-charts
 icon: https://raw.githubusercontent.com/fluent/fluentd-docs/master/public/logo/Fluentd_square.png
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/master/charts/fluentd
-- https://www.fluentd.org
+  - https://github.com/sergelogvinov/helm-charts/tree/master/charts/fluentd
+  - https://www.fluentd.org
 keywords:
-- fluentd
-- logging
-- logs
+  - fluentd
+  - logging
+  - logs
 maintainers:
-- name: sergelogvinov
-  url: https://github.com/sergelogvinov
-
+  - name: sergelogvinov
+    url: https://github.com/sergelogvinov
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.1.5
-
+version: 0.2.0
 # renovate: datasource=docker depName=ghcr.io/sergelogvinov/fluentd
-appVersion: 1.16.2
+appVersion: 1.17.1
