@@ -20,5 +20,5 @@ maintainers:
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
 version: 0.7.0
 
-# https://hub.docker.com/r/clickhouse/clickhouse-server/tags
+# renovate: datasource=docker depName=clickhouse/clickhouse-server
 appVersion: 24.10

@@ -20,4 +20,6 @@ maintainers:
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
 version: 0.1.5
-appVersion: "1.16.2"
+
+# renovate: datasource=docker depName=ghcr.io/sergelogvinov/fluentd
+appVersion: 1.16.2
