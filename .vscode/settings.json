@@ -5,6 +5,7 @@
         "*.yaml": "go-template"
     },
     "yaml.schemas": {
+        "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.{yml,yaml}",
         "http://json.schemastore.org/chart.json": "Chart.yaml",
         "kubernetes": "templates/**"
     },
