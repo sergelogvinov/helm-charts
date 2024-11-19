@@ -99,7 +99,7 @@ resources:
 # -- Use a daemonset instead of a deployment
 useDaemonSet: false
 
-# -- Pod deployment update stategy type.
+# -- Pod deployment update strategy type.
 # ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
   type: RollingUpdate
