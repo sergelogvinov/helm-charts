@@ -5,6 +5,7 @@
         "sergelogvinov/helm-charts"
     ],
     "allowedPostUpgradeCommands": [
-        "^\.\/hack\/bump-chart-version\.sh"
+        "^\.\/hack\/bump-chart-version\.sh",
+        "^make"
     ]
 }
