@@ -43,7 +43,8 @@
           "make docs-{{{parentDir}}}"
         ],
         "fileFilters": [
-          "**/Chart.yaml"
+          "**/Chart.yaml",
+          "**/README.md"
         ],
         "executionMode": "branch"
       }
