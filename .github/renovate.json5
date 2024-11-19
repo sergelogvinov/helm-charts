@@ -55,6 +55,15 @@
         "haproxy"
       ],
       "allowedVersions": "<=2.8"
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "docker"
+      ],
+      "allowedVersions": "<=26"
     }
   ],
   "helm-values": {
