@@ -66,7 +66,7 @@ loadbalancer:
   image:
     repository: haproxy
     pullPolicy: IfNotPresent
-    tag: 2.7.10-alpine3.18
+    tag: 2.9.0-alpine3.18
 
   podSecurityContext:
     runAsNonRoot: true
