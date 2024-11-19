@@ -21,7 +21,7 @@
   ],
   "separateMajorMinor": true,
   "separateMultipleMajor": true,
-  "rebaseWhen": "conflicted",
+  "rebaseWhen": "behind-base-branch",
   "ignorePaths": [],
   "packageRules": [
     {
