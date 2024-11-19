@@ -126,7 +126,7 @@ backup:
   image:
     repository: altinity/clickhouse-backup
     pullPolicy: IfNotPresent
-    tag: "2.5.29"
+    tag: "2.6.3"
 
   # set value "" to disable cron backup
   schedule: "15 4 * * *"
