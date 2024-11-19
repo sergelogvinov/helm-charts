@@ -1,6 +1,6 @@
 # github-actions-runner
 
-![Version: 1.6.7](https://img.shields.io/badge/Version-1.6.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.319.1](https://img.shields.io/badge/AppVersion-2.319.1-informational?style=flat-square)
+![Version: 2.0.1](https://img.shields.io/badge/Version-2.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.320.0](https://img.shields.io/badge/AppVersion-2.320.0-informational?style=flat-square)
 
 Github Actions with container registry and mirrors
 
@@ -98,7 +98,7 @@ nodeSelector:
 | githubConfigSecret | object | `{}` |  |
 | controllerServiceAccount.name | string | `"arc"` |  |
 | dind.enabled | bool | `true` |  |
-| dind.image | object | `{"pullPolicy":"IfNotPresent","repository":"docker","tag":"25.0-dind"}` | Docker in Docker image. ref: https://hub.docker.com/_/docker/tags?page=1&name=dind |
+| dind.image | object | `{"pullPolicy":"IfNotPresent","repository":"docker","tag":"26.1-dind"}` | Docker in Docker image. ref: https://hub.docker.com/_/docker/tags?page=1&name=dind |
 | dind.resources | object | `{"limits":{"cpu":1,"memory":"1Gi"},"requests":{"cpu":"500m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | dind.extraVolumeMounts | list | `[]` | Additional container volume mounts. |
 | dind.extraVolumes | list | `[]` | Additional volumes. |
@@ -119,19 +119,20 @@ nodeSelector:
 | mirrors.image.repository | string | `"ghcr.io/project-zot/zot"` |  |
 | mirrors.image.pullPolicy | string | `"IfNotPresent"` |  |
 | mirrors.image.tag | string | `"v2.1.1"` |  |
-| mirrors.registry | list | `[{"host":"docker.io","source":"https://registry-1.docker.io"},{"host":"gcr.io","source":"https://gcr.io"},{"host":"ghcr.io","source":"https://ghcr.io"},{"host":"quay.io","source":"https://quay.io"},{"host":"mcr.microsoft.com","source":"https://mcr.microsoft.com"},{"host":"registry.k8s.io","source":"https://registry.k8s.io"}]` | Container registry list. ref: https://docs.docker.com/registry/recipes/mirror/ |
+| mirrors.registry | list | `[{"host":"docker.io","source":"https://registry-1.docker.io"},{"host":"gcr.io","source":"https://gcr.io"},{"host":"ghcr.io","source":"https://ghcr.io"},{"host":"registry.gitlab.com","source":"https://registry.gitlab.com"},{"host":"quay.io","source":"https://quay.io"},{"host":"mcr.microsoft.com","source":"https://mcr.microsoft.com"},{"host":"registry.k8s.io","source":"https://registry.k8s.io"}]` | Container registry list. ref: https://docs.docker.com/registry/recipes/mirror/ |
 | mirrors.resources | object | `{"limits":{"cpu":1,"memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | mirrors.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"100Gi"}` | Persistence parameters for source code ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
+| mirrors.serviceAccount | object | `{"annotations":{},"create":false,"name":""}` | Registry Service Account. ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
 | mirrors.nodeSelector | object | `{}` | Node labels for mirrors deploy assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | mirrors.tolerations | list | `[]` | Tolerations for mirrors deploy assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | mirrors.affinity | object | `{}` | Affinity for mirrors deploy assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | registry.enabled | bool | `true` |  |
-| registry.image.repository | string | `"registry"` |  |
+| registry.image.repository | string | `"ghcr.io/project-zot/zot"` |  |
 | registry.image.pullPolicy | string | `"IfNotPresent"` |  |
-| registry.image.tag | float | `2.8` |  |
+| registry.image.tag | string | `"v2.1.2-rc3"` |  |
 | registry.storage | string | `nil` |  |
 | registry.ingress | object | `{"annotations":{"nginx.ingress.kubernetes.io/proxy-body-size":0},"auth":{},"className":"","enabled":false,"hosts":[],"tls":null}` | Registry ingress parameters ref: http://kubernetes.io/docs/user-guide/ingress/ |
-| registry.resources | object | `{"limits":{"cpu":1,"memory":"512Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| registry.resources | object | `{"limits":{"cpu":1,"memory":"1024Mi"},"requests":{"cpu":"100m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | registry.extraVolumeMounts | list | `[]` |  |
 | registry.extraVolumes | list | `[]` |  |
 | registry.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"100Gi"}` | Persistence parameters for source code ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
@@ -139,14 +140,6 @@ nodeSelector:
 | registry.nodeSelector | object | `{}` | Node labels for local registry deploy assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | registry.tolerations | list | `[]` | Tolerations for local registry deploy assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | registry.affinity | object | `{}` | Affinity for local registry deploy assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-| registry.cleaner.image.repository | string | `"ghcr.io/sergelogvinov/deckschrubber"` |  |
-| registry.cleaner.image.pullPolicy | string | `"IfNotPresent"` |  |
-| registry.cleaner.image.tag | string | `"0.7.0"` |  |
-| registry.cleaner.args[0] | string | `"-insecure"` |  |
-| registry.cleaner.args[1] | string | `"-registry=https://{{ include \"github-actions-runner.fullname\" . }}-registry"` |  |
-| registry.cleaner.args[2] | string | `"-day=1"` |  |
-| registry.cleaner.args[3] | string | `"-repos=50"` |  |
-| registry.cleaner.resources | object | `{"limits":{"cpu":"100m","memory":"128Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | metrics.enabled | bool | `true` |  |
 | metrics.image.repository | string | `"ghcr.io/sergelogvinov/github-actions-exporter"` |  |
 | metrics.image.pullPolicy | string | `"IfNotPresent"` |  |

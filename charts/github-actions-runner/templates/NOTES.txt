@@ -15,8 +15,3 @@
       metricsQuery: 'sum(<<.Series>>{<<.LabelMatchers>>,busy="true"}) BY (<<.GroupBy>>,repo) / sum(<<.Series>>{}) BY (<<.GroupBy>>,repo) * 100 OR on () topk(1, <<.Series>>{<<.LabelMatchers>>})'
 
 {{- end }}
-{{- if .Values.registry.enabled }}
-2. Clean registry manually
-
-kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "github-actions-runner.fullname" . }}-registry-cleaner {{ include "github-actions-runner.fullname" . }}-registry-cleaner-manual
-{{- end }}

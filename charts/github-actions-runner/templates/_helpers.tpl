@@ -36,6 +36,19 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 
+{{- define "github-actions-runner.mirrors.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}-mirrors
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}-mirrors
+{{- else }}
+{{- printf "%s-%s-mirrors" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
+
 {{/*
 Create chart name and version as used by the chart label.
 */}}
@@ -81,6 +94,17 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
+Create the name of the service account to use by mirrors
+*/}}
+{{- define "github-actions-runner.mirrors.serviceAccountName" -}}
+{{- if .Values.mirrors.serviceAccount.create }}
+{{- default (include "github-actions-runner.mirrors.fullname" .) .Values.mirrors.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.mirrors.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "github-actions-runner.registry.serviceAccountName" -}}
@@ -91,6 +115,9 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
+{{/*
+Define managerRoleName
+*/}}
 {{- define "github-actions-runner.managerRoleName" -}}
 {{- include "github-actions-runner.fullname" . }}-manager
 {{- end }}

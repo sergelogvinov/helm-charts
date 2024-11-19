@@ -16,9 +16,9 @@ keywords:
 maintainers:
 - name: sergelogvinov
   url: https://github.com/sergelogvinov
-
-# This is the chart version. This version number should be incremented each time you make changes
-# to the chart and its templates, including the app version.
+#
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 2.0.0
+version: 2.0.1
+#
+# renovate: datasource=docker depName=ghcr.io/sergelogvinov/github-actions-runner
 appVersion: 2.320.0

@@ -23,8 +23,13 @@ spec:
         {{- include "github-actions-runner.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: mirrors
     spec:
-      enableServiceLinks: false
+      {{- if .Values.mirrors.serviceAccount.create }}
+      serviceAccountName: {{ include "github-actions-runner.mirrors.serviceAccountName" . }}
+      automountServiceAccountToken: true
+      {{- else }}
       automountServiceAccountToken: false
+      {{- end }}
+      enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
@@ -45,6 +50,15 @@ spec:
           ports:
             - name: https
               containerPort: 8443
+          startupProbe:
+            httpGet:
+              path: /v2/
+              port: https
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 30
+            periodSeconds: 5
           resources:
             {{- toYaml $.Values.mirrors.resources | nindent 12 }}
           volumeMounts:
@@ -63,12 +77,13 @@ spec:
               type: RuntimeDefault
             capabilities:
               drop: ["ALL"]
-          image: ghcr.io/zalando/skipper:v0.18.63
+          image: ghcr.io/zalando/skipper:v0.21.223
           command: ['skipper']
           args:
             - -address=:8080
             - -routes-file=/etc/skipper/mirrors.eskip
             - -application-log-level=WARN
+            - -metrics-listener=
           ports:
             - name: http
               containerPort: 8080

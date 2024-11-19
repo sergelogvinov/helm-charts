@@ -14,6 +14,11 @@ spec:
       app.kubernetes.io/component: registry
   template:
     metadata:
+      annotations:
+        checksum/config: {{ toJson .Values.registry.storage | sha256sum }}
+        prometheus.io/scrape: "true"
+        prometheus.io/scheme: https
+        prometheus.io/port: "8443"
       labels:
         {{- include "github-actions-runner.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: registry
@@ -41,16 +46,12 @@ spec:
             runAsGroup: 65534
           image: "{{ .Values.registry.image.repository }}:{{ .Values.registry.image.tag }}"
           imagePullPolicy: {{ .Values.registry.image.pullPolicy }}
-          command:
-            - /bin/registry
-            - serve
-            - /etc/registry/config.yaml
           ports:
             - name: https
               containerPort: 8443
           startupProbe:
             httpGet:
-              path: /
+              path: /v2/
               port: https
               scheme: HTTPS
             initialDelaySeconds: 5
@@ -63,7 +64,7 @@ spec:
             - name: data
               mountPath: /var/lib/registry
             - name: config
-              mountPath: /etc/registry
+              mountPath: /etc/zot
             - name: tls
               mountPath: /etc/registry-tls
           {{- if .Values.registry.extraVolumeMounts }}
@@ -86,8 +87,8 @@ spec:
           configMap:
             name: {{ include "github-actions-runner.fullname" . }}
             items:
-              - key: registry.yaml
-                path: config.yaml
+              - key: registry.json
+                path: config.json
         - name: tls
           secret:
             secretName:  {{ include "github-actions-runner.fullname" . }}-server-tls

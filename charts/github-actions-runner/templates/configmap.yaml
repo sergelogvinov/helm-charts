@@ -123,31 +123,46 @@ data:
   registry.json: |-
     {
       "distSpecVersion": "1.1.0",
+      {{- if .Values.registry.storage }}
+      "storage": {{ .Values.registry.storage | toJson }},
+      {{- else }}
       "storage": {
         "rootDirectory": "/var/lib/registry",
         "commit": true,
         "gc": true,
         "gcDelay": "2h",
-        "gcInterval": "1h"
+        "gcInterval": "1h",
+        "retention": {
+          "dryRun": false,
+          "delay": "24h",
+          "policies": [
+            {
+              "repositories": ["**"],
+              "deleteReferrers": true,
+              "deleteUntagged": true,
+              "keepTags": [{
+                "mostRecentlyPushedCount": 10,
+                "mostRecentlyPulledCount": 10,
+                "pulledWithin": "48h",
+                "pushedWithin": "48h"
+              }]
+            }
+          ]
+        }
       },
+      {{- end }}
       "http": {
         "address": "0.0.0.0", "port": "8443",
         "tls": {
           "cert":"/etc/registry-tls/tls.crt",
           "key":"/etc/registry-tls/tls.key"
         },
-        "accessControl": {
-          "repositories": {
-            "**": {
-              "anonymousPolicy": ["read", "create", "update", "delete"]
-            }
-          }
-        }
+        "compat": ["docker2s2"]
       },
       "log": { "level": "debug" },
       "extensions": {
         "search": {
-          "enable": true,
+          "enable": false,
           "cve": {
             "updateInterval": "12h"
           }

@@ -27,7 +27,8 @@ runnerScaleSetName: ""
 runnerVersion: "0.9.3"
 
 githubConfigUrl: "https://github.com/..."
-githubConfigSecret: {}
+githubConfigSecret:
+  {}
   # github_token: "ghp_123"
   # github_app_id: ""
   # github_app_installation_id: ""
@@ -178,6 +179,17 @@ mirrors:
     size: 100Gi
     annotations: {}
 
+  # -- Registry Service Account.
+  # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: false
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+
   # -- Node labels for mirrors deploy assignment.
   # ref: https://kubernetes.io/docs/user-guide/node-selection/
   nodeSelector: {}
@@ -194,22 +206,17 @@ registry:
   enabled: true
 
   image:
-    repository: registry
+    repository: ghcr.io/project-zot/zot
     pullPolicy: IfNotPresent
-    tag: 2.8
+    tag: "v2.1.2-rc3"
 
-  storage: ~
-    # maintenance:
-    #   uploadpurging:
-    #     enabled: true
-    #     age: 72h
-    #     interval: 4h
-    #     dryrun: false
-    # filesystem:
-    #   rootdirectory: /var/lib/registry
-    #   maxthreads: 100
-    # delete:
-    #   enabled: true
+  storage:
+    ~
+    # rootDirectory: /var/lib/registry
+    # commit: true
+    # gc: true
+    # gcDelay: "72h"
+    # gcInterval: "4h"
 
   # -- Registry ingress parameters
   # ref: http://kubernetes.io/docs/user-guide/ingress/
@@ -220,7 +227,8 @@ registry:
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: 0
 
-    hosts: []
+    hosts:
+      []
       # - host: chart-example.local
 
     tls:
@@ -228,7 +236,8 @@ registry:
       #   hosts:
       #     - chart-example.local
 
-    auth: {}
+    auth:
+      {}
       # username: ""
       # password: ""
       # cert: ""
@@ -239,10 +248,10 @@ registry:
   resources:
     limits:
       cpu: 1
-      memory: 512Mi
+      memory: 1024Mi
     requests:
       cpu: 100m
-      memory: 128Mi
+      memory: 512Mi
 
   extraVolumeMounts: []
   extraVolumes: []
@@ -282,28 +291,6 @@ registry:
   # -- Affinity for local registry deploy assignment.
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
-
-  cleaner:
-    image:
-      repository: ghcr.io/sergelogvinov/deckschrubber
-      pullPolicy: IfNotPresent
-      tag: 0.7.0
-
-    args:
-      - -insecure
-      - -registry=https://{{ include "github-actions-runner.fullname" . }}-registry
-      - -day=1
-      - -repos=50
-
-    # -- Resource requests and limits.
-    # ref: https://kubernetes.io/docs/user-guide/compute-resources/
-    resources:
-      limits:
-        cpu: 100m
-        memory: 128Mi
-      requests:
-        cpu: 100m
-        memory: 128Mi
 
 metrics:
   enabled: true
@@ -366,7 +353,8 @@ podAnnotations: {}
 
 # -- Pod Security Context.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 0
   # fsGroupChangePolicy: "OnRootMismatch"
 
