@@ -351,7 +351,7 @@ metrics:
   image:
     repository: nginx
     pullPolicy: IfNotPresent
-    tag: 1.23.0-alpine
+    tag: 1.27.2-alpine
 
   # -- Container Security Context.
   # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
