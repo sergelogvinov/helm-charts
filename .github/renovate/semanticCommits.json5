@@ -1,0 +1,101 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["major"],
+      "semanticCommitType": "feat",
+      "semanticCommitScope": "container",
+      "commitMessageTopic": "{{depName}}",
+      "commitMessageExtra": "({{currentVersion}} → {{newVersion}})"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["minor"],
+      "semanticCommitType": "feat",
+      "semanticCommitScope": "container",
+      "commitMessageTopic": "{{depName}}",
+      "commitMessageExtra": "({{currentVersion}} → {{newVersion}})"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["patch"],
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "container",
+      "commitMessageTopic": "{{depName}}",
+      "commitMessageExtra": "({{currentVersion}} → {{newVersion}})"
+    },
+        {
+      "matchDatasources": ["helm"],
+      "matchUpdateTypes": ["major"],
+      "semanticCommitType": "feat",
+      "semanticCommitScope": "helm",
+      "commitMessageTopic": "{{depName}}",
+      "commitMessageExtra": "({{currentVersion}} → {{newVersion}})"
+    },
+    {
+      "matchDatasources": ["helm"],
+      "matchUpdateTypes": ["minor"],
+      "semanticCommitType": "feat",
+      "semanticCommitScope": "helm",
+      "commitMessageTopic": "{{depName}}",
+      "commitMessageExtra": "({{currentVersion}} → {{newVersion}})"
+    },
+    {
+      "matchDatasources": ["helm"],
+      "matchUpdateTypes": ["patch"],
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "helm",
+      "commitMessageTopic": "{{depName}}",
+      "commitMessageExtra": "({{currentVersion}} → {{newVersion}})"
+    },
+        {
+      "matchDatasources": ["github-releases", "github-tags"],
+      "matchUpdateTypes": ["major"],
+      "semanticCommitType": "feat",
+      "semanticCommitScope": "",
+      "commitMessageTopic": "{{depName}}",
+      "commitMessageExtra": "({{currentVersion}} → {{newVersion}})"
+    },
+    {
+      "matchDatasources": ["github-releases", "github-tags"],
+      "matchUpdateTypes": ["minor"],
+      "semanticCommitType": "feat",
+      "semanticCommitScope": "",
+      "commitMessageTopic": "{{depName}}",
+      "commitMessageExtra": "({{currentVersion}} → {{newVersion}})"
+    },
+    {
+      "matchDatasources": ["github-releases", "github-tags"],
+      "matchUpdateTypes": ["patch"],
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "",
+      "commitMessageTopic": "{{depName}}",
+      "commitMessageExtra": "({{currentVersion}} → {{newVersion}})"
+    },
+        {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["major"],
+      "semanticCommitType": "feat",
+      "semanticCommitScope": "",
+      "commitMessageTopic": "{{depName}}",
+      "commitMessageExtra": "({{currentVersion}} → {{newVersion}})"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor"],
+      "semanticCommitType": "feat",
+      "semanticCommitScope": "",
+      "commitMessageTopic": "{{depName}}",
+      "commitMessageExtra": "({{currentVersion}} → {{newVersion}})"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["patch"],
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "",
+      "commitMessageTopic": "{{depName}}",
+      "commitMessageExtra": "({{currentVersion}} → {{newVersion}})"
+    }
+  ]
+}
