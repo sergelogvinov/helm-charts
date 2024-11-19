@@ -9,7 +9,7 @@ on:
 
 jobs:
   release:
-    name: "Publish release"
+    name: Publish release
     runs-on: ubuntu-latest
     permissions:
       contents: write

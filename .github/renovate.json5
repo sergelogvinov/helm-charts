@@ -10,7 +10,7 @@
     ":semanticCommitScopeDisabled",
     "github>sergelogvinov/helm-charts//.github/renovate/customManagers.json5",
     "github>sergelogvinov/helm-charts//.github/renovate/semanticCommits.json5",
-    // "github>sergelogvinov/helm-charts//.github/renovate/groups.json5"
+    "github>sergelogvinov/helm-charts//.github/renovate/groups.json5"
   ],
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "Renovate Dashboard",
@@ -46,6 +46,15 @@
         ],
         "executionMode": "branch"
       }
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "haproxy"
+      ],
+      "allowedVersions": "<=2.8"
     }
   ],
   "helm-values": {
