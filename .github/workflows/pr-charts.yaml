@@ -21,10 +21,11 @@ jobs:
       - uses: dorny/paths-filter@v3
         id: filter
         with:
-          # make list | xargs -n1 | xargs -L 1 -I {} -R 2 echo "{}: [{}/**]" > .github/packages.yaml
+          # make list | xargs -n1 | xargs -L 1 -I {} -R 2 echo "{}: [charts/{}/**]" > .github/packages.yaml
           filters: .github/packages.yaml
 
   build-helm:
+    if: ${{ (needs.packages.outputs.packages != '') }}
     needs: packages
     runs-on: ubuntu-latest
     permissions:
