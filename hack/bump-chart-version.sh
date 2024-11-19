@@ -36,4 +36,4 @@ if [[ "$is_patch" = 'true' ]]; then
 fi
 
 echo "Bumping version for $parent_dir from $version to $major.$minor.$patch"
-sed -i "s/^version:.*/version: ${major}.${minor}.${patch}/g" "charts/${parent_dir}/Chart.yaml"
+yq -i '.version = ${major}.${minor}.${patch}' charts/${parent_dir}/Chart.yaml

@@ -52,6 +52,15 @@
         "docker"
       ],
       "matchPackageNames": [
+        "clickhouse/clickhouse-server"
+      ],
+      "allowedVersions": "<=24.10"
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
         "haproxy"
       ],
       "allowedVersions": "<=2.8"
@@ -86,6 +95,7 @@
   ],
   "helm-values": {
     "fileMatch": [
+      "(^|/)Chart.yaml$",
       "(^|/)values.yaml$"
     ]
   }
