@@ -2145,6 +2145,27 @@ entries:
   ipsec:
   - apiVersion: v2
     appVersion: "5.0"
+    created: "2024-11-19T21:16:47.445812389Z"
+    description: IPSec link for Kubernetes
+    digest: 4305557dd8cfe449f7d7f1c9e774db1b2184022fe78f06e7eb4d8dc9a1f0469b
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/ipsec/icon.png
+    keywords:
+    - ipsec
+    - vpn
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: ipsec
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/ipsec
+    - https://libreswan.org/
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/ipsec-0.4.2/ipsec-0.4.2.tgz
+    version: 0.4.2
+  - apiVersion: v2
+    appVersion: "5.0"
     created: "2024-11-19T15:14:08.80038954Z"
     description: IPSec link for Kubernetes
     digest: f5215d9b47283bf75ec5f3c7e6af872b286486faf43a31e13d81f5ad3499f8c3
@@ -6990,4 +7011,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-11-19T21:14:04.025625749Z"
+generated: "2024-11-19T21:16:47.446385229Z"
