@@ -1,92 +1,92 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    "docker:enableMajor",
-    ":timezone(Europe/Tallinn)",
-    ":dependencyDashboard",
-    ":disableRateLimiting",
-    ":semanticCommits",
-    ":semanticCommitScopeDisabled",
-    "github>sergelogvinov/helm-charts//.github/renovate/customManagers.json5",
-    "github>sergelogvinov/helm-charts//.github/renovate/semanticCommits.json5",
-    "github>sergelogvinov/helm-charts//.github/renovate/groups.json5"
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:recommended',
+    'docker:enableMajor',
+    ':timezone(Europe/Tallinn)',
+    ':dependencyDashboard',
+    ':disableRateLimiting',
+    ':semanticCommits',
+    ':semanticCommitScopeDisabled',
+    'github>sergelogvinov/helm-charts//.github/renovate/customManagers.json5',
+    'github>sergelogvinov/helm-charts//.github/renovate/semanticCommits.json5',
+    'github>sergelogvinov/helm-charts//.github/renovate/groups.json5',
   ],
-  "dependencyDashboard": true,
-  "dependencyDashboardTitle": "Renovate Dashboard",
-  "prHeader": "Update Request | Renovate Bot",
-  "suppressNotifications": [
-    "prEditedNotification",
-    "prIgnoreNotification"
+  dependencyDashboard: true,
+  dependencyDashboardTitle: 'Renovate Dashboard',
+  prHeader: 'Update Request | Renovate Bot',
+  suppressNotifications: [
+    'prEditedNotification',
+    'prIgnoreNotification',
   ],
-  "separateMajorMinor": true,
-  "separateMultipleMajor": true,
-  "rebaseWhen": "conflicted",
-  "ignorePaths": [],
-  "packageRules": [
+  separateMajorMinor: true,
+  separateMultipleMajor: true,
+  rebaseWhen: 'conflicted',
+  ignorePaths: [],
+  packageRules: [
     {
-      "matchManagers": [
-        "helm-values",
-        "dockerfile",
-        "regex"
+      matchManagers: [
+        'helm-values',
+        'dockerfile',
+        'custom.regex',
       ],
-      "groupName": "{{depName}}"
+      groupName: '{{depName}}',
     },
     {
-      "description": "Bump helm chart versions by a patch when updating values files. Digests, pins, rollbacks, replacements and pinDigest updates are deliberately ignored since in our use case, these need a manual decision about the version bump for the chart. This can be removed when https://github.com/renovatebot/renovate/issues/8231 is implemented and enabled.",
-      "matchManagers": [
-        "helm-values"
+      description: 'Bump helm chart versions by a patch when updating values files. Digests, pins, rollbacks, replacements and pinDigest updates are deliberately ignored since in our use case, these need a manual decision about the version bump for the chart. This can be removed when https://github.com/renovatebot/renovate/issues/8231 is implemented and enabled.',
+      matchManagers: [
+        'helm-values',
       ],
-      "postUpgradeTasks": {
-        "commands": [
-          "./hack/bump-chart-version.sh '{{{parentDir}}}' '{{{isMajor}}}' '{{{isMinor}}}' '{{{isPatch}}}'"
+      postUpgradeTasks: {
+        commands: [
+          "./hack/bump-chart-version.sh '{{{parentDir}}}' '{{{isMajor}}}' '{{{isMinor}}}' '{{{isPatch}}}'",
         ],
-        "fileFilters": [
-          "**/Chart.yaml"
+        fileFilters: [
+          '**/Chart.yaml',
         ],
-        "executionMode": "branch"
-      }
+        executionMode: 'branch',
+      },
     },
     {
-      "matchDatasources": [
-        "docker"
+      matchDatasources: [
+        'docker',
       ],
-      "matchPackageNames": [
-        "haproxy"
+      matchPackageNames: [
+        'haproxy',
       ],
-      "allowedVersions": "<=2.8"
+      allowedVersions: '<=2.8',
     },
     {
-      "matchDatasources": [
-        "docker"
+      matchDatasources: [
+        'docker',
       ],
-      "matchPackageNames": [
-        "docker"
+      matchPackageNames: [
+        'docker',
       ],
-      "allowedVersions": "<=26"
+      allowedVersions: '<=26',
     },
     {
-      "matchDatasources": [
-        "docker"
+      matchDatasources: [
+        'docker',
       ],
-      "matchPackageNames": [
-        "nginx"
+      matchPackageNames: [
+        'nginx',
       ],
-      "allowedVersions": "<=1.23"
+      allowedVersions: '<=1.23',
     },
     {
-      "matchDatasources": [
-        "docker"
+      matchDatasources: [
+        'docker',
       ],
-      "matchPackageNames": [
-        "quay.io/prometheuscommunity/postgres-exporter"
+      matchPackageNames: [
+        'quay.io/prometheuscommunity/postgres-exporter',
       ],
-      "allowedVersions": "<=0.11"
-    }
+      allowedVersions: '<=0.11',
+    },
   ],
-  "helm-values": {
-    "fileMatch": [
-      "(^|/)values.yaml$"
-    ]
-  }
+  'helm-values': {
+    fileMatch: [
+      '(^|/)values.yaml$',
+    ],
+  },
 }
