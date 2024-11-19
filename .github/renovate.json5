@@ -64,6 +64,24 @@
         "docker"
       ],
       "allowedVersions": "<=26"
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "nginx"
+      ],
+      "allowedVersions": "<=1.23"
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "quay.io/prometheuscommunity/postgres-exporter"
+      ],
+      "allowedVersions": "<=0.11"
     }
   ],
   "helm-values": {
