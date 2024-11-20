@@ -52,7 +52,8 @@ service:
   type: ClusterIP
   ipFamilies: [IPv4]
 
-  ports: []
+  ports:
+    []
     # - name: postgres
     #   port: 5432
     #   backend: postgres.default.svc.cluster.local:5432
@@ -63,7 +64,8 @@ certManager:
 
   dnsName: ~
 
-  clients: []
+  clients:
+    []
     # - user1
     # - user2
 
@@ -87,7 +89,8 @@ wireguard:
   #   wg genkey | tee privatekey | wg pubkey > publickey
   wireguardKey: ""
 
-  peers: {}
+  peers:
+    {}
     # peer-1:
     #   endpoint: 1.2.3.4:51820
     #   publicKey: Dpj+rWfq5zVNr7vlREef2Ug5Y8w4gDSPF/da4tZj0T0=

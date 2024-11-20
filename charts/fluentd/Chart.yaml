@@ -15,7 +15,9 @@ keywords:
 maintainers:
   - name: sergelogvinov
     url: https://github.com/sergelogvinov
-
-version: 0.2.1
+#
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 0.2.2
+#
 # renovate: datasource=docker depName=ghcr.io/sergelogvinov/fluentd
 appVersion: 1.17.1

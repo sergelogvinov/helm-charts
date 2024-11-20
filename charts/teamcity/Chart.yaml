@@ -6,29 +6,26 @@ type: application
 home: https://github.com/sergelogvinov/helm-charts
 icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/teamcity/icon.png
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/master/charts/teamcity
-- https://www.jetbrains.com/teamcity
+  - https://github.com/sergelogvinov/helm-charts/tree/master/charts/teamcity
+  - https://www.jetbrains.com/teamcity
 keywords:
-- ci
-- continuous integration
-- continuous delivery
-- continuous deployment
-- devops
-- automation
+  - ci
+  - continuous integration
+  - continuous delivery
+  - continuous deployment
+  - devops
+  - automation
 maintainers:
-- name: sergelogvinov
-  url: https://github.com/sergelogvinov
-
-# This is the chart version. This version number should be incremented each time you make changes
-# to the chart and its templates, including the app version.
-# Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.7.0
-
-# https://hub.docker.com/r/jetbrains/teamcity-server/tags
-appVersion: 2024.07.3
-
-# dependencies:
+  - name: sergelogvinov
+    url: https://github.com/sergelogvinov
+# dependencies: []
 #   - name: postgresql-single
 #     version: ~0.10.6
 #     repository: https://helm-charts.sinextra.dev
 #     condition: postgresql.enabled
+#
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 0.7.2
+#
+# renovate: datasource=docker depName=ghcr.io/sergelogvinov/teamcity
+appVersion: 2024.07.3

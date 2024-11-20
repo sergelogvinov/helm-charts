@@ -15,11 +15,13 @@ nameOverride: ""
 fullnameOverride: ""
 
 # -- command Override default container command
-command: []
+command:
+  []
   # - /pause
 
-env: []
-  # Databse backup version on restore process
+env:
+  []
+  # Database backup version on restore process
   # - name: WALG_BACKUP_VERSION
   #   value: base_000000010000062D0000005B
 
@@ -75,7 +77,8 @@ tlsCerts:
   ## ref: https://www.postgresql.org/docs/current/libpq-ssl.html
   mode: require
 
-initContainers: []
+initContainers:
+  []
   # - name: pg-init
   #   command: ['/copy_if_not_exist.sh']
   #   env:
@@ -102,7 +105,8 @@ podlabels: {}
 
 # -- Annotations for pod.
 # ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-podAnnotations: {}
+podAnnotations:
+  {}
   # cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
 
 # -- Pod Security Context.
@@ -122,7 +126,7 @@ securityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
 
 # -- Service parameters
 # ref: https://kubernetes.io/docs/user-guide/services/
@@ -191,7 +195,8 @@ backup:
   recovery: false
 
   walpush: false
-  walg: {}
+  walg:
+    {}
     # WALG_TAR_DISABLE_FSYNC: true
     # WALG_UPLOAD_WAL_METADATA: INDIVIDUAL
     # WALG_COMPRESSION_METHOD: brotli

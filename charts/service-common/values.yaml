@@ -67,7 +67,7 @@ resources:
     cpu: 50m
     memory: 32Mi
 
-# -- Pod deployment update stategy type.
+# -- Pod deployment update strategy type.
 # ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
   type: RollingUpdate

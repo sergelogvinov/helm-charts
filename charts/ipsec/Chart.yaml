@@ -6,17 +6,17 @@ type: application
 home: https://github.com/sergelogvinov/helm-charts
 icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/ipsec/icon.png
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/main/charts/ipsec
-- https://libreswan.org/
+  - https://github.com/sergelogvinov/helm-charts/tree/main/charts/ipsec
+  - https://libreswan.org/
 keywords:
-- ipsec
-- vpn
+  - ipsec
+  - vpn
 maintainers:
-- name: sergelogvinov
-  url: https://github.com/sergelogvinov
+  - name: sergelogvinov
+    url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.4.2
+version: 0.4.3
 #
 # renovate: datasource=docker depName=ghcr.io/sergelogvinov/ipsec
 appVersion: "5.0"

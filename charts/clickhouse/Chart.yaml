@@ -6,19 +6,17 @@ type: application
 home: https://github.com/sergelogvinov/helm-charts
 icon: https://github.com/ClickHouse/clickhouse-docs/raw/84f38d893eb7e561c7296279d7953b6a508ec413/static/img/clickhouse-logo.svg
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/master/charts/clickhouse
-- https://github.com/ClickHouse/ClickHouse
-- https://hub.docker.com/r/clickhouse/clickhouse-server
+  - https://github.com/sergelogvinov/helm-charts/tree/master/charts/clickhouse
+  - https://github.com/ClickHouse/ClickHouse
+  - https://hub.docker.com/r/clickhouse/clickhouse-server
 keywords:
-- database
+  - database
 maintainers:
-- name: sergelogvinov
-  url: https://github.com/sergelogvinov
-
-# This is the chart version. This version number should be incremented each time you make changes
-# to the chart and its templates, including the app version.
+  - name: sergelogvinov
+    url: https://github.com/sergelogvinov
+#
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.7.0
-
+version: 0.7.1
+#
 # renovate: datasource=docker depName=clickhouse/clickhouse-server
-appVersion: 24.10
+appVersion: 24.10.2

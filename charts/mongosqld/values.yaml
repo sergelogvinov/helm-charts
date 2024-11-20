@@ -22,7 +22,8 @@ tlsCerts:
 # memory, auto, custom
 schemaMode: memory
 
-schema: ~
+schema:
+  ~
   # schema:
   # - db: mongoDb
   #   tables:
@@ -47,7 +48,6 @@ auth:
 # -- Mongosqld arguments
 # example: `- --sampleNamespaces=contacts.addresses`
 args: []
-  # - --sampleNamespaces=contacts.addresses
 
 # -- Pods Service Account.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -81,7 +81,7 @@ securityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
 
 # -- Service parameters
 # ref: https://kubernetes.io/docs/user-guide/services/

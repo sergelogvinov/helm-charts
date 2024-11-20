@@ -6,19 +6,17 @@ type: application
 home: https://github.com/sergelogvinov/helm-charts
 icon: https://raw.githubusercontent.com/bitwarden/brand/master/icons/icon-square.svg
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/master/charts/bitwarden
-- https://github.com/dani-garcia/vaultwarden
+  - https://github.com/sergelogvinov/helm-charts/tree/master/charts/bitwarden
+  - https://github.com/dani-garcia/vaultwarden
 keywords:
-- vaultwarden
-- bitwarden
+  - vaultwarden
+  - bitwarden
 maintainers:
-- name: sergelogvinov
-  url: https://github.com/sergelogvinov
-
-# This is the chart version. This version number should be incremented each time you make changes
-# to the chart and its templates, including the app version.
+  - name: sergelogvinov
+    url: https://github.com/sergelogvinov
+#
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.3.7
-
+version: 0.3.8
+#
 # renovate: datasource=docker depName=vaultwarden/server
 appVersion: 1.32.5

@@ -6,19 +6,19 @@ type: application
 home: https://github.com/sergelogvinov/helm-charts
 icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/mongodb-backup/icon.png
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongodb-backup
-- https://www.mongodb.com
-- https://github.com/wal-g/wal-g
+  - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongodb-backup
+  - https://www.mongodb.com
+  - https://github.com/wal-g/wal-g
 keywords:
-- mongodb
-- backup
-- wal-g
+  - mongodb
+  - backup
+  - wal-g
 maintainers:
-- name: sergelogvinov
-  url: https://github.com/sergelogvinov
-
-# This is the chart version. This version number should be incremented each time you make changes
-# to the chart and its templates, including the app version.
+  - name: sergelogvinov
+    url: https://github.com/sergelogvinov
+#
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.4.2
+version: 0.4.4
+#
+# renovate: datasource=docker depName=ghcr.io/sergelogvinov/mongodb
 appVersion: 6.0.13

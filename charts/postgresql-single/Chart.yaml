@@ -6,21 +6,19 @@ type: application
 home: https://github.com/sergelogvinov/helm-charts
 icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/postgresql-single/icon.png
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/main/charts/postgresql-single
+  - https://github.com/sergelogvinov/helm-charts/tree/main/charts/postgresql-single
 keywords:
-- postgresql
-- postgres
-- database
-- sql
-- replication
+  - postgresql
+  - postgres
+  - database
+  - sql
+  - replication
 maintainers:
-- name: sergelogvinov
-  url: https://github.com/sergelogvinov
-
-# This is the chart version. This version number should be incremented each time you make changes
-# to the chart and its templates, including the app version.
+  - name: sergelogvinov
+    url: https://github.com/sergelogvinov
+#
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.11.3
-
-# https://github.com/sergelogvinov/helm-charts/pkgs/container/charts%2Fpostgresql-single
+version: 0.11.4
+#
+# renovate: datasource=docker depName=ghcr.io/sergelogvinov/postgresql
 appVersion: "15.8"
