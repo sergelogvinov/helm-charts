@@ -23,6 +23,9 @@
   "separateMultipleMajor": true,
   "rebaseWhen": "behind-base-branch",
   "ignorePaths": [],
+  "regex": {
+    "fileMatch": []
+  },
   "packageRules": [
     {
       "matchManagers": [
