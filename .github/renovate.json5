@@ -44,6 +44,7 @@
         ],
         "fileFilters": [
           "**/Chart.yaml",
+          "**/values.yaml",
           "**/README.md"
         ],
         "executionMode": "branch"

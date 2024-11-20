@@ -14,7 +14,7 @@
         // version: "1.2.3"
         // version=1.2.3
         // 1.2.3
-        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( repository=(?<registryUrl>\\S+))?( versioning=(?<versioning>.*?))?\\n(.+[:=]\\s*)?(&\\S+\\s)?(?<quoteType>['\"])?(?<currentValue>\\S+)(['\"])?",
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( repository=(?<registryUrl>\\S+))?( versioning=(?<versioning>.*?))?\\n(.+[:=]\\s*)?(&\\S+\\s)?(?<quoteType>['\"])?(?<currentValue>[\\w\\d.]+)['\"]?",
         // # renovate: datasource=github-releases depName=org/repo versioning=loose
         // https://github.com/org/repo/releases/download/v1.2.3/artifact
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>.*?))?\\n.+/(?<currentValue>(v|\\d)[^/]+)"
