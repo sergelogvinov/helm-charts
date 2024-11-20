@@ -16,3 +16,6 @@ developers: []
 
 clusterAdmins: []
   # - root1
+
+superadminNamespaces: ""
+  # - kube-system

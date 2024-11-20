@@ -9,10 +9,12 @@ rules:
 - apiGroups:
   - rbac.authorization.k8s.io
   resources:
-  - clusterroles
-  - clusterrolebindings
   - roles
   - rolebindings
+  {{- with .Values.superadminNamespaces }}
+  resourceNames:
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
   verbs:
   - get
   - list
