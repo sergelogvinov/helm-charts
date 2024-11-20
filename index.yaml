@@ -6835,6 +6835,25 @@ entries:
   system-upgrade-controller:
   - apiVersion: v2
     appVersion: v0.14.2
+    created: "2024-11-20T10:23:00.920055073Z"
+    description: System Upgrade Controller for Talos
+    digest: 4f4726ac032ee601bd690be2fcd31536fe525391781629694845f7106be545e9
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - system-upgrade-controller
+    - talos
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: system-upgrade-controller
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/system-upgrade-contoller
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/system-upgrade-controller-0.1.2/system-upgrade-controller-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: v0.14.2
     created: "2024-11-20T08:27:44.740178326Z"
     description: System Upgrade Controller for Talos
     digest: 2bc556f0a07f1265b345ee6b36a618e121c2840e0260c6a6405636d07a3f8f5b
@@ -7696,4 +7715,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-11-20T08:58:17.107969705Z"
+generated: "2024-11-20T10:23:00.920652987Z"
