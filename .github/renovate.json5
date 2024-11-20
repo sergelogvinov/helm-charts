@@ -22,10 +22,9 @@
   "separateMajorMinor": true,
   "separateMultipleMajor": true,
   "rebaseWhen": "behind-base-branch",
-  "ignorePaths": [],
-  "regex": {
-    "fileMatch": []
-  },
+  "ignorePaths": [
+    "/hack/.*"
+  ],
   "packageRules": [
     {
       "matchManagers": [
