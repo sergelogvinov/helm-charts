@@ -93,6 +93,15 @@
         "quay.io/prometheuscommunity/postgres-exporter"
       ],
       "allowedVersions": "<=0.11"
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/sergelogvinov/keydb"
+      ],
+      "allowedVersions": "<=6.3.3"
     }
   ],
   "helm-values": {
