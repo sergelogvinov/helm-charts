@@ -36,6 +36,7 @@ githubConfigSecret:
 
 controllerServiceAccount:
   name: arc
+  namespace: "" # cicd-controller
 
 dind:
   enabled: true
@@ -76,7 +77,7 @@ dind:
     annotations: {}
 
 proxy:
-  enabled: true
+  enabled: false
 
   image:
     repository: ubuntu/squid
@@ -203,7 +204,7 @@ mirrors:
   affinity: {}
 
 registry:
-  enabled: true
+  enabled: false
 
   image:
     repository: ghcr.io/project-zot/zot
@@ -293,7 +294,7 @@ registry:
   affinity: {}
 
 metrics:
-  enabled: true
+  enabled: false
 
   image:
     repository: ghcr.io/sergelogvinov/github-actions-exporter

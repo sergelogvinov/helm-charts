@@ -1,6 +1,6 @@
 # github-actions-runner
 
-![Version: 2.1.1](https://img.shields.io/badge/Version-2.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.321.0](https://img.shields.io/badge/AppVersion-2.321.0-informational?style=flat-square)
+![Version: 2.1.2](https://img.shields.io/badge/Version-2.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.321.0](https://img.shields.io/badge/AppVersion-2.321.0-informational?style=flat-square)
 
 Github Actions with container registry and mirrors
 
@@ -97,13 +97,14 @@ nodeSelector:
 | githubConfigUrl | string | `"https://github.com/..."` |  |
 | githubConfigSecret | object | `{}` |  |
 | controllerServiceAccount.name | string | `"arc"` |  |
+| controllerServiceAccount.namespace | string | `""` |  |
 | dind.enabled | bool | `true` |  |
 | dind.image | object | `{"pullPolicy":"IfNotPresent","repository":"docker","tag":"26.1-dind"}` | Docker in Docker image. ref: https://hub.docker.com/_/docker/tags?page=1&name=dind |
 | dind.resources | object | `{"limits":{"cpu":1,"memory":"1Gi"},"requests":{"cpu":"500m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | dind.extraVolumeMounts | list | `[]` | Additional container volume mounts. |
 | dind.extraVolumes | list | `[]` | Additional volumes. |
 | dind.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"100Gi"}` | Persistence parameters for source code ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
-| proxy.enabled | bool | `true` |  |
+| proxy.enabled | bool | `false` |  |
 | proxy.image.repository | string | `"ubuntu/squid"` |  |
 | proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | proxy.image.tag | string | `"4.13-21.10_beta"` |  |
@@ -126,7 +127,7 @@ nodeSelector:
 | mirrors.nodeSelector | object | `{}` | Node labels for mirrors deploy assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | mirrors.tolerations | list | `[]` | Tolerations for mirrors deploy assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | mirrors.affinity | object | `{}` | Affinity for mirrors deploy assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-| registry.enabled | bool | `true` |  |
+| registry.enabled | bool | `false` |  |
 | registry.image.repository | string | `"ghcr.io/project-zot/zot"` |  |
 | registry.image.pullPolicy | string | `"IfNotPresent"` |  |
 | registry.image.tag | string | `"v2.1.2-rc3"` |  |
@@ -140,7 +141,7 @@ nodeSelector:
 | registry.nodeSelector | object | `{}` | Node labels for local registry deploy assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | registry.tolerations | list | `[]` | Tolerations for local registry deploy assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | registry.affinity | object | `{}` | Affinity for local registry deploy assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-| metrics.enabled | bool | `true` |  |
+| metrics.enabled | bool | `false` |  |
 | metrics.image.repository | string | `"ghcr.io/sergelogvinov/github-actions-exporter"` |  |
 | metrics.image.pullPolicy | string | `"IfNotPresent"` |  |
 | metrics.image.tag | string | `"v1.9.0-beta"` |  |
