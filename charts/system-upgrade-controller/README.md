@@ -1,6 +1,6 @@
 # system-upgrade-controller
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.14.2](https://img.shields.io/badge/AppVersion-v0.14.2-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.14.2](https://img.shields.io/badge/AppVersion-v0.14.2-informational?style=flat-square)
 
 System Upgrade Controller for Talos
 
@@ -24,7 +24,7 @@ Example:
 | imagePullSecrets | list | `[]` | Secretes for pulling an image from a private repository. ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
 | nameOverride | string | `""` |  |
 | fullnameOverride | string | `""` |  |
-| envs | object | `{"SYSTEM_UPGRADE_CONTROLLER_DEBUG":false,"SYSTEM_UPGRADE_CONTROLLER_THREADS":2,"SYSTEM_UPGRADE_JOB_ACTIVE_DEADLINE_SECONDS":1800,"SYSTEM_UPGRADE_JOB_BACKOFF_LIMIT":1,"SYSTEM_UPGRADE_JOB_IMAGE_PULL_POLICY":"IfNotPresent","SYSTEM_UPGRADE_JOB_KUBECTL_IMAGE":"registry.k8s.io/kubectl:v1.31.2@sha256:d31de5468fb5c0943358671e3dcf8e4d8281108027efd1f211262d09aedd5519","SYSTEM_UPGRADE_JOB_PRIVILEGED":false,"SYSTEM_UPGRADE_JOB_TTL_SECONDS_AFTER_FINISH":900,"SYSTEM_UPGRADE_PLAN_POLLING_INTERVAL":"15m"}` | Environment variables |
+| envs | object | `{"SYSTEM_UPGRADE_CONTROLLER_DEBUG":false,"SYSTEM_UPGRADE_CONTROLLER_THREADS":2,"SYSTEM_UPGRADE_JOB_ACTIVE_DEADLINE_SECONDS":1800,"SYSTEM_UPGRADE_JOB_BACKOFF_LIMIT":1,"SYSTEM_UPGRADE_JOB_IMAGE_PULL_POLICY":"IfNotPresent","SYSTEM_UPGRADE_JOB_KUBECTL_IMAGE":"registry.k8s.io/kubectl:v1.31.3@sha256:f5735dae787c62a225536142b5eb0fbfd5515f7a80fcf2b3a5035401b681d1db","SYSTEM_UPGRADE_JOB_PRIVILEGED":false,"SYSTEM_UPGRADE_JOB_TTL_SECONDS_AFTER_FINISH":900,"SYSTEM_UPGRADE_PLAN_POLLING_INTERVAL":"15m"}` | Environment variables |
 | talosVersion | string | `"v1.8.3"` |  |
 | plan.kubernetes.enabled | bool | `true` |  |
 | plan.kubernetes.version | string | `"v1.31.2"` |  |
