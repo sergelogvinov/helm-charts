@@ -46,7 +46,8 @@ serviceAccount:
 
 # -- Annotations for pod.
 # ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-podAnnotations: {}
+podAnnotations:
+  {}
   # cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
 
 # -- Extra labels for pod.
@@ -70,7 +71,7 @@ securityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
 
 # -- Service parameters
 # ref: https://kubernetes.io/docs/user-guide/services/
@@ -90,7 +91,8 @@ service:
 ingress:
   enabled: false
   className: ""
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:

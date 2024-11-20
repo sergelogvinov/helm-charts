@@ -1,5 +1,7 @@
 {
     "files.associations": {
+        "Chart.yaml": "yaml",
+        "values.yaml": "yaml",
         "*.json5": "jsonc",
         "*.tpl": "go-template",
         "*.yaml": "go-template"

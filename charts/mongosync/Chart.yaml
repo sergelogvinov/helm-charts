@@ -6,19 +6,17 @@ type: application
 home: https://github.com/sergelogvinov/helm-charts
 icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/mongosync/icon.png
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongosync
-- https://www.mongodb.com/docs/cluster-to-cluster-sync
+  - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongosync
+  - https://www.mongodb.com/docs/cluster-to-cluster-sync
 keywords:
-- mongodb
-- mongosync
+  - mongodb
+  - mongosync
 maintainers:
-- name: sergelogvinov
-  url: https://github.com/sergelogvinov
-
-# This is the chart version. This version number should be incremented each time you make changes
-# to the chart and its templates, including the app version.
+  - name: sergelogvinov
+    url: https://github.com/sergelogvinov
+#
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.1.6
-
-# https://github.com/sergelogvinov/containers/pkgs/container/mongosync
+version: 0.1.7
+#
+# renovate: datasource=docker depName=ghcr.io/sergelogvinov/mongosync
 appVersion: "1.8.0"

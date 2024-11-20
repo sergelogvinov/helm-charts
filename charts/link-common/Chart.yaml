@@ -6,18 +6,16 @@ type: application
 home: https://github.com/sergelogvinov/helm-charts
 icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/link-common/icon.png
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/main/charts/link-common
+  - https://github.com/sergelogvinov/helm-charts/tree/main/charts/link-common
 keywords:
-- networking
-- vpn
+  - networking
+  - vpn
 maintainers:
-- name: sergelogvinov
-  url: https://github.com/sergelogvinov
-
-# This is the chart version. This version number should be incremented each time you make changes
-# to the chart and its templates, including the app version.
+  - name: sergelogvinov
+    url: https://github.com/sergelogvinov
+#
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.3.4
-
-# https://github.com/sergelogvinov/containers/pkgs/container/haproxy
+version: 0.3.6
+#
+# renovate: datasource=docker depName=ghcr.io/sergelogvinov/haproxy
 appVersion: "2.8.6-alpine3.19"

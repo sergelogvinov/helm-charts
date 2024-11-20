@@ -77,7 +77,8 @@ service:
 ingress:
   enabled: false
   className: ""
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -107,19 +108,21 @@ persistence:
   size: 1Gi
   annotations: {}
 
-# -- pod deployment update stategy type.
+# -- pod deployment update strategy type.
 # ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
   type: RollingUpdate
 
 # -- Node labels for pod assignment.
 # ref: https://kubernetes.io/docs/user-guide/node-selection/
-nodeSelector: {}
+nodeSelector:
+  {}
   # node-role.kubernetes.io/control-plane: ""
 
 # -- Tolerations for pod assignment.
 # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-tolerations: []
+tolerations:
+  []
   # - key: node-role.kubernetes.io/control-plane
   #   effect: NoSchedule
 

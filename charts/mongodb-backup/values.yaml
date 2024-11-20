@@ -30,6 +30,8 @@ backupCheck:
       cpu: 2
       memory: 512Mi
 
+  # -- Persistence parameters
+  # ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   persistence:
     ## A manually managed Persistent Volume and Claim
     # existingClaim:
@@ -40,10 +42,16 @@ backupCheck:
     size: 8Gi
     annotations: {}
 
+  # -- Node labels for backup check pod assignment.
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
   nodeSelector: {}
 
+  # -- Tolerations for backup check pod assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   tolerations: []
 
+  # -- Affinity for backup check pod assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
 
 auth:
@@ -92,7 +100,7 @@ securityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
 
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/

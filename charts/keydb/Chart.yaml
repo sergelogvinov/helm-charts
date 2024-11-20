@@ -6,19 +6,19 @@ type: application
 home: https://github.com/sergelogvinov/helm-charts
 icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/keydb/icon.svg
 sources:
-- https://github.com/sergelogvinov/helm-charts/tree/master/charts/keydb
-- https://docs.keydb.dev
-- https://github.com/wal-g/wal-g
+  - https://github.com/sergelogvinov/helm-charts/tree/master/charts/keydb
+  - https://docs.keydb.dev
+  - https://github.com/wal-g/wal-g
 keywords:
-- keydb
-- redis
-- wal-g
+  - keydb
+  - redis
+  - wal-g
 maintainers:
-- name: sergelogvinov
-  url: https://github.com/sergelogvinov
-
-# This is the chart version. This version number should be incremented each time you make changes
-# to the chart and its templates, including the app version.
+  - name: sergelogvinov
+    url: https://github.com/sergelogvinov
+#
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.9.0
+version: 0.9.1
+#
+# renovate: datasource=docker depName=ghcr.io/sergelogvinov/keydb
 appVersion: "6.3.3"

@@ -7,14 +7,13 @@ sources:
   - https://github.com/sergelogvinov/helm-charts/tree/main/charts/system-upgrade-contoller
 keywords:
   - system-upgrade-controller
+  - talos
 maintainers:
   - name: sergelogvinov
     url: https://github.com/sergelogvinov
-
-# This is the chart version. This version number should be incremented each time you make changes
-# to the chart and its templates, including the app version.
+#
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.1.0
-
-# https://github.com/rancher/system-upgrade-controller
+version: 0.1.1
+#
+# renovate: datasource=docker depName=rancher/system-upgrade-controller
 appVersion: "v0.14.2"

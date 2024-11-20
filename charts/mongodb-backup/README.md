@@ -1,6 +1,6 @@
 # mongodb-backup
 
-![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.0.13](https://img.shields.io/badge/AppVersion-6.0.13-informational?style=flat-square)
+![Version: 0.4.4](https://img.shields.io/badge/Version-0.4.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.0.13](https://img.shields.io/badge/AppVersion-6.0.13-informational?style=flat-square)
 
 Mongo backup with restore checks
 
@@ -66,12 +66,10 @@ backupCheck:
 | backupCheck.resources.limits.memory | string | `"1Gi"` |  |
 | backupCheck.resources.requests.cpu | int | `2` |  |
 | backupCheck.resources.requests.memory | string | `"512Mi"` |  |
-| backupCheck.persistence.accessModes[0] | string | `"ReadWriteOnce"` |  |
-| backupCheck.persistence.size | string | `"8Gi"` |  |
-| backupCheck.persistence.annotations | object | `{}` |  |
-| backupCheck.nodeSelector | object | `{}` |  |
-| backupCheck.tolerations | list | `[]` |  |
-| backupCheck.affinity | object | `{}` |  |
+| backupCheck.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"size":"8Gi"}` | Persistence parameters ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
+| backupCheck.nodeSelector | object | `{}` | Node labels for backup check pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| backupCheck.tolerations | list | `[]` | Tolerations for backup check pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| backupCheck.affinity | object | `{}` | Affinity for backup check pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | auth.host | string | `"mongo-headless:27017/?authSource=admin"` |  |
 | auth.username | string | `"root"` |  |
 | auth.password | string | `"root"` |  |

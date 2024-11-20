@@ -184,7 +184,7 @@ securityContext:
   readOnlyRootFilesystem: true
   capabilities:
     drop:
-    - ALL
+      - ALL
 
 # -- Priority Class Name
 # ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass

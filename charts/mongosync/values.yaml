@@ -14,7 +14,8 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-hostAliases: []
+hostAliases:
+  []
   # - ip: 172.20.2.15
   #   hostnames:
   #     - mongo-0.mongo-headless
@@ -31,7 +32,8 @@ config:
   verbosity: "INFO"
   disableTelemetry: true
 
-filters: []
+filters:
+  []
   # - database: databaseOne
   #   collections:
   #     - collectionOne
@@ -40,7 +42,8 @@ filters: []
 
 # -- Mongosqld arguments
 # example: `- --verbosity=DEBUG`
-args: []
+args:
+  []
   # - --verbosity=DEBUG
 
 # -- Pods Service Account.
@@ -73,7 +76,7 @@ securityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
   seccompProfile:
     type: RuntimeDefault
   readOnlyRootFilesystem: true

@@ -22,7 +22,8 @@ victoriaMetricsConfig:
   ## Ref: https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/
   recordingRules: ~
 
-  extraScrapeConfigs: []
+  extraScrapeConfigs:
+    []
     # - job_name: 'prometheus-blackbox-exporter'
     #   metrics_path: /probe
     #   params:
@@ -72,7 +73,8 @@ prometheusConfig:
   ## Ref: https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/
   recordingRules: ~
 
-  extraScrapeConfigs: []
+  extraScrapeConfigs:
+    []
     # - job_name: 'prometheus-blackbox-exporter'
     #   metrics_path: /probe
     #   params:
