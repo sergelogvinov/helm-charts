@@ -1,6 +1,6 @@
 # teamcity
 
-![Version: 0.7.2](https://img.shields.io/badge/Version-0.7.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2024.07.3](https://img.shields.io/badge/AppVersion-2024.07.3-informational?style=flat-square)
+![Version: 0.7.3](https://img.shields.io/badge/Version-0.7.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2024.07.3](https://img.shields.io/badge/AppVersion-2024.07.3-informational?style=flat-square)
 
 Teamcity on Kubernetes
 
@@ -105,6 +105,7 @@ ingress:
 | server.clusterResponsibilities[2] | string | `"CAN_CHECK_FOR_CHANGES"` |  |
 | server.clusterResponsibilities[3] | string | `"CAN_PROCESS_BUILD_MESSAGES"` |  |
 | server.image | object | `{"pullPolicy":"IfNotPresent","repository":"ghcr.io/sergelogvinov/teamcity","tag":""}` | Teamcity container image |
+| server.envs | object | `{}` | Teamcity server environment variables |
 | server.configDb | string | `""` | Teamcity database properties ref: https://www.jetbrains.com/help/teamcity/setting-up-an-external-database.html |
 | server.updateStrategy | object | `{"type":"Recreate"}` | pod deployment update strategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |
 | server.serviceAccount | object | `{"annotations":{},"create":true,"name":""}` | Teamcity server Service Account. ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |

@@ -68,6 +68,10 @@ spec:
             - name: TEAMCITY_SERVER_OPTS
               value: "-Dteamcity.server.nodeId=${HOSTNAME} -Dteamcity.server.rootURL=${NODE_URL}"
             {{- end }}
+            {{- range $name, $value := .Values.server.envs }}
+            - name: {{ $name }}
+              value: {{ $value | quote }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 8111
