@@ -6319,6 +6319,26 @@ entries:
   rbac-common:
   - apiVersion: v2
     appVersion: 0.1.1
+    created: "2024-11-20T13:24:37.791222851Z"
+    description: Kubernetes RBAC
+    digest: 81012715309372397774d4435c57b5b90965c1ac2d9296abe1f1def8cc22345e
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/rbac-common/icon.png
+    keywords:
+    - rbac
+    - security
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: rbac-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/rbac-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/rbac-common-0.2.10/rbac-common-0.2.10.tgz
+    version: 0.2.10
+  - apiVersion: v2
+    appVersion: 0.1.1
     created: "2024-11-18T17:13:08.00636848Z"
     description: Kubernetes RBAC
     digest: 379ad7e7a238c9e82ba92ae1a192d80b8c17c0deeaa6d3395451e5db81880be6
@@ -7715,4 +7735,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-11-20T10:23:00.920652987Z"
+generated: "2024-11-20T13:24:37.792136386Z"
