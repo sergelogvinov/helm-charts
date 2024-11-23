@@ -4337,6 +4337,26 @@ entries:
     version: 0.1.1
   overprovisioner:
   - apiVersion: v2
+    appVersion: "3.10"
+    created: "2024-11-23T15:16:48.492324555Z"
+    description: Reserve the resources for the migration
+    digest: e801fb2407fbaf9e82f9444c6c70a383913daea0d19f8c917bb6dcaa08af7d48
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/overprovisioner/icon.png
+    keywords:
+    - kubernetes
+    - overprovisioner
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: overprovisioner
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/overprovisioner
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/overprovisioner-0.2.0/overprovisioner-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     appVersion: "3.6"
     created: "2024-11-20T08:27:43.198516925Z"
     description: Reserve the resources for the migration
@@ -7804,4 +7824,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-11-22T14:50:38.421464065Z"
+generated: "2024-11-23T15:16:48.493019422Z"
