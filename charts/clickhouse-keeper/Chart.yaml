@@ -19,4 +19,4 @@ maintainers:
 version: 0.7.1
 #
 # renovate: datasource=docker depName=clickhouse/clickhouse-server
-appVersion: 24.10.2
+appVersion: 24.10.3
