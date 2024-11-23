@@ -20,6 +20,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Helm docs
+        uses: gabe565/setup-helm-docs-action@v1
+        with:
+          version: v1.11.3
+
       - name: Renovate
         uses: renovatebot/github-action@v41.0.3
         with:
