@@ -1163,6 +1163,28 @@ entries:
   fluentd:
   - apiVersion: v2
     appVersion: 1.17.1
+    created: "2024-11-29T10:18:03.791296047Z"
+    description: Deploy fluentd as log router
+    digest: cf9f57c58ac1e126d0876cc65ee91d18ed38158de275a4ad387dcf614cd64880
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/fluent/fluentd-docs/master/public/logo/Fluentd_square.png
+    keywords:
+    - fluentd
+    - logging
+    - logs
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: fluentd
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/fluentd
+    - https://www.fluentd.org
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/fluentd-1.0.0/fluentd-1.0.0.tgz
+    version: 1.0.0
+  - apiVersion: v2
+    appVersion: 1.17.1
     created: "2024-11-20T08:27:41.419108793Z"
     description: Deploy fluentd as log router
     digest: 992394a1c262883c7aa050fdb89a959081b06bf5ec7467c61beaed9697248781
@@ -7887,4 +7909,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-11-26T19:03:45.513282787Z"
+generated: "2024-11-29T10:18:03.791961331Z"
