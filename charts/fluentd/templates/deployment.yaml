@@ -78,6 +78,11 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /fluentd/etc
+          {{- if .Values.inputCerts.create }}
+            - name: fluentd-tls
+              mountPath: /fluentd/tls
+              readOnly: true
+          {{- end }}
           {{- if .Values.extraVolumeMounts }}
             {{ toYaml .Values.extraVolumeMounts | nindent 12 }}
           {{- end }}
@@ -98,6 +103,11 @@ spec:
           configMap:
             name: {{ include "fluentd.fullname" . }}
             defaultMode: 0440
+      {{- if .Values.inputCerts.create }}
+        - name: fluentd-tls
+          secret:
+            secretName: {{ include "fluentd.fullname" . }}-server-tls
+      {{- end }}
       {{- if .Values.extraVolumes }}
         {{ toYaml .Values.extraVolumes | nindent 8 }}
       {{- end }}

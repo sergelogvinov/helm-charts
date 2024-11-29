@@ -22,19 +22,39 @@ data:
       bind 0.0.0.0
     </source>
 
-{{- range $key, $value := .Values.configMaps }}
+    @include input.conf
+    {{- range $key, $value := .Values.configMaps }}
     @include {{ $key }}
-{{- end }}
-{{- if .Values.metrics.enabled }}
+    {{- end }}
+    {{- if .Values.metrics.enabled }}
     @include metrics.conf
-{{- end }}
+    {{- end }}
+
+  input.conf: |
+    <source>
+      @type forward
+      {{- range $port := .Values.service.ports }}{{- if eq $port.name "fluentd" }}
+      port {{ $port.containerPort }}
+      {{- end }}{{- end }}
+      bind 0.0.0.0
+
+      {{- if .Values.inputCerts.create }}
+      <transport tls>
+        version                TLS1_2
+        ca_path                /fluentd/tls/ca.crt
+        cert_path              /fluentd/tls/tls.crt
+        private_key_path       /fluentd/tls/tls.key
+        private_key_passphrase empty
+      </transport>
+      {{- end }}
+    </source>
 
   # custom configs
-{{- range $key, $value := .Values.configMaps }}
+  {{- range $key, $value := .Values.configMaps }}
   {{ $key }}: |-
-    {{ $value | nindent 4 }}
-{{- end }}
-{{- if .Values.metrics.enabled }}
+    {{ tpl $value . | nindent 4 }}
+  {{- end }}
+  {{- if .Values.metrics.enabled }}
   metrics.conf: |
     <source>
       @type prometheus
@@ -48,4 +68,4 @@ data:
     <source>
       @type prometheus_output_monitor
     </source>
-{{- end }}
+  {{- end }}

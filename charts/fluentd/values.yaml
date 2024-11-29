@@ -27,8 +27,8 @@ serviceAccount:
 
 # -- Annotations for pod.
 # ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+# example: `fluentbit.io/exclude: 'true'`
 podAnnotations: {}
-  # fluentbit.io/exclude: 'true'
 
 # -- Pod Security Context.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -47,7 +47,7 @@ securityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
   # readOnlyRootFilesystem: true
 
 # -- Use host's network namespace.
@@ -69,22 +69,22 @@ service:
       protocol: UDP
       containerPort: 24224
 
-# -- Deployment env,
+# -- Deployment environment variables
 # example: `FLUENTD_CONF: /fluentd/etc/fluent.conf`
 envs: {}
-  # FLUENTD_CONF: /fluentd/etc/fluent.conf
 
 logLevel: warn
 
-configMaps:
-  # -- Input rules
-  forward-input.conf: |
-    <source>
-      @type forward
-      port 24224
-      bind 0.0.0.0
-    </source>
+# -- Use tls connection for input port
+# ref: https://docs.fluentd.org/input/forward
+inputCerts:
+  create: false
+  clients:
+    - fluent-bit
 
+# -- Fluentd configuration
+# ref: https://docs.fluentd.org/configuration
+configMaps:
   # -- Output rules
   output.conf: |
     <match **>
@@ -115,16 +115,20 @@ updateStrategy:
   rollingUpdate:
     maxUnavailable: 1
 
-extraVolumes: []
+extraVolumes:
+  []
   # - name: fluent-tls
   #   secret:
   #     secretName: fluent-client-tls
 
-extraVolumeMounts: []
+extraVolumeMounts:
+  []
   # - name: fluent-tls
   #   mountPath: /etc/ssl/fluent-bit
 
-# priorityClassName:
+# -- Priority Class Name
+# ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+priorityClassName: ~
 
 # -- Node labels for pod assignment.
 # ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -132,7 +136,8 @@ nodeSelector: {}
 
 # -- Tolerations for pod assignment.
 # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-tolerations: []
+tolerations:
+  []
   # - operator: Exists
   #   effect: NoSchedule
 

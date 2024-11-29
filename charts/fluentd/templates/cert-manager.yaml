@@ -1,0 +1,108 @@
+{{- if .Values.inputCerts.create }}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "fluentd.fullname" . }}-issuer
+  labels:
+    {{- include "fluentd.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "fluentd.fullname" . }}-ca
+  labels:
+    {{- include "fluentd.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  secretName: {{ include "fluentd.fullname" . }}-ca-tls
+  secretTemplate:
+    labels:
+      {{- include "fluentd.labels" . | nindent 6 }}
+  issuerRef:
+    name: {{ include "fluentd.fullname" . }}-issuer
+    kind: Issuer
+  commonName: {{ include "fluentd.fullname" . }}
+  duration: 26280h # 3y
+  renewBefore: 26000h # ~3y
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - server auth
+    - client auth
+  isCA: true
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "fluentd.fullname" . }}-ca-issuer
+  namespace: {{ .Release.Namespace }}
+spec:
+  ca:
+    secretName: {{ include "fluentd.fullname" . }}-ca-tls
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "fluentd.fullname" . }}-server
+  labels:
+    {{- include "fluentd.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  secretName: {{ include "fluentd.fullname" . }}-server-tls
+  secretTemplate:
+    labels:
+      {{- include "fluentd.labels" . | nindent 6 }}
+  commonName: {{ include "fluentd.fullname" . }}-server
+  duration: 26280h # 3y
+  renewBefore: 8760h # 1y
+  privateKey:
+    rotationPolicy: Always
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - digital signature
+    - server auth
+    - client auth
+  isCA: false
+  dnsNames:
+    - {{ include "fluentd.fullname" . }}
+    - {{ include "fluentd.fullname" . }}.{{ .Release.Namespace }}
+    - {{ include "fluentd.fullname" . }}.{{ .Release.Namespace }}.svc
+  issuerRef:
+    name: {{ include "fluentd.fullname" . }}-ca-issuer
+{{- range $k := .Values.inputCerts.clients }}
+{{ $client := ($k | trunc 63 | replace "@" "-" | replace "." "-" ) }}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "fluentd.fullname" $ }}-{{ $client }}
+  labels:
+    {{- include "fluentd.labels" $ | nindent 4 }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  secretName: {{ include "fluentd.fullname" $ }}-client-{{ $client }}-tls
+  secretTemplate:
+    labels:
+      {{- include "fluentd.labels" $ | nindent 6 }}
+  commonName: {{ include "fluentd.fullname" $ }}-client-{{ $client }}
+  duration: 8760h # 1y
+  renewBefore: 2190h # 3m
+  privateKey:
+    rotationPolicy: Always
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - digital signature
+    - client auth
+  isCA: false
+  dnsNames:
+    - {{ include "fluentd.fullname" $ }}.{{ $.Release.Namespace }}.svc
+  issuerRef:
+    name: {{ include "fluentd.fullname" $ }}-ca-issuer
+{{- end }}
+{{- end }}
