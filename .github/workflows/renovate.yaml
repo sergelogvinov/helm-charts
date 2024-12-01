@@ -22,7 +22,7 @@ jobs:
 
       # Everything runs in container, use docker-cmd-file to add packages
       - name: Renovate
-        uses: renovatebot/github-action@v41.0.3
+        uses: renovatebot/github-action@v41.0.5
         with:
           configurationFile: .github/renovate-global.json
           token: ${{ secrets.GITHUB_TOKEN }}
