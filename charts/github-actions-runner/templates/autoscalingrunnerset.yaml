@@ -92,7 +92,7 @@ spec:
       {{- if $sidecar }}
       initContainers:
         {{- if not .Values.dind.enabled }}
-        {}
+        []
         {{- end }}
       {{- else }}
       containers:
