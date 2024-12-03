@@ -6,16 +6,20 @@ rbac:
   create: true
   singleNamespace: false
 
-viewers: []
+viewers:
+  []
   # - user1
   # - user2
 
-developers: []
+developers:
+  []
   # - user1
   # - user2
 
-clusterAdmins: []
+clusterAdmins:
+  []
   # - root1
 
-superadminNamespaces: ""
+superadminNamespaces:
+  []
   # - kube-system
