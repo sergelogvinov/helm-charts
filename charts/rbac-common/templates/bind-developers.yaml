@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ include "rbac-common.fullname" . }}
+  name: {{ include "rbac-common.fullname" . }}:developers
   namespace: {{ .Release.Namespace | quote }}
   labels:
     {{- include "rbac-common.labels" . | nindent 4 }}
