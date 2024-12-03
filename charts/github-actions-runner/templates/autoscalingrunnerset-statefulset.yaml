@@ -55,6 +55,9 @@ spec:
             value: "3"
       {{- if $sidecar }}
       initContainers:
+        {{- if not .Values.dind.enabled }}
+        {}
+        {{- end }}
       {{- else }}
       containers:
       {{- end }}
