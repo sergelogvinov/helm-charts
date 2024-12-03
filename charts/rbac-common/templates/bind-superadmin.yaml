@@ -18,5 +18,23 @@ subjects:
   kind: User
   name: {{ . }}
 {{- end }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "rbac-common.fullname" $ }}:superadmin:edit
+  namespace: {{ . | quote }}
+  labels:
+    {{- include "rbac-common.labels" $ | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "rbac-common.fullname" $ }}:edit
+subjects:
+{{- range $.Values.clusterAdmins }}
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: {{ . }}
+{{- end }}
 {{- end }}
 {{- end }}
