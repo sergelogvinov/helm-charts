@@ -1,0 +1,15 @@
+priorityClassName: system-cluster-critical
+
+env:
+  - name: CLUSTER_NAME
+    value: "infra"
+  - name: BUCKET
+    value: "production"
+
+envSecrets:
+  CUSTOM_S3_ENDPOINT: "https://s3.eu-west-1.amazonaws.com"
+  S3_PREFIX: etcd-backups
+  AWS_REGION: eu-west-1
+  AWS_ACCESS_KEY_ID: "key"
+  AWS_SECRET_ACCESS_KEY: "secret"
+  AGE_X25519_PUBLIC_KEY: "age"

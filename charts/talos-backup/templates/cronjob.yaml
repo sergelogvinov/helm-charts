@@ -1,0 +1,82 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "talos-backup.fullname" . }}
+  labels:
+    {{- include "talos-backup.labels" . | nindent 4 }}
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  suspend: {{ eq .Values.schedule "" }}
+  schedule: {{ default "10 3 * * *" .Values.schedule | quote }}
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: {{ default 600 .Values.activeDeadlineSeconds }}
+      backoffLimit: 0
+      template:
+        metadata:
+          name: {{ include "talos-backup.fullname" . }}
+          labels:
+            {{- include "talos-backup.labels" . | nindent 12 }}
+            {{- with .Values.podLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        spec:
+          restartPolicy: Never
+          enableServiceLinks: false
+          {{- if .Values.priorityClassName }}
+          priorityClassName: {{ .Values.priorityClassName }}
+          {{- end }}
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "talos-backup.serviceAccountName" . }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          containers:
+            - name: {{ .Chart.Name }}
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              workingDir: /tmp
+              {{- if .Values.env }}
+              env:
+                {{- toYaml .Values.env | nindent 16 }}
+              {{- end }}
+              {{- if .Values.envSecrets }}
+              envFrom:
+                - secretRef:
+                    name: {{ include "talos-backup.fullname" . }}-envs
+              {{- end }}
+              volumeMounts:
+                - name: talos-secrets
+                  mountPath: /var/run/secrets/talos.dev
+                  readOnly: true
+              {{- if .Values.extraVolumeMounts }}
+                {{- toYaml .Values.extraVolumeMounts | nindent 16 }}
+              {{- end }}
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumes:
+            - name: talos-secrets
+              secret:
+                secretName: {{ include "talos-backup.serviceAccountName" . }}-secrets
+                defaultMode: 416 # 0640
+          {{- if .Values.extraVolumes }}
+            {{- toYaml .Values.extraVolumes | nindent 12 }}
+          {{- end }}

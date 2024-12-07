@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://json.schemastore.org/chart.json
+apiVersion: v2
+name: talos-backup
+description: Talos etcd backup
+type: application
+home: https://github.com/sergelogvinov/helm-charts
+icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/talos-backup/icon.png
+sources:
+  - https://github.com/sergelogvinov/helm-charts/tree/main/charts/talos-backup
+keywords:
+  - talos
+  - etcd
+maintainers:
+  - name: sergelogvinov
+    url: https://github.com/sergelogvinov
+#
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 0.1.0
+#
+# renovate: datasource=docker depName=ghcr.io/siderolabs/talos-backup
+appVersion: "v0.1.0-beta.2"

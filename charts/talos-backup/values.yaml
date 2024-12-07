@@ -1,0 +1,146 @@
+# Default values for talos-backup.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- Talos Backup Image Configuration.
+# ref: https://kubernetes.io/docs/concepts/containers/images/
+image:
+  repository: ghcr.io/siderolabs/talos-backup
+  # This sets the pull policy for images.
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+# -- Image pull secrets.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+env:
+  []
+  # - name: AWS_ACCESS_KEY_ID
+  #   value: talosbackupawsaccesskeyid
+  # - name: AWS_SECRET_ACCESS_KEY
+  #   # consider storing this as a secret.
+  #   value: d7m4WgVWxUd2jNPKwsoQLWzFG
+  # - name: AWS_REGION
+  #   value: us-west-2
+  # # CUSTOM_S3_ENDPOINT is optional; if omitted the service will fallback to default AWS endpoints.
+  # - name: CUSTOM_S3_ENDPOINT
+  #   value: https://my-s3-compatible-api.example.com:1234
+  # - name: BUCKET
+  #   value: talos-backups
+  # # CLUSTER_NAME is optional; if omitted it will fall back to the name of the default context.
+  # - name: CLUSTER_NAME
+  #   value: "prod-cluster"
+  # # S3_PREFIX is optional; if omitted it will fall back to the cluster name.
+  # - name: S3_PREFIX
+  #   value: "important/backups"
+  # - name: AGE_X25519_PUBLIC_KEY
+  #   value: "age1khpnnl86pzx96ttyjmldptsl5yn2v9jgmmzcjcufvk00ttkph9zs0ytgec"
+  # # USE_PATH_STYLE is optional; set this to false if you have another s3 like endpoint such as minio.
+  # # If not, the S3 will resolve to a hostname based on https://$BUCKET_NAME.$CUSTOM_S3_ENDPOINT/
+  # - name: USE_PATH_STYLE
+  #   value: "false"
+
+envSecrets:
+  {}
+  # CLUSTER_NAME: "production"
+  # AGE_X25519_PUBLIC_KEY: "age1khpnnl86pzx96ttyjmldptsl5yn2v9jgmmzcjcufvk00ttkph9zs0ytgec"
+  # S3_PREFIX: "production/etcd"
+  # AWS_REGION: "us-west-2"
+  # AWS_ACCESS_KEY_ID: "talosbackup"
+  # AWS_SECRET_ACCESS_KEY: "key"
+
+# -- Backup Schedule.
+# min | hour | day | month | day of week
+schedule: "0 6 * * 0"
+
+# -- Backup timeout.
+activeDeadlineSeconds: 600
+
+# -- Pods Service Account.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Extra labels for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+podlabels: {}
+
+# -- Annotations for pod.
+# ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+podAnnotations: {}
+
+# -- Pod Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  fsGroupChangePolicy: "OnRootMismatch"
+
+# -- Container Security Context.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+# -- Resource requests and limits.
+# ref: https://kubernetes.io/docs/user-guide/compute-resources/
+resources:
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# -- Priority Class Name
+# ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+priorityClassName: ~
+
+# -- Additional volumes on the output Deployment definition.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# -- Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+# -- Node labels for pod assignment.
+# ref: https://kubernetes.io/docs/user-guide/node-selection/
+nodeSelector:
+  node-role.kubernetes.io/control-plane: ""
+
+# -- Tolerations for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+tolerations:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/control-plane
+    operator: Exists
+
+# -- Affinity for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}
