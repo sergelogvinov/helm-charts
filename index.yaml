@@ -7549,6 +7549,27 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.1.1/tailscale-0.1.1.tgz
     version: 0.1.1
+  talos-backup:
+  - apiVersion: v2
+    appVersion: v0.1.0-beta.2
+    created: "2024-12-07T23:29:01.545956713Z"
+    description: Talos etcd backup
+    digest: eff8fc4069941e0f5fa824bbd7e2dbcd82ee458130e5d89bd98b779f47a94c7e
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/talos-backup/icon.png
+    keywords:
+    - talos
+    - etcd
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: talos-backup
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/talos-backup
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/talos-backup-0.1.0/talos-backup-0.1.0.tgz
+    version: 0.1.0
   teamcity:
   - apiVersion: v2
     appVersion: 2024.07.3
@@ -8015,4 +8036,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-12-03T22:23:51.633363104Z"
+generated: "2024-12-07T23:29:01.546979847Z"
