@@ -13,6 +13,11 @@ spec:
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   podManagementPolicy: Parallel
+  {{- if semverCompare ">=1.29" .Capabilities.KubeVersion.GitVersion }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  {{- end }}
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
   selector:

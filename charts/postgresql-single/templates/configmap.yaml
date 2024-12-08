@@ -177,7 +177,7 @@ data:
 
     echo "# bootstrap addons" > $PGDATA/postgresql.auto.conf
 
-    if [ "$HOSTNAME" != "{{ include "postgresql-single.fullname" . }}-0" ]; then
+    if [ "$HOSTNAME" != "{{ include "postgresql-single.primary" . }}" ]; then
         # https://www.postgresql.org/docs/current/libpq-connect.html
 
         echo "archive_command = '/bin/true'" >> $PGDATA/postgresql.auto.conf
