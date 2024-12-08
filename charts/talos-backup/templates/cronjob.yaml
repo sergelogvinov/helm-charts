@@ -46,10 +46,15 @@ spec:
               env:
                 {{- toYaml .Values.env | nindent 16 }}
               {{- end }}
-              {{- if .Values.envSecrets }}
+              {{- if or .Values.envSecrets .Values.envSecretName }}
               envFrom:
+                {{- if .Values.envSecretName }}
+                - secretRef:
+                    name: {{ .Values.envSecretName }}
+                {{- else }}
                 - secretRef:
                     name: {{ include "talos-backup.fullname" . }}-envs
+                {{- end }}
               {{- end }}
               volumeMounts:
                 - name: talos-secrets

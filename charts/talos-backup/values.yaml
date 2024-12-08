@@ -17,6 +17,7 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# -- Environment variables.
 env:
   []
   # - name: AWS_ACCESS_KEY_ID
@@ -44,6 +45,11 @@ env:
   # - name: USE_PATH_STYLE
   #   value: "false"
 
+# -- Kubernetes Secrets Name resource for environment variables.
+# if set, the secrets will be mounted as environment variables.
+envSecretName: ""
+
+# -- Secret environment variables.
 envSecrets:
   {}
   # CLUSTER_NAME: "production"

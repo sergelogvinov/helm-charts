@@ -24,8 +24,9 @@ Talos etcd backup
 | imagePullSecrets | list | `[]` | Image pull secrets. ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
 | nameOverride | string | `""` |  |
 | fullnameOverride | string | `""` |  |
-| env | list | `[]` |  |
-| envSecrets | object | `{}` |  |
+| env | list | `[]` | Environment variables. |
+| envSecretName | string | `""` | Kubernetes Secrets Name resource for environment variables. if set, the secrets will be mounted as environment variables. |
+| envSecrets | object | `{}` | Secret environment variables. |
 | schedule | string | `"0 6 * * 0"` | Backup Schedule. min | hour | day | month | day of week |
 | activeDeadlineSeconds | int | `600` | Backup timeout. |
 | serviceAccount | object | `{"annotations":{},"automount":true,"create":true,"name":""}` | Pods Service Account. ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
