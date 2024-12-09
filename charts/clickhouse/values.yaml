@@ -50,7 +50,9 @@ securityContext:
     drop:
       - ALL
     add:
-      - SYS_NICE
+      []
+      # Need PodSecurity policy to `pod-security.kubernetes.io/enforce: privileged`
+      # - SYS_NICE
       # - IPC_LOCK
   # readOnlyRootFilesystem: true
 
