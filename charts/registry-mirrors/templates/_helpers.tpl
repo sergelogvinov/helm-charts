@@ -75,3 +75,13 @@ Create the mirror auth password
 {{- randAlphaNum 16 }}
 {{- end }}
 {{- end }}
+
+{{- define "registry-mirrors.credentialsFile" -}}
+{{- range $inx, $val := .Values.mirrors }}{{- if and $val.auth $val.auth.username }}
+{{- $val.host }}: {{- toYaml $val.auth | nindent 2 }}
+{{- if eq $val.host "docker.io" }}
+index.docker.io: {{- toYaml $val.auth | nindent 2 }}
+registry-1.docker.io: {{- toYaml $val.auth | nindent 2 }}
+{{- end }}
+{{ end }}{{- end }}
+{{- end }}

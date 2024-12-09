@@ -38,9 +38,10 @@ machine:
     mirrors:
       {{- range $inx, $val := .Values.mirrors }}
       {{ $val.host }}:
+        overridePath: true
         endpoints:
           {{- range $host := $.Values.ingress.hosts }}
-          - http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}/{{ $val.host | replace "." "-" }}
+          - http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}/v2/{{ $val.host | replace "." "-" }}
           {{- end }}
       {{- end }}
 ```

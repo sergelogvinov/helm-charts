@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: registry
+  repository: ghcr.io/project-zot/zot
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -23,6 +23,11 @@ auth:
 mirrors:
   - host: docker.io
     source: https://registry-1.docker.io
+    # auth:
+    #   username: ""
+    #   password: ""
+  - host: quay.io
+    source: https://quay.io
   - host: gcr.io
     source: https://gcr.io
   - host: ghcr.io
@@ -49,6 +54,8 @@ podAnnotations: {}
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 podSecurityContext:
   runAsNonRoot: true
+  runAsUser: 65534
+  runAsGroup: 65534
   fsGroup: 65534
   fsGroupChangePolicy: "OnRootMismatch"
 
@@ -92,12 +99,12 @@ ingress:
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
+  limits:
+    cpu: 1
+    # memory: 1Gi
   requests:
-    cpu: 50m
-    memory: 64Mi
+    cpu: 100m
+    memory: 512Mi
 
 # -- Persistence parameters
 # ref: https://kubernetes.io/docs/user-guide/persistent-volumes/

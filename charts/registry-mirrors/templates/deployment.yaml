@@ -31,69 +31,32 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}-router
+        - name: {{ include "registry-mirrors.fullname" . }}
           securityContext:
-            allowPrivilegeEscalation: false
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop: ["ALL"]
-            runAsUser: 65534
-            runAsGroup: 65534
-          image: registry.opensource.zalan.do/teapot/skipper:v0.13.174
-          command: ['skipper']
-          args:
-            - -routes-file=/etc/skipper/mirrors.eskip
-            - -access-log-json-enabled
-            - -application-log-level=WARN
-            - -timeout-backend=5s
-            - -read-timeout-server=30s
-            - -write-timeout-server=30s
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 9090
+              containerPort: 8080
           startupProbe:
             httpGet:
-              path: /healthz
+              path: /v2/
               port: http
               scheme: HTTP
-              httpHeaders:
-                - name: Host
-                  value: 127.0.0.1
             initialDelaySeconds: 5
             timeoutSeconds: 3
             failureThreshold: 30
             periodSeconds: 5
           resources:
-            requests:
-              cpu: 50m
-              memory: 32Mi
+            {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            - name: config
-              mountPath: /etc/skipper
-        {{- range $inx, $val := .Values.mirrors }}
-        - name: {{ $.Chart.Name }}-{{ $val.host | replace "." "-" }}
-          securityContext:
-            {{- toYaml $.Values.securityContext | nindent 12 }}
-          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
-          imagePullPolicy: {{ $.Values.image.pullPolicy }}
-          env:
-            - name: REGISTRY_HTTP_ADDR
-              value: 127.0.0.1:{{ add 5000 $inx }}
-            - name: REGISTRY_PROXY_REMOTEURL
-              value: {{ $val.source }}
-            - name: REGISTRY_STORAGE_DELETE_ENABLED
-              value: "true"
-            - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
-              value: /var/lib/registry/{{ $val.host | replace "." "-" }}
-          resources:
-            {{- toYaml $.Values.resources | nindent 12 }}
-          volumeMounts:
-            - name: config
-              mountPath: /etc/docker/registry
             - name: cache
               mountPath: /var/lib/registry
-        {{- end }}
+            - name: config
+              mountPath: /etc/zot
+            - name: credentials
+              mountPath: /etc/credentials
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -110,6 +73,10 @@ spec:
         - name: config
           configMap:
             name: {{ include "registry-mirrors.fullname" . }}
+        - name: credentials
+          secret:
+            secretName:  {{ include "registry-mirrors.fullname" . }}
+            defaultMode: 256
         {{- if .Values.persistence.storageClass }}
         - name: cache
           ephemeral:

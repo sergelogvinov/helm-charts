@@ -51,17 +51,21 @@ machine:
             key: BASE64-key
     mirrors:
       docker.io:
+        overridePath: true
         endpoints:
-          - https://mirrors.example.com/docker-io
+          - https://mirrors.example.com/v2/docker-io
       gcr.io:
+        overridePath: true
         endpoints:
-          - https://mirrors.example.com/gcr-io
+          - https://mirrors.example.com/v2/gcr-io
       ghcr.io:
+        overridePath: true
         endpoints:
-          - https://mirrors.example.com/ghcr-io
+          - https://mirrors.example.com/v2/ghcr-io
       registry.k8s.io:
+        overridePath: true
         endpoints:
-          - https://mirrors.example.com/registry-k8s-io
+          - https://mirrors.example.com/v2/registry-k8s-io
 ```
 
 {{ template "chart.valuesSection" . }}

@@ -15,7 +15,7 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.2.3
+version: 1.0.0
 #
-# renovate: datasource=docker depName=registry
-appVersion: 2.8.3
+# renovate: datasource=docker depName=ghcr.io/project-zot/zot
+appVersion: v2.1.1

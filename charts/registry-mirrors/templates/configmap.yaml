@@ -5,38 +5,78 @@ metadata:
   labels:
     {{- include "registry-mirrors.labels" . | nindent 4 }}
 data:
-  mirrors.eskip: |-
-    healthz: Path("/healthz") -> inlineContent("ok")
-        -> disableAccessLog() -> <shunt>;
-
-    {{- range $inx, $val := .Values.mirrors }}
-    {{ $val.host | replace "." "" }}: PathSubtree("/{{ $val.host | replace "." "-" }}/v2/") -> modPath("/{{ $val.host | replace "." "-" }}/", "/")
-        -> enableAccessLog(5) -> "http://127.0.0.1:{{ add 5000 $inx }}";
-    {{- end }}
-
-    docker: PathSubtree("/v2/")
-        -> enableAccessLog(5) -> "http://127.0.0.1:5000";
-
-    default: * -> status(404) -> <shunt>;
-
-  config.yml: |-
-    version: 0.1
-    log:
-      accesslog:
-        disabled: true
-      level: error
-      formatter: json
-    storage:
-      cache:
-        blobdescriptor: inmemory
-      maintenance:
-        uploadpurging:
-          enabled: true
-          age: 168h
-          interval: 24h
-          dryrun: false
-      filesystem:
-        rootdirectory: /var/lib/registry
-        maxthreads: 100
-    http:
-      addr: :8080
+  config.json: |-
+    {
+      "distSpecVersion": "1.1.0",
+      "storage": {
+        "rootDirectory": "/var/lib/registry",
+        "commit": true,
+        "gc": true,
+        "gcDelay": "1h",
+        "gcInterval": "12h"
+      },
+      "http": {
+        "address": "0.0.0.0", "port": "8080"
+      },
+      "log": { "level": "warn" },
+      "extensions": {
+        "metrics": {
+          "enable": true,
+          "prometheus": {
+            "path": "/metrics"
+          }
+        },
+        "sync": {
+          "enable": true,
+          "credentialsFile": "/etc/credentials/credentials.json",
+          "registries": [
+            {{- range $inx, $val := .Values.mirrors }}{{- if ne $val.host "docker.io" }}
+            {
+              "urls": ["https://{{ $val.host }}"],
+              "tlsVerify": true,
+              "onDemand": true,
+              "maxRetries": 3,
+              "retryDelay": "15m",
+              "onlySigned": false,
+              "content": [
+                {
+                  "prefix": "**",
+                  "destination": "/{{ $val.host | replace "." "-" }}"
+                }
+              ]
+            },
+            {{- end }}{{- end }}
+            {
+              "urls": ["https://index.docker.io"],
+              "tlsVerify": true,
+              "onDemand": true,
+              "maxRetries": 3,
+              "retryDelay": "15m",
+              "onlySigned": false,
+              "content": [
+                {
+                  "prefix": "library/**",
+                  "destination": "/docker-io"
+                },
+                {
+                  "prefix": "**",
+                  "destination": "/docker-io"
+                },
+                {
+                  "prefix": "library/**"
+                },
+                {
+                  "prefix": "moby/**"
+                },
+                {
+                  "prefix": "docker/**"
+                },
+                {
+                  "prefix": "multiarch/**"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
