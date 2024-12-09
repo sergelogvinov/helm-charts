@@ -49,9 +49,9 @@ securityContext:
   capabilities:
     drop:
       - ALL
-    # add:
-    # - SYS_NICE
-    # - IPC_LOCK
+    add:
+      - SYS_NICE
+      # - IPC_LOCK
   # readOnlyRootFilesystem: true
 
 # -- Service parameters
