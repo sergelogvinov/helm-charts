@@ -6715,6 +6715,26 @@ entries:
     version: 0.2.6
   registry-mirrors:
   - apiVersion: v2
+    appVersion: v2.1.1
+    created: "2024-12-09T20:32:53.804434374Z"
+    description: Container registry mirror
+    digest: ae76f3b988079edd4df40b155a3655443473563f90918ab9b26f2e7a8800a49d
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/registry-mirrors/icon.png
+    keywords:
+    - containerd
+    - docker mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: registry-mirrors
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/registry-mirrors
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/registry-mirrors-1.0.0/registry-mirrors-1.0.0.tgz
+    version: 1.0.0
+  - apiVersion: v2
     appVersion: 2.8.3
     created: "2024-11-20T08:32:59.506232401Z"
     description: Container registry mirror
@@ -8121,4 +8141,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-12-09T12:15:29.008307017Z"
+generated: "2024-12-09T20:32:53.805047207Z"
