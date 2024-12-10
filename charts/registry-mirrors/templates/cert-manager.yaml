@@ -46,10 +46,13 @@ metadata:
     {{- include "registry-mirrors.labels" . | nindent 4 }}
 spec:
   secretName: {{ include "registry-mirrors.fullname" . }}-auth-server
-  duration: 17520h # 24m
+  duration: 26280h # 3y
   renewBefore: 4380h # 6m
   privateKey:
     rotationPolicy: Always
+    algorithm: ECDSA
+    encoding: PKCS1
+    size: 256
   usages:
     - server auth
     - client auth
@@ -71,10 +74,13 @@ metadata:
 spec:
   secretName: {{ include "registry-mirrors.fullname" . }}-auth-containerd
   commonName: containerd
-  duration: 17520h # 24m
+  duration: 26280h # 3y
   renewBefore: 4380h # 6m
   privateKey:
     rotationPolicy: Always
+    algorithm: ECDSA
+    encoding: PKCS1
+    size: 256
   usages:
     - client auth
   isCA: false
