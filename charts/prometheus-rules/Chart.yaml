@@ -16,6 +16,6 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.2.14
+version: 0.2.15
 #
 appVersion: "2.40.0"
