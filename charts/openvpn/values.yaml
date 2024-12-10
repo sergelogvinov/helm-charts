@@ -20,6 +20,7 @@ certManager:
 
   # -- Common name for the certificate.
   commonName: ~
+
   # -- Subject for the certificate.
   subject:
     {}

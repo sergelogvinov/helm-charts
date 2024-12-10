@@ -22,8 +22,8 @@ spec:
   issuerRef:
     name: {{ include "openvpn.fullname" . }}
     kind: Issuer
-  subject:
   {{- with .Values.certManager.subject }}
+  subject:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   commonName: {{ default (include "openvpn.fullname" .) .Values.certManager.commonName }}
