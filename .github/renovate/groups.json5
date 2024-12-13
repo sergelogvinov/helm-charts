@@ -15,6 +15,25 @@
         "commitMessageTopic": "{{{groupName}}} group"
       },
       "separateMinorPatch": true
+    },
+    {
+      "description": "Kubernetes Group",
+      "groupName": "Storage",
+      "matchPackagePatterns": [
+        "^registry.k8s.io/"
+      ],
+      "matchDatasources": [
+        "docker",
+        "github-tags"
+      ],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "matchUpdateTypes": [
+        "major",
+        "minor"
+      ],
+      "enabled": false
     }
   ]
 }
