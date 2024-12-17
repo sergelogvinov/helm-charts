@@ -14,23 +14,29 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# -- Kubernetes Secrets Name resource for environment variables.
+# if set, the secrets will be mounted as environment variables.
+envSecretName: ""
+
+# -- Secret environment variables.
+# Uses if not set the envSecretName
 envs:
   # -- smtp username
-  SMTP_USERNAME: 'username'
+  SMTP_USERNAME: "username"
   # -- smtp password
-  SMTP_PASSWORD: 'password'
+  SMTP_PASSWORD: "password"
   # -- Admin token,
   # use `/vaultwarden hash` to encrypt password
-  ADMIN_TOKEN: 'token'
+  ADMIN_TOKEN: "token"
   # -- After creation, better to disable admin portal
-  DISABLE_ADMIN_TOKEN: 'false'
+  DISABLE_ADMIN_TOKEN: "false"
 
 # -- Official documentation
 # https://github.com/dani-garcia/vaultwarden/wiki/Configuration-overview
 config:
-  SMTP_HOST: 'smtp.domain.tld'
-  SMTP_FROM: 'bitwarden-rs@domain.tld'
-  SMTP_FROM_NAME: 'Vault'
+  SMTP_HOST: "smtp.domain.tld"
+  SMTP_FROM: "bitwarden-rs@domain.tld"
+  SMTP_FROM_NAME: "Vault"
   SMTP_PORT: 587
   SMTP_SECURITY: starttls
   #
@@ -38,13 +44,13 @@ config:
   ROCKET_WORKERS: 10
   #
   EXTENDED_LOGGING: true
-  ROCKET_CLI_COLORS: 'off'
+  ROCKET_CLI_COLORS: "off"
   #
   SIGNUPS_ALLOWED: false
   SIGNUPS_VERIFY: false
-  SIGNUPS_DOMAINS_WHITELIST: 'domain.tld'
+  SIGNUPS_DOMAINS_WHITELIST: "domain.tld"
   INVITATIONS_ALLOWED: true
-  INVITATION_ORG_NAME: 'Bitwarden'
+  INVITATION_ORG_NAME: "Bitwarden"
   SHOW_PASSWORD_HINT: false
   #
   USER_ATTACHMENT_LIMIT: 1048576

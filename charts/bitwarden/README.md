@@ -1,6 +1,6 @@
 # bitwarden
 
-![Version: 0.3.9](https://img.shields.io/badge/Version-0.3.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.32.6](https://img.shields.io/badge/AppVersion-1.32.6-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.32.6](https://img.shields.io/badge/AppVersion-1.32.6-informational?style=flat-square)
 
 A Helm chart to deploy Bitwarden.
 
@@ -58,6 +58,8 @@ persistence:
 | imagePullSecrets | list | `[]` |  |
 | nameOverride | string | `""` |  |
 | fullnameOverride | string | `""` |  |
+| envSecretName | string | `""` | Kubernetes Secrets Name resource for environment variables. if set, the secrets will be mounted as environment variables. |
+| envs | object | `{"ADMIN_TOKEN":"token","DISABLE_ADMIN_TOKEN":"false","SMTP_PASSWORD":"password","SMTP_USERNAME":"username"}` | Secret environment variables. Uses if not set the envSecretName |
 | envs.SMTP_USERNAME | string | `"username"` | smtp username |
 | envs.SMTP_PASSWORD | string | `"password"` | smtp password |
 | envs.ADMIN_TOKEN | string | `"token"` | Admin token, use `/vaultwarden hash` to encrypt password |

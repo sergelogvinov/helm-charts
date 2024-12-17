@@ -57,7 +57,7 @@ spec:
               value: "/etc/bitwarden/config.json"
           envFrom:
             - secretRef:
-                name: {{ include "bitwarden.fullname" . }}
+                name: {{ include "bitwarden.secrets" . }}
           ports:
             - name: http
               containerPort: 8080

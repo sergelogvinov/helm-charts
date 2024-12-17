@@ -69,3 +69,11 @@ Prepare bitwarden config
 {{ $key | lower }}: {{ $value }}
 {{- end }}
 {{- end }}
+
+{{- define "bitwarden.secrets" -}}
+{{- if .Values.envSecretName }}
+{{-  .Values.envSecretName  }}
+{{- else }}
+{{-  include "bitwarden.fullname" .  }}
+{{- end }}
+{{- end }}
