@@ -258,3 +258,11 @@ clickhouse:
     # AWS_REGION: eu-central-1
     # AWS_ACCESS_KEY_ID: XXXX
     # AWS_SECRET_ACCESS_KEY: YYYY
+
+  customConfig:
+    {}
+    # background_fetches_pool_size.xml: |-
+    #   <?xml version="1.0"?>
+    #   <clickhouse>
+    #     <background_fetches_pool_size>32</background_fetches_pool_size>
+    #   </clickhouse>

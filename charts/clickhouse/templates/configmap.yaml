@@ -14,6 +14,15 @@ data:
                 <load_balancing>random</load_balancing>
                 <query_profiler_real_time_period_ns>0</query_profiler_real_time_period_ns>
                 <query_profiler_cpu_time_period_ns>0</query_profiler_cpu_time_period_ns>
+                {{- $mem := include "resource-bytes" (default (default (dict) .Values.resources.limits ).memory .Values.resources.requests.memory) }}
+                {{- $res := int64 (div (sub (int64 $mem) 1000000000) 2) }}
+                {{- if lt $res 1000000000 }}
+                <max_bytes_before_external_group_by>0</max_bytes_before_external_group_by>
+                <max_bytes_before_external_sort>0</max_bytes_before_external_sort>
+                {{- else }}
+                <max_bytes_before_external_group_by>{{ $res }}</max_bytes_before_external_group_by>
+                <max_bytes_before_external_sort>{{ $res }}</max_bytes_before_external_sort>
+                {{- end }}
             </default>
             <reader>
                 <max_memory_usage>10000000000</max_memory_usage>
@@ -21,6 +30,15 @@ data:
                 <load_balancing>random</load_balancing>
                 <query_profiler_real_time_period_ns>0</query_profiler_real_time_period_ns>
                 <query_profiler_cpu_time_period_ns>0</query_profiler_cpu_time_period_ns>
+                {{- $mem := include "resource-bytes" (default (default (dict) .Values.resources.limits ).memory .Values.resources.requests.memory) }}
+                {{- $res := int64 (div (sub (int64 $mem) 1000000000) 2) }}
+                {{- if lt $res 1000000000 }}
+                <max_bytes_before_external_group_by>0</max_bytes_before_external_group_by>
+                <max_bytes_before_external_sort>0</max_bytes_before_external_sort>
+                {{- else }}
+                <max_bytes_before_external_group_by>{{ $res }}</max_bytes_before_external_group_by>
+                <max_bytes_before_external_sort>{{ $res }}</max_bytes_before_external_sort>
+                {{- end }}
                 <readonly>2</readonly>
             </reader>
         </profiles>
@@ -265,4 +283,11 @@ data:
 {{ range $key, $val := .Values.cronjobs }}
   command-{{ $key }}: |-
     {{- default "exit 1" $val.command | nindent 4 }}
+{{- end }}
+
+{{- if .Values.clickhouse.customConfig }}
+  {{- range $key, $value := .Values.clickhouse.customConfig }}
+  {{ $key }}: |-
+    {{- $value | nindent 4 }}
+  {{- end }}
 {{- end }}
