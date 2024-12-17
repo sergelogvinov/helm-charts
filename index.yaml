@@ -141,6 +141,27 @@ entries:
   bitwarden:
   - apiVersion: v2
     appVersion: 1.32.6
+    created: "2024-12-17T20:55:18.842459064Z"
+    description: A Helm chart to deploy Bitwarden.
+    digest: 38f8d866534943f52f60e988ec53b8ed125ea98e75502c36946fd3e43adcc3ee
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/bitwarden/brand/master/icons/icon-square.svg
+    keywords:
+    - vaultwarden
+    - bitwarden
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: bitwarden
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/bitwarden
+    - https://github.com/dani-garcia/vaultwarden
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/bitwarden-0.4.0/bitwarden-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
+    appVersion: 1.32.6
     created: "2024-12-13T07:00:26.567936126Z"
     description: A Helm chart to deploy Bitwarden.
     digest: 51de8b637499be748940b7a4e5d6d7d0058139a23e95b5937c843313bf568836
@@ -8376,4 +8397,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-12-17T19:11:52.028201166Z"
+generated: "2024-12-17T20:55:18.843282739Z"
