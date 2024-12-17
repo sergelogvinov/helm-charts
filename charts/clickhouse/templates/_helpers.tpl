@@ -89,3 +89,14 @@ Create the backupPassword
 {{- randAlphaNum 16 }}
 {{- end }}
 {{- end }}
+
+{{/*
+Convert a memory resource like "500Mi" to the number 500000000 (bytes)
+*/}}
+{{- define "resource-bytes" -}}
+{{- if . | hasSuffix "Mi" -}}
+{{- mul (. | trimSuffix "Mi" | int64) 1000000 -}}
+{{- else if . | hasSuffix "Gi" -}}
+{{- mul (. | trimSuffix "Gi" | int64) 1000000000 -}}
+{{- end }}
+{{- end }}
