@@ -13,7 +13,7 @@ spec:
   selector:
     matchLabels:
       {{- include "teamcity.selectorLabels" . | nindent 6 }}
-      type: agent
+      app.kubernetes.io/component: agent
   template:
     metadata:
       annotations:
@@ -23,7 +23,7 @@ spec:
       {{- end }}
       labels:
         {{- include "teamcity.selectorLabels" . | nindent 8 }}
-        type: agent
+        app.kubernetes.io/component: agent
     spec:
       enableServiceLinks: false
       {{- if .Values.agent.priorityClassName }}
