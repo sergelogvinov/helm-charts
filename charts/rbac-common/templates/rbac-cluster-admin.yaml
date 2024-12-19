@@ -318,6 +318,12 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  resources:
+  - gitrepositories
+  verbs:
+  - patch
 ####
 - apiGroups:
   - cilium.io
