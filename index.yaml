@@ -1567,6 +1567,29 @@ entries:
   github-actions-runner:
   - apiVersion: v2
     appVersion: 2.321.0
+    created: "2024-12-20T09:02:34.792055938Z"
+    description: Github Actions with container registry and mirrors
+    digest: 93bc7711f71c4e0be40f8f9fe870ff98ccd4d601cdc30b6e3579c4a21ae1d820
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://avatars.githubusercontent.com/u/44036562
+    keywords:
+    - github-actions
+    - conteiner
+    - docker-registry
+    - docker-mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: github-actions-runner
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/github-actions-runner
+    - https://github.com/actions/actions-runner-controller.git
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/github-actions-runner-2.2.0/github-actions-runner-2.2.0.tgz
+    version: 2.2.0
+  - apiVersion: v2
+    appVersion: 2.321.0
     created: "2024-12-20T08:01:34.013372466Z"
     description: Github Actions with container registry and mirrors
     digest: b45e467b4f3c55b748c98c3ece549b42e975e3f2187cb51ea191e6dec06ae325
@@ -8465,4 +8488,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-12-20T08:01:34.014269849Z"
+generated: "2024-12-20T09:02:34.79305852Z"
