@@ -24,7 +24,7 @@ autoscaling:
 
 runnerGroup: "default"
 runnerScaleSetName: ""
-# renovate: datasource=docker depName=actions/gha-runner-scale-set-controller
+# renovate: datasource=docker depName=ghcr.io/actions/gha-runner-scale-set-controller
 runnerVersion: "0.9.3"
 
 githubConfigUrl: "https://github.com/..."
