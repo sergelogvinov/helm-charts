@@ -1,6 +1,6 @@
 # github-actions-runner
 
-![Version: 2.1.4](https://img.shields.io/badge/Version-2.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.321.0](https://img.shields.io/badge/AppVersion-2.321.0-informational?style=flat-square)
+![Version: 2.1.5](https://img.shields.io/badge/Version-2.1.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.321.0](https://img.shields.io/badge/AppVersion-2.321.0-informational?style=flat-square)
 
 Github Actions with container registry and mirrors
 
@@ -130,7 +130,7 @@ nodeSelector:
 | registry.enabled | bool | `false` |  |
 | registry.image.repository | string | `"ghcr.io/project-zot/zot"` |  |
 | registry.image.pullPolicy | string | `"IfNotPresent"` |  |
-| registry.image.tag | string | `"v2.1.2-rc3"` |  |
+| registry.image.tag | string | `"v2.1.2-rc4"` |  |
 | registry.storage | string | `nil` |  |
 | registry.ingress | object | `{"annotations":{"nginx.ingress.kubernetes.io/proxy-body-size":0},"auth":{},"className":"","enabled":false,"hosts":[],"tls":null}` | Registry ingress parameters ref: http://kubernetes.io/docs/user-guide/ingress/ |
 | registry.resources | object | `{"limits":{"cpu":1,"memory":"1024Mi"},"requests":{"cpu":"100m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
