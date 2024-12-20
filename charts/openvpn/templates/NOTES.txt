@@ -64,3 +64,10 @@ dh   dh.pem
 dh   none
 {{- end }}
 ```
+
+{{- if .Values.openvpn.otp }}
+5. OTP is on
+
+You need to use username and password and OTP token to connect to the VPN.
+Username is your cartificate name without the domain part.
+{{- end }}
