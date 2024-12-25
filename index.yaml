@@ -1289,6 +1289,28 @@ entries:
   fluentd:
   - apiVersion: v2
     appVersion: 1.17.1
+    created: "2024-12-25T10:08:49.400601876Z"
+    description: Deploy fluentd as log router
+    digest: a1ef91c1d7d38b24348492dcf1ce2ab5c23bdbb7798e164ed8aed501f0f187be
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/fluent/fluentd-docs/master/public/logo/Fluentd_square.png
+    keywords:
+    - fluentd
+    - logging
+    - logs
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: fluentd
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/fluentd
+    - https://www.fluentd.org
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/fluentd-1.1.0/fluentd-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
+    appVersion: 1.17.1
     created: "2024-11-29T10:18:03.791296047Z"
     description: Deploy fluentd as log router
     digest: cf9f57c58ac1e126d0876cc65ee91d18ed38158de275a4ad387dcf614cd64880
@@ -2902,6 +2924,29 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/ipsec-0.1.0/ipsec-0.1.0.tgz
     version: 0.1.0
   keydb:
+  - apiVersion: v2
+    appVersion: 6.3.3
+    created: "2024-12-25T10:08:49.513979661Z"
+    description: KeyDB with TLS, backup/restore support
+    digest: 477777b7d009052701a9cfb83eec1b63356aca1e9ac233219595cb789b8b3dd6
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/keydb/icon.svg
+    keywords:
+    - keydb
+    - redis
+    - wal-g
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: keydb
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/keydb
+    - https://docs.keydb.dev
+    - https://github.com/wal-g/wal-g
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.11.0/keydb-0.11.0.tgz
+    version: 0.11.0
   - apiVersion: v2
     appVersion: 6.3.3
     created: "2024-12-17T19:11:52.02735557Z"
@@ -8530,4 +8575,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2024-12-20T16:05:54.33339885Z"
+generated: "2024-12-25T10:08:49.515314688Z"
