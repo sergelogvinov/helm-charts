@@ -28,3 +28,6 @@ spec:
       {{- end }}
   selector:
     {{- include "pgbouncer.selectorLabels" . | nindent 4 }}
+  {{- if and (semverCompare ">=1.32" (default .Capabilities.KubeVersion.Version .Values.kubeVersion)) .Values.service.trafficDistribution }}
+  trafficDistribution: {{ .Values.service.trafficDistribution }}
+  {{- end }}

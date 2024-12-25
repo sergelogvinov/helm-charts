@@ -10,11 +10,13 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
+kubeVersion: ""
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-databases: {}
+databases:
+  {}
   # name:
   #   host: host
   #   port: 5432
@@ -23,7 +25,8 @@ databases: {}
   #   poolmode: session
   #   poolsize: 100
 
-users: {}
+users:
+  {}
   # name:
   #   poolmode: transaction
   #   connections: 100
@@ -49,7 +52,8 @@ serverSslSecret: ""
 # -- Server TLS secrets.
 # ref: https://www.pgbouncer.org/config.html#server_tls_ca_file
 # ca, cert, key: If you want to use your own certificates, you can provide them here.
-serverSsl: {}
+serverSsl:
+  {}
   # ca: ""
   # cert: ""
   # key: ""
@@ -57,7 +61,8 @@ serverSsl: {}
 # -- Client TLS configuration.
 # ref: https://www.pgbouncer.org/config.html#client_tls_sslmode
 clientSslMode: allow
-clientSslSecret: ""
+clientSslSecret:
+  ""
   # pgbouncer-tls
 
 # -- Extra labels for pod.
@@ -85,20 +90,33 @@ securityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
   # readOnlyRootFilesystem: true
 
 # -- Service parameters
 # ref: https://kubernetes.io/docs/user-guide/services/
 service:
+  # -- Service type
+  # ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
+
+  # -- Service port
   port: 5432
   # nodePort: 5432
 
+  # -- Annotations for service
   annotations: {}
   # service.kubernetes.io/topology-mode: Auto
 
+  # -- IP families for service
+  # possible values: IPv4, IPv6
+  # ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/
   ipFamilies: [IPv4]
+
+  # -- The traffic distribution for the service.
+  # possible values: PreferClose
+  # ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+  trafficDistribution: ""
 
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/
@@ -124,7 +142,7 @@ useDaemonSet: false
 
 terminationGracePeriodSeconds: 240
 
-# -- pod deployment update stategy type.
+# -- pod deployment update strategy type.
 # ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
   type: RollingUpdate
