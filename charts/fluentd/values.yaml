@@ -10,6 +10,7 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
+kubeVersion: ""
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -57,10 +58,20 @@ hostNetwork: false
 # -- Service parameters
 # ref: https://kubernetes.io/docs/user-guide/services/
 service:
+  # -- Service type
+  # ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
-  ipFamilies: [IPv4]
+
+  # -- Annotations for service
   annotations: {}
   # service.kubernetes.io/topology-mode: Auto
+
+  # -- IP families for service
+  # possible values: IPv4, IPv6
+  # ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/
+  ipFamilies: [IPv4]
+
+  # -- Service ports
   ports:
     - name: "fluentd"
       protocol: TCP
@@ -68,6 +79,11 @@ service:
     - name: "heartbeat"
       protocol: UDP
       containerPort: 24224
+
+  # -- The traffic distribution for the service.
+  # possible values: PreferClose
+  # ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+  trafficDistribution: ""
 
 # -- Deployment environment variables
 # example: `FLUENTD_CONF: /fluentd/etc/fluent.conf`

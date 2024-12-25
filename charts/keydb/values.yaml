@@ -10,6 +10,7 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
+kubeVersion: ""
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -215,11 +216,23 @@ startupProbe:
 # -- Service parameters
 # ref: https://kubernetes.io/docs/user-guide/services/
 service:
+  # -- Service type
+  # ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
+
+  # -- Annotations for service
   annotations: {}
   # service.kubernetes.io/topology-mode: Auto
 
+  # -- IP families for service
+  # possible values: IPv4, IPv6
+  # ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/
   ipFamilies: [IPv4]
+
+  # -- The traffic distribution for the service.
+  # possible values: PreferClose
+  # ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+  trafficDistribution: ""
 
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/

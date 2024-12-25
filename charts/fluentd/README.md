@@ -1,6 +1,6 @@
 # fluentd
 
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.17.1](https://img.shields.io/badge/AppVersion-1.17.1-informational?style=flat-square)
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.17.1](https://img.shields.io/badge/AppVersion-1.17.1-informational?style=flat-square)
 
 Deploy fluentd as log router
 
@@ -63,6 +63,7 @@ tolerations:
 | image.repository | string | `"ghcr.io/sergelogvinov/fluentd"` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.tag | string | `""` |  |
+| kubeVersion | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
 | nameOverride | string | `""` |  |
 | fullnameOverride | string | `""` |  |
@@ -71,7 +72,12 @@ tolerations:
 | podSecurityContext | object | `{"fsGroup":101,"fsGroupChangePolicy":"OnRootMismatch","runAsGroup":101,"runAsNonRoot":true,"runAsUser":100}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | hostNetwork | bool | `false` | Use host's network namespace. ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#host-namespaces |
-| service | object | `{"annotations":{},"ipFamilies":["IPv4"],"ports":[{"containerPort":24224,"name":"fluentd","protocol":"TCP"},{"containerPort":24224,"name":"heartbeat","protocol":"UDP"}],"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
+| service | object | `{"annotations":{},"ipFamilies":["IPv4"],"ports":[{"containerPort":24224,"name":"fluentd","protocol":"TCP"},{"containerPort":24224,"name":"heartbeat","protocol":"UDP"}],"trafficDistribution":"","type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
+| service.type | string | `"ClusterIP"` | Service type ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types |
+| service.annotations | object | `{}` | Annotations for service |
+| service.ipFamilies | list | `["IPv4"]` | IP families for service possible values: IPv4, IPv6 ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/ |
+| service.ports | list | `[{"containerPort":24224,"name":"fluentd","protocol":"TCP"},{"containerPort":24224,"name":"heartbeat","protocol":"UDP"}]` | Service ports |
+| service.trafficDistribution | string | `""` | The traffic distribution for the service. possible values: PreferClose ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution |
 | envs | object | `{}` | Deployment environment variables example: `FLUENTD_CONF: /fluentd/etc/fluent.conf` |
 | logLevel | string | `"warn"` |  |
 | inputCerts | object | `{"clients":["fluent-bit"],"create":false}` | Use tls connection for input port ref: https://docs.fluentd.org/input/forward |
