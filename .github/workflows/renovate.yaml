@@ -7,8 +7,8 @@ on:
 
 jobs:
   renovate:
-    name: "Renovate"
-    runs-on: ubuntu-latest
+    name: Renovate
+    runs-on: ubuntu-24.04
     permissions:
       checks: read
       contents: write
@@ -24,6 +24,7 @@ jobs:
       - name: Renovate
         uses: renovatebot/github-action@v41.0.6
         with:
+          renovate-image: ghcr.io/sergelogvinov/renovate:39.86
           configurationFile: .github/renovate-global.json
           token: ${{ secrets.GITHUB_TOKEN }}
         env:
