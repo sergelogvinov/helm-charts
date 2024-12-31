@@ -1,6 +1,6 @@
 # clickhouse
 
-![Version: 0.7.5](https://img.shields.io/badge/Version-0.7.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 24.10.3](https://img.shields.io/badge/AppVersion-24.10.3-informational?style=flat-square)
+![Version: 0.7.7](https://img.shields.io/badge/Version-0.7.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 24.10.3](https://img.shields.io/badge/AppVersion-24.10.3-informational?style=flat-square)
 
 Clickhouse chart for Kubernetes
 
@@ -88,7 +88,7 @@ metrics:
 | backup.enabled | bool | `false` |  |
 | backup.image.repository | string | `"altinity/clickhouse-backup"` |  |
 | backup.image.pullPolicy | string | `"IfNotPresent"` |  |
-| backup.image.tag | string | `"2.6.4"` |  |
+| backup.image.tag | string | `"2.6.5"` |  |
 | backup.schedule | string | `"15 4 * * *"` |  |
 | backup.args | list | `[]` |  |
 | backup.envs | object | `{}` |  |
@@ -106,3 +106,4 @@ metrics:
 | clickhouse.users[1] | object | `{"accessManagement":false,"name":"reader","password":"3d0941964aa3ebdcb00ccef58b1bb399f9f898465e9886d5aec7f31090a0fb30","profile":"reader","quota":"default"}` | Clickhouse read only user |
 | clickhouse.collections | list | `[]` | Clickhouse named collections |
 | clickhouse.envs | object | `{}` |  |
+| clickhouse.customConfig | object | `{}` |  |
