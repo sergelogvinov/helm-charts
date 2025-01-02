@@ -22,7 +22,7 @@ data:
   {{- if .Values.victoriaMetricsConfig.enabled }}
   scrape.yml: |
     global:
-      scrape_interval: {{ default "1m" .Values.victoriaMetricsConfig.global.scrape_interval }}
+      scrape_interval: {{ default "30s" .Values.victoriaMetricsConfig.global.scrape_interval }}
       scrape_timeout: {{ default "10s" .Values.victoriaMetricsConfig.global.scrape_timeout }}
       {{- with .Values.victoriaMetricsConfig.global.external_labels }}
       external_labels:
@@ -36,7 +36,7 @@ data:
   prometheus.yml: |
     global:
       evaluation_interval: {{ default "1m" .Values.prometheusConfig.global.evaluation_interval }}
-      scrape_interval: {{ default "1m" .Values.prometheusConfig.global.scrape_interval }}
+      scrape_interval: {{ default "30s" .Values.prometheusConfig.global.scrape_interval }}
       scrape_timeout: {{ default "10s" .Values.prometheusConfig.global.scrape_timeout }}
       {{- with .Values.prometheusConfig.global.external_labels }}
       external_labels:
