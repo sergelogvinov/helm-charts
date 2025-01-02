@@ -1,6 +1,6 @@
 # prometheus-rules
 
-![Version: 0.2.17](https://img.shields.io/badge/Version-0.2.17-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.40.0](https://img.shields.io/badge/AppVersion-2.40.0-informational?style=flat-square)
+![Version: 0.2.18](https://img.shields.io/badge/Version-0.2.18-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.40.0](https://img.shields.io/badge/AppVersion-2.40.0-informational?style=flat-square)
 
 Static prometheus/victoria metrics common rules
 
@@ -122,13 +122,13 @@ spec:
 | nameOverride | string | `""` |  |
 | fullnameOverride | string | `""` |  |
 | victoriaMetricsConfig.enabled | bool | `false` |  |
-| victoriaMetricsConfig.global.scrape_interval | string | `"1m"` |  |
+| victoriaMetricsConfig.global.scrape_interval | string | `"30s"` |  |
 | victoriaMetricsConfig.global.scrape_timeout | string | `"10s"` |  |
 | victoriaMetricsConfig.global.external_labels | object | `{}` |  |
 | victoriaMetricsConfig.recordingRules | string | `nil` |  |
 | victoriaMetricsConfig.extraScrapeConfigs | list | `[]` |  |
 | prometheusConfig.enabled | bool | `false` |  |
-| prometheusConfig.global.scrape_interval | string | `"1m"` |  |
+| prometheusConfig.global.scrape_interval | string | `"30s"` |  |
 | prometheusConfig.global.scrape_timeout | string | `"10s"` |  |
 | prometheusConfig.global.evaluation_interval | string | `"1m"` |  |
 | prometheusConfig.global.external_labels | object | `{}` |  |
