@@ -1,6 +1,6 @@
 # link-common
 
-![Version: 0.3.6](https://img.shields.io/badge/Version-0.3.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.6-alpine3.19](https://img.shields.io/badge/AppVersion-2.8.6--alpine3.19-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.6-alpine3.19](https://img.shields.io/badge/AppVersion-2.8.6--alpine3.19-informational?style=flat-square)
 
 Simple vpn-p2p-link service
 
@@ -81,11 +81,18 @@ wireguard:
 | wireguard.wireguardPort | string | `nil` | WireGuard incoming port. uses as container hostPort. |
 | wireguard.wireguardKey | string | `""` | WireGuard private key. ref: https://www.wireguard.com/quickstart/   wg genkey | tee privatekey | wg pubkey > publickey |
 | wireguard.peers | object | `{}` |  |
-| wireguard.metrics.enabled | bool | `true` |  |
+| wireguard.metrics.enabled | bool | `true` | Enable link metrics |
 | wireguard.metrics.image.repository | string | `"mindflavor/prometheus-wireguard-exporter"` |  |
 | wireguard.metrics.image.pullPolicy | string | `"IfNotPresent"` |  |
 | wireguard.metrics.image.tag | string | `"3.6.6"` |  |
 | resources | object | `{"limits":{"cpu":"100m","memory":"64Mi"},"requests":{"cpu":"50m","memory":"32Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| networkPolicy.enabled | bool | `false` | Enable creation of NetworkPolicy resources ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/ |
+| networkPolicy.allowExternal | bool | `false` | Allow traffic from outside |
+| networkPolicy.ingressNSMatchLabels | object | `{}` | Labels to match to allow traffic from other namespaces. |
+| networkPolicy.ingressNSPodMatchLabels | object | `{}` | Pod labels to match to allow traffic from other namespaces |
+| networkPolicy.metrics | object | `{"ingressNSMatchLabels":{},"ingressNSPodMatchLabels":{"app.kubernetes.io/component":"monitoring","app.kubernetes.io/name":"vmagent"}}` | NetworkPolicy for metrics. |
+| networkPolicy.metrics.ingressNSMatchLabels | object | `{}` | Allowed from pods in namespaces that match the specified labels example: kubernetes.io/metadata.name: monitoring |
+| networkPolicy.metrics.ingressNSPodMatchLabels | object | `{"app.kubernetes.io/component":"monitoring","app.kubernetes.io/name":"vmagent"}` | Allowed from pods that match the specified labels |
 | nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |

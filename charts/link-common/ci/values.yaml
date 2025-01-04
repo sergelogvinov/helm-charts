@@ -1,0 +1,5 @@
+wireguard:
+  enabled: true
+
+networkPolicy:
+  enabled: true
