@@ -14,7 +14,8 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-tailscale: {}
+tailscale:
+  {}
   # TS_AUTH_KEY: tskey-auth-
   # TS_TAGS: tag:exitnode
 
@@ -35,12 +36,17 @@ podAnnotations: {}
 
 # -- Pod Security Context.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # sysctls:
   #   # - name: net.ipv6.conf.all.forwarding
   #   #   value: "1"
   #   - name: net.ipv6.conf.all.disable_ipv6
   #     value: "1"
+
+# -- Add Pod Topology to the pod's hostname.
+podTopology:
+  enabled: false
 
 # -- Container Security Context.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -98,12 +104,14 @@ updateStrategy:
 
 # -- Node labels for pod assignment.
 # ref: https://kubernetes.io/docs/user-guide/node-selection/
-nodeSelector: {}
+nodeSelector:
+  {}
   # node-role.kubernetes.io/control-plane: ""
 
 # -- Tolerations for pod assignment.
 # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-tolerations: []
+tolerations:
+  []
   # - key: node-role.kubernetes.io/control-plane
   #   effect: NoSchedule
 

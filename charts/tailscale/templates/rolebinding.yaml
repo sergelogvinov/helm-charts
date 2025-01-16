@@ -12,6 +12,7 @@ subjects:
 - kind: ServiceAccount
   name: {{ include "tailscale.serviceAccountName" . }}
   namespace: {{ .Release.Namespace }}
+{{- if .Values.podTopology.enabled }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -27,6 +28,7 @@ subjects:
 - kind: ServiceAccount
   name: {{ include "tailscale.serviceAccountName" . }}
   namespace: {{ .Release.Namespace }}
+{{- end }}
 {{- if eq .Values.dnsPolicy "Local" }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1

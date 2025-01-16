@@ -1,6 +1,6 @@
 # tailscale
 
-![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.78.3](https://img.shields.io/badge/AppVersion-v1.78.3-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.78.3](https://img.shields.io/badge/AppVersion-v1.78.3-informational?style=flat-square)
 
 Tailscale mesh network.
 
@@ -115,6 +115,7 @@ and should not be used for commercial purposes or to violate the terms of servic
 | serviceAccount | object | `{"annotations":{},"create":true,"name":""}` | Pods Service Account. ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
 | podAnnotations | object | `{}` | Annotations for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
 | podSecurityContext | object | `{}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
+| podTopology | object | `{"enabled":false}` | Add Pod Topology to the pod's hostname. |
 | securityContext | object | `{"capabilities":{"add":["NET_ADMIN","NET_RAW"],"drop":["ALL"]},"runAsNonRoot":false,"runAsUser":0,"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | service | object | `{"ipFamilies":["IPv4","IPv6"],"port":30025,"type":"NodePort"}` | Service parameters ref: https://kubernetes.io/docs/concepts/services-networking/service/ |
 | service.port | int | `30025` | P2P endpoints port |

@@ -55,6 +55,7 @@ spec:
             value: "3"
       {{- end }}
       initContainers:
+        {{- if .Values.podTopology.enabled }}
         - name: {{ .Chart.Name }}-init
           securityContext:
             seccompProfile:
@@ -75,6 +76,7 @@ spec:
               mountPath: /start
             - name: state
               mountPath: /tmp
+        {{- end }}
       {{- if not $sidecar }}
       containers:
       {{- end }}
@@ -112,9 +114,9 @@ spec:
               type: RuntimeDefault
             capabilities:
               add:
-              - NET_BIND_SERVICE
+                - NET_BIND_SERVICE
               drop:
-              - all
+                - all
             readOnlyRootFilesystem: true
             runAsUser: 0
             runAsGroup: 53

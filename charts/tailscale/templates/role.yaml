@@ -9,6 +9,7 @@ rules:
     # resourceNames: [{{ printf "%s-state" (include "tailscale.fullname" .) | quote }}]
     resources: ["secrets"]
     verbs: ["create", "get", "update", "patch"]
+{{- if .Values.podTopology.enabled }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -20,3 +21,4 @@ rules:
   - apiGroups: [""]
     resources: ["nodes"]
     verbs: ["get"]
+{{- end }}
