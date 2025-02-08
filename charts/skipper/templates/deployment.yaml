@@ -65,40 +65,48 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["skipper"]
+          # alpha order
           args:
-            - "-access-log-json-enabled"
-            - "-address=:{{ .Values.hostPort.ports.https }}"
-            - "-application-log-json-enabled"
+            - "-access-log-json-enabled" # in zalando
+            - "-address=:{{ .Values.hostPort.ports.https }}" # in zalando
+            - "-application-log-json-enabled" # in zalando
             - "-application-log-level=WARN"
-            - "-default-filters-prepend=enableAccessLog(2,4,5)->flowId()->xforward()"
-            - "-disable-metrics-compat"
             - "-enable-connection-metrics"
-            - "-enable-route-fifo-metrics"
-            - "-enable-route-lifo-metrics"
-            - "-expect-continue-timeout-backend=30s"
-            - "-experimental-upgrade"
-            - "-idle-timeout-server=62s"
+            - "-experimental-upgrade" # in zalando
             - "-insecure-address=:{{ .Values.hostPort.ports.http }}"
-            - "-keepalive-backend=30s"
+            - "-kubernetes" # in zalando
+            - "-kubernetes-https-redirect" # in zalando
+            - "-kubernetes-in-cluster" # in zalando
+            - "-kubernetes-path-mode=path-prefix" # in zalando
+          {{- if .Values.useTls }}
             - "-kubernetes-enable-tls"
-            - "-kubernetes-https-redirect"
-            - "-kubernetes-in-cluster"
-            - "-kubernetes-ingress-class={{ .Values.ingressClass }}"
-            - "-kubernetes-path-mode=path-prefix"
-            - "-kubernetes"
-            - "-max-audit-body=0"
-            - "-metrics-exp-decay-sample"
-            - "-metrics-flavour=prometheus"
-            - "-proxy-preserve-host"
-            - "-read-timeout-server=5m"
-            - "-response-header-timeout-backend=1m"
-            - "-runtime-metrics=false"
+          {{- end }}
+            - "-metrics-exp-decay-sample" # in zalando
+            - "-metrics-flavour=prometheus" # in zalando (which adds one more)
+            - "-proxy-preserve-host" # in zalando
+            - "-response-header-timeout-backend=1m" # in zalando / provide override?
+          {{- if .Values.useTls }}
             - "-tls-cert=/etc/ssl/tlscerts/tls.crt"
             - "-tls-key=/etc/ssl/tlscerts/tls.key"
-            - "-wait-first-route-load"
-            - "-write-timeout-server=60s"
-            # - "-insecure"
-            # - "-passive-health-check=period=5s"
+          {{- end }}
+            - "-write-timeout-server=60s" #  in zalando / override?
+          {{- with .Values.serverArgs }}
+            # .Values.serverArgs
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+            # Removed from serge's chart -- pending review by team
+            # - "-default-filters-prepend=enableAccessLog(2,4,5)->flowId()->xforward()"
+            # - "-disable-metrics-compat"
+            # - "-enable-route-fifo-metrics"
+            # - "-enable-route-lifo-metrics"
+            # - "-expect-continue-timeout-backend=30s"
+            # - "-idle-timeout-server=62s"
+            # - "-keepalive-backend=30s"
+            # - "-kubernetes-ingress-class={{ .Values.ingressClass }}"
+            # - "-max-audit-body=0"
+            # - "-read-timeout-server=5m"
+            # - "-runtime-metrics=false"
+            # - "-wait-first-route-load"
           ports:
             - name: http
               containerPort: {{ .Values.hostPort.ports.http }}
@@ -112,22 +120,26 @@ spec:
           readinessProbe:
             httpGet:
               path: /kube-system/healthz
-              port: {{ .Values.hostPort.ports.http }}
+              port: {{ .Values.hostPort.ports.https }}
             initialDelaySeconds: 30
             timeoutSeconds: 5
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
+          {{- if .Values.useTls }}
             - name: tlscerts
               mountPath: /etc/ssl/tlscerts
+          {{- end }}
           {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
       volumes:
+      {{- if .Values.useTls }}
         - name: tlscerts
           secret:
             secretName: {{ include "skipper.fullname" . }}-tls
             defaultMode: 256
+      {{- end }}
       {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}

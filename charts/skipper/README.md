@@ -77,3 +77,5 @@ terminationGracePeriodSeconds: 120
 | podAntiAffinityPreset | string | `"soft"` | Pod Anti Affinity soft/hard |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | metrics.enabled | bool | `false` |  |
+| serverArgs | list | `[]` | Additional `skipper` CLI arguments |
+| useTls | bool | `false` | Enable TLS in `skipper` |

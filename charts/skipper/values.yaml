@@ -90,6 +90,9 @@ autoscaling:
 # -- Use a daemonset instead of a deployment
 useDaemonSet: false
 
+# -- Set to true to create certs and use TLS
+useTls: false
+
 terminationGracePeriodSeconds: 120
 
 ## updateStrategy for PostgreSQL StatefulSet and its slaves StatefulSets
