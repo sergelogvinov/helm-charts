@@ -25,7 +25,7 @@ jobs:
         uses: renovatebot/github-action@v41.0.11
         with:
           renovate-image: ghcr.io/sergelogvinov/renovate
-          renovate-version: 39.86
+          renovate-version: 39
           configurationFile: .github/renovate-global.json
           token: ${{ secrets.GITHUB_TOKEN }}
         env:
