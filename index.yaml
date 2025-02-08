@@ -7538,6 +7538,25 @@ entries:
     version: 0.1.0
   service-common:
   - apiVersion: v2
+    appVersion: 2.8.14
+    created: "2025-02-08T10:40:23.639443327Z"
+    description: Simple gateway with TLS auth
+    digest: 9f5c41d831b94cbf0f597ab69efa5f69fc3c285e0a685643de63c5484feb5a51
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - haproxy
+    - gateway
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: service-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/service-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/service-common-0.3.2/service-common-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v2
     appVersion: 2.8.13
     created: "2024-12-13T07:14:27.09897764Z"
     description: Simple gateway with TLS auth
@@ -8963,4 +8982,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2025-02-08T10:40:01.38773795Z"
+generated: "2025-02-08T10:40:23.640161856Z"
