@@ -77,5 +77,19 @@ terminationGracePeriodSeconds: 120
 | podAntiAffinityPreset | string | `"soft"` | Pod Anti Affinity soft/hard |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | metrics.enabled | bool | `false` |  |
+|-----|------|---------|-------------|
+| kiac.annotations | bool | `false` | Enable Deployment for `kube-ingress-aws-controller` |
+| kiac.enabled | bool | `false` | Enable Deployment for `kube-ingress-aws-controller` |
+| kiac.fullnameOverride | string | `""` |  |
+| kiac.image.repository | string | `"registry.opensource.zalan.do/teapot/kube-ingress-aws-controller"` |  |
+| kiac.image.pullPolicy | string | `"IfNotPresent"` |  |
+| kiac.image.tag | string | `""` |  |
+| kiac.nameOverride | string | `""` |  |
+| kiac.podAnnotations | object | `{}` | Annotations for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
+| kiac.podLabels | object | `{}` | Extra labels for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ |
+| kiac.region | string | `` | Value for `AWS_REGION` env var injection |
+| kiac.replicas | int | `1` | Replica count for `kube-ingress-aws-controller` |
+| kiac.serviceAccount.annotations | object | `{}` |  |
+| kiac.serviceAccount.create | bool | `true` | Create a ServiceAccount for `kube-ingress-aws-controller` |
 | serverArgs | list | `[]` | Additional `skipper` CLI arguments |
 | useTls | bool | `false` | Enable TLS in `skipper` |

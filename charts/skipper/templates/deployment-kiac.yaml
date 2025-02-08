@@ -1,0 +1,39 @@
+{{- if .Values.kiac.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    {{- include "kiac.labels" . | nindent 4 }}
+  name: {{ include "kiac.fullname" . }}
+spec:
+  replicas: {{ .Values.kiac.replicas }}
+  selector:
+    matchLabels:
+      {{- include "kiac.selectorLabels" . | nindent  6 }}
+  template:
+    metadata:
+      {{- with .Values.kiac.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "kiac.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: AWS_REGION
+          value: {{ .Values.kiac.region
+          | required ".Values.kiac.region is required" }}
+        image: {{ printf "%s:%s"
+          .Values.kiac.image.repository
+          .Values.kiac.image.tag }}
+        name: controller
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 24Mi
+      serviceAccountName: {{ include "kiac.serviceAccountName" . }}
+{{- end -}}
