@@ -55,8 +55,9 @@ hostNetwork: false
 hostPort:
   enabled: false
   ports:
-    http: 8080
-    https: 8443
+    # http is optional
+    # http: 8080
+    https: 9999
 
 ingressClass: skipper
 ingressClassResource:

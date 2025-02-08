@@ -26,7 +26,8 @@ spec:
           | required ".Values.kiac.region is required" }}
         image: {{ printf "%s:%s"
           .Values.kiac.image.repository
-          .Values.kiac.image.tag }}
+          .Values.kiac.image.tag
+          | quote }}
         name: controller
         resources:
           limits:
