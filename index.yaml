@@ -9025,4 +9025,30 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.6.4/teamcity-0.6.4.tgz
     version: 0.6.4
-generated: "2025-02-10T09:08:28.300118422Z"
+  victoria-metrics:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2025-02-17T12:02:33.958002986Z"
+    description: Predefined resources for Victoria Metrics Operator
+    digest: f8799adf75ac84fa4db5b7282b5ba888773ac12d219e3daf3a64d66c0db3f370
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://avatars.githubusercontent.com/u/43720803?s=200&v=4
+    keywords:
+    - prometheus
+    - victoria-metrics
+    - vmstorage
+    - vmagent
+    - vmalert
+    - metrics
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: victoria-metrics
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/victoria-metrics
+    - https://github.com/VictoriaMetrics
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-02-17T12:02:33.958861905Z"
