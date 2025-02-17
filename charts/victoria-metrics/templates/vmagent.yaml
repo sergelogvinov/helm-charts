@@ -1,0 +1,85 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAgent
+metadata:
+  name: {{ include "victoria-metrics.fullname" . }}
+  labels:
+    {{- include "victoria-metrics.labels" . | nindent 4 }}
+spec:
+  replicaCount: 1
+  revisionHistoryLimitCount: 2
+
+  podMetadata:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "8429"
+
+  useStrictSecurity: true
+  selectAllByDefault: false
+
+  nodeScrapeNamespaceSelector:
+    matchLabels:
+      kubernetes.io/metadata.name: {{ .Release.Namespace }}
+  staticScrapeNamespaceSelector:
+    matchLabels:
+      kubernetes.io/metadata.name: {{ .Release.Namespace }}
+
+  scrapeInterval: 1m
+  secrets:
+    {{- toYaml .Values.vmAgent.secrets | nindent 4 }}
+  configMaps:
+    {{- toYaml .Values.vmAgent.configMaps | nindent 4 }}
+  additionalScrapeConfigs:
+    {{- toYaml .Values.vmAgent.additionalScrapeConfigs | nindent 4 }}
+  externalLabels:
+    {{- toYaml .Values.vmAgent.externalLabels | nindent 4 }}
+
+  extraArgs:
+    {{- toYaml .Values.vmAgent.extraArgs | nindent 4 }}
+  logLevel: INFO
+
+  remoteWrite:
+    - url: http://vmsingle-{{ include "victoria-metrics.fullname" . }}:8429/api/v1/write
+      inlineUrlRelabelConfig:
+        - source_labels: ["__name__"]
+          regex: ^go_.*
+          action: drop
+    {{- with .Values.vmAgent.remoteWrite }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+
+  resources:
+    {{- toYaml .Values.vmAgent.resources | nindent 4 }}
+
+  {{- with .Values.nodeSelector }}
+  nodeSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  affinity:
+  {{- with .Values.affinity }}
+    {{- toYaml . | nindent 4 }}
+  {{- else }}
+    podAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 50
+          podAffinityTerm:
+            topologyKey: topology.kubernetes.io/zone
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - vmsingle
+        - weight: 100
+          podAffinityTerm:
+            topologyKey: topology.kubernetes.io/region
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - vmsingle
+  {{- end }}
+  {{- with .Values.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}

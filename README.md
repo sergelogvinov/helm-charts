@@ -26,9 +26,13 @@ helm upgrade -i ${PKG_NAME} --version=${CHART_VERSION} oci://ghcr.io/sergelogvin
 * [bitwarden](charts/bitwarden/) - open source bitwarden (rust)
 * [fluentd](charts/fluentd/) - fluentd log router
 * [overprovisioner](charts/overprovisioner/) - reserve the resources for the deployment
-* [prometheus-rules](charts/prometheus-rules/) - prometheus operator replacer
 * [registry-mirrors](charts/registry-mirrors/) - container registry mirrors
 * [skipper](charts/skipper/) - skipper ingress controller
+
+### Monitoring
+
+* [victoria-metrics](charts/victoria-metrics/) - victoria metrics components (vmagent, vmalert, vmstorage)
+* [prometheus-rules](charts/prometheus-rules/) - prometheus operator replacer
 
 ### Databases
 

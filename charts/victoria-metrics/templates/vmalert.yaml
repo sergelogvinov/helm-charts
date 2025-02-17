@@ -1,0 +1,50 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlert
+metadata:
+  name: {{ include "victoria-metrics.fullname" . }}
+  labels:
+    {{- include "victoria-metrics.labels" . | nindent 4 }}
+spec:
+  replicaCount: 1
+  revisionHistoryLimitCount: 2
+
+  podMetadata:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "8080"
+
+  useStrictSecurity: true
+  selectAllByDefault: true
+  evaluationInterval: "60s"
+
+  secrets:
+    {{- toYaml .Values.vmAlert.secrets | nindent 4 }}
+  configMaps:
+    {{- toYaml .Values.vmAlert.configMaps | nindent 4 }}
+  rulePath:
+    {{- toYaml .Values.vmAlert.rulePath | nindent 4 }}
+
+  datasource:
+    url: "http://vmsingle-{{ include "victoria-metrics.fullname" . }}:8429"
+  remoteWrite:
+    url: "http://vmsingle-{{ include "victoria-metrics.fullname" . }}:8429"
+  remoteRead:
+    url: "http://vmsingle-{{ include "victoria-metrics.fullname" . }}:8429"
+  notifier:
+    url: "http://prometheus-alertmanager:9093"
+
+  resources:
+    {{- toYaml .Values.vmAlert.resources | nindent 4 }}
+
+  {{- with .Values.nodeSelector }}
+  nodeSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}

@@ -1,0 +1,97 @@
+# Default values for victoria-metrics.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+vmAgent:
+  extraArgs:
+    promscrape.maxScrapeSize: "67108864"
+    promscrape.maxDroppedTargets: "10000"
+    promscrape.streamParse: "true"
+    promscrape.suppressDuplicateScrapeTargetErrors: "true"
+
+  secrets:
+    []
+    # - web-auth-tls
+  configMaps: []
+  externalLabels:
+    {}
+    # cluster: ${CLUSTER_NAME}
+  additionalScrapeConfigs:
+    name: prometheus-rules-scrape
+    key: scrape.yml
+
+  remoteWrite:
+    []
+    # - url: https://external-victoria-metrics.dev:8429/api/v1/write
+    #   tlsConfig:
+    #     certFile: /etc/vm/secrets/web-auth-tls/tls.crt
+    #     keyFile: /etc/vm/secrets/web-auth-tls/tls.key
+    #     serverName: external-victoria-metrics.dev
+
+  # -- Resource requests and limits.
+  # ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  resources:
+    limits:
+      cpu: 1
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+vmAlert:
+  secrets: []
+  configMaps:
+    - prometheus-rules-config
+    - prometheus-rules
+  rulePath:
+    - /etc/vm/configs/prometheus-rules-config/recording_rules.yml
+    - /etc/vm/configs/prometheus-rules/*.yml
+
+  # -- Resource requests and limits.
+  # ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+vmSingle:
+  extraArgs:
+    maxLabelsPerTimeseries: "40"
+
+  # -- Resource requests and limits.
+  # ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  resources:
+    limits:
+      cpu: 2
+      memory: 3Gi
+    requests:
+      cpu: 500m
+      memory: 2Gi
+
+# -- Priority Class Name
+# ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+priorityClassName: ~
+
+# -- Node labels for pod assignment.
+# ref: https://kubernetes.io/docs/user-guide/node-selection/
+nodeSelector:
+  {}
+  # node-role.kubernetes.io/control-plane: ""
+
+# -- Tolerations for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+tolerations:
+  []
+  # - key: node-role.kubernetes.io/control-plane
+  #   effect: NoSchedule
+
+# -- Affinity for pod assignment.
+# ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}

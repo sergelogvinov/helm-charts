@@ -1,0 +1,40 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMSingle
+metadata:
+  name: {{ include "victoria-metrics.fullname" . }}
+  labels:
+    {{- include "victoria-metrics.labels" . | nindent 4 }}
+spec:
+  replicaCount: 1
+  revisionHistoryLimitCount: 2
+
+  podMetadata:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "8429"
+
+  retentionPeriod: "1d"
+  removePvcAfterDelete: true
+  useStrictSecurity: true
+  {{- if .Values.priorityClassName }}
+  priorityClassName: {{ .Values.priorityClassName }}
+  {{- end }}
+
+  extraArgs:
+    {{- toYaml .Values.vmSingle.extraArgs | nindent 4 }}
+
+  resources:
+    {{- toYaml .Values.vmSingle.resources | nindent 4 }}
+
+  {{- with .Values.nodeSelector }}
+  nodeSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
