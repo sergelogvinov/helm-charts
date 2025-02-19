@@ -17,6 +17,11 @@ spec:
   exclusive: true
   concurrency: 1
   jobActiveDeadlineSecs: {{ default 3600 $val.jobActiveDeadlineSecs }}
+  window:
+    days: ["mo", "tu", "we", "th"]
+    startTime: "10:00:00"
+    endTime: "18:00:00"
+    timeZone: "UTC"
 
   nodeSelector:
     matchExpressions:
