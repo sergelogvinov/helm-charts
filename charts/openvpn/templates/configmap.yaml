@@ -86,7 +86,9 @@ data:
     data-ciphers AES-256-GCM:AES-128-GCM:?CHACHA20-POLY1305
     data-ciphers-fallback AES-256-CBC
 
+    {{- if .Values.dns.enabled }}
     push "dhcp-option DNS 172.30.0.1"
+    {{- end }}
     {{- end }}
     {{- if .Values.openvpn.redirectGateway }}
     push "redirect-gateway def1"
