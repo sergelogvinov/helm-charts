@@ -145,6 +145,10 @@ server:
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
 
+  # -- Additional containers to add to the server deployment
+  # ref: https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Container
+  additionalContainers: []
+
 agent:
   ## If true, teamcity agent deployment will be installed
   ##
