@@ -20,12 +20,9 @@ data:
         }
         {{- end }}
 
-        forward . tls://1.1.1.1 tls://1.0.0.1 {
-          tls_servername cloudflare-dns.com
-          policy sequential
-          health_check 30s
-          expire 60s
-        }
+        {{- if .Values.dns.forward }}
+        {{- .Values.dns.forward | nindent 8 }}
+        {{- end }}
 
         cache 300
         reload

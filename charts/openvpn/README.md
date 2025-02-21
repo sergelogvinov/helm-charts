@@ -1,6 +1,6 @@
 # openvpn
 
-![Version: 0.4.10](https://img.shields.io/badge/Version-0.4.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.6.12](https://img.shields.io/badge/AppVersion-2.6.12-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.6.12](https://img.shields.io/badge/AppVersion-2.6.12-informational?style=flat-square)
 
 OpenVPN in kubernetes
 
@@ -119,6 +119,7 @@ vpn-%: ## create certificate for vpn
 | certManager.clients | list | `[]` | List of clients. |
 | clusterDomain | string | `nil` | Kubernetes cluster domain. |
 | dns.enabled | bool | `false` | Create a DNS server in the pod. |
+| dns.forward | string | `"forward . tls://1.1.1.1 tls://1.0.0.1 {\n  tls_servername cloudflare-dns.com\n  policy sequential\n  health_check 30s\n  expire 60s\n}\n"` |  |
 | openvpn | object | `{"ca":null,"cert":null,"config":null,"defaultroutes":null,"dh":null,"hostName":"vpn.example.com","key":null,"otp":null,"redirectGateway":false,"revoke":null,"tlsauth":null,"tlsversion":{}}` | genkey secret ta.key |
 | openvpn.hostName | string | `"vpn.example.com"` | Server domain name. |
 | openvpn.config | string | `nil` | OpenVPN configuration file. |
