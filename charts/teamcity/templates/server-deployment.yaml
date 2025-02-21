@@ -127,6 +127,9 @@ spec:
               mountPath: /etc/nginx
               readOnly: true
         {{- end }}
+        {{- with .Values.server.additionalContainers }}
+        {{ . | toYaml | nindent 8 }}
+        {{- end }}
       {{- with .Values.server.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
