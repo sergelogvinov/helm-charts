@@ -13,7 +13,7 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.2.2
+version: 0.2.3
 #
 # renovate: datasource=docker depName=rancher/system-upgrade-controller
-appVersion: "v0.15.1"
+appVersion: "v0.15.2"
