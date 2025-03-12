@@ -1,6 +1,6 @@
 # pgbouncer
 
-![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.8](https://img.shields.io/badge/AppVersion-16.8-informational?style=flat-square)
+![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.8](https://img.shields.io/badge/AppVersion-16.8-informational?style=flat-square)
 
 Postgres connection poller
 
@@ -97,7 +97,7 @@ metrics:
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | metrics.enabled | bool | `false` |  |
 | metrics.image.repository | string | `"jbub/pgbouncer_exporter"` |  |
-| metrics.image.tag | string | `"v0.18.0"` |  |
+| metrics.image.tag | string | `"v0.19.0"` |  |
 | metrics.image.pullPolicy | string | `"IfNotPresent"` |  |
 | metrics.resources.limits.cpu | string | `"100m"` |  |
 | metrics.resources.limits.memory | string | `"32Mi"` |  |
