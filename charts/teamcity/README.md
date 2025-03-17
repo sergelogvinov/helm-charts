@@ -1,6 +1,6 @@
 # teamcity
 
-![Version: 0.8.2](https://img.shields.io/badge/Version-0.8.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2024.12.2](https://img.shields.io/badge/AppVersion-2024.12.2-informational?style=flat-square)
+![Version: 0.9.1](https://img.shields.io/badge/Version-0.9.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2024.12.3](https://img.shields.io/badge/AppVersion-2024.12.3-informational?style=flat-square)
 
 Teamcity on Kubernetes
 
@@ -123,6 +123,7 @@ ingress:
 | server.nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | server.tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | server.affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
+| server.additionalContainers | list | `[]` | Additional containers to add to the server deployment ref: https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Container |
 | agent.enabled | bool | `true` |  |
 | agent.image.repository | string | `"ghcr.io/sergelogvinov/teamcity"` |  |
 | agent.image.pullPolicy | string | `"IfNotPresent"` |  |
