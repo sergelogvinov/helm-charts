@@ -1,3 +1,5 @@
+# use: {{ .Values.useTls }}
+{{- if .Values.useTls }}
 {{- $ca := genCA .Chart.Name 3650 }}
 {{- $server := genSignedCert "server" (list "127.0.0.1") nil 3650 $ca }}
 apiVersion: v1
@@ -18,4 +20,5 @@ data:
   ca.crt: {{ $ca.Cert | b64enc }}
   tls.crt: {{ $server.Cert | b64enc }}
   tls.key: {{ $server.Key | b64enc }}
+{{- end }}
 {{- end }}

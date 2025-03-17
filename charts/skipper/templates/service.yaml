@@ -19,6 +19,7 @@ spec:
   {{- end }}
   ipFamilyPolicy: {{ if eq (len .Values.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
   ports:
+    {{- if .Values.hostPort.ports.http }}
     - port: 80
       targetPort: http
       protocol: TCP
@@ -26,6 +27,7 @@ spec:
       {{- if .Values.hostPort.enabled }}
       nodePort: {{ .Values.hostPort.ports.http }}
       {{- end }}
+    {{- end }}
     - port: 443
       targetPort: https
       protocol: TCP
