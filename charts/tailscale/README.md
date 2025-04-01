@@ -1,6 +1,6 @@
 # tailscale
 
-![Version: 0.6.1](https://img.shields.io/badge/Version-0.6.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.80.3](https://img.shields.io/badge/AppVersion-v1.80.3-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.82.0](https://img.shields.io/badge/AppVersion-v1.82.0-informational?style=flat-square)
 
 Tailscale mesh network.
 
