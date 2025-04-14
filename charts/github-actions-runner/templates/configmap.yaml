@@ -131,7 +131,7 @@ data:
         "commit": true,
         "gc": true,
         "gcDelay": "24h",
-        "gcInterval": "24h"
+        "gcInterval": "24h",
         "retention": {
           "dryRun": false,
           "delay": "24h",
