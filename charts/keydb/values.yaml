@@ -146,7 +146,7 @@ metrics:
   image:
     repository: oliver006/redis_exporter
     pullPolicy: IfNotPresent
-    tag: v1.69.0
+    tag: v1.70.0
 
 # -- Pods Service Account.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
