@@ -55,8 +55,9 @@ hostNetwork: false
 hostPort:
   enabled: false
   ports:
-    http: 8080
-    https: 8443
+    # http is optional
+    # http: 8080
+    https: 9999
 
 ingressClass: skipper
 ingressClassResource:
@@ -89,6 +90,9 @@ autoscaling:
 
 # -- Use a daemonset instead of a deployment
 useDaemonSet: false
+
+# -- Set to true to create certs and use TLS
+useTls: false
 
 terminationGracePeriodSeconds: 120
 
@@ -134,3 +138,43 @@ affinity: {}
 
 metrics:
   enabled: false
+
+# kube-ingress-aws-controller (KIAC)
+kiac:
+  # Should KIAC resources get deployed?
+  enabled: false
+
+  # Full name override
+  fullnameOverride: ""
+
+  # KIAC image details
+  image:
+    pullPolicy: IfNotPresent
+    repository: "registry.opensource.zalan.do/teapot/kube-ingress-aws-controller"
+    tag: v0.15.33
+
+  # Name override
+  nameOverride: ""
+
+  # Optional annotations to add to each KIAC pod
+  podAnnotations: {}
+
+  # Optional labels to add to each KIAC pod
+  podLabels: {}
+
+  # AWS region for injecting AWS_REGION env var
+  region: ""
+
+  # One replica is enough
+  # KIAC does not require high availability (HA) and/or HPA
+  replicas: 1
+
+  # KIAC service account
+  serviceAccount:
+
+    # Optional annotations to add to the service account
+    # Useful for adding IAM roles to the service account
+    annotations: {}
+
+    # Specify whether a service account should be created
+    create: true
