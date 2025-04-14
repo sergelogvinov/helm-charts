@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/sergelogvinov/skipper
+  repository: ghcr.io/zalando/skipper
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -25,7 +25,8 @@ serviceAccount:
 
 # -- Annotations for pod.
 # ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-podAnnotations: {}
+podAnnotations:
+  {}
   # cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
 
 # -- Extra labels for pod.
@@ -49,7 +50,7 @@ securityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
 
 hostNetwork: false
 hostPort:

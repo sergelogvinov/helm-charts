@@ -66,8 +66,12 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["skipper"]
           args:
+            {{- if .Values.hostPort.ports.https }}
             - "-address=:{{ .Values.hostPort.ports.https }}"
+            {{- end }}
+            {{- if .Values.hostPort.ports.http }}
             - "-insecure-address=:{{ .Values.hostPort.ports.http }}"
+            {{- end }}
             - "-tls-cert=/etc/ssl/tlscerts/tls.crt"
             - "-tls-key=/etc/ssl/tlscerts/tls.key"
             - "-kubernetes"
@@ -100,12 +104,16 @@ spec:
             - "-default-filters-prepend=enableAccessLog(2,4,5)->flowId()->xforward()"
             # - "-insecure"
           ports:
+            {{- if .Values.hostPort.ports.http }}
             - name: http
               containerPort: {{ .Values.hostPort.ports.http }}
               protocol: TCP
+            {{- end }}
+            {{- if .Values.hostPort.ports.https }}
             - name: https
               containerPort: {{ .Values.hostPort.ports.https }}
               protocol: TCP
+            {{- end }}
             - name: metrics
               containerPort: 9911
               protocol: TCP

@@ -1,6 +1,6 @@
 # skipper
 
-![Version: 0.1.8](https://img.shields.io/badge/Version-0.1.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.21.107](https://img.shields.io/badge/AppVersion-v0.21.107-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.22.21](https://img.shields.io/badge/AppVersion-v0.22.21-informational?style=flat-square)
 
 Ingress controller for Kubernetes
 
@@ -39,7 +39,7 @@ terminationGracePeriodSeconds: 120
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | replicaCount | int | `1` |  |
-| image.repository | string | `"ghcr.io/sergelogvinov/skipper"` |  |
+| image.repository | string | `"ghcr.io/zalando/skipper"` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.tag | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
