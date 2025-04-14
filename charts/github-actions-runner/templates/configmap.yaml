@@ -17,8 +17,8 @@ data:
         "rootDirectory": "/var/lib/registry",
         "commit": true,
         "gc": true,
-        "gcDelay": "1h",
-        "gcInterval": "12h"
+        "gcDelay": "24h",
+        "gcInterval": "24h"
       },
       "http": {
         "address": "0.0.0.0", "port": "8443",
@@ -130,8 +130,8 @@ data:
         "rootDirectory": "/var/lib/registry",
         "commit": true,
         "gc": true,
-        "gcDelay": "2h",
-        "gcInterval": "1h",
+        "gcDelay": "24h",
+        "gcInterval": "24h"
         "retention": {
           "dryRun": false,
           "delay": "24h",

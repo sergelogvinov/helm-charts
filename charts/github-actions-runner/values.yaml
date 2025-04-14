@@ -163,7 +163,7 @@ mirrors:
   resources:
     limits:
       cpu: 1
-      memory: 1Gi
+      memory: 2Gi
     requests:
       cpu: 200m
       memory: 512Mi
@@ -250,7 +250,7 @@ registry:
   resources:
     limits:
       cpu: 1
-      memory: 1024Mi
+      memory: 2Gi
     requests:
       cpu: 100m
       memory: 512Mi
