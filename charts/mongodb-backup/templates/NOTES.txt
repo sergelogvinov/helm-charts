@@ -2,6 +2,9 @@
 
 kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "mongodb-backup.fullname" . }} {{ include "mongodb-backup.fullname" . }}-manual
 
+{{- if .Values.backupCheck.enabled }}
+
 2. Backup check command:
 
 kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "mongodb-backup.fullname" . }}-check {{ include "mongodb-backup.fullname" . }}-check-manual
+{{- end }}
