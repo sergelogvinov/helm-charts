@@ -1,6 +1,6 @@
 # clickhouse
 
-![Version: 0.7.14](https://img.shields.io/badge/Version-0.7.14-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 24.10.4](https://img.shields.io/badge/AppVersion-24.10.4-informational?style=flat-square)
+![Version: 0.7.15](https://img.shields.io/badge/Version-0.7.15-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 24.10.4](https://img.shields.io/badge/AppVersion-24.10.4-informational?style=flat-square)
 
 Clickhouse chart for Kubernetes
 

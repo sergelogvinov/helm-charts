@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "clickhouse.labels" . | nindent 4 }}
 data:
+  {{- $mem := include "resource-bytes" (default (default (dict) .Values.resources.limits ).memory .Values.resources.requests.memory) }}
   users.xml: |-
     <clickhouse>
         <profiles>
@@ -14,7 +15,6 @@ data:
                 <load_balancing>random</load_balancing>
                 <query_profiler_real_time_period_ns>0</query_profiler_real_time_period_ns>
                 <query_profiler_cpu_time_period_ns>0</query_profiler_cpu_time_period_ns>
-                {{- $mem := include "resource-bytes" (default (default (dict) .Values.resources.limits ).memory .Values.resources.requests.memory) }}
                 {{- $res := int64 (div (sub (int64 $mem) 1000000000) 2) }}
                 {{- if lt $res 1000000000 }}
                 <max_bytes_before_external_group_by>0</max_bytes_before_external_group_by>
@@ -30,7 +30,6 @@ data:
                 <load_balancing>random</load_balancing>
                 <query_profiler_real_time_period_ns>0</query_profiler_real_time_period_ns>
                 <query_profiler_cpu_time_period_ns>0</query_profiler_cpu_time_period_ns>
-                {{- $mem := include "resource-bytes" (default (default (dict) .Values.resources.limits ).memory .Values.resources.requests.memory) }}
                 {{- $res := int64 (div (sub (int64 $mem) 1000000000) 2) }}
                 {{- if lt $res 1000000000 }}
                 <max_bytes_before_external_group_by>0</max_bytes_before_external_group_by>
@@ -188,6 +187,12 @@ data:
             <ttl>event_date + INTERVAL 7 DAY DELETE</ttl>
             <flush_interval_milliseconds>7500</flush_interval_milliseconds>
         </query_log>
+        <query_views_log>
+            <database>system</database>
+            <table>query_views_log</table>
+            <ttl>event_date + INTERVAL 7 DAY DELETE</ttl>
+            <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+        </query_views_log>
 
         {{- if .Values.metrics.enabled }}
         <prometheus>
@@ -199,11 +204,22 @@ data:
             <status_info>true</status_info>
         </prometheus>
         {{- end }}
-        {{- default "" .Values.config | nindent 8 }}
 
+        {{- if lt (div $mem 1000000000) 8 }}
+        <mark_cache_size>1073741824</mark_cache_size>
+        <max_server_memory_usage_to_ram_ratio>0.6</max_server_memory_usage_to_ram_ratio>
+        <merge_tree>
+            <merge_max_block_size>2048</merge_max_block_size>
+            <max_bytes_to_merge_at_max_space_in_pool>2147483648</max_bytes_to_merge_at_max_space_in_pool>
+            <max_suspicious_broken_parts>100</max_suspicious_broken_parts>
+        </merge_tree>
+        {{- else }}
         <merge_tree>
             <max_suspicious_broken_parts>100</max_suspicious_broken_parts>
         </merge_tree>
+        {{- end }}
+
+        {{- default "" .Values.config | nindent 8 }}
     </clickhouse>
 
   storage.xml: |-
