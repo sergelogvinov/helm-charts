@@ -317,6 +317,9 @@ metrics:
                pg_stat_statements.local_blks_dirtied, pg_stat_statements.local_blks_written, pg_stat_statements.temp_blks_read,
                pg_stat_statements.temp_blks_written, pg_stat_statements.blk_read_time, pg_stat_statements.blk_write_time
                FROM pg_stat_statements JOIN pg_database ON pg_database.oid = pg_stat_statements.dbid AND max_exec_time > 10
+               WHERE pg_stat_statements.query not like '%pg_stat_statements%' and pg_database.datname != 'postgres'
+               and pg_stat_statements.query not like 'SET %' and pg_stat_statements.query != 'COMMIT' and pg_stat_statements.query != 'BEGIN'
+               and pg_stat_statements.query not like '%SAVEPOINT%'
                ORDER BY pg_stat_statements.total_exec_time DESC LIMIT 100
       metrics:
         - user:
