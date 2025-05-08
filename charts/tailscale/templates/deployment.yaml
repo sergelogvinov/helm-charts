@@ -160,8 +160,9 @@ spec:
               mountPath: /start
             - name: state
               mountPath: /tmp
-            - name: tun
-              mountPath: /dev/net/tun
+          {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -196,6 +197,6 @@ spec:
                 path: Corefile
         - name: state
           emptyDir: {}
-        - name: tun
-          hostPath:
-            path: /dev/net/tun
+      {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
+      {{- end }}

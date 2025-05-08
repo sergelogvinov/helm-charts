@@ -78,9 +78,11 @@ resources:
   limits:
     cpu: 500m
     memory: 512Mi
+    # squat.ai/tun: "1"
   requests:
     cpu: 100m
     memory: 256Mi
+    # squat.ai/tun: "1"
 
 # -- DNS Policy for pod
 # ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
@@ -101,6 +103,11 @@ updateStrategy:
   type: RollingUpdate
   rollingUpdate:
     maxUnavailable: 1
+
+# -- Additional container volume mounts.
+extraVolumeMounts: []
+# -- Additional volumes.
+extraVolumes: []
 
 # -- Node labels for pod assignment.
 # ref: https://kubernetes.io/docs/user-guide/node-selection/

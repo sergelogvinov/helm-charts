@@ -1,0 +1,17 @@
+useDaemonSet: true
+nodeSelector:
+  node-role.kubernetes.io/vpn: ""
+
+podSecurityContext:
+  sysctls:
+    - name: net.ipv6.conf.all.forwarding
+      value: "1"
+
+extraVolumeMounts:
+  - name: tun
+    mountPath: /dev/net/tun
+
+extraVolumes:
+  - name: tun
+    hostPath:
+      path: /dev/net/tun

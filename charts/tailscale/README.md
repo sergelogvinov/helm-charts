@@ -1,6 +1,6 @@
 # tailscale
 
-![Version: 0.7.1](https://img.shields.io/badge/Version-0.7.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.82.5](https://img.shields.io/badge/AppVersion-v1.82.5-informational?style=flat-square)
+![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.82.5](https://img.shields.io/badge/AppVersion-v1.82.5-informational?style=flat-square)
 
 Tailscale mesh network.
 
@@ -125,6 +125,8 @@ and should not be used for commercial purposes or to violate the terms of servic
 | networkPolicy | object | `{"enabled":false}` | Network Policy parameters. ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/ |
 | useDaemonSet | bool | `false` | Use a daemonset instead of a deployment |
 | updateStrategy | object | `{"rollingUpdate":{"maxUnavailable":1},"type":"RollingUpdate"}` | pod deployment update strategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |
+| extraVolumeMounts | list | `[]` | Additional container volume mounts. |
+| extraVolumes | list | `[]` | Additional volumes. |
 | nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
