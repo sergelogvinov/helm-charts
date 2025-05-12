@@ -5008,6 +5008,27 @@ entries:
     version: 0.1.0
   openvpn:
   - apiVersion: v2
+    appVersion: 2.6.14
+    created: "2025-05-12T03:30:47.686120243Z"
+    description: OpenVPN in kubernetes
+    digest: 4fcb5b02062117948b69590efd5225132d96773228fe77c59e627d0a778e30ce
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/openvpn/icon.png
+    keywords:
+    - openvpn
+    - vpn
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: openvpn
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/openvpn
+    - https://openvpn.net
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/openvpn-0.5.1/openvpn-0.5.1.tgz
+    version: 0.5.1
+  - apiVersion: v2
     appVersion: 2.6.12
     created: "2025-02-21T09:00:17.45407794Z"
     description: OpenVPN in kubernetes
@@ -9958,4 +9979,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-12T03:30:38.586335716Z"
+generated: "2025-05-12T03:30:47.686987142Z"
