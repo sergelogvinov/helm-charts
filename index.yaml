@@ -9404,6 +9404,31 @@ entries:
     version: 0.1.0
   teamcity:
   - apiVersion: v2
+    appVersion: 2025.03.1
+    created: "2025-05-12T03:36:36.079716444Z"
+    description: Teamcity on Kubernetes
+    digest: d54f046daf162af72ec4d8aa3aa53a69d6c6a1022805d192bd31259e4ae41487
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/teamcity/icon.png
+    keywords:
+    - ci
+    - continuous integration
+    - continuous delivery
+    - continuous deployment
+    - devops
+    - automation
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: teamcity
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/teamcity
+    - https://www.jetbrains.com/teamcity
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/teamcity-0.9.2/teamcity-0.9.2.tgz
+    version: 0.9.2
+  - apiVersion: v2
     appVersion: 2024.12.3
     created: "2025-03-17T13:39:06.283727186Z"
     description: Teamcity on Kubernetes
@@ -10019,4 +10044,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-12T03:31:20.532915675Z"
+generated: "2025-05-12T03:36:36.080607013Z"
