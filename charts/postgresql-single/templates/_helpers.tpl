@@ -82,9 +82,22 @@ Convert a memory resource like "500Mi" to the number 500
 {{- if . | hasSuffix "Mi" -}}
 {{- . | trimSuffix "Mi" | int64 -}}
 {{- else if . | hasSuffix "Gi" -}}
-{{- mulf (. | trimSuffix "Gi" | int64) 1024 -}}
+{{- mulf (. | trimSuffix "Gi" | int64) 1024 | int64 -}}
+{{- else if . | hasSuffix "Ti" -}}
+{{- mulf (. | trimSuffix "Ti" | int64) 1048576 | int64 -}}
 {{- else -}}
-1024
+1024 | int64
+{{- end }}
+{{- end }}
+
+{{/*
+Convert a cpu resource like "500m" to the number 1
+*/}}
+{{- define "resource-cpu" -}}
+{{- if . | printf "%s" | hasSuffix "m" -}}
+{{- max 1 (int (div (. | trimSuffix "m" | int) 1000)) -}}
+{{- else -}}
+{{- max 1 (int .) -}}
 {{- end }}
 {{- end }}
 
@@ -135,6 +148,8 @@ Create the postgresqlConfiguration
 */}}
 {{- define "postgresql-single.postgresqlConfiguration" -}}
 {{- if not .Values.postgresqlConfiguration }}
+{{- $size := include "resource-megabytes" (default "10Gi" .Values.persistence.size) }}
+{{- $cpu := include "resource-cpu" (default .Values.resources.requests.cpu (get (default (dict) .Values.resources.limits) "cpu")) }}
 listen_addresses = '*'
 
 lc_messages = 'en_US.UTF-8'
@@ -171,13 +186,23 @@ full_page_writes = on
 wal_level = replica
 wal_compression = on
 wal_buffers = -1
-wal_writer_delay = 200ms
+{{- if .Values.postgresqlServerWalWriterDelay }}
+wal_writer_delay = {{ .Values.postgresqlServerWalWriterDelay }}
 wal_writer_flush_after = 1MB
+{{- end }}
+{{- if ge (int64 $size) (int64 512000) }}
+wal_keep_size = {{ div $size 32 }}MB
+{{- end }}
 
 max_replication_slots = 8
 max_wal_senders = 8
 max_wal_size = 10240MB
+{{- if ge (int64 $size) (int64 1024000) }}
+min_wal_size = 5120MB
+{{- else }}
 min_wal_size = 512MB
+{{- end }}
+max_slot_wal_keep_size = 1000MB
 
 # Checkpointing:
 checkpoint_timeout  = 15min
@@ -189,6 +214,22 @@ bgwriter_lru_maxpages = 100
 bgwriter_lru_multiplier = 2.0
 bgwriter_flush_after = 0
 
+{{- if ge (int $cpu) 2 }}
+
+# Parallel queries:
+max_worker_processes = {{ $cpu }}
+max_parallel_workers = {{ $cpu }}
+max_parallel_workers_per_gather = {{ max 1 (div $cpu 2) }}
+max_parallel_maintenance_workers = {{ max 1 (div $cpu 2) }}
+parallel_leader_participation = on
+{{- end }}
+
+# Advanced features
+enable_partitionwise_join = on
+enable_partitionwise_aggregate = on
+jit = on
+
+# Replication
 hot_standby = on
 archive_mode = on
 {{- if or .Values.backup.enabled .Values.backup.recovery }}

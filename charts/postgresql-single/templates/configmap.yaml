@@ -11,10 +11,12 @@ data:
 
   {{- if gt (int .Values.postgresqlServerMemory) (int "511") }}
 
-    # auto generated
+    # auto generated, see https://pgconfigurator.cybertec.at
     work_mem = {{ div .Values.postgresqlServerMemory 32 }}MB
     maintenance_work_mem = {{ div .Values.postgresqlServerMemory 4 }}MB
     effective_cache_size = {{ div .Values.postgresqlServerMemory 2 }}MB
+    effective_io_concurrency = 100
+    random_page_cost = 1.25
     {{- if and .Values.resources.requests (hasKey .Values.resources.requests "hugepages-1Gi") }}
     {{- $pages := int (regexFind "[0-9]+" (get .Values.resources.requests "hugepages-1Gi")) }}
     shared_buffers = {{ sub $pages 1 }}GB

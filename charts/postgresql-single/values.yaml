@@ -137,7 +137,12 @@ service:
 
   ipFamilies: [IPv4]
 
+# -- Specifies the expected memory usage
 postgresqlServerMemory: "128"
+
+# -- Specifies how often the WAL writer flushes WAL (wal_writer_delay)
+# ref: https://www.postgresql.org/docs/current/runtime-config-wal.html
+postgresqlServerWalWriterDelay: "200ms"
 
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/
