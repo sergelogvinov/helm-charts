@@ -121,7 +121,7 @@ Create the postgresql folover service selector
 */}}
 {{- define "postgresql-single.folover-number" -}}
 {{- $pname := include "postgresql-single.primary" . }}
-{{- if eq (int .Values.replicaCount) 1 }}
+{{- if le (int .Values.replicaCount) 1 }}
 {{- 0 -}}
 {{- else if eq $pname (printf "%s-0" (include "postgresql-single.fullname" .)) }}
 {{- sub (int .Values.replicaCount) 1 -}}
