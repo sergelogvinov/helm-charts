@@ -324,6 +324,14 @@ rules:
   - gitrepositories
   verbs:
   - patch
+- apiGroups:
+  - kustomize.toolkit.fluxcd.io
+  resources:
+  - kustomizations
+  resourceNames:
+  - cluster
+  verbs:
+  - patch
 ####
 - apiGroups:
   - cilium.io
@@ -376,11 +384,12 @@ rules:
   - watch
   - patch
   - update
-# Victoria Metrics
+#### Victoria Metrics
 - apiGroups:
   - operator.victoriametrics.com
   resources:
   - vmrules
+  - vmrules/finalizers
   verbs:
   - get
   - list
@@ -397,7 +406,7 @@ rules:
   - get
   - list
   - watch
-# Percona Server for MongoDB
+#### Percona Server for MongoDB
 - apiGroups:
   - psmdb.percona.com
   resources:
@@ -416,4 +425,20 @@ rules:
   verbs:
   - create
   - delete
+#### Keda
+- apiGroups:
+  - keda.sh
+  resources:
+  - scaledjobs
+  - scaledobjects
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - keda.sh
+  resources:
+  - triggerauthentications
+  verbs:
+  - '*'
 {{- end }}

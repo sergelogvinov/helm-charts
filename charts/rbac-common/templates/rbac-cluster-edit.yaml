@@ -293,7 +293,7 @@ rules:
   verbs:
   - get
   - list
-###
+####
 - apiGroups:
   - cert-manager.io
   resources:
@@ -320,7 +320,7 @@ rules:
   - list
   - watch
   - patch
-# Victoria Metrics
+#### Victoria Metrics
 - apiGroups:
   - operator.victoriametrics.com
   resources:
@@ -339,7 +339,7 @@ rules:
   - get
   - list
   - watch
-# Percona Server for MongoDB
+#### Percona Server for MongoDB
 - apiGroups:
   - psmdb.percona.com
   resources:
@@ -357,4 +357,13 @@ rules:
   - perconaservermongodbbackups
   verbs:
   - create
+#### Keda
+- apiGroups:
+  - keda.sh
+  resources:
+  - scaledjobs
+  - scaledobjects
+  verbs:
+  - patch
+  - update
 {{- end }}
