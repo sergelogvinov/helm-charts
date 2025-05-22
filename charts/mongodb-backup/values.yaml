@@ -59,6 +59,8 @@ auth:
   username: root
   password: root
 
+backupOplog: true
+
 env: []
 
 walg: {}

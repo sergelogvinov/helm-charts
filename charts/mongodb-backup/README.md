@@ -1,6 +1,6 @@
 # mongodb-backup
 
-![Version: 1.0.1](https://img.shields.io/badge/Version-1.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.6](https://img.shields.io/badge/AppVersion-8.0.6-informational?style=flat-square)
+![Version: 1.0.2](https://img.shields.io/badge/Version-1.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.6](https://img.shields.io/badge/AppVersion-8.0.6-informational?style=flat-square)
 
 Mongo backup with restore checks
 
@@ -73,6 +73,7 @@ backupCheck:
 | auth.host | string | `"mongo-headless:27017/?authSource=admin"` |  |
 | auth.username | string | `"root"` |  |
 | auth.password | string | `"root"` |  |
+| backupOplog | bool | `true` |  |
 | env | list | `[]` |  |
 | walg | object | `{}` |  |
 | serviceAccount | object | `{"annotations":{},"create":true,"name":""}` | Pods Service Account. ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |

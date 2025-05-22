@@ -94,8 +94,8 @@ OPLOG_PITR_DISCOVERY_INTERVAL: '168h'
 OPLOG_PUSH_WAIT_FOR_BECOME_PRIMARY: 'true'
 
 MONGODB_URI:                 '{{ include "mongodb-backup.mongodb" . }}'
-WALG_STREAM_CREATE_COMMAND:  'mongodump --archive --oplog --uri="{{ include "mongodb-backup.mongodb" . }}"'
-WALG_STREAM_RESTORE_COMMAND: 'mongorestore --archive --oplogReplay --uri="{{ include "mongodb-backup-localhost.mongodb" . }}"'
+WALG_STREAM_CREATE_COMMAND:  'mongodump --archive {{ if .Values.backupOplog }}--oplog{{ end }} --uri="{{ include "mongodb-backup.mongodb" . }}"'
+WALG_STREAM_RESTORE_COMMAND: 'mongorestore --archive {{ if .Values.backupOplog }}--oplogReplay{{ end }} --uri="{{ include "mongodb-backup-localhost.mongodb" . }}"'
 {{- end }}
 
 {{/*
@@ -111,6 +111,6 @@ WALG_FILE_PREFIX: /backup
 {{- end }}
 
 MONGODB_URI:                 '{{ include "mongodb-backup-localhost.mongodb" . }}'
-WALG_STREAM_CREATE_COMMAND:  'mongodump --archive --oplog --uri="{{ include "mongodb-backup.mongodb" . }}"'
-WALG_STREAM_RESTORE_COMMAND: 'mongorestore --archive --oplogReplay --uri="{{ include "mongodb-backup-localhost.mongodb" . }}"'
+WALG_STREAM_CREATE_COMMAND:  'mongodump --archive {{ if .Values.backupOplog }}--oplog{{ end }} --uri="{{ include "mongodb-backup.mongodb" . }}"'
+WALG_STREAM_RESTORE_COMMAND: 'mongorestore --archive {{ if .Values.backupOplog }}--oplogReplay{{ end }} --uri="{{ include "mongodb-backup-localhost.mongodb" . }}"'
 {{- end }}
