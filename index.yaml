@@ -4357,6 +4357,29 @@ entries:
   mongodb-backup:
   - apiVersion: v2
     appVersion: 8.0.6
+    created: "2025-05-22T02:33:38.549543407Z"
+    description: Mongo backup with restore checks
+    digest: 4f6ea4418ed951cc78ac46b1c260bf4b523219c0108884d22caacde9d9878482
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/mongodb-backup/icon.png
+    keywords:
+    - mongodb
+    - backup
+    - wal-g
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongodb-backup
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongodb-backup
+    - https://www.mongodb.com
+    - https://github.com/wal-g/wal-g
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongodb-backup-1.0.2/mongodb-backup-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
+    appVersion: 8.0.6
     created: "2025-04-17T01:35:10.173659156Z"
     description: Mongo backup with restore checks
     digest: 95d40f2a826e2f344a10f641ac9a387e4c431669b29d27f5a0a9d483e0d05da5
@@ -10241,4 +10264,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-21T10:08:27.211997456Z"
+generated: "2025-05-22T02:33:38.551466765Z"
