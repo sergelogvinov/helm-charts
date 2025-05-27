@@ -46,9 +46,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         summary: An Alertmanager instance failed to send notifications.
       expr: |-
         (
-          rate(alertmanager_notifications_failed_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}"}[5m])
+          rate(alertmanager_notifications_failed_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}"}[15m])
         /
-          ignoring (reason) group_left rate(alertmanager_notifications_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}"}[5m])
+          ignoring (reason) group_left rate(alertmanager_notifications_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}"}[15m])
         )
         > 0.01
       for: 5m
@@ -63,9 +63,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         summary: All Alertmanager instances in a cluster failed to send notifications to a critical integration.
       expr: |-
         min by (namespace,service, integration) (
-          rate(alertmanager_notifications_failed_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}", integration=~`.*`}[5m])
+          rate(alertmanager_notifications_failed_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}", integration=~`.*`}[15m])
         /
-          ignoring (reason) group_left rate(alertmanager_notifications_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}", integration=~`.*`}[5m])
+          ignoring (reason) group_left rate(alertmanager_notifications_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}", integration=~`.*`}[15m])
         )
         > 0.01
       for: 5m
@@ -80,9 +80,9 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         summary: All Alertmanager instances in a cluster failed to send notifications to a non-critical integration.
       expr: |-
         min by (namespace,service, integration) (
-          rate(alertmanager_notifications_failed_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}", integration!~`.*`}[5m])
+          rate(alertmanager_notifications_failed_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}", integration!~`.*`}[15m])
         /
-          ignoring (reason) group_left rate(alertmanager_notifications_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}", integration!~`.*`}[5m])
+          ignoring (reason) group_left rate(alertmanager_notifications_total{job="kubernetes-service-endpoints",app_kubernetes_io_name="alertmanager",kubernetes_namespace="{{ .Release.Namespace }}", integration!~`.*`}[15m])
         )
         > 0.01
       for: 5m

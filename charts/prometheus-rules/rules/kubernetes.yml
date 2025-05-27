@@ -10,7 +10,7 @@
       summary: Memory limit reached
 
   - alert: PodMemoryResourcesAboveRequested
-    expr: topk by(cluster, namespace, pod) (10, (max by(cluster, namespace, pod) (container_memory_working_set_bytes{container!=""}) - max by(cluster, namespace, pod) (kube_pod_container_resource_requests{resource="memory",unit="byte"})) > 100*1024*1024)
+    expr: topk by(cluster, namespace, pod, container) (10, (max by(cluster, namespace, pod, container) (container_memory_working_set_bytes{container!=""}) - max by(cluster, namespace, pod, container) (kube_pod_container_resource_requests{resource="memory",unit="byte"})) > 100*1024*1024)
     for: 5m
     labels:
       severity: warning

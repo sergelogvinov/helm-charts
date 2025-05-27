@@ -11,7 +11,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeAPIErrorBudgetBurn | default false) }}
     - alert: KubeAPIErrorBudgetBurn
       annotations:
-        description: The API server is burning too much error budget.
+        description: The API server is burning too much error budget on cluster {{`{{`}} $labels.cluster {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
       expr: |-
@@ -27,7 +27,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeAPIErrorBudgetBurn | default false) }}
     - alert: KubeAPIErrorBudgetBurn
       annotations:
-        description: The API server is burning too much error budget.
+        description: The API server is burning too much error budget on cluster {{`{{`}} $labels.cluster {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
       expr: |-
@@ -43,7 +43,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeAPIErrorBudgetBurn | default false) }}
     - alert: KubeAPIErrorBudgetBurn
       annotations:
-        description: The API server is burning too much error budget.
+        description: The API server is burning too much error budget on cluster {{`{{`}} $labels.cluster {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
       expr: |-
@@ -59,7 +59,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeAPIErrorBudgetBurn | default false) }}
     - alert: KubeAPIErrorBudgetBurn
       annotations:
-        description: The API server is burning too much error budget.
+        description: The API server is burning too much error budget on cluster {{`{{`}} $labels.cluster {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
       expr: |-

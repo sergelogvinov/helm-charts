@@ -11,18 +11,35 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeNodeNotReady | default false) }}
     - alert: KubeNodeNotReady
       annotations:
-        description: '{{`{{`}} $labels.node {{`}}`}} has been unready for more than 15 minutes.'
+        description: '{{`{{`}} $labels.node {{`}}`}} has been unready for more than 15 minutes on cluster {{`{{`}} $labels.cluster {{`}}`}}.'
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubenodenotready
         summary: Node is not ready.
-      expr: kube_node_status_condition{job="kubernetes-service-endpoints",condition="Ready",status="true"} == 0
+      expr: |-
+        kube_node_status_condition{job="kubernetes-service-endpoints",condition="Ready",status="true"} == 0
+        and on (cluster, node)
+        kube_node_spec_unschedulable{job="kubernetes-service-endpoints"} == 0
       for: 15m
       labels:
         severity: warning
 {{- end }}
+{{- if not (.Values.defaultRules.disabled.KubeNodePressure | default false) }}
+    - alert: KubeNodePressure
+      annotations:
+        description: '{{`{{`}} $labels.node {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}} has active Condition {{`{{`}} $labels.condition {{`}}`}}. This is caused by resource usage exceeding eviction thresholds.'
+        runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubenodepressure
+        summary: Node has as active Condition.
+      expr: |-
+        kube_node_status_condition{job="kubernetes-service-endpoints",condition=~"(MemoryPressure|DiskPressure|PIDPressure)",status="true"} == 1
+        and on (cluster, node)
+        kube_node_spec_unschedulable{job="kubernetes-service-endpoints"} == 0
+      for: 10m
+      labels:
+        severity: info
+{{- end }}
 {{- if not (.Values.defaultRules.disabled.KubeNodeUnreachable | default false) }}
     - alert: KubeNodeUnreachable
       annotations:
-        description: '{{`{{`}} $labels.node {{`}}`}} is unreachable and some workloads may be rescheduled.'
+        description: '{{`{{`}} $labels.node {{`}}`}} is unreachable and some workloads may be rescheduled on cluster {{`{{`}} $labels.cluster {{`}}`}}.'
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubenodeunreachable
         summary: Node is unreachable.
       expr: (kube_node_spec_taint{job="kubernetes-service-endpoints",key="node.kubernetes.io/unreachable",effect="NoSchedule"} unless ignoring(key,value) kube_node_spec_taint{job="kubernetes-service-endpoints",key=~"ToBeDeletedByClusterAutoscaler|cloud.google.com/impending-node-termination|aws-node-termination-handler/spot-itn"}) == 1
@@ -33,16 +50,22 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeletTooManyPods | default false) }}
     - alert: KubeletTooManyPods
       annotations:
-        description: Kubelet '{{`{{`}} $labels.node {{`}}`}}' is running at {{`{{`}} $value | humanizePercentage {{`}}`}} of its Pod capacity.
+        description: Kubelet '{{`{{`}} $labels.node {{`}}`}}' is running at {{`{{`}} $value | humanizePercentage {{`}}`}} of its Pod capacity on cluster {{`{{`}} $labels.cluster {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubelettoomanypods
         summary: Kubelet is running at capacity.
       expr: |-
-        count by(cluster, node) (
-          (kube_pod_status_phase{job="kubernetes-service-endpoints",phase="Running"} == 1) * on(instance,pod,namespace,cluster) group_left(node) topk by(instance,pod,namespace,cluster) (1, kube_pod_info{job="kubernetes-service-endpoints"})
+        (
+          max by (cluster, instance) (
+            kubelet_running_pods{job="kubernetes-nodes", metrics_path="/metrics"} > 1
+          )
+          * on (cluster, instance) group_left(node)
+          max by (cluster, instance, node) (
+            kubelet_node_name{job="kubernetes-nodes", metrics_path="/metrics"}
+          )
         )
-        /
-        max by(cluster, node) (
-          kube_node_status_capacity{job="kubernetes-service-endpoints",resource="pods"} != 1
+        / on (cluster, node) group_left()
+        max by (cluster, node) (
+          kube_node_status_capacity{job="kubernetes-service-endpoints", resource="pods"} != 1
         ) > 0.95
       for: 15m
       labels:
@@ -51,18 +74,38 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeNodeReadinessFlapping | default false) }}
     - alert: KubeNodeReadinessFlapping
       annotations:
-        description: The readiness status of node {{`{{`}} $labels.node {{`}}`}} has changed {{`{{`}} $value {{`}}`}} times in the last 15 minutes.
+        description: The readiness status of node {{`{{`}} $labels.node {{`}}`}} has changed {{`{{`}} $value {{`}}`}} times in the last 15 minutes on cluster {{`{{`}} $labels.cluster {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubenodereadinessflapping
         summary: Node readiness status is flapping.
-      expr: sum(changes(kube_node_status_condition{job="kubernetes-service-endpoints",status="true",condition="Ready"}[15m])) by (cluster, node) > 2
+      expr: |-
+        sum(changes(kube_node_status_condition{job="kubernetes-service-endpoints",status="true",condition="Ready"}[15m])) by (cluster, node) > 2
+        and on (cluster, node)
+        kube_node_spec_unschedulable{job="kubernetes-service-endpoints"} == 0
       for: 15m
       labels:
         severity: warning
 {{- end }}
+{{- if not (.Values.defaultRules.disabled.KubeNodeEviction | default false) }}
+    - alert: KubeNodeEviction
+      annotations:
+        description: Node {{`{{`}} $labels.node {{`}}`}} on {{`{{`}} $labels.cluster {{`}}`}} is evicting Pods due to {{`{{`}} $labels.eviction_signal {{`}}`}}.  Eviction occurs when eviction thresholds are crossed, typically caused by Pods exceeding RAM/ephemeral-storage limits.
+        runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubenodeeviction
+        summary: Node is evicting pods.
+      expr: |-
+        sum(rate(kubelet_evictions{job="kubernetes-nodes", metrics_path="/metrics"}[15m])) by(cluster, eviction_signal, instance)
+        * on (cluster, instance) group_left(node)
+        max by (cluster, instance, node) (
+          kubelet_node_name{job="kubernetes-nodes", metrics_path="/metrics"}
+        )
+        > 0
+      for: 0s
+      labels:
+        severity: info
+{{- end }}
 {{- if not (.Values.defaultRules.disabled.KubeletPlegDurationHigh | default false) }}
     - alert: KubeletPlegDurationHigh
       annotations:
-        description: The Kubelet Pod Lifecycle Event Generator has a 99th percentile duration of {{`{{`}} $value {{`}}`}} seconds on node {{`{{`}} $labels.node {{`}}`}}.
+        description: The Kubelet Pod Lifecycle Event Generator has a 99th percentile duration of {{`{{`}} $value {{`}}`}} seconds on node {{`{{`}} $labels.node {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeletplegdurationhigh
         summary: Kubelet Pod Lifecycle Event Generator is taking too long to relist.
       expr: node_quantile:kubelet_pleg_relist_duration_seconds:histogram_quantile{quantile="0.99"} >= 10
@@ -73,7 +116,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeletPodStartUpLatencyHigh | default false) }}
     - alert: KubeletPodStartUpLatencyHigh
       annotations:
-        description: Kubelet Pod startup 99th percentile latency is {{`{{`}} $value {{`}}`}} seconds on node {{`{{`}} $labels.node {{`}}`}}.
+        description: Kubelet Pod startup 99th percentile latency is {{`{{`}} $value {{`}}`}} seconds on node {{`{{`}} $labels.node {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeletpodstartuplatencyhigh
         summary: Kubelet Pod startup latency is too high.
       expr: histogram_quantile(0.99, sum(rate(kubelet_pod_worker_duration_seconds_bucket{job="kubernetes-nodes", metrics_path="/metrics"}[5m])) by (cluster, instance, le)) * on(cluster, instance) group_left(node) kubelet_node_name{job="kubernetes-nodes", metrics_path="/metrics"} > 60
@@ -84,7 +127,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeletClientCertificateExpiration | default false) }}
     - alert: KubeletClientCertificateExpiration
       annotations:
-        description: Client certificate for Kubelet on node {{`{{`}} $labels.node {{`}}`}} expires in {{`{{`}} $value | humanizeDuration {{`}}`}}.
+        description: Client certificate for Kubelet on node {{`{{`}} $labels.node {{`}}`}} expires in {{`{{`}} $value | humanizeDuration {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeletclientcertificateexpiration
         summary: Kubelet client certificate is about to expire.
       expr: kubelet_certificate_manager_client_ttl_seconds < 604800
@@ -94,7 +137,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeletClientCertificateExpiration | default false) }}
     - alert: KubeletClientCertificateExpiration
       annotations:
-        description: Client certificate for Kubelet on node {{`{{`}} $labels.node {{`}}`}} expires in {{`{{`}} $value | humanizeDuration {{`}}`}}.
+        description: Client certificate for Kubelet on node {{`{{`}} $labels.node {{`}}`}} expires in {{`{{`}} $value | humanizeDuration {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeletclientcertificateexpiration
         summary: Kubelet client certificate is about to expire.
       expr: kubelet_certificate_manager_client_ttl_seconds < 86400
@@ -104,7 +147,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeletServerCertificateExpiration | default false) }}
     - alert: KubeletServerCertificateExpiration
       annotations:
-        description: Server certificate for Kubelet on node {{`{{`}} $labels.node {{`}}`}} expires in {{`{{`}} $value | humanizeDuration {{`}}`}}.
+        description: Server certificate for Kubelet on node {{`{{`}} $labels.node {{`}}`}} expires in {{`{{`}} $value | humanizeDuration {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeletservercertificateexpiration
         summary: Kubelet server certificate is about to expire.
       expr: kubelet_certificate_manager_server_ttl_seconds < 604800
@@ -114,7 +157,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeletServerCertificateExpiration | default false) }}
     - alert: KubeletServerCertificateExpiration
       annotations:
-        description: Server certificate for Kubelet on node {{`{{`}} $labels.node {{`}}`}} expires in {{`{{`}} $value | humanizeDuration {{`}}`}}.
+        description: Server certificate for Kubelet on node {{`{{`}} $labels.node {{`}}`}} expires in {{`{{`}} $value | humanizeDuration {{`}}`}} on cluster {{`{{`}} $labels.cluster {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeletservercertificateexpiration
         summary: Kubelet server certificate is about to expire.
       expr: kubelet_certificate_manager_server_ttl_seconds < 86400
@@ -124,7 +167,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeletClientCertificateRenewalErrors | default false) }}
     - alert: KubeletClientCertificateRenewalErrors
       annotations:
-        description: Kubelet on node {{`{{`}} $labels.node {{`}}`}} has failed to renew its client certificate ({{`{{`}} $value | humanize {{`}}`}} errors in the last 5 minutes).
+        description: Kubelet on node {{`{{`}} $labels.node {{`}}`}} has failed to renew its client certificate ({{`{{`}} $value | humanize {{`}}`}} errors in the last 5 minutes) on cluster {{`{{`}} $labels.cluster {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeletclientcertificaterenewalerrors
         summary: Kubelet has failed to renew its client certificate.
       expr: increase(kubelet_certificate_manager_client_expiration_renew_errors[5m]) > 0
@@ -135,7 +178,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 {{- if not (.Values.defaultRules.disabled.KubeletServerCertificateRenewalErrors | default false) }}
     - alert: KubeletServerCertificateRenewalErrors
       annotations:
-        description: Kubelet on node {{`{{`}} $labels.node {{`}}`}} has failed to renew its server certificate ({{`{{`}} $value | humanize {{`}}`}} errors in the last 5 minutes).
+        description: Kubelet on node {{`{{`}} $labels.node {{`}}`}} has failed to renew its server certificate ({{`{{`}} $value | humanize {{`}}`}} errors in the last 5 minutes) on cluster {{`{{`}} $labels.cluster {{`}}`}}.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeletservercertificaterenewalerrors
         summary: Kubelet has failed to renew its server certificate.
       expr: increase(kubelet_server_expiration_renew_errors[5m]) > 0
