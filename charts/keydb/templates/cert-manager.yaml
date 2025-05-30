@@ -23,8 +23,8 @@ spec:
     name: {{ include "keydb.fullname" . }}-issuer
     kind: Issuer
   commonName: {{ include "keydb.fullname" . }}
-  duration: 26280h # 3y
-  renewBefore: 26000h # ~3y
+  duration: 87600h # 10y
+  renewBefore: 87000h # ~10y
   privateKey:
     algorithm: ECDSA
     size: 256
