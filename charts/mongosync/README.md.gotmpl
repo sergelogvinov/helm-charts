@@ -17,4 +17,24 @@ It is designed to be used in a Kubernetes environment.
 
 {{ template "chart.requirementsSection" . }}
 
+Run mongo sync
+
+```shell
+curl localhost:27182/api/v1/start -XPOST \
+--data '{
+      "source": "cluster0",
+      "destination": "cluster1",
+      "enableUserWriteBlocking": true,
+      "verification": {
+        "enabled": false
+      }
+   }'
+```
+
+Check progress
+
+```shell
+curl localhost:27182/api/v1/progress -XGET
+```
+
 {{ template "chart.valuesSection" . }}

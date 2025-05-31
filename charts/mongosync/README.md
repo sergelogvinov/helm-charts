@@ -1,6 +1,6 @@
 # mongosync
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.13.1](https://img.shields.io/badge/AppVersion-1.13.1-informational?style=flat-square)
+![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.13.1](https://img.shields.io/badge/AppVersion-1.13.1-informational?style=flat-square)
 
 Mongo Cluster-to-Cluster Sync
 
@@ -19,6 +19,26 @@ It is designed to be used in a Kubernetes environment.
 
 * <https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongosync>
 * <https://www.mongodb.com/docs/cluster-to-cluster-sync>
+
+Run mongo sync
+
+```shell
+curl localhost:27182/api/v1/start -XPOST \
+--data '{
+      "source": "cluster0",
+      "destination": "cluster1",
+      "enableUserWriteBlocking": true,
+      "verification": {
+        "enabled": false
+      }
+   }'
+```
+
+Check progress
+
+```shell
+curl localhost:27182/api/v1/progress -XGET
+```
 
 ## Values
 
@@ -44,6 +64,6 @@ It is designed to be used in a Kubernetes environment.
 | securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | service | object | `{"port":27182,"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
 | resources | object | `{"limits":{"cpu":"500m"},"requests":{"cpu":"100m","memory":"1Gi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
-| nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| nodeSelector | object | `{"kubernetes.io/arch":"amd64"}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
