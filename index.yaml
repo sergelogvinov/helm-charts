@@ -5027,6 +5027,27 @@ entries:
   mongosync:
   - apiVersion: v2
     appVersion: 1.13.1
+    created: "2025-05-31T12:20:48.916229022Z"
+    description: Mongo Cluster-to-Cluster Sync
+    digest: f285d481687f04f4d4c6f2aa3279feea88e8522d4bde0c6bfa0c891d904a666a
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/mongosync/icon.png
+    keywords:
+    - mongodb
+    - mongosync
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongosync
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongosync
+    - https://www.mongodb.com/docs/cluster-to-cluster-sync
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongosync-0.3.1/mongosync-0.3.1.tgz
+    version: 0.3.1
+  - apiVersion: v2
+    appVersion: 1.13.1
     created: "2025-04-16T05:09:52.123115581Z"
     description: Mongo Cluster-to-Cluster Sync
     digest: 8322f2dd2dc47e414a80dd7b78a6e315c95a38539af461a8120e0ecb61e141fe
@@ -10519,4 +10540,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-30T03:38:58.596769661Z"
+generated: "2025-05-31T12:20:48.91693383Z"
