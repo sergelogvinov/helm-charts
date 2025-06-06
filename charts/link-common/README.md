@@ -1,6 +1,6 @@
 # link-common
 
-![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.6-alpine3.19](https://img.shields.io/badge/AppVersion-2.8.6--alpine3.19-informational?style=flat-square)
+![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.6-alpine3.19](https://img.shields.io/badge/AppVersion-2.8.6--alpine3.19-informational?style=flat-square)
 
 Simple vpn-p2p-link service
 
@@ -75,7 +75,7 @@ wireguard:
 | wireguard.enabled | bool | `false` |  |
 | wireguard.image.repository | string | `"ghcr.io/sergelogvinov/wireguard"` |  |
 | wireguard.image.pullPolicy | string | `"IfNotPresent"` |  |
-| wireguard.image.tag | string | `"1.0.20210914"` |  |
+| wireguard.image.tag | string | `"1.0.20250521"` |  |
 | wireguard.wireguardIP | string | `"172.30.1.1/32"` |  |
 | wireguard.wireguardMTU | int | `1280` |  |
 | wireguard.wireguardPort | string | `nil` | WireGuard incoming port. uses as container hostPort. |
