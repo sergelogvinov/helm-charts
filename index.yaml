@@ -4868,6 +4868,28 @@ entries:
     version: 0.1.0
   mongosqld:
   - apiVersion: v2
+    appVersion: 2.14.23
+    created: "2025-06-09T03:04:06.221389715Z"
+    description: Mongo to SQL bridge
+    digest: 56cd96fb8b36f61465d38b0dd187d6af69e651b17f062b0b6615800324c89c84
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/mongosqld/icon.png
+    keywords:
+    - mongodb
+    - mongosqld
+    - powerbi
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongosqld
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongosqld
+    - https://www.mongodb.com/docs/bi-connector/current/reference/mongosqld
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongosqld-0.3.7/mongosqld-0.3.7.tgz
+    version: 0.3.7
+  - apiVersion: v2
     appVersion: 2.14.22
     created: "2025-04-16T05:06:10.093317998Z"
     description: Mongo to SQL bridge
@@ -10644,4 +10666,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-06-06T03:53:37.042941947Z"
+generated: "2025-06-09T03:04:06.22216989Z"
