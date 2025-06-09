@@ -12,11 +12,11 @@ data:
 
   mirrors.json: |-
     {
-      "distSpecVersion": "1.1.0",
+      "distSpecVersion": "1.1.1",
       "storage": {
         "rootDirectory": "/var/lib/registry",
         "commit": true,
-        "gc": true,
+        "gc": false,
         "gcDelay": "24h",
         "gcInterval": "24h"
       },
@@ -122,7 +122,7 @@ data:
 
   registry.json: |-
     {
-      "distSpecVersion": "1.1.0",
+      "distSpecVersion": "1.1.1",
       {{- if .Values.registry.storage }}
       "storage": {{ .Values.registry.storage | toJson }},
       {{- else }}
