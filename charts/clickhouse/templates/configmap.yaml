@@ -6,6 +6,7 @@ metadata:
     {{- include "clickhouse.labels" . | nindent 4 }}
 data:
   {{- $mem := include "resource-bytes" (default (default (dict) .Values.resources.limits ).memory .Values.resources.requests.memory) }}
+  {{- $memHalf := int64 (div (sub (int64 $mem) 1000000000) 2) }}
   users.xml: |-
     <clickhouse>
         <profiles>
@@ -15,13 +16,12 @@ data:
                 <load_balancing>random</load_balancing>
                 <query_profiler_real_time_period_ns>0</query_profiler_real_time_period_ns>
                 <query_profiler_cpu_time_period_ns>0</query_profiler_cpu_time_period_ns>
-                {{- $res := int64 (div (sub (int64 $mem) 1000000000) 2) }}
-                {{- if lt $res 1000000000 }}
+                {{- if lt $memHalf 1000000000 }}
                 <max_bytes_before_external_group_by>0</max_bytes_before_external_group_by>
                 <max_bytes_before_external_sort>0</max_bytes_before_external_sort>
                 {{- else }}
-                <max_bytes_before_external_group_by>{{ $res }}</max_bytes_before_external_group_by>
-                <max_bytes_before_external_sort>{{ $res }}</max_bytes_before_external_sort>
+                <max_bytes_before_external_group_by>{{ $memHalf }}</max_bytes_before_external_group_by>
+                <max_bytes_before_external_sort>{{ $memHalf }}</max_bytes_before_external_sort>
                 {{- end }}
             </default>
             <reader>
@@ -30,13 +30,12 @@ data:
                 <load_balancing>random</load_balancing>
                 <query_profiler_real_time_period_ns>0</query_profiler_real_time_period_ns>
                 <query_profiler_cpu_time_period_ns>0</query_profiler_cpu_time_period_ns>
-                {{- $res := int64 (div (sub (int64 $mem) 1000000000) 2) }}
-                {{- if lt $res 1000000000 }}
+                {{- if lt $memHalf 1000000000 }}
                 <max_bytes_before_external_group_by>0</max_bytes_before_external_group_by>
                 <max_bytes_before_external_sort>0</max_bytes_before_external_sort>
                 {{- else }}
-                <max_bytes_before_external_group_by>{{ $res }}</max_bytes_before_external_group_by>
-                <max_bytes_before_external_sort>{{ $res }}</max_bytes_before_external_sort>
+                <max_bytes_before_external_group_by>{{ $memHalf }}</max_bytes_before_external_group_by>
+                <max_bytes_before_external_sort>{{ $memHalf }}</max_bytes_before_external_sort>
                 {{- end }}
                 <readonly>2</readonly>
             </reader>
@@ -210,8 +209,9 @@ data:
         <max_server_memory_usage_to_ram_ratio>0.6</max_server_memory_usage_to_ram_ratio>
         <merge_tree>
             <merge_max_block_size>2048</merge_max_block_size>
-            <max_bytes_to_merge_at_max_space_in_pool>2147483648</max_bytes_to_merge_at_max_space_in_pool>
+            <max_bytes_to_merge_at_max_space_in_pool>{{ $memHalf }}</max_bytes_to_merge_at_max_space_in_pool>
             <max_suspicious_broken_parts>100</max_suspicious_broken_parts>
+            <min_merge_bytes_to_use_direct_io>5368709120</min_merge_bytes_to_use_direct_io>
         </merge_tree>
         {{- else }}
         <merge_tree>
