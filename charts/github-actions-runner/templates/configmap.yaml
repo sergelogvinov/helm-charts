@@ -210,6 +210,7 @@ data:
     [registry."{{ $val.host }}"]
       capabilities = ["pull", "resolve"]
       mirrors = ["{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc/{{ $val.host | replace "." "-" }}"]
+      timeout = "5s"
     {{- end }}
     [registry."{{ include "github-actions-runner.fullname" $ }}-mirrors.{{ $.Release.Namespace }}.svc"]
       ca = ["/etc/docker-tls/ca.crt"]
