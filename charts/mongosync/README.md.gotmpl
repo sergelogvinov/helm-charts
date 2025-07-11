@@ -37,4 +37,10 @@ Check progress
 curl localhost:27182/api/v1/progress -XGET
 ```
 
+Finish sync
+
+```
+curl localhost:27182/api/v1/commit -XPOST --data '{ }'
+```
+
 {{ template "chart.valuesSection" . }}

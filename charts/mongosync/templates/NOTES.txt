@@ -1,0 +1,20 @@
+1. Check status of the MongoDB Sync:
+
+kubectl -n {{ .Release.Namespace }} get pods -l app.kubernetes.io/name={{ include "mongosync.name" . }}
+kubectl -n {{ .Release.Namespace }} exec -it <pod-name> -- curl localhost:27182/api/v1/progress -XGET
+
+2. Run the MongoDB Sync:
+
+kubectl -n {{ .Release.Namespace }} exec -it <pod-name> -- curl localhost:27182/api/v1/start -XPOST \
+--data '{
+      "source": "cluster0",
+      "destination": "cluster1",
+      "enableUserWriteBlocking": true,
+      "verification": {
+        "enabled": false
+      }
+   }'
+
+3. Stop the MongoDB Sync:
+
+kubectl -n {{ .Release.Namespace }} exec -it <pod-name> -- curl localhost:27182/api/v1/commit -XPOST --data '{ }'
