@@ -1,7 +1,7 @@
 - name: proxmox.rules
   rules:
     - alert: ProxmoxCSIAPI
-      expr: count(proxmox_api_request_errors_total) by (request) > 0
+      expr: sum by (request) (increase(proxmox_api_request_errors_total[5m])) > 0
       for: 5m
       labels:
         severity: warning
