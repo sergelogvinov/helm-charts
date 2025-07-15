@@ -6042,6 +6042,26 @@ entries:
     version: 0.1.1
   overprovisioner:
   - apiVersion: v2
+    appVersion: 3.10.1
+    created: "2025-07-15T22:55:50.833640016Z"
+    description: Reserve the resources for the migration
+    digest: 6ed02932aec63936a7e18d3c4d9ebe64c3639808a2c602c657d66facd80e19c1
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/overprovisioner/icon.png
+    keywords:
+    - kubernetes
+    - overprovisioner
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: overprovisioner
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/overprovisioner
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/overprovisioner-0.2.1/overprovisioner-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
     appVersion: "3.10"
     created: "2024-11-23T15:16:48.492324555Z"
     description: Reserve the resources for the migration
@@ -11189,4 +11209,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-07-15T22:55:30.642239689Z"
+generated: "2025-07-15T22:55:50.834543627Z"
