@@ -15,7 +15,7 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.2.0
+version: 0.2.1
 #
 # renovate: datasource=docker depName=registry.k8s.io/pause
-appVersion: "3.10"
+appVersion: "3.10.1"
