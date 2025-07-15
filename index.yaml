@@ -9762,6 +9762,25 @@ entries:
     version: 0.1.0
   system-upgrade-controller:
   - apiVersion: v2
+    appVersion: v0.16.0
+    created: "2025-07-15T22:58:30.84011976Z"
+    description: System Upgrade Controller for Talos
+    digest: b01c01d96c4459abc4782c3b506ff53229a8b6bb83a0a4add5f32bcf84c0c6c6
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - system-upgrade-controller
+    - talos
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: system-upgrade-controller
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/system-upgrade-contoller
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/system-upgrade-controller-0.3.0/system-upgrade-controller-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: v0.15.3
     created: "2025-07-07T01:35:59.311964988Z"
     description: System Upgrade Controller for Talos
@@ -11250,4 +11269,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-07-15T22:57:43.4383032Z"
+generated: "2025-07-15T22:58:30.841094136Z"
