@@ -30,7 +30,7 @@ spec:
   nodeSelector:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- with .Values.affinity }}
+  {{- with default .Values.affinity .Values.vmSingle.affinity }}
   affinity:
     {{- toYaml . | nindent 4 }}
   {{- end }}

@@ -40,9 +40,30 @@ spec:
   nodeSelector:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- with .Values.affinity }}
   affinity:
+  {{- with default .Values.affinity .Values.vmAlert.affinity }}
     {{- toYaml . | nindent 4 }}
+  {{- else }}
+    podAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 50
+          podAffinityTerm:
+            topologyKey: topology.kubernetes.io/zone
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - vmagent
+        - weight: 100
+          podAffinityTerm:
+            topologyKey: topology.kubernetes.io/region
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - vmagent
   {{- end }}
   {{- with .Values.tolerations }}
   tolerations:

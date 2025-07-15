@@ -1,0 +1,26 @@
+fullnameOverride: vm
+priorityClassName: system-cluster-critical
+
+vmAgent:
+  secrets:
+    - web-auth-tls
+  externalLabels:
+    cluster: cluster-name
+  remoteWrite:
+    - url: http://127.0.1:8429/api/v1/write
+      inlineUrlRelabelConfig:
+        - source_labels: ["__name__"]
+          regex: nginx_ingress_controller_.*
+          action: drop
+        - source_labels: ["job"]
+          regex: kubernetes-apiservers
+          action: drop
+        - source_labels: ["__name__"]
+          regex: ^go_.*
+          action: drop
+
+nodeSelector:
+  node-role.kubernetes.io/control-plane: ""
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    effect: NoSchedule

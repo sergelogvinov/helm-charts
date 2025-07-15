@@ -55,7 +55,7 @@ spec:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   affinity:
-  {{- with .Values.affinity }}
+  {{- with default .Values.affinity .Values.vmAgent.affinity }}
     {{- toYaml . | nindent 4 }}
   {{- else }}
     podAffinity:
