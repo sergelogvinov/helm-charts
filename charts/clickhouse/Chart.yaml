@@ -16,7 +16,7 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.7.23
+version: 0.7.24
 #
 # renovate: datasource=docker depName=clickhouse/clickhouse-server
 appVersion: 24.10.4
