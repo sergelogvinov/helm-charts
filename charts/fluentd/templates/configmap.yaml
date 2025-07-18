@@ -48,6 +48,15 @@ data:
       </transport>
       {{- end }}
     </source>
+    {{- if .Values.inputCerts.create }}
+    <source>
+      @type forward
+      {{- range $port := .Values.service.ports }}{{- if eq $port.name "fluentd" }}
+      port {{ add 1 ($port.containerPort | int) }}
+      {{- end }}{{- end }}
+      bind 0.0.0.0
+    </source>
+    {{- end }}
 
   # custom configs
   {{- range $key, $value := .Values.configMaps }}

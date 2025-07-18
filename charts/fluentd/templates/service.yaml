@@ -17,10 +17,21 @@ spec:
   ipFamilyPolicy: {{ if eq (len .Values.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
   ports:
   {{- range $port := .Values.service.ports }}
+  {{- if and $.Values.inputCerts.create (eq $port.name "fluentd") }}
+    - name: {{ printf "%s-tls" $port.name }}
+      port: {{ $port.containerPort }}
+      targetPort: {{ $port.containerPort }}
+      protocol: {{ $port.protocol }}
+    - name: {{ $port.name }}
+      port: {{ add 1 ($port.containerPort | int) }}
+      targetPort: {{ add 1 ($port.containerPort | int) }}
+      protocol: {{ $port.protocol }}
+  {{- else }}
     - name: {{ $port.name }}
       port: {{ $port.containerPort }}
       targetPort: {{ $port.containerPort }}
       protocol: {{ $port.protocol }}
+  {{- end }}
   {{- end }}
   selector:
     {{- include "fluentd.selectorLabels" . | nindent 4 }}

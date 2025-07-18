@@ -1,4 +1,9 @@
 
+inputCerts:
+  create: true
+  clients:
+    - fluent-bit
+
 envs:
   FLUENTD_CONF: /fluentd/etc/fluent.conf
 

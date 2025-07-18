@@ -67,9 +67,18 @@ spec:
           {{- end }}
           ports:
           {{- range $port := .Values.service.ports }}
+            {{- if and $.Values.inputCerts.create (eq $port.name "fluentd") }}
+            - name: {{ printf "%s-tls" $port.name }}
+              containerPort: {{ $port.containerPort }}
+              protocol: {{ $port.protocol }}
+            - name: {{ $port.name }}
+              containerPort: {{ add 1 ($port.containerPort | int) }}
+              protocol: {{ $port.protocol }}
+          {{- else }}
             - name: {{ $port.name }}
               containerPort: {{ $port.containerPort }}
               protocol: {{ $port.protocol }}
+          {{- end }}
           {{- end }}
           {{- if .Values.metrics.enabled }}
             - name: metrics
