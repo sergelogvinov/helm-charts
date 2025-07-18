@@ -58,10 +58,13 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           # command: ["sleep","6000"]
           env:
-            {{- range $key, $value := .Values.envs }}
+          {{- with .Values.env }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- range $key, $value := .Values.envs }}
             - name: {{ $key | quote }}
               value: {{ $value | quote }}
-            {{- end }}
+          {{- end }}
           ports:
           {{- range $port := .Values.service.ports }}
             - name: {{ $port.name }}

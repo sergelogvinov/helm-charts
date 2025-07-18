@@ -1,6 +1,6 @@
 # fluentd
 
-![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.18.0](https://img.shields.io/badge/AppVersion-1.18.0-informational?style=flat-square)
+![Version: 1.2.1](https://img.shields.io/badge/Version-1.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.18.0](https://img.shields.io/badge/AppVersion-1.18.0-informational?style=flat-square)
 
 Deploy fluentd as log router
 
@@ -79,6 +79,7 @@ tolerations:
 | service.ports | list | `[{"containerPort":24224,"name":"fluentd","protocol":"TCP"},{"containerPort":24224,"name":"heartbeat","protocol":"UDP"}]` | Service ports |
 | service.trafficDistribution | string | `""` | The traffic distribution for the service. possible values: PreferClose ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution |
 | envs | object | `{}` | Deployment environment variables example: `FLUENTD_CONF: /fluentd/etc/fluent.conf` |
+| env | list | `[]` | Deployment environment variables example: `- name: AWS_ACCESS_KEY_ID value: ABC` |
 | logLevel | string | `"warn"` |  |
 | inputCerts | object | `{"clients":["fluent-bit"],"create":false}` | Use tls connection for input port ref: https://docs.fluentd.org/input/forward |
 | configMaps | object | `{"output.conf":"<match **>\n  @type stdout\n</match>\n"}` | Fluentd configuration ref: https://docs.fluentd.org/configuration |

@@ -1,0 +1,12 @@
+
+envs:
+  FLUENTD_CONF: /fluentd/etc/fluent.conf
+
+env:
+  - name: AWS_ACCESS_KEY_ID
+    value: ABC
+  - name: AWS_SECRET_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: aws-secret
+        key: AWS_SECRET_ACCESS_KEY

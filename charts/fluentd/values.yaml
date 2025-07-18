@@ -89,6 +89,12 @@ service:
 # example: `FLUENTD_CONF: /fluentd/etc/fluent.conf`
 envs: {}
 
+# -- Deployment environment variables
+# example: `- name: AWS_ACCESS_KEY_ID value: ABC`
+env: []
+  # - name: AWS_ACCESS_KEY_ID
+  #   value: ABC
+
 logLevel: warn
 
 # -- Use tls connection for input port
