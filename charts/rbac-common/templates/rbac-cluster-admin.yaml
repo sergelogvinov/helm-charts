@@ -440,6 +440,28 @@ rules:
   verbs:
   - create
   - delete
+#### Clickhouse altinity
+- apiGroups:
+  - clickhouse.altinity.com
+  resources:
+  - clickhouseinstallation
+  - clickhouseinstallationtemplates
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+  - update
+- apiGroups:
+  - zookeeper.pravega.io
+  resources:
+  - zookeepercluster
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+  - update
 #### Keda
 - apiGroups:
   - keda.sh
