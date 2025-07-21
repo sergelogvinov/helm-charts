@@ -444,7 +444,7 @@ rules:
 - apiGroups:
   - clickhouse.altinity.com
   resources:
-  - clickhouseinstallation
+  - clickhouseinstallations
   - clickhouseinstallationtemplates
   verbs:
   - get
@@ -455,7 +455,7 @@ rules:
 - apiGroups:
   - zookeeper.pravega.io
   resources:
-  - zookeepercluster
+  - zookeeperclusters
   verbs:
   - get
   - list
