@@ -1,6 +1,6 @@
 # postgresql-single
 
-![Version: 1.4.1](https://img.shields.io/badge/Version-1.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.9](https://img.shields.io/badge/AppVersion-16.9-informational?style=flat-square)
+![Version: 1.5.0](https://img.shields.io/badge/Version-1.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.9](https://img.shields.io/badge/AppVersion-16.9-informational?style=flat-square)
 
 Postgres with backup/restore and replication
 
@@ -87,13 +87,14 @@ metrics:
 | imagePullSecrets | list | `[]` |  |
 | nameOverride | string | `""` |  |
 | fullnameOverride | string | `""` |  |
+| installationType | string | `"standalone"` | Installation type can be "cnpg" or "standalone" |
 | command | list | `[]` | command Override default container command |
-| env | list | `[]` |  |
+| env | list | `[]` | Environment variables |
 | postgresqlUsername | string | `"postgres"` | PostgreSQL admin user ref: https://hub.docker.com/_/postgres |
 | postgresqlMaxConnections | int | `150` | Create a database ref: https://hub.docker.com/_/postgres postgresqlDatabase: |
-| pgHbaConfiguration | string | `"# host  database    user                  address       auth-method\n#\nlocal   all         all                                 trust\nlocal   replication postgres                            trust\nhost    all         all                   localhost     md5\nhostssl all         postgres              10.0.0.0/8    md5\nhostssl postgres    postgres              10.0.0.0/8    md5\nhostssl template1   postgres               0.0.0.0/0    md5\nhost    replication postgres              10.0.0.0/8    md5\nhostssl replication postgres              10.0.0.0/8    md5"` | Postgres auth ref: https://www.postgresql.org/docs/current/auth-pg-hba-conf.html |
+| pgHbaConfiguration | list | `[]` | Postgres auth ref: https://www.postgresql.org/docs/current/auth-pg-hba-conf.html |
 | initdb.args | string | `"--data-checksums --auth-host=scram-sha-256"` |  |
-| initdb.script | string | `""` |  |
+| initdb.script | list | `[]` |  |
 | tlsCerts.create | bool | `false` |  |
 | tlsCerts.mode | string | `"require"` |  |
 | initContainers | list | `[]` |  |
@@ -107,19 +108,15 @@ metrics:
 | postgresqlServerWalWriterDelay | string | `"200ms"` | Specifies how often the WAL writer flushes WAL (wal_writer_delay) ref: https://www.postgresql.org/docs/current/runtime-config-wal.html |
 | resources | object | `{"requests":{"cpu":"100m","memory":"128Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"mountPath":"/database","size":"8Gi"}` | Persistence parameters ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
-| autoscaling.enabled | bool | `false` |  |
-| autoscaling.minReplicas | int | `1` |  |
-| autoscaling.maxReplicas | int | `3` |  |
-| autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
 | priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
-| terminationGracePeriodSeconds | int | `120` |  |
+| terminationGracePeriodSeconds | int | `120` | The time in seconds that is allowed for a PostgreSQL instance to gracefully shutdown ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks |
 | updateStrategy.type | string | `"RollingUpdate"` |  |
 | backup.enabled | bool | `false` |  |
 | backup.recovery | bool | `false` |  |
 | backup.walpush | bool | `false` |  |
 | backup.walg | object | `{}` |  |
 | backup.cleanPolicy | string | `"retain FULL 3"` |  |
-| backup.schedule | string | `"15 4 * * *"` |  |
+| backup.schedule | string | `"15 4 * * *"` | Backup schedule. set value "" to disable cron backup refs: https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/ |
 | backup.resources | object | `{"limits":{"cpu":2,"memory":"1Gi"},"requests":{"cpu":"1500m","memory":"768Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | backup.priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
 | backup.podAffinityPreset | string | `"hard"` |  |

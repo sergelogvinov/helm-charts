@@ -14,11 +14,16 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# -- Installation type
+# can be "cnpg" or "standalone"
+installationType: "standalone"
+
 # -- command Override default container command
 command:
   []
   # - /pause
 
+# -- Environment variables
 env:
   []
   # Database backup version on restore process
@@ -47,17 +52,10 @@ postgresqlMaxConnections: 150
 
 # -- Postgres auth
 # ref: https://www.postgresql.org/docs/current/auth-pg-hba-conf.html
-pgHbaConfiguration: |-
+pgHbaConfiguration: []
   # host  database    user                  address       auth-method
   #
-  local   all         all                                 trust
-  local   replication postgres                            trust
-  host    all         all                   localhost     md5
-  hostssl all         postgres              10.0.0.0/8    md5
-  hostssl postgres    postgres              10.0.0.0/8    md5
-  hostssl template1   postgres               0.0.0.0/0    md5
-  host    replication postgres              10.0.0.0/8    md5
-  hostssl replication postgres              10.0.0.0/8    md5
+  # - hostssl app       app                   10.0.0.0/8    md5
 
 initdb:
   ## -- PostgreSQL initdb parameters
@@ -66,9 +64,9 @@ initdb:
 
   ## -- PostgreSQL initdb scripts
   ## ref: https://hub.docker.com/_/postgres
-  script: ""
-  #  #!/bin/sh
-  #  echo "Do something."
+  script: []
+  #
+  # - CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
   #
 
 tlsCerts:
@@ -178,20 +176,15 @@ persistence:
   size: 8Gi
   annotations: {}
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 3
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
-
 # -- Priority Class Name
 # ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
 priorityClassName: ~
 
+# -- The time in seconds that is allowed for a PostgreSQL instance to gracefully shutdown
+# ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks
 terminationGracePeriodSeconds: 120
 
-## updateStrategy for PostgreSQL StatefulSet and its slaves StatefulSets
+## -- Update strategy for PostgreSQL StatefulSet and its slaves StatefulSets
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 updateStrategy:
   type: RollingUpdate
@@ -209,7 +202,9 @@ backup:
 
   cleanPolicy: "retain FULL 3"
 
+  # -- Backup schedule.
   # set value "" to disable cron backup
+  # refs: https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
   schedule: "15 4 * * *"
 
   # -- Resource requests and limits.

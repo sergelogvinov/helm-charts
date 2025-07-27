@@ -1,0 +1,195 @@
+{{- if eq .Values.installationType "cnpg" }}
+{{- $cpu := include "resource-cpu" (default .Values.resources.requests.cpu (get (default (dict) .Values.resources.limits) "cpu")) }}
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}
+  annotations:
+  {{- with .Values.podAnnotations }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "postgresql-single.labels" . | nindent 4 }}
+    {{- with .Values.podlabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  inheritedMetadata:
+    annotations:
+    {{- with .Values.podAnnotations }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- if .Values.metrics.enabled }}
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9187"
+    {{- end}}
+    labels:
+      {{- include "postgresql-single.labels" . | nindent 6 }}
+      {{- with .Values.podlabels }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+  enablePDB: true
+  instances: {{ .Values.replicaCount }}
+  imageName: ghcr.io/cloudnative-pg/postgresql:{{ .Chart.AppVersion }}
+  {{- with .Values.imagePullSecrets }}
+  imagePullSecrets:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- if .Values.priorityClassName }}
+  priorityClassName: {{ .Values.priorityClassName }}
+  {{- end }}
+  postgresGID: 26
+  postgresUID: 26
+  stopDelay: {{ .Values.terminationGracePeriodSeconds | default 1800 }}
+  primaryUpdateMethod: switchover
+  primaryUpdateStrategy: unsupervised
+  enableSuperuserAccess: true
+  superuserSecret:
+    name: {{ include "postgresql-single.fullname" . }}-superuser
+  {{- with .Values.env }}
+  env:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  postgresql:
+    shared_preload_libraries:
+      - pg_stat_statements
+    {{- with .Values.pgHbaConfiguration }}
+    pg_hba:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    parameters:
+      max_connections: {{ .Values.postgresqlMaxConnections | quote }}
+      superuser_reserved_connections: "5"
+      tcp_keepalives_idle: "600"
+      tcp_keepalives_interval: "75"
+      tcp_keepalives_count: "10"
+      track_io_timing: "on"
+      pg_stat_statements.max: "1000"
+      pg_stat_statements.track: "all"
+      max_worker_processes: {{ $cpu | quote }}
+      max_parallel_workers: {{ $cpu | quote }}
+      max_parallel_workers_per_gather: {{ max 1 (div $cpu 2) | quote }}
+      max_parallel_maintenance_workers: {{ max 1 (div $cpu 2) | quote }}
+      parallel_leader_participation: "on"
+      enable_partitionwise_join: "on"
+      enable_partitionwise_aggregate: "on"
+      jit: "on"
+    {{- if gt (int .Values.postgresqlServerMemory) (int "511") }}
+      work_mem: {{ div .Values.postgresqlServerMemory 32 }}MB
+      maintenance_work_mem: {{ div .Values.postgresqlServerMemory 4 }}MB
+      effective_cache_size: {{ div .Values.postgresqlServerMemory 2 }}MB
+      effective_io_concurrency: "100"
+      random_page_cost: "1.25"
+      {{- if and .Values.resources.requests (hasKey .Values.resources.requests "hugepages-1Gi") }}
+      {{- $pages := int (regexFind "[0-9]+" (get .Values.resources.requests "hugepages-1Gi")) }}
+      shared_buffers: {{ sub $pages 1 }}GB
+      shared_memory_type: mmap
+      huge_pages: try
+      {{- else if and .Values.resources.requests (hasKey .Values.resources.requests "hugepages-2Mi") }}
+      {{- $pages := int (include "resource-megabytes" (get .Values.resources.requests "hugepages-2Mi")) }}
+      shared_buffers: {{ sub $pages 800 }}MB
+      shared_memory_type: mmap
+      huge_pages: try
+      {{- else }}
+      shared_buffers: {{ div .Values.postgresqlServerMemory 4 }}MB
+      shared_memory_type: mmap
+      huge_pages: "off"
+      {{- end }}
+      checkpoint_timeout: "15min"
+      checkpoint_completion_target: "0.9"
+      bgwriter_delay: "200ms"
+      bgwriter_lru_maxpages: "100"
+      bgwriter_lru_multiplier: "2.0"
+      bgwriter_flush_after: "0"
+    {{- end }}
+  seccompProfile:
+    type: RuntimeDefault
+  serviceAccountTemplate:
+    metadata:
+      name: {{ include "postgresql-single.serviceAccountName" . }}
+      {{- with .Values.serviceAccount.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  resources:
+    {{- toYaml .Values.resources | nindent 4 }}
+  storage:
+    pvcTemplate:
+      accessModes:
+      {{- range .Values.persistence.accessModes }}
+        - {{ . | quote }}
+      {{- end }}
+      resources:
+        requests:
+          storage: {{ .Values.persistence.size | quote }}
+    {{- if (eq "-" .Values.persistence.storageClass) }}
+      storageClassName: ""
+    {{- else }}
+      storageClassName: "{{ .Values.persistence.storageClass }}"
+    {{- end }}
+    size: {{ .Values.persistence.size | quote }}
+    storageClass: "{{ .Values.persistence.storageClass }}"
+  affinity:
+    podAntiAffinityType: required
+    topologyKey: kubernetes.io/hostname
+    {{- with .Values.nodeSelector }}
+    nodeSelector:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+    additionalPodAffinity:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+    tolerations:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+  bootstrap:
+    initdb:
+      encoding: UTF8
+      localeCollate: en_US.UTF-8
+      localeCType: en_US.UTF-8
+      locale: en_US.UTF-8
+      dataChecksums: true
+      {{- if .Values.postgresqlDatabase }}
+      databases: {{ .Values.postgresqlDatabase | quote }}
+      {{- end }}
+      {{- if .Values.metrics.enabled }}
+      postInitSQLRefs:
+        configMapRefs:
+          - name: {{ include "postgresql-single.fullname" . }}
+            key: metrics.sql
+      {{- end }}
+      {{- with .Values.initdb.script }}
+      postInitTemplateSQLRefs:
+        configMapRefs:
+          - name: {{ include "postgresql-single.fullname" $ }}
+            key: initdb.sql
+      {{- end }}
+  backup:
+    target: "prefer-standby"
+    {{- if .Values.backup.enabled }}
+    {{- with .Values.backup.barmanObjectStore }}
+    barmanObjectStore:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- end }}
+  {{- if .Values.backup.enabled }}
+  plugins:
+    - name: cnpg-extensions.yandex.cloud
+      enabled: true
+      isWALArchiver: {{ .Values.backup.walpush | default false }}
+      parameters:
+        backupConfig: {{ include "postgresql-single.fullname" . }}
+  {{- end }}
+  {{- if .Values.metrics.enabled }}
+  monitoring:
+    enablePodMonitor: true
+    disableDefaultQueries: false
+    {{- if .Values.metrics.queries }}
+    customQueriesConfigMap:
+      - name: {{ include "postgresql-single.fullname" . }}
+        key: queries.yaml
+    {{- end }}
+  {{- end }}
+{{- end }}

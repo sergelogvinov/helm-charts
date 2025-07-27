@@ -1,0 +1,49 @@
+{{- if eq .Values.installationType "cnpg" }}
+{{- if .Values.backup.enabled }}
+apiVersion: cnpg-extensions.yandex.cloud/v1beta1
+kind: BackupConfig
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}
+  labels:
+    {{- include "postgresql-single.labels" . | nindent 4 }}
+spec:
+  # resources:
+  #   claims:
+  #     - name: cpu
+  #       request: {{ .Values.backup.resources.cpu }}
+  #     - name: memory
+  #       request: {{ .Values.backup.resources.memory }}
+  downloadConcurrency: 4
+  downloadFileRetries: 15
+  uploadConcurrency: 4
+  uploadDiskConcurrency: 4
+  deltaMaxSteps: 1
+  storage:
+    type: s3
+    s3:
+      prefix: {{ get .Values.backup.walg "WALG_S3_PREFIX" }}
+      {{- if hasKey .Values.backup.walg "AWS_REGION" }}
+      region: {{ get .Values.backup.walg "AWS_REGION" }}
+      {{- end }}
+      {{- if hasKey .Values.backup.walg "AWS_ENDPOINT" }}
+      endpointUrl: {{ get .Values.backup.walg "AWS_ENDPOINT" }}
+      {{- end }}
+      {{- if hasKey .Values.backup.walg "AWS_S3_FORCE_PATH_STYLE" }}
+      forcePathStyle: {{ get .Values.backup.walg "AWS_S3_FORCE_PATH_STYLE" | quote }}
+      {{- end }}
+      {{- if hasKey .Values.backup.walg "WALG_S3_STORAGE_CLASS" }}
+      storageClass: {{ get .Values.backup.walg "WALG_S3_STORAGE_CLASS" }}
+      {{- end }}
+      accessKeyId:
+        name: {{ include "postgresql-single.fullname" . }}
+        key: accessKey
+      accessKeySecret:
+        name: {{ include "postgresql-single.fullname" . }}
+        key: secretKey
+  {{- if or (hasKey .Values.backup.walg "WALG_LIBSODIUM_KEY")
+            (hasKey .Values.backup.walg "WALG_LIBSODIUM_KEY_PATH") }}
+  encryption:
+    method: libsodium
+  {{- end }}
+{{- end }}
+{{- end }}

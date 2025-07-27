@@ -1,3 +1,4 @@
+{{- if eq .Values.installationType "standalone" }}
 {{- if not .Values.tlsCerts.create }}
 {{- $ca := genCA .Chart.Name 3650 }}
 {{- $name0  := include "postgresql-single.fullname" . }}
@@ -66,5 +67,6 @@ data:
   ca.crt: {{ $ca.Cert | b64enc }}
   tls.crt: {{ $client.Cert | b64enc }}
   tls.key: {{ $client.Key | b64enc }}
+{{- end }}
 {{- end }}
 {{- end }}

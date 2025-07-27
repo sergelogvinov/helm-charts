@@ -1,11 +1,13 @@
 {{- if and .Values.backup.enabled }}
+{{- if eq .Values.installationType "standalone" }}
 1. Backup command:
 
 kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "postgresql-single.fullname" . }}-backup {{ include "postgresql-single.fullname" . }}-backup-manual
 
+{{- end }}
 {{ if .Values.backupCheck.enabled }}
 2. Backup check command:
 
 kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "postgresql-single.fullname" . }}-backup-check {{ include "postgresql-single.fullname" . }}-backup-check-manual
-{{ end }}
 {{- end }}
+{{ end }}

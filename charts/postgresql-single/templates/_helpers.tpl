@@ -59,6 +59,13 @@ app.kubernetes.io/name: {{ include "postgresql-single.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
+{{/*
+Selector labels cnpg
+*/}}
+{{- define "postgresql-single.selectorLabels.cnpg" -}}
+cnpg.io/cluster: {{ include "postgresql-single.fullname" . }}
+{{- end }}
+
 {{- define "postgresql-single.crontab.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "postgresql-single.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}-crontab
@@ -156,13 +163,14 @@ lc_messages = 'en_US.UTF-8'
 lc_monetary = 'en_US.UTF-8'
 lc_numeric = 'en_US.UTF-8'
 lc_time = 'en_US.UTF-8'
-log_timezone = 'UTC'
 
 # Connectivity
 max_connections = {{ .Values.postgresqlMaxConnections }}
 superuser_reserved_connections = 5
 
 ssl = on
+ssl_max_protocol_version = TLSv1.3
+ssl_min_protocol_version = TLSv1.2
 ssl_ciphers = 'EECDH+AESGCM:EDH+AESGCM'
 ssl_prefer_server_ciphers = on
 ssl_ecdh_curve = 'prime256v1'
@@ -194,8 +202,8 @@ wal_writer_flush_after = 1MB
 wal_keep_size = {{ div $size 32 }}MB
 {{- end }}
 
-max_replication_slots = 8
-max_wal_senders = 8
+max_replication_slots = 10
+max_wal_senders = 10
 max_wal_size = 10240MB
 {{- if ge (int64 $size) (int64 1024000) }}
 min_wal_size = 5120MB
@@ -228,7 +236,12 @@ parallel_leader_participation = on
 enable_partitionwise_join = on
 enable_partitionwise_aggregate = on
 jit = on
+{{- else }}
+{{ .Values.postgresqlConfiguration }}
+{{- end }}
+{{- end }}
 
+{{- define "postgresql-single.postgresqlConfigurationReplication" -}}
 # Replication
 hot_standby = on
 archive_mode = on
@@ -245,9 +258,26 @@ restore_command = '/usr/bin/wal-g --config /etc/walg/walg.yaml wal-fetch %f %p'
 {{- else }}
 archive_command = '/bin/true'
 {{- end }}
+{{- end }}
 
+{{- define "postgresql-single.postgresqlConfigurationOptimization" -}}
+# auto generated, see https://pgconfigurator.cybertec.at
+work_mem = {{ div .Values.postgresqlServerMemory 32 }}MB
+maintenance_work_mem = {{ div .Values.postgresqlServerMemory 4 }}MB
+effective_cache_size = {{ div .Values.postgresqlServerMemory 2 }}MB
+effective_io_concurrency = 100
+random_page_cost = 1.25
+{{- if and .Values.resources.requests (hasKey .Values.resources.requests "hugepages-1Gi") }}
+{{- $pages := int (regexFind "[0-9]+" (get .Values.resources.requests "hugepages-1Gi")) }}
+shared_buffers = {{ sub $pages 1 }}GB
+huge_pages = try
+{{- else if and .Values.resources.requests (hasKey .Values.resources.requests "hugepages-2Mi") }}
+{{- $pages := int (include "resource-megabytes" (get .Values.resources.requests "hugepages-2Mi")) }}
+shared_buffers = {{ sub $pages 800 }}MB
+huge_pages = try
 {{- else }}
-{{ .Values.postgresqlConfiguration }}
+shared_buffers = {{ div .Values.postgresqlServerMemory 4 }}MB
+huge_pages = off
 {{- end }}
 {{- end }}
 
@@ -256,6 +286,7 @@ Create the postgresqlConfigurationLogs
 */}}
 {{- define "postgresql-single.postgresqlConfigurationLogs" -}}
 {{- if not .Values.postgresqlConfigurationLogs }}
+log_timezone = 'UTC'
 log_checkpoints = on
 log_connections = off
 log_disconnections = off

@@ -1,4 +1,5 @@
 {{- if .Values.backup.enabled }}
+{{- if eq .Values.installationType "standalone" }}
 {{- $instance := include "postgresql-single.folover-number" . }}
 apiVersion: batch/v1
 kind: CronJob
@@ -141,4 +142,29 @@ spec:
               persistentVolumeClaim:
                 claimName: data-{{ include "postgresql-single.fullname" . }}-{{ $instance }}
           {{- end }}
+{{- end }}
+{{- if eq .Values.installationType "cnpg" }}
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}
+  labels:
+    {{- include "postgresql-single.labels" . | nindent 4 }}
+    {{- with .Values.podlabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  immediate: false
+  suspend: {{ eq .Values.backup.schedule "" }}
+  {{- if eq (split " " .Values.backup.schedule | len) 5 }}
+  schedule: {{ printf "0 %s" .Values.backup.schedule | quote }}
+  {{- else }}
+  schedule: {{ default "15 4 * * *" .Values.backup.schedule | quote }}
+  {{- end }}
+  method: plugin
+  target: prefer-standby
+  backupOwnerReference: cluster
+  cluster:
+    name: {{ include "postgresql-single.fullname" . }}
+{{- end }}
 {{- end }}

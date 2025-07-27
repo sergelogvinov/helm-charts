@@ -119,17 +119,15 @@ spec:
                     path: restore-checker.sh
             - name: tlscerts
               secret:
+                {{- if eq .Values.installationType "standalone" }}
                 secretName: {{ include "postgresql-single.fullname" . }}-server-tls
+                {{- else }}
+                secretName: {{ include "postgresql-single.fullname" . }}-server
+                {{- end }}
                 defaultMode: 256
           {{- if .Values.extraVolumes -}}
             {{- toYaml .Values.extraVolumes | nindent 12 }}
           {{- end -}}
-          {{- if .Values.tlsCerts.create }}
-            - name: tlscerts
-              secret:
-                secretName: {{ include "postgresql-single.fullname" . }}-server-tls
-                defaultMode: 256
-          {{- end }}
           {{- if .Values.backupCheck.persistence.existingClaim }}
             - name: data
               persistentVolumeClaim:

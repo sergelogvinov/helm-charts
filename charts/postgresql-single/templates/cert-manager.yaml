@@ -1,4 +1,4 @@
-{{- if .Values.tlsCerts.create }}
+{{- if and .Values.tlsCerts.create (eq .Values.installationType "standalone") }}
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:

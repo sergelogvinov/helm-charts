@@ -1,3 +1,4 @@
+{{- if eq .Values.installationType "standalone" }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -9,9 +10,7 @@ metadata:
     {{- end }}
 spec:
   serviceName: {{ include "postgresql-single.fullname" . }}-headless
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   podManagementPolicy: Parallel
   {{- if semverCompare ">=1.29" .Capabilities.KubeVersion.GitVersion }}
   persistentVolumeClaimRetentionPolicy:
@@ -270,4 +269,5 @@ spec:
         storageClassName: "{{ .Values.persistence.storageClass }}"
       {{- end }}
       {{- end }}
+{{- end }}
 {{- end }}

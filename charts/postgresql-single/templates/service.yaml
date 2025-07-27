@@ -21,8 +21,13 @@ spec:
       protocol: TCP
       name: postgresql
   selector:
+    {{- if eq .Values.installationType "cnpg" }}
+    {{- include "postgresql-single.selectorLabels.cnpg" . | nindent 4 }}
+    cnpg.io/instanceRole: primary
+    {{- else }}
     {{- include "postgresql-single.selectorLabels" . | nindent 4 }}
     statefulset.kubernetes.io/pod-name: {{ include "postgresql-single.primary" . }}
+    {{- end }}
 ---
 {{- $instance := include "postgresql-single.folover-number" . }}
 apiVersion: v1
@@ -44,8 +49,13 @@ spec:
       protocol: TCP
       name: postgresql
   selector:
+    {{- if eq .Values.installationType "cnpg" }}
+    {{- include "postgresql-single.selectorLabels.cnpg" . | nindent 4 }}
+    cnpg.io/instanceRole: replica
+    {{- else }}
     {{- include "postgresql-single.selectorLabels" . | nindent 4 }}
     statefulset.kubernetes.io/pod-name: {{ include "postgresql-single.fullname" . }}-{{ $instance }}
+    {{- end }}
 ---
 apiVersion: v1
 kind: Service
@@ -62,4 +72,9 @@ spec:
       protocol: TCP
       name: postgresql
   selector:
+    {{- if eq .Values.installationType "cnpg" }}
+    {{- include "postgresql-single.selectorLabels.cnpg" . | nindent 4 }}
+    cnpg.io/podRole: instance
+    {{- else }}
     {{- include "postgresql-single.selectorLabels" . | nindent 4 }}
+    {{- end }}

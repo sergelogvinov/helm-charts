@@ -1,0 +1,11 @@
+{{- if eq .Values.installationType "cnpg" }}
+{{- if .Values.initContainers }}
+value: {{ required "initContainers are not implemented for CNPG installation type" .Values.initContainersError }}
+{{- end }}
+{{- if .Values.command }}
+value: {{ required "Command is not implemented for CNPG installation type" .Values.commandError }}
+{{- end }}
+{{- if and .Values.backup.enabled (not (.Capabilities.APIVersions.Has "cnpg-extensions.yandex.cloud/v1beta1")) }}
+value: {{ required "Backup is required cnpg-plugin-wal-g plugin" .Values.backupError }}
+{{- end }}
+{{- end }}
