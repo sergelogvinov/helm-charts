@@ -440,6 +440,41 @@ rules:
   verbs:
   - create
   - delete
+#### Cloudnative-PG
+- apiGroups:
+  - postgresql.cnpg.io
+  resources:
+  - clusters
+  - poolers
+  - databases
+  - backups
+  - scheduledbackups
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+  - update
+  - create
+  - delete
+- apiGroups:
+  - postgresql.cnpg.io
+  resources:
+  - clusters/status
+  - poolers/status
+  - databases/status
+  - backups/status
+  - scheduledbackups/status
+  verbs:
+  - get
+- apiGroups:
+  - cnpg-extensions.yandex.cloud
+  resources:
+  - '*'
+  verbs:
+  - get
+  - list
+  - watch
 #### Clickhouse altinity
 - apiGroups:
   - clickhouse.altinity.com
