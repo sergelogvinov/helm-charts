@@ -8782,6 +8782,26 @@ entries:
   rbac-common:
   - apiVersion: v2
     appVersion: 0.1.1
+    created: "2025-07-27T13:57:00.194809274Z"
+    description: Kubernetes RBAC
+    digest: 1add12de9faac9037addb39673fe69817ab884df4651f00de6ae48a58230e1e5
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/rbac-common/icon.png
+    keywords:
+    - rbac
+    - security
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: rbac-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/rbac-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/rbac-common-0.3.6/rbac-common-0.3.6.tgz
+    version: 0.3.6
+  - apiVersion: v2
+    appVersion: 0.1.1
     created: "2025-07-21T04:19:20.720844353Z"
     description: Kubernetes RBAC
     digest: 5f652707da8596da7e823ccf40a64166cf473bc95aab71b6ae15e7e29b9f0be8
@@ -11481,4 +11501,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-07-27T13:55:04.309123125Z"
+generated: "2025-07-27T13:57:00.195695848Z"
