@@ -16,7 +16,7 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.6.0
+version: 0.6.1
 #
 # renovate: datasource=docker depName=vaultwarden/server
-appVersion: 1.34.1
+appVersion: 1.34.2
