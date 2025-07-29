@@ -103,25 +103,6 @@ data:
         </users>
     </clickhouse>
 
-  collections.xml: |-
-    <clickhouse>
-        <named_collections>
-        {{- range $key, $val := .Values.clickhouse.collections }}
-            <{{ $val.name }}>
-                {{- range $k, $v := $val }}
-                {{- if not (has $k (list "name")) }}
-                <{{ $k }}>{{ $v }}</{{ $k }}>
-                {{- end }}
-                {{- end }}
-            </{{ $val.name }}>
-        {{- end }}
-        </named_collections>
-    </clickhouse>
-
-  dictionaries.xml: |-
-    <dictionaries>
-    </dictionaries>
-
   config.xml: |-
     <clickhouse>
         <display_name>{{ include "clickhouse.fullname" . }}</display_name>
@@ -172,6 +153,20 @@ data:
         </openSSL>
         {{- end }}
 
+        {{- if .Values.metrics.enabled }}
+        <prometheus>
+            <endpoint>/metrics</endpoint>
+            <port>9363</port>
+            <metrics>true</metrics>
+            <events>true</events>
+            <asynchronous_metrics>false</asynchronous_metrics>
+            <status_info>true</status_info>
+        </prometheus>
+        {{- end }}
+    </clickhouse>
+
+  logger.xml: |-
+    <clickhouse>
         <logger>
             <level>{{ .Values.clickhouse.logLevel }}</level>
             <console>1</console>
@@ -192,18 +187,10 @@ data:
             <ttl>event_date + INTERVAL 7 DAY DELETE</ttl>
             <flush_interval_milliseconds>7500</flush_interval_milliseconds>
         </query_views_log>
+    </clickhouse>
 
-        {{- if .Values.metrics.enabled }}
-        <prometheus>
-            <endpoint>/metrics</endpoint>
-            <port>9363</port>
-            <metrics>true</metrics>
-            <events>true</events>
-            <asynchronous_metrics>false</asynchronous_metrics>
-            <status_info>true</status_info>
-        </prometheus>
-        {{- end }}
-
+  optimization.xml: |-
+    <clickhouse>
         {{- if lt (div $mem 1000000000) 8 }}
         <mark_cache_size>1073741824</mark_cache_size>
         <max_server_memory_usage_to_ram_ratio>0.6</max_server_memory_usage_to_ram_ratio>
@@ -218,8 +205,6 @@ data:
             <max_suspicious_broken_parts>100</max_suspicious_broken_parts>
         </merge_tree>
         {{- end }}
-
-        {{- default "" .Values.config | nindent 8 }}
     </clickhouse>
 
   storage.xml: |-
@@ -274,9 +259,28 @@ data:
         {{- end }}
     </clickhouse>
 
+  collections.xml: |-
+    <clickhouse>
+        <named_collections>
+        {{- range $key, $val := .Values.clickhouse.collections }}
+            <{{ $val.name }}>
+                {{- range $k, $v := $val }}
+                {{- if not (has $k (list "name")) }}
+                <{{ $k }}>{{ $v }}</{{ $k }}>
+                {{- end }}
+                {{- end }}
+            </{{ $val.name }}>
+        {{- end }}
+        </named_collections>
+    </clickhouse>
+
+  dictionaries.xml: |-
+    <dictionaries>
+    </dictionaries>
+
   clickhouse-backup.yaml: |-
     general:
-      log_level: info
+      log_level: warning
       retries_on_failure: 3
       retries_pause: 60s
       #   download_concurrency: 2
@@ -289,12 +293,43 @@ data:
       allow_empty_backups: false
     clickhouse:
       username: backup
-      host: "{{ include "clickhouse.fullname" . }}-0.{{ include "clickhouse.fullname" . }}-headless"
       port: 9000
-      config_dir: /etc/clickhouse-server
     {{- if .Values.backup.config }}
     {{- toYaml .Values.backup.config | nindent 4 }}
     {{- end }}
+
+  clickhouse-backup-check.sh: |-
+    #!/bin/sh -e
+    set -e
+
+    TRIES=30
+    while [ "$TRIES" != "0" ]
+    do
+        echo "*** Trying to connect... #$TRIES"
+        clickhouse-backup tables >/dev/null 2>/dev/null && break || sleep 60 && TRIES=`expr "$TRIES" - 1`
+    done
+
+    echo "*** Start recovery from remote backup"
+    START=`date +%s`
+
+    export LOG_LEVEL=warning
+    VERSION=`clickhouse-backup list remote 2>/dev/null | tail -n 1 | awk '{print $1}'`
+    if [ $? -ne 0 ]; then
+      echo "No remote backups found"
+      exit 1
+    fi
+
+    echo "*** Latest remote backup: $VERSION"
+    echo "***"
+
+    export LOG_LEVEL=info
+    clickhouse-backup restore_remote $VERSION
+
+    END=`date +%s`
+    RUNTIME=`expr $END - $START`
+    echo "***"
+    echo "*** Recovery time - ${RUNTIME}s"
+    echo "*** Size: `du -hs /var/lib/clickhouse`"
 
 {{ range $key, $val := .Values.cronjobs }}
   command-{{ $key }}: |-

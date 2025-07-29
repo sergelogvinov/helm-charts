@@ -1,10 +1,14 @@
 # clickhouse
 
-![Version: 0.7.25](https://img.shields.io/badge/Version-0.7.25-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 24.10.4](https://img.shields.io/badge/AppVersion-24.10.4-informational?style=flat-square)
+![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 24.10.4](https://img.shields.io/badge/AppVersion-24.10.4-informational?style=flat-square)
 
 Clickhouse chart for Kubernetes
 
 Clickhouse is a fast open-source OLAP database management system.
+
+Supports both Altinity and standalone (statefulset) installations.
+Supports backup to the external storage, using [clickhouse-backup](https://github.com/Altinity/clickhouse-backup)
+Periodically checks backups by schedule.
 
 **Homepage:** <https://github.com/sergelogvinov/helm-charts>
 
@@ -25,6 +29,8 @@ Example:
 ```yaml
 # clickhouse.yaml
 
+installationType: "standalone" # or "altinity"
+
 clickhouse:
   users:
     - name: reader
@@ -35,7 +41,6 @@ clickhouse:
 
 ingress:
   enabled: true
-  className: nginx
   hosts:
     - host: clickhouse.example.com
   tls:
@@ -55,6 +60,29 @@ persistence:
   enabled: true
   size: 10Gi
 
+backup:
+  enabled: true
+
+  args:
+    - create_remote
+    - --schema
+
+  envs:
+    REMOTE_STORAGE: s3
+  config:
+    s3:
+      bucket: backet-name
+      path: clickhouse-backup
+      storage_class: STANDARD
+      endpoint: s3.amazonaws.com
+      region: us-east-1
+      concurrency: 2
+      compression_level: 4
+      compression_format: brotli
+
+backupCheck:
+  enabled: true
+
 metrics:
   enabled: true
 ```
@@ -70,21 +98,22 @@ metrics:
 | imagePullSecrets | list | `[]` |  |
 | nameOverride | string | `""` |  |
 | fullnameOverride | string | `""` |  |
+| installationType | string | `"standalone"` | Installation type can be "altinity" or "standalone" |
+| clusterDomain | string | `"cluster.local"` | Cluster domain refs: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/ |
 | serviceAccount | object | `{"annotations":{},"create":true,"name":""}` | Pods Service Account. ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
-| podlabels | object | `{}` |  |
+| podlabels | object | `{}` | Extra labels for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ |
 | podAnnotations | object | `{}` | Annotations for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
-| podSecurityContext | object | `{"fsGroup":999,"fsGroupChangePolicy":"OnRootMismatch","runAsGroup":999,"runAsNonRoot":true,"runAsUser":999}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
+| podSecurityContext | object | `{"fsGroup":101,"fsGroupChangePolicy":"OnRootMismatch","runAsGroup":101,"runAsNonRoot":true,"runAsUser":101}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"add":[],"drop":["ALL"]},"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | service | object | `{"ipFamilies":["IPv4"],"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
 | ingress | object | `{"annotations":{},"className":"","enabled":false,"hosts":[{"host":"chart-example.local","paths":["/clickhouse"]}],"tls":[]}` | Clickhouse ingress parameters ref: http://kubernetes.io/docs/user-guide/ingress/ |
 | resources | object | `{"requests":{"cpu":"500m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
-| persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":true,"size":"64Gi","storageClass":"local-path"}` | Persistence parameters ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
+| persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":true,"size":"64Gi"}` | Persistence parameters ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
 | priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
 | updateStrategy | object | `{"type":"RollingUpdate"}` | pod deployment update strategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |
 | nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-| metrics.enabled | bool | `false` |  |
 | backup.enabled | bool | `false` |  |
 | backup.image.repository | string | `"altinity/clickhouse-backup"` |  |
 | backup.image.pullPolicy | string | `"IfNotPresent"` |  |
@@ -95,10 +124,17 @@ metrics:
 | backup.config | object | `{}` |  |
 | backup.resources | object | `{"limits":{"cpu":"1200m","memory":"512Mi"},"requests":{"cpu":"500m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | backup.priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
+| backupCheck.enabled | bool | `false` |  |
+| backupCheck.schedule | string | `"15 8 * * *"` |  |
+| backupCheck.envs | object | `{}` |  |
+| backupCheck.resources | object | `{"limits":{"cpu":2,"memory":"1Gi"},"requests":{"cpu":"100m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| backupCheck.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"size":"8Gi"}` | Persistence parameters ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
+| backupCheck.nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| backupCheck.tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| backupCheck.affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | cronjobs | object | `{}` |  |
 | tlsCerts.create | bool | `false` |  |
-| files | object | `{}` |  |
-| config | string | `nil` |  |
+| metrics.enabled | bool | `false` |  |
 | storage | object | `{}` |  |
 | clickhouse.logLevel | string | `"information"` | Clickhouse log level ref: https://clickhouse.com/docs/en/operations/server-configuration-parameters/settings#logger trace, debug, information, warning, error |
 | clickhouse.accessManagement | bool | `false` | Clickhouse SQL-driven Access Control refs: https://clickhouse.com/docs/en/operations/access-rights |

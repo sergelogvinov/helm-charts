@@ -11,12 +11,15 @@ sources:
   - https://hub.docker.com/r/clickhouse/clickhouse-server
 keywords:
   - database
+  - clickhouse
+  - clickhouse-backup
+  - altinity
 maintainers:
   - name: sergelogvinov
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.7.25
+version: 0.8.0
 #
 # renovate: datasource=docker depName=clickhouse/clickhouse-server
 appVersion: 24.10.4

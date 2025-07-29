@@ -1,0 +1,185 @@
+{{- if .Values.backupCheck.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "clickhouse.fullname" . }}-backup-check
+  labels:
+    {{- with .Values.podlabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- include "clickhouse.crontab.labels" . | nindent 4 }}
+    app.kubernetes.io/component: checker
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: {{ default 1 .Values.backupCheck.history }}
+  suspend: {{ eq .Values.backupCheck.schedule "" }}
+  schedule: {{ default "15 4 * * *" .Values.backupCheck.schedule | quote }}
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 3600 # 1h
+      activeDeadlineSeconds: 43200 # 12h
+      backoffLimit: 0
+      template:
+        metadata:
+          name: {{ include "clickhouse.podfullname" . }}
+          annotations:
+            kubectl.kubernetes.io/default-container: {{ .Chart.Name }}-backup-check
+          labels:
+            {{- with .Values.podlabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- include "clickhouse.crontab.labels" . | nindent 12 }}
+            app.kubernetes.io/component: checker
+        spec:
+          restartPolicy: Never
+          enableServiceLinks: false
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "clickhouse.serviceAccountName" . }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          containers:
+            - name: {{ .Chart.Name }}
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              env:
+                - name: HOME
+                  value: /tmp
+              volumeMounts:
+                - name: users
+                  mountPath: /etc/clickhouse-server/users.d
+                - name: config
+                  mountPath: /etc/clickhouse-server/config.d
+                - name: logs
+                  mountPath: /var/log/clickhouse
+                - name: data
+                  mountPath: /var/lib/clickhouse
+            - name: {{ .Chart.Name }}-backup-check
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              image: "{{ .Values.backup.image.repository }}:{{ .Values.backup.image.tag }}"
+              imagePullPolicy: {{ .Values.backup.image.pullPolicy }}
+              command: ["/bin/sh","-e","/usr/backup/clickhouse-backup-check.sh"]
+              env:
+                - name: CLICKHOUSE_BACKUP_CONFIG
+                  value: "/etc/clickhouse-backup/config.yml"
+                - name: CLICKHOUSE_HOST
+                  value: 127.0.0.1
+                - name: CLICKHOUSE_PORT
+                  value: "9000"
+                - name: CLICKHOUSE_USERNAME
+                  value: "backup"
+                - name: CLICKHOUSE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "clickhouse.fullname" . }}
+                      key: backupPassword
+                {{- range $name, $value := (merge .Values.backup.envs .Values.backupCheck.envs) }}
+                - name: {{ $name | quote }}
+                  value: {{ $value | quote }}
+                {{- end }}
+              volumeMounts:
+                - name: config-backup
+                  mountPath: /etc/clickhouse-backup
+                - name: scripts
+                  mountPath: /usr/backup
+                - name: data
+                  mountPath: /var/lib/clickhouse
+              resources:
+                {{- toYaml .Values.backupCheck.resources | nindent 16 }}
+          {{- with default .Values.nodeSelector .Values.backupCheck.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.backupCheck.affinity }}
+          affinity:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.backupCheck.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumes:
+            - name: config-backup
+              configMap:
+                name: {{ include "clickhouse.fullname" . }}
+                items:
+                  - key: clickhouse-backup.yaml
+                    path: config.yml
+            - name: scripts
+              configMap:
+                name: {{ include "clickhouse.fullname" . }}
+                defaultMode: 493
+                items:
+                  - key: clickhouse-backup-check.sh
+                    path: clickhouse-backup-check.sh
+            - name: users
+              configMap:
+                name: {{ include "clickhouse.fullname" . }}
+                items:
+                  - key: users.xml
+                    path: users.xml
+            - name: config
+              configMap:
+                name: {{ include "clickhouse.fullname" . }}
+                items:
+                  - key: config.xml
+                    path: config.xml
+                  - key: logger.xml
+                    path: logger.xml
+                  - key: optimization.xml
+                    path: optimization.xml
+                  - key: collections.xml
+                    path: collections.xml
+                  - key: storage.xml
+                    path: storage.xml
+                  - key: backups.xml
+                    path: backups.xml
+            - name: logs
+              emptyDir: {}
+          {{- if .Values.backupCheck.persistence.existingClaim }}
+            - name: data
+              persistentVolumeClaim:
+                claimName: {{ .Values.backupCheck.persistence.existingClaim }}
+          {{- else if .Values.backupCheck.persistence.storageClass }}
+            - name: data
+              ephemeral:
+                volumeClaimTemplate:
+                  metadata:
+                    labels:
+                      {{- with .Values.podlabels }}
+                      {{- toYaml . | nindent 22 }}
+                      {{- end }}
+                      {{- include "clickhouse.crontab.labels" . | nindent 22 }}
+                      app.kubernetes.io/component: checker
+                  {{- with .Values.backupCheck.persistence.annotations }}
+                    annotations:
+                    {{- range $key, $value := . }}
+                      {{ $key }}: {{ $value }}
+                    {{- end }}
+                  {{- end }}
+                  spec:
+                    accessModes:
+                    {{- range .Values.backupCheck.persistence.accessModes }}
+                      - {{ . | quote }}
+                    {{- end }}
+                    resources:
+                      requests:
+                        storage: {{ .Values.backupCheck.persistence.size | quote }}
+                  {{- if .Values.backupCheck.persistence.storageClass }}
+                  {{- if (eq "-" .Values.backupCheck.persistence.storageClass) }}
+                    storageClassName: ""
+                  {{- else }}
+                    storageClassName: "{{ .Values.backupCheck.persistence.storageClass }}"
+                  {{- end }}
+                  {{- end }}
+          {{- else }}
+            - name: data
+              emptyDir: {}
+          {{- end }}
+{{- end }}

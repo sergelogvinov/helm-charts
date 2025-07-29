@@ -23,6 +23,14 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 
+{{- define "clickhouse.podfullname" -}}
+{{- if eq .Values.installationType "altinity" }}
+{{- printf "chi-clickhouse-%s" (include "clickhouse.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- include "clickhouse.fullname" . }}
+{{- end }}
+{{- end }}
+
 {{/*
 Create chart name and version as used by the chart label.
 */}}

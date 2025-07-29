@@ -1,3 +1,4 @@
+{{- if eq .Values.installationType "standalone" }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -144,6 +145,10 @@ spec:
             items:
               - key: config.xml
                 path: config.xml
+              - key: logger.xml
+                path: logger.xml
+              - key: optimization.xml
+                path: optimization.xml
               - key: collections.xml
                 path: collections.xml
               - key: storage.xml
@@ -196,4 +201,5 @@ spec:
         storageClassName: "{{ .Values.persistence.storageClass }}"
       {{- end }}
       {{- end }}
+{{- end -}}
 {{- end -}}

@@ -1,18 +1,26 @@
-1. Get the application URL by running these commands:
 {{- if .Values.ingress.enabled }}
+1. Get the application URL by running these commands:
 {{ range $host := .Values.ingress.hosts }}
   http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}
 {{ end }}
 {{- end }}
 {{- if or .Values.backup.enabled .Values.cronjobs }}
-2. Cronjob command:
 {{ if .Values.backup.enabled }}
-Backup:
+2. Backup command:
 
 kubectl -n {{ $.Release.Namespace }} create job --from=cronjob/{{ include "clickhouse.fullname" $ }}-backup {{ include "clickhouse.fullname" $ }}-backup-manual
 {{ end }}
 
+{{- if .Values.backupCheck.enabled }}
+3. Backup check command:
+
+kubectl -n {{ .Release.Namespace }} create job --from=cronjob/{{ include "clickhouse.fullname" . }}-backup-check {{ include "clickhouse.fullname" . }}-backup-check-manual
+{{- end }}
+
+{{ if .Values.cronjobs }}
+4. Cronjobs command:
 {{ range $key, $val := .Values.cronjobs }}
 kubectl -n {{ $.Release.Namespace }} create job --from=cronjob/{{ include "clickhouse.fullname" $ }}-{{ $key }} {{ include "clickhouse.fullname" $ }}-{{ $key }}-manual
 {{ end }}
-{{- end }}
+{{ end }}
+{{ end }}

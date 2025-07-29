@@ -22,7 +22,7 @@ spec:
       backoffLimit: 0
       template:
         metadata:
-          name: {{ include "clickhouse.fullname" . }}
+          name: {{ include "clickhouse.podfullname" . }}
           labels:
             {{- with .Values.podlabels }}
             {{- toYaml . | nindent 12 }}
@@ -67,11 +67,13 @@ spec:
                       name: {{ include "clickhouse.fullname" . }}
                       key: backupPassword
                 - name: CLICKHOUSE_HOST
+                  {{- if eq .Values.installationType "altinity" }}
+                  value: "chi-clickhouse-{{ include "clickhouse.fullname" . }}-0-0-0.chi-clickhouse-{{ include "clickhouse.fullname" . }}-0-0"
+                  {{- else }}
                   value: "{{ include "clickhouse.fullname" . }}-{{ $instance }}.{{ include "clickhouse.fullname" . }}-headless"
+                  {{- end }}
                 - name: CLICKHOUSE_PORT
                   value: "9000"
-                - name: CLICKHOUSE_CONFIG_DIR
-                  value: "/etc/clickhouse-server"
                 {{- range $name, $value := .Values.backup.envs }}
                 - name: {{ $name | quote }}
                   value: {{ $value | quote }}
@@ -79,12 +81,6 @@ spec:
               volumeMounts:
                 - name: config-backup
                   mountPath: /etc/clickhouse-backup
-                - name: users
-                  mountPath: /etc/clickhouse-server/users.d
-                - name: dictionaries
-                  mountPath: /etc/clickhouse-server/dictionaries.d
-                - name: config
-                  mountPath: /etc/clickhouse-server/config.d
                 - name: data
                   mountPath: /var/lib/clickhouse
               resources:
@@ -95,7 +91,11 @@ spec:
                 - labelSelector:
                     matchLabels:
                       {{- include "clickhouse.selectorLabels" . | nindent 22 }}
+                      {{- if eq .Values.installationType "altinity" }}
+                      statefulset.kubernetes.io/pod-name: chi-clickhouse-{{ include "clickhouse.fullname" . }}-0-0-0
+                      {{- else }}
                       statefulset.kubernetes.io/pod-name: {{ include "clickhouse.fullname" . }}-{{ $instance }}
+                      {{- end }}
                   topologyKey: kubernetes.io/hostname
           {{- with .Values.tolerations }}
           tolerations:
@@ -108,31 +108,11 @@ spec:
                 items:
                   - key: clickhouse-backup.yaml
                     path: config.yml
-            - name: users
-              configMap:
-                name: {{ include "clickhouse.fullname" . }}
-                items:
-                  - key: users.xml
-                    path: users.xml
-            - name: dictionaries
-              configMap:
-                name: {{ include "clickhouse.fullname" . }}
-                items:
-                  - key: dictionaries.xml
-                    path: dictionaries.xml
-            - name: config
-              configMap:
-                name: {{ include "clickhouse.fullname" . }}
-                items:
-                  - key: config.xml
-                    path: config.xml
-                  - key: collections.xml
-                    path: collections.xml
-                  - key: storage.xml
-                    path: storage.xml
-                  - key: backups.xml
-                    path: backups.xml
             - name: data
               persistentVolumeClaim:
+                {{- if eq .Values.installationType "altinity" }}
+                claimName: data-chi-clickhouse-{{ include "clickhouse.fullname" . }}-0-0-0
+                {{- else }}
                 claimName: data-{{ include "clickhouse.fullname" . }}-{{ $instance }}
+                {{- end }}
 {{- end }}

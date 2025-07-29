@@ -8,6 +8,10 @@
 
 Clickhouse is a fast open-source OLAP database management system.
 
+Supports both Altinity and standalone (statefulset) installations.
+Supports backup to the external storage, using [clickhouse-backup](https://github.com/Altinity/clickhouse-backup)
+Periodically checks backups by schedule.
+
 {{ template "chart.homepageLine" . }}
 
 {{ template "chart.maintainersSection" . }}
@@ -21,6 +25,8 @@ Example:
 ```yaml
 # clickhouse.yaml
 
+installationType: "standalone" # or "altinity"
+
 clickhouse:
   users:
     - name: reader
@@ -31,7 +37,6 @@ clickhouse:
 
 ingress:
   enabled: true
-  className: nginx
   hosts:
     - host: clickhouse.example.com
   tls:
@@ -50,6 +55,29 @@ resources:
 persistence:
   enabled: true
   size: 10Gi
+
+backup:
+  enabled: true
+
+  args:
+    - create_remote
+    - --schema
+
+  envs:
+    REMOTE_STORAGE: s3
+  config:
+    s3:
+      bucket: backet-name
+      path: clickhouse-backup
+      storage_class: STANDARD
+      endpoint: s3.amazonaws.com
+      region: us-east-1
+      concurrency: 2
+      compression_level: 4
+      compression_format: brotli
+
+backupCheck:
+  enabled: true
 
 metrics:
   enabled: true
