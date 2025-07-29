@@ -41,8 +41,9 @@ spec:
           serviceAccountName: {{ include "clickhouse.serviceAccountName" . }}
           securityContext:
             {{- toYaml .Values.podSecurityContext | nindent 12 }}
-          containers:
+          initContainers:
             - name: {{ .Chart.Name }}
+              restartPolicy: Always
               securityContext:
                 {{- toYaml .Values.securityContext | nindent 16 }}
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -50,6 +51,18 @@ spec:
               env:
                 - name: HOME
                   value: /tmp
+              ports:
+                - name: http
+                  containerPort: 8123
+              startupProbe:
+                httpGet:
+                  path: /ping
+                  port: http
+                  scheme: HTTP
+                initialDelaySeconds: 10
+                timeoutSeconds: 5
+                failureThreshold: 600
+                periodSeconds: 10
               volumeMounts:
                 - name: users
                   mountPath: /etc/clickhouse-server/users.d
@@ -59,6 +72,9 @@ spec:
                   mountPath: /var/log/clickhouse
                 - name: data
                   mountPath: /var/lib/clickhouse
+              resources:
+                {{- toYaml .Values.backupCheck.resources | nindent 16 }}
+          containers:
             - name: {{ .Chart.Name }}-backup-check
               securityContext:
                 {{- toYaml .Values.securityContext | nindent 16 }}
@@ -90,8 +106,11 @@ spec:
                   mountPath: /usr/backup
                 - name: data
                   mountPath: /var/lib/clickhouse
+              {{- if .Values.extraVolumeMounts }}
+                {{- toYaml .Values.extraVolumeMounts | nindent 16 }}
+              {{- end }}
               resources:
-                {{- toYaml .Values.backupCheck.resources | nindent 16 }}
+                {{- toYaml .Values.backup.resources | nindent 16 }}
           {{- with default .Values.nodeSelector .Values.backupCheck.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}
@@ -182,4 +201,7 @@ spec:
             - name: data
               emptyDir: {}
           {{- end }}
+          {{- if .Values.extraVolumes -}}
+            {{ toYaml .Values.extraVolumes | nindent 12 }}
+          {{- end -}}
 {{- end }}

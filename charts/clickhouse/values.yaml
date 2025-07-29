@@ -98,6 +98,19 @@ resources:
     cpu: 500m
     memory: 512Mi
 
+# -- Additional volume mounts.
+extraVolumes: []
+  # - name: backet-certs
+  #   secret:
+  #     defaultMode: 420
+  #     secretName: backup-gcp
+
+# -- Additional volumes.
+extraVolumeMounts: []
+  # - name: backet-certs
+  #   mountPath: /etc/gcp
+  #   readOnly: true
+
 # -- Persistence parameters
 # ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 persistence:
@@ -138,6 +151,13 @@ backup:
     tag: "2.6.29"
 
   # set value "" to disable cron backup
+  #           ┌───────────── minute (0 - 59)
+  #           │ ┌───────────── hour (0 - 23)
+  #           │ │ ┌───────────── day of the month (1 - 31)
+  #           │ │ │ ┌───────────── month (1 - 12)
+  #           │ │ │ │ ┌───────────── day of the week (0 - 6)
+  #           │ │ │ │ │
+  #           * * * * *
   schedule: "15 4 * * *"
 
   args: []
@@ -166,7 +186,7 @@ backup:
   # ref: https://kubernetes.io/docs/user-guide/compute-resources/
   resources:
     limits:
-      cpu: 1200m
+      cpu: 4
       memory: 512Mi
     requests:
       cpu: 500m
@@ -178,6 +198,14 @@ backup:
 
 backupCheck:
   enabled: false
+
+  #           ┌───────────── minute (0 - 59)
+  #           │ ┌───────────── hour (0 - 23)
+  #           │ │ ┌───────────── day of the month (1 - 31)
+  #           │ │ │ ┌───────────── month (1 - 12)
+  #           │ │ │ │ ┌───────────── day of the week (0 - 6)
+  #           │ │ │ │ │
+  #           * * * * *
   schedule: "15 8 * * *"
 
   envs: {}
@@ -188,8 +216,8 @@ backupCheck:
   # ref: https://kubernetes.io/docs/user-guide/compute-resources/
   resources:
     limits:
-      cpu: 2
-      memory: 1Gi
+      cpu: 1
+      memory: 4Gi
     requests:
       cpu: 100m
       memory: 512Mi

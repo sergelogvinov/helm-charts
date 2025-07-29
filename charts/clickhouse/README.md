@@ -1,6 +1,6 @@
 # clickhouse
 
-![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 24.10.4](https://img.shields.io/badge/AppVersion-24.10.4-informational?style=flat-square)
+![Version: 0.8.1](https://img.shields.io/badge/Version-0.8.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 24.10.4](https://img.shields.io/badge/AppVersion-24.10.4-informational?style=flat-square)
 
 Clickhouse chart for Kubernetes
 
@@ -108,6 +108,8 @@ metrics:
 | service | object | `{"ipFamilies":["IPv4"],"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
 | ingress | object | `{"annotations":{},"className":"","enabled":false,"hosts":[{"host":"chart-example.local","paths":["/clickhouse"]}],"tls":[]}` | Clickhouse ingress parameters ref: http://kubernetes.io/docs/user-guide/ingress/ |
 | resources | object | `{"requests":{"cpu":"500m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| extraVolumes | list | `[]` | Additional volume mounts. |
+| extraVolumeMounts | list | `[]` | Additional volumes. |
 | persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":true,"size":"64Gi"}` | Persistence parameters ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
 | priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
 | updateStrategy | object | `{"type":"RollingUpdate"}` | pod deployment update strategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |
@@ -122,12 +124,12 @@ metrics:
 | backup.args | list | `[]` |  |
 | backup.envs | object | `{}` |  |
 | backup.config | object | `{}` |  |
-| backup.resources | object | `{"limits":{"cpu":"1200m","memory":"512Mi"},"requests":{"cpu":"500m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| backup.resources | object | `{"limits":{"cpu":4,"memory":"512Mi"},"requests":{"cpu":"500m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | backup.priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
 | backupCheck.enabled | bool | `false` |  |
 | backupCheck.schedule | string | `"15 8 * * *"` |  |
 | backupCheck.envs | object | `{}` |  |
-| backupCheck.resources | object | `{"limits":{"cpu":2,"memory":"1Gi"},"requests":{"cpu":"100m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| backupCheck.resources | object | `{"limits":{"cpu":1,"memory":"4Gi"},"requests":{"cpu":"100m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | backupCheck.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"size":"8Gi"}` | Persistence parameters ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
 | backupCheck.nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | backupCheck.tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |

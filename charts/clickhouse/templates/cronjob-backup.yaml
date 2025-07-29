@@ -83,6 +83,9 @@ spec:
                   mountPath: /etc/clickhouse-backup
                 - name: data
                   mountPath: /var/lib/clickhouse
+              {{- if .Values.extraVolumeMounts }}
+                {{- toYaml .Values.extraVolumeMounts | nindent 16 }}
+              {{- end }}
               resources:
                 {{- toYaml .Values.backup.resources | nindent 16 }}
           affinity:
@@ -115,4 +118,7 @@ spec:
                 {{- else }}
                 claimName: data-{{ include "clickhouse.fullname" . }}-{{ $instance }}
                 {{- end }}
+          {{- if .Values.extraVolumes -}}
+            {{ toYaml .Values.extraVolumes | nindent 12 }}
+          {{- end -}}
 {{- end }}
