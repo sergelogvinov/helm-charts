@@ -9171,6 +9171,26 @@ entries:
     version: 0.2.6
   registry-mirrors:
   - apiVersion: v2
+    appVersion: v2.1.7
+    created: "2025-08-04T06:05:13.42300559Z"
+    description: Container registry mirror
+    digest: e2625b61b9e5ca028fd17b66605b9acf2a04c8c05e05a37aacc4887adf0f7cbc
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/registry-mirrors/icon.png
+    keywords:
+    - containerd
+    - docker mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: registry-mirrors
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/registry-mirrors
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/registry-mirrors-2.0.6/registry-mirrors-2.0.6.tgz
+    version: 2.0.6
+  - apiVersion: v2
     appVersion: v2.1.6
     created: "2025-07-27T04:23:22.511983676Z"
     description: Container registry mirror
@@ -11636,4 +11656,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-08-04T06:04:56.117989267Z"
+generated: "2025-08-04T06:05:13.424006136Z"
