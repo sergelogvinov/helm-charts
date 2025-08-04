@@ -17,7 +17,7 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.9.2
+version: 0.10.0
 #
 # renovate: datasource=docker depName=tailscale/tailscale
-appVersion: v1.84.3
+appVersion: v1.86.2
