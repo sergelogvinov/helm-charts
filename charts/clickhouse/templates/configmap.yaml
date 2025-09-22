@@ -195,8 +195,14 @@ data:
         <mark_cache_size>1073741824</mark_cache_size>
         <max_server_memory_usage_to_ram_ratio>0.6</max_server_memory_usage_to_ram_ratio>
         <merge_tree>
-            <merge_max_block_size>2048</merge_max_block_size>
+            <merge_max_block_size>1024</merge_max_block_size>
             <max_bytes_to_merge_at_max_space_in_pool>{{ $memHalf }}</max_bytes_to_merge_at_max_space_in_pool>
+            <max_suspicious_broken_parts>100</max_suspicious_broken_parts>
+            <min_merge_bytes_to_use_direct_io>2684354560</min_merge_bytes_to_use_direct_io>
+        </merge_tree>
+        {{ else if lt (div $mem 1000000000) 16 }}
+        <merge_tree>
+            <merge_max_block_size>2048</merge_max_block_size>
             <max_suspicious_broken_parts>100</max_suspicious_broken_parts>
             <min_merge_bytes_to_use_direct_io>5368709120</min_merge_bytes_to_use_direct_io>
         </merge_tree>
