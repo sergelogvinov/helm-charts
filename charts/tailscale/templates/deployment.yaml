@@ -140,6 +140,10 @@ spec:
             - name: TS_TAILSCALED_EXTRA_ARGS
               value: "--no-logs-no-support"
             {{- end }}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: NODE
               valueFrom:
                 fieldRef:

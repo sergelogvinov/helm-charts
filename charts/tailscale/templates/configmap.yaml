@@ -39,7 +39,7 @@ data:
     [ -f /tmp/labels ] && source /tmp/labels ||:
     export TS_HOSTNAME=$REGION-$NODE
     export TS_KUBE_SECRET=tailscale-$NODE
-    export TS_EXTRA_ARGS="--hostname=$REGION-$NODE --advertise-exit-node --advertise-tags=$TS_TAGS --accept-dns=false --accept-routes=false"
+    export TS_EXTRA_ARGS="--advertise-exit-node --advertise-tags=$TS_TAGS --accept-dns=false --accept-routes=false"
 
     /bin/sleep 5
     /usr/local/bin/containerboot

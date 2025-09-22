@@ -59,6 +59,7 @@ securityContext:
       - NET_RAW
     drop:
       - ALL
+  # privileged: true
   # readOnlyRootFilesystem: true
   runAsNonRoot: false
   runAsUser: 0
