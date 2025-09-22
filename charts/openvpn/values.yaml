@@ -56,6 +56,13 @@ openvpn:
   # -- Server domain name.
   hostName: vpn.example.com
 
+  # -- Device type, tun or tap
+  # Prefer to use tun interface.
+  devtype: tun
+
+  # -- Device MTU size
+  devmtu: 1400
+
   # -- OpenVPN configuration file.
   config:
     ~

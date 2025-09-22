@@ -49,9 +49,9 @@ data:
     #
     port  {{ .Values.service.port }}
 
-    dev tun
-    dev-type tun
-    tun-mtu 1400
+    dev {{ default "tun" .Values.openvpn.devicetype }}
+    dev-type {{ default "tun" .Values.openvpn.devicetype }}
+    tun-mtu {{ default 1400 .Values.openvpn.devmtu }}
     mssfix 1160
 
     keepalive 10 120
