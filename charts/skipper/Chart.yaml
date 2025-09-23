@@ -15,7 +15,7 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.2.17
+version: 0.2.18
 #
 # renovate: datasource=docker depName=ghcr.io/zalando/skipper
-appVersion: v0.22.115
+appVersion: v0.22.117
