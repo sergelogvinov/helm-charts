@@ -88,12 +88,6 @@ spec:
           env:
             - name: SERVER_URL
               value: http://{{ include "teamcity.fullname" . }}:{{ .Values.service.port }}
-            - name: OWN_ADDRESS
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
-            - name: OWN_PORT
-              value: "9090"
             - name: NODE_NAME
               valueFrom:
                 fieldRef:
