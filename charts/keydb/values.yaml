@@ -230,7 +230,7 @@ service:
   ipFamilies: [IPv4]
 
   # -- The traffic distribution for the service.
-  # possible values: PreferClose
+  # possible values: PreferClose, PreferSameZone, PreferSameNode
   # ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
   trafficDistribution: ""
 

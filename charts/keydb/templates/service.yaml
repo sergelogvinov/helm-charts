@@ -29,7 +29,7 @@ spec:
   selector:
     {{- include "keydb.selectorLabels" . | nindent 4 }}
     statefulset.kubernetes.io/pod-name: {{ include "keydb.primary" . }}
-  {{- if and (semverCompare ">=1.32" (default .Capabilities.KubeVersion.Version .Values.kubeVersion)) .Values.service.trafficDistribution }}
+  {{- if and (semverCompare ">=1.33" (default .Capabilities.KubeVersion.Version .Values.kubeVersion)) .Values.service.trafficDistribution }}
   trafficDistribution: {{ .Values.service.trafficDistribution }}
   {{- end }}
 ---
