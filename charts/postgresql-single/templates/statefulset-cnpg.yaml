@@ -127,8 +127,6 @@ spec:
     {{- else }}
       storageClassName: "{{ .Values.persistence.storageClass }}"
     {{- end }}
-    size: {{ .Values.persistence.size | quote }}
-    storageClass: "{{ .Values.persistence.storageClass }}"
   affinity:
     podAntiAffinityType: required
     topologyKey: kubernetes.io/hostname

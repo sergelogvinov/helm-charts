@@ -44,6 +44,7 @@ spec:
             (hasKey .Values.backup.walg "WALG_LIBSODIUM_KEY_PATH") }}
   encryption:
     method: libsodium
+    encryptionSecret: {{ include "postgresql-single.fullname" . }}
   {{- end }}
 {{- end }}
 {{- end }}
