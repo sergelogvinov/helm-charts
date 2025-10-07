@@ -331,6 +331,10 @@ WALG_PREVENT_WAL_OVERWRITE: true
 WALG_COMPRESSION_METHOD: brotli
 WALG_DELTA_MAX_STEPS: 1
 WALG_FILE_PREFIX: {{ .Values.persistence.mountPath }}/backup
+{{- else if eq .Values.installationType "cnpg" }}
+{{- $version := semver (default .Chart.AppVersion .Values.image.tag) }}
+WALG_S3_PREFIX: {{ get .Values.backup.walg "WALG_S3_PREFIX" }}/{{ $version.Major }}
+{{ unset .Values.backup.walg "WALG_S3_PREFIX" | toYaml }}
 {{- else }}
 {{- .Values.backup.walg | toYaml }}
 {{- end }}

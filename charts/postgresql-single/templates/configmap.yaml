@@ -244,6 +244,10 @@ data:
 
     export VERSION=LATEST
 
+    /usr/bin/wal-g --config /etc/walg/walg.yaml backup-list --pretty --detail
+    /usr/bin/wal-g --config /etc/walg/walg.yaml wal-show ||:
+
+    echo
     echo "*** Start recovery from wal-g backup ($VERSION)"
     START=`date +%s`
 
