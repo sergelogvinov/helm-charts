@@ -166,5 +166,9 @@ spec:
   backupOwnerReference: cluster
   cluster:
     name: {{ include "postgresql-single.fullname" . }}
+  pluginConfiguration:
+    name: cnpg-extensions.yandex.cloud
+    parameters:
+      backupConfig: {{ include "postgresql-single.fullname" . }}
 {{- end }}
 {{- end }}
