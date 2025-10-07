@@ -11,7 +11,7 @@ data:
         bind {{ default "tun" .Values.openvpn.devtype }}0
         errors
 
-        health localhost:8080 {
+        health :8080 {
           lameduck 5s
         }
 
