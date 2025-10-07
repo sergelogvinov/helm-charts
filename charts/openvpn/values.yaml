@@ -129,6 +129,7 @@ openvpn:
   tlsversion:
     {}
     # tls-version-min: 1.2
+    ## openvpn --show-tls
     # tls-cipher: TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256
 
   # -- TLS authentication.

@@ -7,9 +7,11 @@ metadata:
 data:
   corefile: |
     .:53 {
+        bind 127.0.0.1 ::1
+        bind {{ default "tun" .Values.openvpn.devtype }}0
         errors
 
-        health :8080 {
+        health localhost:8080 {
           lameduck 5s
         }
 
@@ -49,8 +51,8 @@ data:
     #
     port  {{ .Values.service.port }}
 
-    dev {{ default "tun" .Values.openvpn.devicetype }}
-    dev-type {{ default "tun" .Values.openvpn.devicetype }}
+    dev {{ default "tun" .Values.openvpn.devtype }}
+    dev-type {{ default "tun" .Values.openvpn.devtype }}
     tun-mtu {{ default 1400 .Values.openvpn.devmtu }}
     mssfix 1160
 
@@ -123,7 +125,7 @@ data:
   client.conf: |-
     client
     dev tun
-    tun-mtu 1400
+    tun-mtu {{ default 1400 .Values.openvpn.devmtu }}
     {{- range (eq .Values.service.proto "All" | ternary (list "tcp" "udp") (list .Values.service.proto)) }}
     remote {{ $.Values.openvpn.hostName }} {{ default "30190" $.Values.service.nodePort }} {{ . | lower }}
     {{- end }}

@@ -27,8 +27,8 @@ spec:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   commonName: {{ default (include "openvpn.fullname" .) .Values.certManager.commonName }}
-  duration: 26280h # 3y
-  renewBefore: 26000h # ~3y
+  duration: 87600h # 10y
+  renewBefore: 87000h # ~10y
   privateKey:
     algorithm: ECDSA
     size: 256

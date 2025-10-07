@@ -94,9 +94,12 @@ spec:
         {{- end }}
         {{- if .Values.dns.enabled }}
         - name: {{ .Chart.Name }}-dns
-          image: registry.k8s.io/coredns/coredns:v1.11.3
+          image: registry.k8s.io/coredns/coredns:v1.12.4
           imagePullPolicy: IfNotPresent
           args: [ "-conf", "/etc/coredns/Corefile" ]
+          env:
+            - name: GOMAXPROCS
+              value: "1"
           volumeMounts:
             - name: coredns
               mountPath: /etc/coredns
