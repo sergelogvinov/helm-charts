@@ -1,5 +1,14 @@
 - name: mongodb.rules
   rules:
+  - alert: MongoOperatorBackupError
+    expr: increase(controller_runtime_reconcile_total{controller="psmdbbackup-controller",result="error"}[15m]) > 0
+    for: 15m
+    labels:
+      severity: warning
+    annotations:
+      description: MongoOperator backup error occurred {{$value}} times during last 15 minutes in cluster {{$labels.cluster}}
+      summary: MongoOperator get error duruing backup process
+
   - alert: MongoDBReplicationLagIsTooLarge
     expr: mongodb_mongod_replset_member_replication_lag{state="SECONDARY"} > 86400
     for: 1m
