@@ -190,8 +190,8 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         # Without max_over_time, failed scrapes could create false negatives, see
         # https://www.robustperception.io/alerting-on-gauges-in-prometheus-2-0 for details.
         (
-          max_over_time(prometheus_remote_storage_highest_timestamp_in_seconds{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m])
-        - ignoring(remote_name, url) group_right
+          max_over_time(prometheus_remote_storage_queue_highest_timestamp_seconds{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m])
+        -
           max_over_time(prometheus_remote_storage_queue_highest_sent_timestamp_seconds{job="kubernetes-pods",kubernetes_namespace="{{ .Release.Namespace }}"}[5m])
         )
         > 120

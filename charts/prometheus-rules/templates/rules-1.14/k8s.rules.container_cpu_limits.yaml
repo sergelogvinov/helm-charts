@@ -11,8 +11,8 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
     - expr: |-
         kube_pod_container_resource_limits{resource="cpu",job="kubernetes-service-endpoints"}  * on (namespace, pod, cluster)
         group_left() max by (namespace, pod, cluster) (
-         (kube_pod_status_phase{phase=~"Pending|Running"} == 1)
-         )
+          (kube_pod_status_phase{phase=~"Pending|Running"} == 1)
+        )
       record: cluster:namespace:pod_cpu:active:kube_pod_container_resource_limits
     - expr: |-
         sum by (namespace, cluster) (
