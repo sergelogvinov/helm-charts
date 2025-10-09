@@ -166,12 +166,6 @@ spec:
       {{- end }}
   backup:
     target: "prefer-standby"
-    {{- if .Values.backup.enabled }}
-    {{- with .Values.backup.barmanObjectStore }}
-    barmanObjectStore:
-      {{- toYaml . | nindent 6 }}
-    {{- end }}
-    {{- end }}
   {{- if .Values.backup.enabled }}
   plugins:
     - name: cnpg-extensions.yandex.cloud
