@@ -1,5 +1,5 @@
 {{- if eq .Values.installationType "cnpg" }}
-{{- if .Values.backup.enabled }}
+{{- if or .Values.backup.enabled .Values.backup.recovery }}
 apiVersion: cnpg-extensions.yandex.cloud/v1beta1
 kind: BackupConfig
 metadata:

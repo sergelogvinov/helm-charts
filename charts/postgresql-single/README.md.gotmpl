@@ -26,14 +26,12 @@ kubectl create secret generic backup-s3 --from-file=credentials
 
 ```yaml
 # Helm values
-pgHbaConfiguration: |-
-  local   all         all                                 trust
-  local   replication postgres                            trust
-  host    all         all                   localhost     md5
-  hostssl postgres    postgres              10.0.0.0/8    md5
-  hostssl postgres    replication           10.0.0.0/8    md5
-  hostssl replication postgres              10.0.0.0/8    md5
-  hostssl replication replication           10.0.0.0/8    md5
+
+installationType: standalone # or cnpg
+
+pgHbaConfiguration:
+  # host    database    user                  address       auth-method
+  - hostssl app         app                   10.0.0.0/8    md5
 
 postgresqlServerMemory: 2048
 resources:
@@ -58,13 +56,15 @@ backup:
   enabled: true
 
   recovery: true # If PVC empty - it will use latest backup.
-  walpush: true  # Send wal to the s3.
 
+  walpush: true  # Send wal to the s3.
   walg:
     WALG_TAR_DISABLE_FSYNC: true
     WALG_UPLOAD_WAL_METADATA: INDIVIDUAL
     WALG_PREVENT_WAL_OVERWRITE: true
     WALG_COMPRESSION_METHOD: brotli
+    WALG_LIBSODIUM_KEY_TRANSFORM: hex
+    WALG_LIBSODIUM_KEY: "" # generate it: openssl rand -hex 32
     WALG_S3_PREFIX: s3://backup/postgrtes-backup
 
 backupCheck:

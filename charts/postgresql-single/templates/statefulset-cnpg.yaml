@@ -143,6 +143,10 @@ spec:
       {{- toYaml . | nindent 6 }}
     {{- end }}
   bootstrap:
+    {{- if .Values.backup.recovery }}
+    recovery:
+      source: {{ include "postgresql-single.fullname" . }}-backup
+    {{- else }}
     initdb:
       encoding: UTF8
       localeCollate: en_US.UTF-8
@@ -164,6 +168,7 @@ spec:
           - name: {{ include "postgresql-single.fullname" $ }}
             key: initdb.sql
       {{- end }}
+    {{- end }}
   backup:
     target: "prefer-standby"
   {{- if .Values.backup.enabled }}
@@ -173,6 +178,14 @@ spec:
       isWALArchiver: {{ .Values.backup.walpush | default false }}
       parameters:
         backupConfig: {{ include "postgresql-single.fullname" . }}
+  {{- end }}
+  {{- if .Values.backup.recovery }}
+  externalClusters:
+    - name: {{ include "postgresql-single.fullname" . }}-backup
+      plugin:
+        name: cnpg-extensions.yandex.cloud
+        parameters:
+          backupConfig: {{ include "postgresql-single.fullname" . }}
   {{- end }}
   {{- if .Values.metrics.enabled }}
   monitoring:
