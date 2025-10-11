@@ -175,13 +175,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels: {{- (include "postgresql-single.selectorLabels" .) | nindent 18 }}
-              namespaces:
-                - {{ .Release.Namespace | quote }}
-              topologyKey: kubernetes.io/hostname
+        podAntiAffinity: {{- include "affinities.pods" . | nindent 10 }}
       {{- with .Values.affinity }}
         {{- toYaml . | nindent 8 }}
       {{- end }}

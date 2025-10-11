@@ -412,6 +412,10 @@ metrics:
       cpu: 10m
       memory: 32Mi
 
+podDisruptionBudget:
+  create: true
+  minAvailable: 1
+
 # -- Node labels for pod assignment.
 # ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
@@ -419,6 +423,11 @@ nodeSelector: {}
 # -- Tolerations for pod assignment.
 # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
+
+# -- Pod Anti Affinity
+# soft/hard
+podAntiAffinityPreset: hard
+podAntiAffinityPresetKey: kubernetes.io/hostname
 
 # -- Affinity for pod assignment.
 # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity

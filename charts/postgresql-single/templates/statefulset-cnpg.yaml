@@ -28,7 +28,7 @@ spec:
       {{- with .Values.podlabels }}
       {{- toYaml . | nindent 6 }}
       {{- end }}
-  enablePDB: true
+  enablePDB: {{ .Values.podDisruptionBudget.create }}
   instances: {{ .Values.replicaCount }}
   imageName: ghcr.io/cloudnative-pg/postgresql:{{ .Chart.AppVersion }}
   {{- with .Values.imagePullSecrets }}
@@ -132,8 +132,8 @@ spec:
       storageClassName: "{{ .Values.persistence.storageClass }}"
     {{- end }}
   affinity:
-    podAntiAffinityType: required
-    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: {{ if eq .Values.podAntiAffinityPreset "hard" }}required{{ else }}preferred{{ end }}
+    topologyKey: {{ default "kubernetes.io/hostname" .Values.podAntiAffinityPresetKey }}
     {{- with .Values.nodeSelector }}
     nodeSelector:
       {{- toYaml . | nindent 6 }}
