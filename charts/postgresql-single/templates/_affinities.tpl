@@ -18,7 +18,7 @@ preferredDuringSchedulingIgnoredDuringExecution:
       labelSelector:
         matchLabels:
           {{- if not (empty $component) }}
-          {{ printf "app.kubernetes.io/component: \"%s\"" $component }}
+          {{ printf "app.kubernetes.io/component: %s" $component }}
           {{- end }}
           {{- range $key, $value := $labels }}
           {{ $key }}: {{ $value | quote }}
@@ -31,7 +31,7 @@ preferredDuringSchedulingIgnoredDuringExecution:
       labelSelector:
         matchLabels: {{- (include "common.labels.matchLabels" .context) | nindent 10 }}
           {{- if not (empty $component) }}
-          {{ printf "app.kubernetes.io/component: \"%s\"" $component }}
+          {{ printf "app.kubernetes.io/component: %s" $component }}
           {{- end }}
           {{- range $key, $value := $labels }}
           {{ $key }}: {{ $value | quote }}

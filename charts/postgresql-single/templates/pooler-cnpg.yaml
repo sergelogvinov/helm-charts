@@ -1,83 +1,102 @@
 {{- if and .Values.pooler.enabled (eq .Values.installationType "cnpg") }}
+{{- range $type := .Values.pooler.types }}
+{{ $name := ternary "pooler" (printf "pooler-%s" $type) (eq $type "rw") }}
+---
 apiVersion: postgresql.cnpg.io/v1
 kind: Pooler
 metadata:
-  name: {{ include "postgresql-single.fullname" . }}-pooler
-  {{- with .Values.podAnnotations }}
+  name: {{ include "postgresql-single.fullname" $ }}-{{ $name }}
+  {{- with $.Values.podAnnotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "postgresql-single.labels" . | nindent 4 }}
-    {{- with .Values.podlabels }}
+    {{- include "postgresql-single.labels" $ | nindent 4 }}
+    {{- with $.Values.podlabels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
   cluster:
-    name: {{ include "postgresql-single.fullname" . }}
-  instances: {{ .Values.pooler.replicaCount }}
-  type: rw
+    name: {{ include "postgresql-single.fullname" $ }}
+  instances: {{ $.Values.pooler.replicaCount }}
+  type: {{ $type }}
   pgbouncer:
-    poolMode: {{ .Values.pooler.poolMode }}
-    {{- with .Values.pooler.parameters }}
+    poolMode: {{ $.Values.pooler.mode }}
+    {{- with $.Values.pooler.parameters }}
     parameters:
       {{- toYaml . | nindent 6 }}
     {{- end }}
   template:
     metadata:
       labels:
-        {{- include "postgresql-single.labels" . | nindent 8 }}
-        app.kubernetes.io/component: pooler
+        {{- include "postgresql-single.labels" $ | nindent 8 }}
+        app.kubernetes.io/component: {{ $name }}
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9127"
     spec:
       enableServiceLinks: false
-      {{- if or .Values.priorityClassName .Values.pooler.priorityClassName }}
-      priorityClassName: {{ default .Values.priorityClassName .Values.pooler.priorityClassName }}
+      {{- if or $.Values.priorityClassName $.Values.pooler.priorityClassName }}
+      priorityClassName: {{ default $.Values.priorityClassName $.Values.pooler.priorityClassName }}
       {{- end }}
       containers:
         - name: pgbouncer
           resources:
-            {{- toYaml .Values.pooler.resources | nindent 12 }}
-      {{- with (default .Values.nodeSelector .Values.pooler.nodeSelector) }}
+            {{- toYaml $.Values.pooler.resources | nindent 12 }}
+      {{- with (default $.Values.nodeSelector $.Values.pooler.nodeSelector) }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       affinity:
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.pooler.podAntiAffinityPreset
-        "topologyKey" .Values.pooler.podAntiAffinityPresetTopologyKey "component" "pooler" "context" $) | nindent 10 }}
-      {{- with .Values.pooler.affinity }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.pooler.podAntiAffinityPreset
+        "topologyKey" $.Values.pooler.podAntiAffinityPresetTopologyKey "component" $name "context" $) | nindent 10 }}
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  {{- include "postgresql-single.selectorLabels" $ | nindent 18 }}
+                  cnpg.io/podRole: instance
+              topologyKey: kubernetes.io/hostname
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    cnpg.io/podRole: instance
+                    cnpg.io/instanceRole: {{ ternary "primary" "replica" (eq $type "rw") }}
+                topologyKey: kubernetes.io/hostname
+              weight: 5
+      {{- with $.Values.pooler.affinity }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with (default .Values.tolerations .Values.pooler.tolerations) }}
+      {{- with (default $.Values.tolerations $.Values.pooler.tolerations) }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
   serviceTemplate:
     metadata:
-      {{- with .Values.pooler.service.annotations }}
+      {{- with $.Values.pooler.service.annotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "postgresql-single.labels" . | nindent 8 }}
-        app.kubernetes.io/component: pooler
-        {{- with .Values.pooler.service.podlabels }}
+        {{- include "postgresql-single.labels" $ | nindent 8 }}
+        app.kubernetes.io/component: {{ $name }}
+        {{- with $.Values.pooler.service.podlabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      type: {{ .Values.pooler.service.type }}
-      {{- if has .Values.pooler.service.type (list "NodePort" "LoadBalancer") }}
-      externalTrafficPolicy: {{ .Values.pooler.service.externalTrafficPolicy }}
+      type: {{ $.Values.pooler.service.type }}
+      {{- if has $.Values.pooler.service.type (list "NodePort" "LoadBalancer") }}
+      externalTrafficPolicy: {{ $.Values.pooler.service.externalTrafficPolicy }}
       {{- end }}
-      internalTrafficPolicy: {{ .Values.pooler.service.internalTrafficPolicy }}
-      {{- with .Values.pooler.service.ipFamilies }}
+      internalTrafficPolicy: {{ $.Values.pooler.service.internalTrafficPolicy }}
+      {{- with $.Values.pooler.service.ipFamilies }}
       ipFamilies:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      ipFamilyPolicy: {{ if eq (len .Values.pooler.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
-      {{- if .Values.pooler.service.trafficDistribution }}
-      trafficDistribution: {{ .Values.pooler.service.trafficDistribution }}
+      ipFamilyPolicy: {{ if eq (len $.Values.pooler.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
+      {{- if $.Values.pooler.service.trafficDistribution }}
+      trafficDistribution: {{ $.Values.pooler.service.trafficDistribution }}
       {{- end }}
+{{- end }}
 {{- end }}

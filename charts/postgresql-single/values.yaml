@@ -79,7 +79,9 @@ pooler:
 
   replicaCount: 1
 
+  types: [rw,ro]
   mode: session
+
   parameters: {}
 
   service:
