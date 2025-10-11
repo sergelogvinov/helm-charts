@@ -26,16 +26,15 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include "pgbouncer.ini" . | sha256sum }}
+      {{- if .Values.metrics.enabled }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9127"
+      {{- end}}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "pgbouncer.selectorLabels" . | nindent 8 }}
-      {{- if .Values.metrics.enabled }}
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "9127"
-      {{- end}}
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
