@@ -53,8 +53,10 @@ spec:
   postgresql:
     shared_preload_libraries:
       - pg_stat_statements
-    {{- with .Values.pgHbaConfiguration }}
     pg_hba:
+      - hostssl all         postgres              10.0.0.0/8    scram-sha-256
+      - hostssl replication postgres              10.0.0.0/8    scram-sha-256
+    {{- with .Values.pgHbaConfiguration }}
       {{- toYaml . | nindent 6 }}
     {{- end }}
     parameters:
@@ -186,6 +188,22 @@ spec:
         name: cnpg-extensions.yandex.cloud
         parameters:
           backupConfig: {{ include "postgresql-single.fullname" . }}
+      {{- if .Values.postgresqlConninfo }}
+      {{- $connection := include "postgresql-single.postgresqlConninfoDict" . | fromYaml }}
+      connectionParameters:
+        host: {{ $connection.host }}
+        user: {{ default .Values.postgresqlUsername $connection.user }}
+        dbname: {{ default "postgres" $connection.dbname }}
+        sslmode: {{ default "require" $connection.sslmode }}
+      password:
+        name: {{ include "postgresql-single.fullname" . }}
+        key: postgresqlPassword
+      {{- end}}
+  {{- if .Values.postgresqlConninfo }}
+  replica:
+    enabled: true
+    source: {{ include "postgresql-single.fullname" . }}-backup
+  {{- end }}
   {{- end }}
   {{- if .Values.metrics.enabled }}
   monitoring:

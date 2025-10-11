@@ -150,6 +150,18 @@ Create the postgresql folover service selector
 {{- end }}
 {{- end }}
 
+{{- define "postgresql-single.postgresqlConninfoDict" -}}
+{{- $res := dict -}}
+{{- $keysVal := splitList " " (tpl .Values.postgresqlConninfo .) -}}
+{{- range $i, $key := $keysVal -}}
+{{- $kv := splitList "=" $key -}}
+{{- if eq (len $kv) 2 -}}
+{{- $res = merge $res (dict (index $kv 0) (index $kv 1)) -}}
+{{- end -}}
+{{- end -}}
+{{- $res | toYaml }}
+{{- end }}
+
 {{/*
 Create the postgresqlConfiguration
 */}}

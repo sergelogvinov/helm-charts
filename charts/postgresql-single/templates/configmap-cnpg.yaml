@@ -18,6 +18,10 @@ spec:
   uploadConcurrency: 4
   uploadDiskConcurrency: 4
   deltaMaxSteps: 1
+  retention:
+    ignoreForManualBackups: true
+    minBackupsToKeep: 7
+    deleteBackupsAfter: 14d
   storage:
     type: s3
     s3:
