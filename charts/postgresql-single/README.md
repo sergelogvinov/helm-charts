@@ -1,6 +1,6 @@
 # postgresql-single
 
-![Version: 1.7.3](https://img.shields.io/badge/Version-1.7.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.10](https://img.shields.io/badge/AppVersion-16.10-informational?style=flat-square)
+![Version: 1.8.0](https://img.shields.io/badge/Version-1.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.10](https://img.shields.io/badge/AppVersion-16.10-informational?style=flat-square)
 
 Postgres with backup/restore and replication
 
@@ -97,6 +97,26 @@ metrics:
 | initdb.script | list | `[]` |  |
 | tlsCerts.create | bool | `false` |  |
 | tlsCerts.mode | string | `"require"` |  |
+| pooler.enabled | bool | `false` |  |
+| pooler.replicaCount | int | `1` |  |
+| pooler.mode | string | `"session"` |  |
+| pooler.parameters | object | `{}` |  |
+| pooler.service.type | string | `"ClusterIP"` | Service type ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types |
+| pooler.service.labels | object | `{}` | Extra labels for load balancer service. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ |
+| pooler.service.annotations | object | `{}` | Extra annotations for load balancer service. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
+| pooler.service.externalTrafficPolicy | string | `"Cluster"` | Traffic policies. ref: https://kubernetes.io/docs/reference/networking/virtual-ips/#traffic-policies |
+| pooler.service.internalTrafficPolicy | string | `"Cluster"` |  |
+| pooler.service.ipFamilies | list | `["IPv4"]` | IP families for service possible values: IPv4, IPv6 ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/ |
+| pooler.resources.limits.cpu | string | `"500m"` |  |
+| pooler.resources.limits.memory | string | `"64Mi"` |  |
+| pooler.resources.requests.cpu | string | `"100m"` |  |
+| pooler.resources.requests.memory | string | `"32Mi"` |  |
+| pooler.priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
+| pooler.podAntiAffinityPreset | string | `"soft"` | Pod Anti Affinity soft/hard |
+| pooler.podAntiAffinityPresetKey | string | `"kubernetes.io/hostname"` |  |
+| pooler.nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| pooler.tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| pooler.affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | initContainers | list | `[]` |  |
 | serviceAccount | object | `{"annotations":{},"create":true,"name":""}` | Pods Service Account. ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
 | podlabels | object | `{}` | Extra labels for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ |
@@ -104,6 +124,7 @@ metrics:
 | podSecurityContext | object | `{"fsGroup":999,"fsGroupChangePolicy":"OnRootMismatch","runAsGroup":999,"runAsNonRoot":true,"runAsUser":999}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | service | object | `{"ipFamilies":["IPv4"],"port":5432,"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
+| service.ipFamilies | list | `["IPv4"]` | IP families for service possible values: IPv4, IPv6 ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/ |
 | postgresqlServerMemory | string | `"128"` | Specifies the expected memory usage |
 | postgresqlServerWalWriterDelay | string | `"200ms"` | Specifies how often the WAL writer flushes WAL (wal_writer_delay) ref: https://www.postgresql.org/docs/current/runtime-config-wal.html |
 | resources | object | `{"requests":{"cpu":"100m","memory":"128Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |

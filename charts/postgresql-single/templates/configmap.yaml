@@ -286,7 +286,16 @@ data:
     echo "*** Recovery time - ${RUNTIME}s"
 
     echo "*** Size: `du -hs {{ .Values.persistence.mountPath }}/data`"
-    psql -U postgres postgres -c "SELECT pg_database.datname,pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database ORDER BY datname;"
+    psql -U postgres postgres -c "SELECT datname,pg_size_pretty(pg_database_size(datname)) AS size FROM pg_database ORDER BY datname;"
+
+    echo "*** Refresh collation"
+    list_databases() {
+      psql -U postgres postgres -Atc "SELECT datname FROM pg_database WHERE datistemplate = false OR datname = 'template1';"
+    }
+
+    for db in $(list_databases); do
+      psql -U postgres "$db" -Atc "ALTER DATABASE \"$db\" REFRESH COLLATION VERSION;" 2>/dev/null ||:
+    done
 
     echo "*** Start tests"
     START=`date +%s`
