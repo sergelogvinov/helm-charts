@@ -6683,6 +6683,26 @@ entries:
   pgbouncer:
   - apiVersion: v2
     appVersion: "16.10"
+    created: "2025-10-11T10:59:36.774496992Z"
+    description: Postgres connection poller
+    digest: 864614007933d6f8e72fae47fb557c194713d57d00dcbe4d78819c0e3a83e4f0
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/pgbouncer/icon.png
+    keywords:
+    - pgbouncer
+    - postgresql
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: pgbouncer
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/pgbouncer
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/pgbouncer-0.11.1/pgbouncer-0.11.1.tgz
+    version: 0.11.1
+  - apiVersion: v2
+    appVersion: "16.10"
     created: "2025-10-05T14:39:06.075193893Z"
     description: Postgres connection poller
     digest: ddca1edde4fcb602f56d0b0d9f4617c59c574bdd12d07d00f380bcc5a03c8f44
@@ -12611,4 +12631,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-10-11T10:58:58.544042281Z"
+generated: "2025-10-11T10:59:36.776378087Z"
