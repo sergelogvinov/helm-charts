@@ -190,11 +190,11 @@ backup:
   recovery: false
 
   walpush: false
-  walg:
-    {}
+  walg: {}
     # WALG_TAR_DISABLE_FSYNC: true
     # WALG_UPLOAD_WAL_METADATA: INDIVIDUAL
     # WALG_COMPRESSION_METHOD: brotli
+  walgSourceConfig: ~
 
   cleanPolicy: "retain FULL 3"
 

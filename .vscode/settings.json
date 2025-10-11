@@ -13,6 +13,13 @@
     },
     "git.rebaseWhenSync": true,
     "github.copilot.enable": {
-        "yaml": false
+        "*": true,
+        "plaintext": true,
+        "markdown": true,
+        "scminput": false,
+        "jinja": false,
+        "dockerfile": false,
+        "yaml": false,
+        "ini": false
     }
 }

@@ -19,7 +19,7 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 1.7.1
+version: 1.7.2
 #
 # renovate: datasource=docker depName=ghcr.io/sergelogvinov/postgresql
 appVersion: "16.10"
