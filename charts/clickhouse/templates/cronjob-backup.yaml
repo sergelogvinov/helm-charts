@@ -18,6 +18,7 @@ spec:
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
+      ttlSecondsAfterFinished: 86400 # 24h
       activeDeadlineSeconds: 86400 # 24h
       backoffLimit: 0
       template:
