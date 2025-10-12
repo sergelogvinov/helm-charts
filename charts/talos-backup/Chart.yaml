@@ -15,7 +15,7 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.1.1
+version: 0.1.2
 #
 # renovate: datasource=docker depName=ghcr.io/siderolabs/talos-backup
 appVersion: "v0.1.0-beta.2"
