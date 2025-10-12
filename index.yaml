@@ -615,6 +615,30 @@ entries:
   clickhouse:
   - apiVersion: v2
     appVersion: 24.12.6
+    created: "2025-10-12T08:33:02.983446829Z"
+    description: Clickhouse chart for Kubernetes
+    digest: 561882e057944b227257336004f18ccaa20100d0dcf5888e7c61e351f312e34b
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://github.com/ClickHouse/clickhouse-docs/raw/84f38d893eb7e561c7296279d7953b6a508ec413/static/img/clickhouse-logo.svg
+    keywords:
+    - database
+    - clickhouse
+    - clickhouse-backup
+    - altinity
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: clickhouse
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/clickhouse
+    - https://github.com/ClickHouse/ClickHouse
+    - https://hub.docker.com/r/clickhouse/clickhouse-server
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-0.8.7/clickhouse-0.8.7.tgz
+    version: 0.8.7
+  - apiVersion: v2
+    appVersion: 24.12.6
     created: "2025-09-28T22:18:52.11696884Z"
     description: Clickhouse chart for Kubernetes
     digest: c8086d4fd224f06e187ba2ee0c10e0eed69d30b9df304bf8c45984dad9e33b30
@@ -4182,6 +4206,29 @@ entries:
     - https://github.com/sergelogvinov/helm-charts/releases/download/ipsec-0.1.0/ipsec-0.1.0.tgz
     version: 0.1.0
   keydb:
+  - apiVersion: v2
+    appVersion: 6.3.3
+    created: "2025-10-12T08:33:03.206042292Z"
+    description: KeyDB with TLS, backup/restore support
+    digest: 6fc2c3653141d29114cc4c79d08670672206de9cab1e4a899b67930e134595da
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/keydb/icon.svg
+    keywords:
+    - keydb
+    - redis
+    - wal-g
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: keydb
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/keydb
+    - https://docs.keydb.dev
+    - https://github.com/wal-g/wal-g
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.19.2/keydb-0.19.2.tgz
+    version: 0.19.2
   - apiVersion: v2
     appVersion: 6.3.3
     created: "2025-10-01T05:34:31.937625366Z"
@@ -12655,4 +12702,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-10-11T13:40:08.884976409Z"
+generated: "2025-10-12T08:33:03.207272234Z"
