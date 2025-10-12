@@ -5301,6 +5301,29 @@ entries:
   mongodb-backup:
   - apiVersion: v2
     appVersion: 8.0.10
+    created: "2025-10-12T08:34:40.97314339Z"
+    description: Mongo backup with restore checks
+    digest: f457dc0a8be3bc3560a6d8e84c1ab83f61ef1d33f5758b81e5c5793ff88a5111
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/mongodb-backup/icon.png
+    keywords:
+    - mongodb
+    - backup
+    - wal-g
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: mongodb-backup
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/mongodb-backup
+    - https://www.mongodb.com
+    - https://github.com/wal-g/wal-g
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/mongodb-backup-1.0.4/mongodb-backup-1.0.4.tgz
+    version: 1.0.4
+  - apiVersion: v2
+    appVersion: 8.0.10
     created: "2025-06-09T03:04:23.78747378Z"
     description: Mongo backup with restore checks
     digest: b2f09d220b9526cdcbde0cdc387beb60b9477a661117e3d8e314670bb4c97ef5
@@ -11922,6 +11945,26 @@ entries:
   talos-backup:
   - apiVersion: v2
     appVersion: v0.1.0-beta.2
+    created: "2025-10-12T08:34:41.114023725Z"
+    description: Talos etcd backup
+    digest: b37fbc821bcc8745ac9df49894bc65b732cf9007c5260842594f8fccb82730d8
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/talos-backup/icon.png
+    keywords:
+    - talos
+    - etcd
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: talos-backup
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/talos-backup
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/talos-backup-0.1.2/talos-backup-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: v0.1.0-beta.2
     created: "2024-12-08T10:30:27.786453867Z"
     description: Talos etcd backup
     digest: 84e88a39477ddf0cf0d59ab5c39adaec16b7fda0a73b4267818a3ac36253b0d0
@@ -12702,4 +12745,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-10-12T08:33:03.207272234Z"
+generated: "2025-10-12T08:34:41.116081786Z"
