@@ -1,8 +1,4 @@
-{{- if semverCompare ">=1.22" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: policy/v1
-{{- else -}}
-apiVersion: policy/v1beta1
-{{- end }}
+apiVersion: {{ ge .Capabilities.KubeVersion.Minor "21" | ternary "policy/v1" "policy/v1beta1" }}
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "keydb.fullname" . }}
