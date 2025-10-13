@@ -7,12 +7,14 @@ metadata:
   labels:
     {{- include "postgresql-single.labels" . | nindent 4 }}
 spec:
-  # resources:
-  #   claims:
-  #     - name: cpu
-  #       request: {{ .Values.backup.resources.cpu }}
-  #     - name: memory
-  #       request: {{ .Values.backup.resources.memory }}
+  resources:
+  {{- with .Values.backup.resources.limits }}
+    limits:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
+    requests:
+      cpu: 100m
+      memory: 32Mi
   downloadConcurrency: 4
   downloadFileRetries: 15
   uploadConcurrency: 4
