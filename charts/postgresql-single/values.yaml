@@ -56,12 +56,16 @@ pgHbaConfiguration: []
   # - hostssl app       app                   10.0.0.0/8    md5
 
 initdb:
-  ## -- PostgreSQL initdb parameters
-  ## ref: https://www.postgresql.org/docs/current/app-initdb.html
+  # -- PostgreSQL initdb parameters
+  # ref: https://www.postgresql.org/docs/current/app-initdb.html
   args: "--data-checksums --auth-host=scram-sha-256"
 
-  ## -- PostgreSQL initdb scripts
-  ## ref: https://hub.docker.com/_/postgres
+  # -- Create owner and database
+  database: app
+  username: app
+
+  # -- PostgreSQL initdb scripts
+  # ref: https://hub.docker.com/_/postgres
   script: []
   #
   # - CREATE EXTENSION IF NOT EXISTS pg_stat_statements;

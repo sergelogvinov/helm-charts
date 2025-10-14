@@ -157,9 +157,8 @@ spec:
       localeCType: en_US.UTF-8
       locale: en_US.UTF-8
       dataChecksums: true
-      {{- if .Values.postgresqlDatabase }}
-      databases: {{ .Values.postgresqlDatabase | quote }}
-      {{- end }}
+      owner: {{ .Values.initdb.username | quote }}
+      database: {{ default .Values.initdb.database .Values.postgresqlDatabase | quote }}
       {{- if .Values.metrics.enabled }}
       postInitSQLRefs:
         configMapRefs:

@@ -1,6 +1,6 @@
 # postgresql-single
 
-![Version: 1.8.2](https://img.shields.io/badge/Version-1.8.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.10](https://img.shields.io/badge/AppVersion-16.10-informational?style=flat-square)
+![Version: 1.8.3](https://img.shields.io/badge/Version-1.8.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.10](https://img.shields.io/badge/AppVersion-16.10-informational?style=flat-square)
 
 Postgres with backup/restore and replication
 
@@ -93,8 +93,10 @@ metrics:
 | postgresqlUsername | string | `"postgres"` | PostgreSQL admin user ref: https://hub.docker.com/_/postgres |
 | postgresqlMaxConnections | int | `150` | Create a database ref: https://hub.docker.com/_/postgres postgresqlDatabase: |
 | pgHbaConfiguration | list | `[]` | Postgres auth ref: https://www.postgresql.org/docs/current/auth-pg-hba-conf.html |
-| initdb.args | string | `"--data-checksums --auth-host=scram-sha-256"` |  |
-| initdb.script | list | `[]` |  |
+| initdb.args | string | `"--data-checksums --auth-host=scram-sha-256"` | PostgreSQL initdb parameters ref: https://www.postgresql.org/docs/current/app-initdb.html |
+| initdb.database | string | `"app"` | Create owner and database |
+| initdb.username | string | `"app"` |  |
+| initdb.script | list | `[]` | PostgreSQL initdb scripts ref: https://hub.docker.com/_/postgres |
 | tlsCerts.create | bool | `false` |  |
 | tlsCerts.mode | string | `"require"` |  |
 | pooler.enabled | bool | `false` |  |
