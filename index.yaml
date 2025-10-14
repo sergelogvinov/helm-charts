@@ -7479,6 +7479,30 @@ entries:
   postgresql-single:
   - apiVersion: v2
     appVersion: "16.10"
+    created: "2025-10-14T00:50:05.635138461Z"
+    description: Postgres with backup/restore and replication
+    digest: 5361790743674dc7ac9d9611be58c141eba4fd129ee8fff3975a5cd986171cef
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/postgresql-single/icon.png
+    keywords:
+    - postgresql
+    - postgres
+    - cloudnative-pg
+    - database
+    - sql
+    - replication
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: postgresql-single
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/postgresql-single
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/postgresql-single-1.8.3/postgresql-single-1.8.3.tgz
+    version: 1.8.3
+  - apiVersion: v2
+    appVersion: "16.10"
     created: "2025-10-13T03:18:57.034056178Z"
     description: Postgres with backup/restore and replication
     digest: 841e6cb9f47ae403360cfe6cef7927404963f507a71e848be0b6c889271f21b8
@@ -12835,4 +12859,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-10-13T11:44:53.426006001Z"
+generated: "2025-10-14T00:50:05.636059405Z"
