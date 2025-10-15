@@ -448,6 +448,7 @@ rules:
   - poolers
   - databases
   - backups
+  - backupconfigs
   - scheduledbackups
   verbs:
   - get
