@@ -448,7 +448,6 @@ rules:
   - poolers
   - databases
   - backups
-  - backupconfigs
   - scheduledbackups
   verbs:
   - get
@@ -476,6 +475,10 @@ rules:
   - get
   - list
   - watch
+  - patch
+  - update
+  - create
+  - delete
 #### Clickhouse altinity
 - apiGroups:
   - clickhouse.altinity.com
