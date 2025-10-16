@@ -100,3 +100,39 @@
     annotations:
       description: PostgreSQL on {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} has unused {{ $labels.slot_type }} slot "{{ $labels.slot_name }}"
       summary: PostgreSQL replication slots
+---
+- name: postgresql-cnpg.rules
+  rules:
+  - alert: PostgresInstanceDown
+    expr:  cnpg_collector_up{} == 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      description: Postgres instance dead, {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} project={{ $labels.cluster }}
+      summary: Postgres instance dead
+  - alert: PostgresInstanceDown
+    expr:  cnpg_collector_up{cnpg_io_instanceRole="primary"} == 0
+    for: 30s
+    labels:
+      severity: critical
+    annotations:
+      description: Postgres primary instance dead, {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} project={{ $labels.cluster }}
+      summary: Postgres primary instance dead
+  - alert: PostgresOperatorControllerError
+    expr:  increase(controller_runtime_reconcile_errors_total{app_kubernetes_io_name="cloudnative-pg"}[10m]) > 1
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: Postgres Operator has reconcile error {{ $labels.kubernetes_namespace }} controller={{ $labels.controller }}
+      summary: Postgres Operator has reconcile error
+
+  - alert: PostgresWalArchiver
+    expr:  increase(cnpg_pg_stat_archiver_failed_count{cnpg_io_instanceRole="primary"}[10m]) > 2
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Postgres wal archiver failed {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} project={{ $labels.cluster }}
+      summary: Postgres wal archiver failed
