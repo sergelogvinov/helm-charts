@@ -277,7 +277,7 @@ backup:
   resources:
     limits:
       cpu: 2
-      memory: 1Gi
+      memory: 2Gi
     requests:
       cpu: 1500m
       memory: 768Mi
@@ -340,20 +340,20 @@ metrics:
   slowQueries: true
 
   queries: |-
+    {{- if eq .Values.installationType "standalone" }}
     pg_replication:
       query: SELECT CASE WHEN NOT pg_is_in_recovery() THEN 0 ELSE GREATEST (0, EXTRACT(EPOCH FROM (now() - pg_last_xact_replay_timestamp()))) END AS lag
-      master: true
       metrics:
         - lag:
             usage: "GAUGE"
             description: "Replication lag behind master in seconds"
     pg_postmaster:
       query: SELECT pg_postmaster_start_time as start_time_seconds from pg_postmaster_start_time()
-      master: true
       metrics:
         - start_time_seconds:
             usage: "GAUGE"
             description: "Time at which postmaster started"
+    {{- end }}
     {{- if and .Values.metrics.slowQueries (regexMatch "^[0-9]+\\.[0-9]+$" .Values.image.tag) (semverCompare ">=14.0" (default .Chart.AppVersion .Values.image.tag)) }}
     pg_stat_slow_queries:
       query: SELECT pg_get_userbyid(userid) as rolname,t3.datname,queryid,calls,max_exec_time / 1000 as max_time_seconds,REGEXP_REPLACE(substring(query,1,200),'["\n\s\t]+',' ','g') as sql FROM pg_stat_statements t1 JOIN pg_database t3 ON (t1.dbid=t3.oid) WHERE datname != 'postgres' AND rows != 0 AND max_exec_time > 1000 ORDER BY max_exec_time DESC LIMIT 10

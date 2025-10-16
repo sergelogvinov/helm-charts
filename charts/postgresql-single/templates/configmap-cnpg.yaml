@@ -15,11 +15,11 @@ spec:
     requests:
       cpu: 100m
       memory: 32Mi
-  downloadConcurrency: 4
-  downloadFileRetries: 15
-  uploadConcurrency: 4
-  uploadDiskConcurrency: 4
-  deltaMaxSteps: 1
+  uploadConcurrency: {{ default 8 (get .Values.backup.walg "WALG_UPLOAD_CONCURRENCY") }}
+  uploadDiskConcurrency: {{ default 16 (get .Values.backup.walg "WALG_UPLOAD_DISK_CONCURRENCY") }}
+  uploadDiskRateLimitBytesPerSecond: {{ default 536870912 (get .Values.backup.walg "WALG_DISK_RATE_LIMIT") }} # 512MB/s
+  uploadNetworkRateLimitBytesPerSecond: {{ default 268435456 (get .Values.backup.walg "WALG_NETWORK_RATE_LIMIT") }} # 256MB/s
+  deltaMaxSteps: {{ default 1 (get .Values.backup.walg "WALG_DELTA_MAX_STEPS") }}
   retention:
     ignoreForManualBackups: true
     minBackupsToKeep: 7
