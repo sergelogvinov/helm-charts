@@ -250,6 +250,8 @@ wal_writer_flush_after = 1MB
 {{- end }}
 {{- if ge (int64 $size) (int64 512000) }}
 wal_keep_size = {{ div $size 32 }}MB
+{{- else }}
+wal_keep_size = {{ div $size 10 }}MB
 {{- end }}
 
 max_replication_slots = 10
@@ -260,7 +262,9 @@ min_wal_size = 5120MB
 {{- else }}
 min_wal_size = 512MB
 {{- end }}
-max_slot_wal_keep_size = 1000MB
+{{- if ge (int64 $size) (int64 100000) }}
+max_slot_wal_keep_size = {{ div $size 10 }}MB
+{{- end }}
 
 # Checkpointing:
 checkpoint_timeout  = 15min

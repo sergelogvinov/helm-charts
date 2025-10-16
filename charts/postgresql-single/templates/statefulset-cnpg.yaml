@@ -149,6 +149,8 @@ spec:
   bootstrap:
     {{- if .Values.backup.recovery }}
     recovery:
+      owner: {{ .Values.initdb.username | quote }}
+      database: {{ default .Values.initdb.database .Values.postgresqlDatabase | quote }}
       source: {{ include "postgresql-single.fullname" . }}-backup
     {{- else }}
     initdb:
