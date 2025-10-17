@@ -27,6 +27,7 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9363"
       {{- end}}
+        checksum/envs: {{ toJson .Values.clickhouse.envs | sha256sum }}
       labels:
         {{- include "clickhouse.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: server

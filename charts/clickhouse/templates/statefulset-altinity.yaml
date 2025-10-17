@@ -66,9 +66,13 @@ spec:
       {{- end }}
       logger/level: {{ default "information" .Values.clickhouse.logLevel }}
     files:
-      configs.xml: |-
+      optimization.xml: |-
         <clickhouse>
-          <include_from>/etc/clickhouse-server/helm.d/optimization.xml</include_from>
+            {{- include "clickhouse.optimization" . | nindent 12 }}
+        </clickhouse>
+      storage.xml: |-
+        <clickhouse>
+            {{- include "clickhouse.storage" . | nindent 12 }}
         </clickhouse>
     {{- if .Values.clickhouse.customConfig }}
       {{- range $key, $value := .Values.clickhouse.customConfig }}
@@ -126,6 +130,7 @@ spec:
             prometheus.io/scrape: "true"
             prometheus.io/port: "9363"
           {{- end}}
+            checksum/envs: {{ toJson .Values.clickhouse.envs | sha256sum }}
         spec:
           enableServiceLinks: false
           {{- if .Values.priorityClassName }}
@@ -155,20 +160,8 @@ spec:
                   containerPort: 9363
                   protocol: TCP
               {{- end }}
-              volumeMounts:
-                - name: config
-                  mountPath: /etc/clickhouse-server/helm.d
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
-          volumes:
-            - name: config
-              projected:
-                sources:
-                  - configMap:
-                      name: {{ include "clickhouse.fullname" . }}
-                      items:
-                        - key: optimization.xml
-                          path: optimization.xml
           {{- with .Values.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}
@@ -183,7 +176,7 @@ spec:
           {{- end }}
     serviceTemplates:
       - name: {{ include "clickhouse.fullname" . }}
-        generateName: {{ include "clickhouse.fullname" . }}
+        generateName: {{ include "clickhouse.fullname" . }}{{ ternary "" (printf "-%s" .Values.clickhouse.name) (eq .Values.clickhouse.name "") }}
         metadata:
           labels:
             {{- include "clickhouse.labels" . | nindent 12 }}
