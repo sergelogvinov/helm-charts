@@ -294,6 +294,7 @@ data:
     <dictionaries>
     </dictionaries>
 
+  {{- if or .Values.backup.enabled .Values.backupCheck.enabled }}
   clickhouse-backup.yaml: |-
     general:
       log_level: warning
@@ -346,6 +347,7 @@ data:
     echo "***"
     echo "*** Recovery time - ${RUNTIME}s"
     echo "*** Size: `du -hs /var/lib/clickhouse`"
+  {{- end }}
 
 {{ range $key, $val := .Values.cronjobs }}
   command-{{ $key }}: |-

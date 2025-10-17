@@ -100,14 +100,14 @@ resources:
 
 # -- Additional volume mounts.
 extraVolumes: []
-  # - name: backet-certs
+  # - name: bucket-certs
   #   secret:
   #     defaultMode: 420
   #     secretName: backup-gcp
 
 # -- Additional volumes.
 extraVolumeMounts: []
-  # - name: backet-certs
+  # - name: bucket-certs
   #   mountPath: /etc/gcp
   #   readOnly: true
 
@@ -292,6 +292,10 @@ storage: {}
   #     prefer_not_to_merge: true
 
 clickhouse:
+  # -- Clickhouse cluster name
+  # Use helm-chart name if empty
+  name: ~
+
   # -- Clickhouse log level
   # ref: https://clickhouse.com/docs/en/operations/server-configuration-parameters/settings#logger
   # trace, debug, information, warning, error

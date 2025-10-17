@@ -18,7 +18,7 @@ spec:
       serviceTemplate: {{ include "clickhouse.fullname" . }}
   configuration:
     clusters:
-      - name: {{ include "clickhouse.fullname" . }}
+      - name: {{ default (include "clickhouse.fullname" .) .Values.clickhouse.name }}
         layout:
           shardsCount: 1
           replicasCount: {{ .Values.replicaCount }}
@@ -65,8 +65,12 @@ spec:
       prometheus/status_info: true
       {{- end }}
       logger/level: {{ default "information" .Values.clickhouse.logLevel }}
-    {{- if .Values.clickhouse.customConfig }}
     files:
+      configs.xml: |-
+        <clickhouse>
+          <include_from>/etc/clickhouse-server/helm.d/optimization.xml</include_from>
+        </clickhouse>
+    {{- if .Values.clickhouse.customConfig }}
       {{- range $key, $value := .Values.clickhouse.customConfig }}
       {{ $key }}: |-
         {{- $value | nindent 8 }}
@@ -138,8 +142,20 @@ spec:
                   containerPort: 9363
                   protocol: TCP
               {{- end }}
+              volumeMounts:
+                - name: config
+                  mountPath: /etc/clickhouse-server/helm.d
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
+          volumes:
+            - name: config
+              projected:
+                sources:
+                  - configMap:
+                      name: {{ include "clickhouse.fullname" . }}
+                      items:
+                        - key: optimization.xml
+                          path: optimization.xml
           {{- with .Values.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}

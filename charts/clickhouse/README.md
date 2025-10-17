@@ -1,6 +1,6 @@
 # clickhouse
 
-![Version: 0.9.1](https://img.shields.io/badge/Version-0.9.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 24.12.6](https://img.shields.io/badge/AppVersion-24.12.6-informational?style=flat-square)
+![Version: 0.9.2](https://img.shields.io/badge/Version-0.9.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 24.12.6](https://img.shields.io/badge/AppVersion-24.12.6-informational?style=flat-square)
 
 Clickhouse chart for Kubernetes
 
@@ -138,6 +138,7 @@ metrics:
 | tlsCerts.create | bool | `false` |  |
 | metrics.enabled | bool | `false` |  |
 | storage | object | `{}` |  |
+| clickhouse.name | string | `nil` | Clickhouse cluster name Use helm-chart name if empty |
 | clickhouse.logLevel | string | `"information"` | Clickhouse log level ref: https://clickhouse.com/docs/en/operations/server-configuration-parameters/settings#logger trace, debug, information, warning, error |
 | clickhouse.accessManagement | bool | `false` | Clickhouse SQL-driven Access Control refs: https://clickhouse.com/docs/en/operations/access-rights |
 | clickhouse.users[0] | object | `{"name":"logger","password":"2686af9f25e1a64f5e9f7290c7e457aa06b616fb31d2b4331ff6fa0857661cd5","profile":"default","quota":"default"}` | Clickhouse read write user |
