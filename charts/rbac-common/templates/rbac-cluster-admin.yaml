@@ -491,6 +491,8 @@ rules:
   - watch
   - patch
   - update
+  - create
+  - delete
 - apiGroups:
   - zookeeper.pravega.io
   resources:
@@ -501,6 +503,8 @@ rules:
   - watch
   - patch
   - update
+  - create
+  - delete
 #### Keda
 - apiGroups:
   - keda.sh
@@ -511,6 +515,8 @@ rules:
   - get
   - list
   - watch
+  - patch
+  - update
 - apiGroups:
   - keda.sh
   resources:
