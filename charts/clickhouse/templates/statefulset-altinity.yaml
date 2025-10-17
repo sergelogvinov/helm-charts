@@ -76,6 +76,19 @@ spec:
         {{- $value | nindent 8 }}
       {{- end }}
     {{- end }}
+    {{- if ne (len (default (list) .Values.clickhouse.zookeeper.nodes)) 0 }}
+    zookeeper:
+      {{- with .Values.clickhouse.zookeeper.nodes }}
+      nodes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.clickhouse.zookeeper.root }}
+      root: {{ .Values.clickhouse.zookeeper.root }}
+      {{- end }}
+      {{- if .Values.clickhouse.zookeeper.identity }}
+      identity: {{ .Values.clickhouse.zookeeper.identity }}
+      {{- end }}
+    {{- end }}
   templates:
     volumeClaimTemplates:
       - name: data

@@ -318,6 +318,11 @@ clickhouse:
       accessManagement: false # disable access management for this user (default: true)
       password: 3d0941964aa3ebdcb00ccef58b1bb399f9f898465e9886d5aec7f31090a0fb30 # echo -n "reader" | shasum -a 256
 
+  zookeeper: {}
+    # nodes: []
+    # root: ~
+    # identity: user:password
+
   # -- Clickhouse named collections
   collections: []
     # - name: postgres
