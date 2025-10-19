@@ -378,12 +378,13 @@ Create the walg configuration
 */}}
 {{- define "postgresql-single.walg" -}}
 {{- if not .Values.backup.walg }}
-WALG_TAR_SIZE_THRESHOLD: 274877906944
 WALG_TAR_DISABLE_FSYNC: true
-WALG_UPLOAD_WAL_METADATA: INDIVIDUAL
+WALG_TAR_SIZE_THRESHOLD: 68719476736
 WALG_PREVENT_WAL_OVERWRITE: true
 WALG_COMPRESSION_METHOD: brotli
 WALG_DELTA_MAX_STEPS: 1
+WALG_DISK_RATE_LIMIT: 536870912 # 512MB/s
+WALG_NETWORK_RATE_LIMIT: 268435456 # 256MB/s
 WALG_FILE_PREFIX: {{ .Values.persistence.mountPath }}/backup
 {{- else if eq .Values.installationType "cnpg" }}
 {{- $version := semver (default .Chart.AppVersion .Values.image.tag) }}

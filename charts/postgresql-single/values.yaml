@@ -261,8 +261,12 @@ backup:
   walpush: false
   walg: {}
     # WALG_TAR_DISABLE_FSYNC: true
-    # WALG_UPLOAD_WAL_METADATA: INDIVIDUAL
     # WALG_COMPRESSION_METHOD: brotli
+    # WALG_LIBSODIUM_KEY_TRANSFORM: hex
+    # WALG_LIBSODIUM_KEY: a1b2c3d4 # openssl rand -hex 32
+    # WALG_S3_PREFIX: s3://backup/postgres
+    # AWS_ACCESS_KEY_ID: aaaa
+    # AWS_SECRET_ACCESS_KEY: bbbb
   walgSourceConfig: ~
 
   cleanPolicy: "retain FULL 3"
