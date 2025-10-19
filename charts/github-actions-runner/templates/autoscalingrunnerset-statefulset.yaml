@@ -11,7 +11,7 @@ metadata:
 spec:
   serviceName: {{ include "github-actions-runner.fullname" . }}
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ max 1 .Values.minRunners }}
+  replicas: {{ max 1 .Values.autoscaling.minReplicas | int }}
   {{- end }}
   updateStrategy:
     type: RollingUpdate
