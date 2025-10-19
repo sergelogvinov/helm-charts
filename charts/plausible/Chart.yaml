@@ -16,7 +16,7 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.1.6
+version: 1.0.0
 #
 # renovate: datasource=docker depName=ghcr.io/plausible/community-edition
-appVersion: v2.1.5
+appVersion: v3.0.1
