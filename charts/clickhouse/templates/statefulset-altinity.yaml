@@ -86,9 +86,7 @@ spec:
       nodes:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.clickhouse.zookeeper.root }}
-      root: {{ .Values.clickhouse.zookeeper.root }}
-      {{- end }}
+      root: {{ default (printf "/%s/%s" (include "clickhouse.fullname" .) (default (include "clickhouse.fullname" .) .Values.clickhouse.name)) .Values.clickhouse.zookeeper.root }}
       {{- if .Values.clickhouse.zookeeper.identity }}
       identity: {{ .Values.clickhouse.zookeeper.identity }}
       {{- end }}
