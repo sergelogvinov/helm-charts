@@ -58,6 +58,22 @@
     annotations:
       description: RabbitMQ low memory detected {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
       summary: RabbitMQ memory free is not enough
+  - alert: RabbitmqMemoryLow
+    expr: sum by (source, node) ((rabbitmq_node_mem_limit-rabbitmq_node_mem_used)*100/rabbitmq_node_mem_limit) < 10
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: Memory less than 10% on {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}.
+      summary: Free memory for Rabbitmq less than 10% on {{ $labels.node }}. Publishers will be blocked.
+  - alert: RabbitmqMemoryHighWatermarkReached
+    expr: sum by (source, node) ((rabbitmq_node_mem_limit-rabbitmq_node_mem_used)*100/rabbitmq_node_mem_limit) <= 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: rabbitmq_node_mem_limit reached on {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}.
+      summary: rabbitmq_node_mem_limit reached on {{ $labels.node }}. Publishers are blocked.
 
   - alert: RabbitmqAuthError
     expr: increase(rabbitmq_auth_attempts_failed_total[10m]) > 5
