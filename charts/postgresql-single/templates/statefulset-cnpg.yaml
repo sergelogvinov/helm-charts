@@ -30,7 +30,7 @@ spec:
       {{- end }}
   enablePDB: {{ .Values.podDisruptionBudget.create }}
   instances: {{ .Values.replicaCount }}
-  imageName: ghcr.io/cloudnative-pg/postgresql:{{ .Chart.AppVersion }}
+  imageName: ghcr.io/cloudnative-pg/postgresql:{{ .Chart.AppVersion }}-standard-bookworm
   {{- with .Values.imagePullSecrets }}
   imagePullSecrets:
     {{- toYaml . | nindent 4 }}
