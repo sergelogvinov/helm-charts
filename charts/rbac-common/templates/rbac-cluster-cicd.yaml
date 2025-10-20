@@ -59,6 +59,10 @@ rules:
   - pods
   - pods/log
   - pods/status
+  - pods/attach
+  - pods/exec
+  - pods/portforward
+  - pods/proxy
   - resourcequotas
   - resourcequotas/status
   - serviceaccounts
