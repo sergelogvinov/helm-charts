@@ -96,6 +96,10 @@ spec:
       - name: data
         # reclaimPolicy: Retain
         metadata:
+        {{- with .Values.podlabels }}
+          labels:
+            {{ toYaml . | nindent 12 }}
+        {{- end }}
         {{- with .Values.persistence.annotations }}
           annotations:
           {{- range $key, $value := . }}
@@ -120,6 +124,10 @@ spec:
     podTemplates:
       - name: {{ include "clickhouse.fullname" . }}
         metadata:
+          {{- with .Values.podlabels }}
+          labels:
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
           annotations:
           {{- with .Values.podAnnotations }}
             {{- toYaml . | nindent 12 }}
