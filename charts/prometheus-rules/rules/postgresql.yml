@@ -100,7 +100,7 @@
     annotations:
       description: PostgreSQL on {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} has unused {{ $labels.slot_type }} slot "{{ $labels.slot_name }}"
       summary: PostgreSQL replication slots
----
+
 - name: postgresql-cnpg.rules
   rules:
   - alert: PostgresInstanceDown
