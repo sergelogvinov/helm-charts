@@ -73,10 +73,8 @@ spec:
             - postgres
             - -c
             - config_file=/postgresql/conf/postgresql.conf
-          {{- if .Values.pgHbaConfiguration }}
             - -c
             - hba_file=/postgresql/conf/pg_hba.conf
-          {{- end }}
           env:
             - name: POSTGRES_INITDB_ARGS
               value: {{ .Values.initdb.args | quote }}
