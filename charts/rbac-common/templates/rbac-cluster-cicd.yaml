@@ -108,6 +108,8 @@ rules:
   - deployments/scale
   - statefulsets
   - statefulsets/scale
+  - replicasets
+  - replicasets/scale
   verbs:
   - create
   - delete
@@ -126,6 +128,9 @@ rules:
   - statefulsets
   - statefulsets/scale
   - statefulsets/status
+  - replicasets
+  - replicasets/scale
+  - replicasets/status
   verbs:
   - get
   - list
