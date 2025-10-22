@@ -74,6 +74,8 @@ spec:
           {{- end }}
             - name: data
               mountPath: /data
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
