@@ -1,4 +1,5 @@
 {{- define "clickhouse.logger" -}}
+{{- $mem := include "resource-bytes" (default (default (dict) .Values.resources.limits ).memory .Values.resources.requests.memory) }}
 <logger>
     <level>{{ .Values.clickhouse.logLevel }}</level>
     <console>1</console>
@@ -19,6 +20,20 @@
     <ttl>event_date + INTERVAL 7 DAY DELETE</ttl>
     <flush_interval_milliseconds>7500</flush_interval_milliseconds>
 </query_views_log>
+{{- if le (div $mem 1000000000) 4 }}
+<query_metric_log remove="1" />
+<text_log remove="1" />
+<trace_log remove="1" />
+<metric_log remove="1" />
+<asynchronous_metric_log remove="1" />
+{{- else }}
+<query_metric_log>
+    <database>system</database>
+    <table>query_metric_log</table>
+    <ttl>event_date + INTERVAL 7 DAY DELETE</ttl>
+    <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+</query_metric_log>
+{{- end }}
 {{- end }}
 
 {{- define "clickhouse.optimization" -}}
@@ -26,12 +41,20 @@
 {{- $memHalf := int64 (div (sub (int64 $mem) 1000000000) 2) }}
 {{- if le (div $mem 1000000000) 2 -}}
 <mark_cache_size>1073741824</mark_cache_size>
-<max_server_memory_usage_to_ram_ratio>0.8</max_server_memory_usage_to_ram_ratio>
+<max_server_memory_usage>0</max_server_memory_usage>
+<max_server_memory_usage_to_ram_ratio>0.9</max_server_memory_usage_to_ram_ratio>
+<merges_mutations_memory_usage_to_ram_ratio>0.8</merges_mutations_memory_usage_to_ram_ratio>
+<background_pool_size>4</background_pool_size>
 <merge_tree>
     <merge_max_block_size>256</merge_max_block_size>
+    <max_parts_to_merge_at_once>1</max_parts_to_merge_at_once>
+    <max_bytes_to_merge_at_min_space_in_pool>10485760</max_bytes_to_merge_at_min_space_in_pool>
     <max_bytes_to_merge_at_max_space_in_pool>{{ max 1073741824 $memHalf }}</max_bytes_to_merge_at_max_space_in_pool>
     <max_suspicious_broken_parts>100</max_suspicious_broken_parts>
-    <min_merge_bytes_to_use_direct_io>1073741824</min_merge_bytes_to_use_direct_io>
+    <min_merge_bytes_to_use_direct_io>10737418240</min_merge_bytes_to_use_direct_io>
+    <number_of_free_entries_in_pool_to_lower_max_size_of_merge>2</number_of_free_entries_in_pool_to_lower_max_size_of_merge>
+    <number_of_free_entries_in_pool_to_execute_mutation>5</number_of_free_entries_in_pool_to_execute_mutation>
+    <number_of_free_entries_in_pool_to_execute_optimize_entire_partition>5</number_of_free_entries_in_pool_to_execute_optimize_entire_partition>
 </merge_tree>
 {{- else if le (div $mem 1000000000) 3 -}}
 <mark_cache_size>1073741824</mark_cache_size>
