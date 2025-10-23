@@ -324,8 +324,10 @@ rules:
   - list
 #### Custom resources
 - apiGroups:
+  - notification.toolkit.fluxcd.io
   - source.toolkit.fluxcd.io
   - helm.toolkit.fluxcd.io
+  - image.toolkit.fluxcd.io
   - kustomize.toolkit.fluxcd.io
   resources:
   - '*'
@@ -392,6 +394,16 @@ rules:
 - apiGroups:
   - external-secrets.io
   resources:
+  - secretstores
+  - clustersecretstores
+  - pushsecrets
+  - clusterpushsecrets
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - external-secrets.io
+  resources:
   - externalsecrets
   verbs:
   - get
@@ -403,24 +415,27 @@ rules:
 - apiGroups:
   - operator.victoriametrics.com
   resources:
+  - vmalerts
+  - vmalerts/status
+  - vmprobes
+  - vmprobes/status
   - vmrules
-  - vmrules/finalizers
-  verbs:
-  - get
-  - list
-  - watch
-  - create
-  - delete
-  - patch
-  - update
-- apiGroups:
-  - operator.victoriametrics.com
-  resources:
   - vmrules/status
   verbs:
   - get
   - list
   - watch
+- apiGroups:
+  - operator.victoriametrics.com
+  resources:
+  - vmalerts
+  - vmprobes
+  - vmrules
+  verbs:
+  - create
+  - delete
+  - patch
+  - update
 #### Percona Server for MongoDB
 - apiGroups:
   - psmdb.percona.com

@@ -24,6 +24,12 @@ rules:
   - patch
   - update
 - apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs:
+  - impersonate
+- apiGroups:
   - apiextensions.k8s.io
   resources:
   - customresourcedefinitions
@@ -63,8 +69,6 @@ rules:
   - pods/exec
   - pods/portforward
   - pods/proxy
-  - resourcequotas
-  - resourcequotas/status
   - serviceaccounts
   - services
   - services/status
@@ -72,6 +76,8 @@ rules:
   - bindings
   - events
   - limitranges
+  - resourcequotas
+  - resourcequotas/status
   - namespaces/status
   verbs:
   - get
@@ -106,10 +112,10 @@ rules:
   - deployments
   - deployments/rollback
   - deployments/scale
-  - statefulsets
-  - statefulsets/scale
   - replicasets
   - replicasets/scale
+  - statefulsets
+  - statefulsets/scale
   verbs:
   - create
   - delete
@@ -125,12 +131,12 @@ rules:
   - deployments
   - deployments/scale
   - deployments/status
-  - statefulsets
-  - statefulsets/scale
-  - statefulsets/status
   - replicasets
   - replicasets/scale
   - replicasets/status
+  - statefulsets
+  - statefulsets/scale
+  - statefulsets/status
   verbs:
   - get
   - list
@@ -229,6 +235,18 @@ rules:
   - list
   - watch
 
+- apiGroups:
+  - metrics.k8s.io
+  resources:
+  - pods
+  {{- if not .Values.rbac.singleNamespace }}
+  - nodes
+  {{- end }}
+  verbs:
+  - get
+  - list
+  - watch
+
 ####
 - apiGroups:
   - cert-manager.io
@@ -255,6 +273,16 @@ rules:
 - apiGroups:
   - external-secrets.io
   resources:
+  - secretstores
+  - clustersecretstores
+  - pushsecrets
+  - clusterpushsecrets
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - external-secrets.io
+  resources:
   - externalsecrets
   verbs:
   - get
@@ -262,27 +290,31 @@ rules:
   - watch
   - patch
   - update
+  - create
+  - delete
 #### Victoria Metrics
 - apiGroups:
   - operator.victoriametrics.com
   resources:
+  - vmalerts
+  - vmalerts/status
+  - vmprobes
+  - vmprobes/status
   - vmrules
-  verbs:
-  - get
-  - list
-  - watch
-  - create
-  - delete
-  - patch
-  - update
-- apiGroups:
-  - operator.victoriametrics.com
-  resources:
   - vmrules/status
   verbs:
   - get
   - list
   - watch
+- apiGroups:
+  - operator.victoriametrics.com
+  resources:
+  - vmrules
+  verbs:
+  - create
+  - delete
+  - patch
+  - update
 #### Keda
 - apiGroups:
   - keda.sh
