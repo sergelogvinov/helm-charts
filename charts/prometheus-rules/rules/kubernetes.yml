@@ -11,7 +11,7 @@
 
   - alert: PodMemoryResourcesAboveRequested
     expr: topk by(cluster, namespace, pod, container) (10, (max by(cluster, namespace, pod, container) (container_memory_working_set_bytes{container!=""}) - max by(cluster, namespace, pod, container) (kube_pod_container_resource_requests{resource="memory",unit="byte"})) > 100*1024*1024)
-    for: 5m
+    for: 10m
     labels:
       severity: warning
     annotations:
@@ -30,7 +30,7 @@
 
   - alert: PodCPUResourcesAboveRequested
     expr: topk by(cluster, namespace, pod, container) (10, (max by(cluster, namespace, pod, container) (irate(container_cpu_usage_seconds_total{container!=""}[5m])) - max by(cluster, namespace, pod, container) (kube_pod_container_resource_requests{resource="cpu",unit="core"})) > 0.2)
-    for: 5m
+    for: 10m
     labels:
       severity: warning
     annotations:
