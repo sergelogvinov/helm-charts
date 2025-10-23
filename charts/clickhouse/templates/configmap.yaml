@@ -23,7 +23,7 @@ data:
                 <max_bytes_before_external_group_by>{{ $memHalf }}</max_bytes_before_external_group_by>
                 <max_bytes_before_external_sort>{{ $memHalf }}</max_bytes_before_external_sort>
                 {{- end }}
-                {{- if le (div $mem 1000000000) 4 -}}
+                {{- if le (div $mem 1000000000) 4 }}
                 <max_download_threads>1</max_download_threads>
                 {{- end }}
             </default>
@@ -40,7 +40,7 @@ data:
                 <max_bytes_before_external_group_by>{{ $memHalf }}</max_bytes_before_external_group_by>
                 <max_bytes_before_external_sort>{{ $memHalf }}</max_bytes_before_external_sort>
                 {{- end }}
-                {{- if le (div $mem 1000000000) 4 -}}
+                {{- if le (div $mem 1000000000) 4 }}
                 <max_download_threads>1</max_download_threads>
                 {{- end }}
                 <readonly>2</readonly>
