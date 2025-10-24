@@ -1,5 +1,5 @@
 {{- define "clickhouse.logger" -}}
-{{- $mem := include "resource-bytes" (default (default (dict) .Values.resources.limits ).memory .Values.resources.requests.memory) }}
+{{- $mem := include "resource-bytes" (default (default (dict) .Values.resources.limits ).memory .Values.resources.requests.memory) -}}
 <logger>
     <level>{{ .Values.clickhouse.logLevel }}</level>
     <console>1</console>

@@ -1,4 +1,5 @@
 {{- if eq .Values.installationType "altinity" }}
+{{- $mem := include "resource-bytes" (default (default (dict) .Values.resources.limits ).memory .Values.resources.requests.memory) -}}
 apiVersion: clickhouse.altinity.com/v1
 kind: ClickHouseInstallation
 metadata:
@@ -6,7 +7,7 @@ metadata:
   labels:
     {{- include "clickhouse.labels" . | nindent 4 }}
     {{- with .Values.podlabels }}
-    {{ toYaml . | nindent 4 }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
   # troubleshoot: "no"
@@ -53,6 +54,11 @@ spec:
         - "0.0.0.0/0"
       {{- end }}
     profiles:
+      {{- if le (div $mem 1000000000) 4 }}
+      default/max_download_threads: 1
+      readonly/max_download_threads: 1
+      reader/max_download_threads: 1
+      {{- end }}
       readonly/readonly: 2
       reader/readonly: 2
     settings:
@@ -66,6 +72,16 @@ spec:
       {{- end }}
       logger/level: {{ default "information" .Values.clickhouse.logLevel }}
     files:
+      {{- if le (div $mem 1000000000) 4 }}
+      logger.xml: |-
+        <clickhouse>
+            <query_metric_log remove="1" />
+            <text_log remove="1" />
+            <trace_log remove="1" />
+            <metric_log remove="1" />
+            <asynchronous_metric_log remove="1" />
+        </clickhouse>
+      {{- end }}
       optimization.xml: |-
         <clickhouse>
             {{- include "clickhouse.optimization" . | nindent 12 }}

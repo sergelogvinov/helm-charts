@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "clickhouse.labels" . | nindent 4 }}
     {{- with .Values.podlabels }}
-    {{ toYaml . | nindent 4 }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
   serviceName: {{ include "clickhouse.fullname" . }}-headless
