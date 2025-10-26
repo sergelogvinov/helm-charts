@@ -4244,6 +4244,27 @@ entries:
   ipsec:
   - apiVersion: v2
     appVersion: "5.2"
+    created: "2025-10-26T07:20:44.757598125Z"
+    description: IPSec link for Kubernetes
+    digest: 78e5cdf52af37ea94301e6be3ced5ff95e10b8e0d79f321ec52197aef6458fce
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/ipsec/icon.png
+    keywords:
+    - ipsec
+    - vpn
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: ipsec
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/ipsec
+    - https://libreswan.org/
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/ipsec-0.6.1/ipsec-0.6.1.tgz
+    version: 0.6.1
+  - apiVersion: v2
+    appVersion: "5.2"
     created: "2025-06-09T03:05:33.466247832Z"
     description: IPSec link for Kubernetes
     digest: 14595d489e26a707928f7cdb4a90a99a079440a07e02dd6110d7633b8d26e606
@@ -13817,4 +13838,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-10-26T04:28:45.641708461Z"
+generated: "2025-10-26T07:20:44.759390282Z"
