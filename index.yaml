@@ -2221,6 +2221,27 @@ entries:
     version: 0.1.0
   clickhouse-keeper:
   - apiVersion: v2
+    appVersion: 24.12.6
+    created: "2025-10-26T04:28:45.640779876Z"
+    description: Clickhouse keeper chart for Kubernetes
+    digest: c451a4d36af6ff79e6267b629d4c9b96ac2b1de640329ebedb0440220e961ab1
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://github.com/ClickHouse/clickhouse-docs/raw/84f38d893eb7e561c7296279d7953b6a508ec413/static/img/clickhouse-logo.svg
+    keywords:
+    - database
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: clickhouse-keeper
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/clickhouse
+    - https://github.com/ClickHouse/ClickHouse
+    - https://hub.docker.com/r/clickhouse/clickhouse-server
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-keeper-0.7.2/clickhouse-keeper-0.7.2.tgz
+    version: 0.7.2
+  - apiVersion: v2
     appVersion: 24.10.2
     created: "2024-11-20T08:27:41.239536749Z"
     description: Clickhouse keeper chart for Kubernetes
@@ -13796,4 +13817,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-10-24T00:29:50.676893589Z"
+generated: "2025-10-26T04:28:45.641708461Z"
