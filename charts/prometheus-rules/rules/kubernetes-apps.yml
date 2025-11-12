@@ -1,10 +1,22 @@
 - name: kubernetes-apps-static.rules
   rules:
-  - alert: DeploymentReplicasNotUpdated
+  - alert: KubeDeploymentReplicasNotUpdated
     expr: (kube_deployment_status_replicas_unavailable{} > 0) unless (kube_deployment_spec_paused == 1)
-    for: 10m
+    for: 15m
     labels:
       severity: warning
     annotations:
       description: Replicas are not updated and unavailable for deployment {{$labels.namespace}}/{{$labels.deployment}}
       summary: Deployment replicas are outdated
+
+  - alert: KubeHpaReplicasReachedMax
+    expr: |-
+      kube_horizontalpodautoscaler_status_current_replicas{job="kubernetes-service-endpoints"} == kube_horizontalpodautoscaler_spec_max_replicas{job="kubernetes-service-endpoints"}
+        and
+      changes(kube_horizontalpodautoscaler_status_current_replicas{job="kubernetes-service-endpoints"}[30m]) == 0
+    for: 60m
+    labels:
+      severity: warning
+    annotations:
+      description: HPA replicas have reached the maximum limit {{$labels.namespace}}/{{$labels.horizontalpodautoscaler}}
+      summary: HPA replicas have reached the maximum limit
