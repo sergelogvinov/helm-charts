@@ -25,6 +25,7 @@ spec:
   tarSizeThreshold: {{ default 68719476736 (get .Values.backup.walg "WALG_TAR_SIZE_THRESHOLD") | int }} # 64GB
   {{- end }}
   retention:
+    ignoreForBackupConfigDeletion: true
     ignoreForManualBackups: true
     minBackupsToKeep: 7
     deleteBackupsAfter: 14d
