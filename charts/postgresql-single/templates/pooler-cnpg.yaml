@@ -22,8 +22,12 @@ spec:
   type: {{ $type }}
   pgbouncer:
     poolMode: {{ $.Values.pooler.mode }}
-    {{- with $.Values.pooler.parameters }}
     parameters:
+    {{- if and $.Values.postgresqlMaxConnections (not $.Values.pooler.parameters) }}
+      max_client_conn: {{ $.Values.postgresqlMaxConnections | quote }}
+      default_pool_size: "100"
+    {{- end }}
+    {{- with $.Values.pooler.parameters }}
       {{- toYaml . | nindent 6 }}
     {{- end }}
   template:

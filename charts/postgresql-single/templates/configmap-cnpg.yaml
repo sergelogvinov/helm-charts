@@ -15,15 +15,14 @@ spec:
     requests:
       cpu: 100m
       memory: 32Mi
+  downloadConcurrency: {{ default 16 (get .Values.backup.walg "WALG_DOWNLOAD_CONCURRENCY") }}
   uploadConcurrency: {{ default 8 (get .Values.backup.walg "WALG_UPLOAD_CONCURRENCY") }}
   uploadDiskConcurrency: {{ default 16 (get .Values.backup.walg "WALG_UPLOAD_DISK_CONCURRENCY") }}
-  uploadDiskRateLimitBytesPerSecond: {{ default 536870912 (get .Values.backup.walg "WALG_DISK_RATE_LIMIT") }} # 512MB/s
-  uploadNetworkRateLimitBytesPerSecond: {{ default 268435456 (get .Values.backup.walg "WALG_NETWORK_RATE_LIMIT") }} # 256MB/s
+  uploadDiskRateLimitBytesPerSecond: {{ default 1073741824 (get .Values.backup.walg "WALG_DISK_RATE_LIMIT") }} # 1GB/s
+  uploadNetworkRateLimitBytesPerSecond: {{ default 536870912 (get .Values.backup.walg "WALG_NETWORK_RATE_LIMIT") }} # 512MB/s
   deltaMaxSteps: {{ default 1 (get .Values.backup.walg "WALG_DELTA_MAX_STEPS") }}
-  {{- if false }}
   tarDisableFsync: {{ default true (get .Values.backup.walg "WALG_TAR_DISABLE_FSYNC") }}
   tarSizeThreshold: {{ default 68719476736 (get .Values.backup.walg "WALG_TAR_SIZE_THRESHOLD") | int }} # 64GB
-  {{- end }}
   retention:
     ignoreForBackupConfigDeletion: true
     ignoreForManualBackups: true
