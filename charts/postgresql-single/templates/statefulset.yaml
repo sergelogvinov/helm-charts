@@ -89,8 +89,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: PGUSER
-              value: {{ .Values.postgresqlUsername | quote }}
             - name: PGSSLMODE
               value: {{ .Values.tlsCerts.mode | quote }}
             {{- if hasPrefix "verify" .Values.tlsCerts.mode }}

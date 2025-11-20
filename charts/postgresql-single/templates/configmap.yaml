@@ -177,6 +177,9 @@ data:
     mkdir -p {{ .Values.persistence.mountPath }}/data
     /usr/bin/wal-g --config /etc/walg/walg.yaml backup-fetch {{ .Values.persistence.mountPath }}/data $WALG_BACKUP_VERSION
 
+    rm -f {{ .Values.persistence.mountPath }}/data/custom.conf {{ .Values.persistence.mountPath }}/data/override.conf
+    chmod u+rw $PGDATA/postgresql.auto.conf
+
     echo "# bootstrap addons" > $PGDATA/postgresql.auto.conf
 
     if [ "$HOSTNAME" != "{{ include "postgresql-single.primary" . }}" ]; then
