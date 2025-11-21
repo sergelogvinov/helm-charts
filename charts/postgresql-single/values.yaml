@@ -63,6 +63,7 @@ initdb:
   # -- Create owner and database
   database: app
   username: app
+  password: ~
 
   # -- PostgreSQL initdb scripts
   # ref: https://hub.docker.com/_/postgres
@@ -256,7 +257,12 @@ updateStrategy:
 
 backup:
   enabled: false
+
+  ## -- Create cluster from backup
   recovery: false
+  ## -- Cluster recovery method
+  ## can be backup or basebackup
+  recoveryMethod: backup
 
   walpush: false
   walg: {}
@@ -268,6 +274,7 @@ backup:
     # AWS_ACCESS_KEY_ID: aaaa
     # AWS_SECRET_ACCESS_KEY: bbbb
   walgSourceConfig: ~
+  walgSecrets: ~
 
   cleanPolicy: "retain FULL 3"
 

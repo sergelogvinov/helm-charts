@@ -165,17 +165,26 @@ data:
     #!/bin/sh -e
     set -e
 
-    [ -z "$WALG_BACKUP_VERSION" ] && export WALG_BACKUP_VERSION=LATEST
-
-    echo "*** Star recovery from wal-g backup ($WALG_BACKUP_VERSION)"
     start=`date +%s`
     pg_ctl -D "$PGDATA" -m fast -w stop >/dev/null 2>/dev/null ||:
 
     rm -rf {{ .Values.persistence.mountPath }}/data
 
+    {{- if and (eq .Values.backup.recoveryMethod "basebackup") .Values.postgresqlConninfo }}
+    {{- $connection := include "postgresql-single.postgresqlConninfoDict" . | fromYaml }}
+    echo "*** Start recovery from basebackup ({{ $connection.host }})"
+
+    export PGPASSWORD={{ $connection.password }}
+    pg_basebackup -h {{ $connection.host }} -U {{ default .Values.postgresqlUsername $connection.user }} -D {{ .Values.persistence.mountPath }}/data
+    {{- else }}
+    [ -z "$WALG_BACKUP_VERSION" ] && export WALG_BACKUP_VERSION=LATEST
+
+    echo "*** Start recovery from wal-g backup ($WALG_BACKUP_VERSION)"
+
     touch {{ .Values.persistence.mountPath }}/postgresql-local.conf
     mkdir -p {{ .Values.persistence.mountPath }}/data
     /usr/bin/wal-g --config /etc/walg/walg.yaml backup-fetch {{ .Values.persistence.mountPath }}/data $WALG_BACKUP_VERSION
+    {{- end }}
 
     rm -f {{ .Values.persistence.mountPath }}/data/custom.conf {{ .Values.persistence.mountPath }}/data/override.conf
     chmod u+rw $PGDATA/postgresql.auto.conf

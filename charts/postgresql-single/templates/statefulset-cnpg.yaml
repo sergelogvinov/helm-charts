@@ -148,10 +148,15 @@ spec:
     {{- end }}
   bootstrap:
     {{- if .Values.backup.recovery }}
+    {{- if eq .Values.backup.recoveryMethod "basebackup" }}
+    pg_basebackup:
+      source: {{ include "postgresql-single.fullname" . }}-backup
+    {{- else }}
     recovery:
       owner: {{ .Values.initdb.username | quote }}
       database: {{ default .Values.initdb.database .Values.postgresqlDatabase | quote }}
       source: {{ include "postgresql-single.fullname" . }}-backup
+    {{- end }}
     {{- else }}
     initdb:
       encoding: UTF8
