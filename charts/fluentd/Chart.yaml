@@ -17,7 +17,7 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 1.4.0
+version: 1.4.1
 #
 # renovate: datasource=docker depName=ghcr.io/sergelogvinov/fluentd
-appVersion: 1.19.0
+appVersion: 1.19.1
