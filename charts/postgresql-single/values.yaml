@@ -43,6 +43,9 @@ postgresqlUsername: postgres
 postgresqlMaxConnections: 150
 # postgresqlConfiguration:
 # postgresqlConfigurationExtra:
+#   log_min_duration_statement: 100ms
+#   log_statement: ddl
+#   track_io_timing: "on"
 # postgresqlConfigurationLogs:
 
 # -- PostgreSQL connection string

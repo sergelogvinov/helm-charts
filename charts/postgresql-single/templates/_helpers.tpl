@@ -315,23 +315,63 @@ archive_command = '/bin/true'
 {{- end }}
 
 {{- define "postgresql-single.postgresqlConfigurationOptimization" -}}
-# auto generated, see https://pgconfigurator.cybertec.at
-work_mem = {{ div .Values.postgresqlServerMemory 32 }}MB
-maintenance_work_mem = {{ div .Values.postgresqlServerMemory 4 }}MB
-effective_cache_size = {{ div .Values.postgresqlServerMemory 2 }}MB
-effective_io_concurrency = 100
-random_page_cost = 1.25
+{{/* auto generated, see https://pgconfigurator.cybertec.at */}}
+{{- if gt (int .Values.postgresqlServerMemory) (int "511") }}
+work_mem: {{ div .Values.postgresqlServerMemory 32 }}MB
+maintenance_work_mem: {{ div .Values.postgresqlServerMemory 4 }}MB
+effective_cache_size: {{ div .Values.postgresqlServerMemory 2 }}MB
+effective_io_concurrency: "100"
+random_page_cost: "1.25"
 {{- if and .Values.resources.requests (hasKey .Values.resources.requests "hugepages-1Gi") }}
 {{- $pages := int (regexFind "[0-9]+" (get .Values.resources.requests "hugepages-1Gi")) }}
-shared_buffers = {{ sub $pages 1 }}GB
-huge_pages = try
+shared_buffers: {{ sub $pages 1 }}GB
+shared_memory_type: mmap
+huge_pages: try
 {{- else if and .Values.resources.requests (hasKey .Values.resources.requests "hugepages-2Mi") }}
 {{- $pages := int (include "resource-megabytes" (get .Values.resources.requests "hugepages-2Mi")) }}
-shared_buffers = {{ sub $pages 800 }}MB
-huge_pages = try
+shared_buffers: {{ sub $pages 800 }}MB
+shared_memory_type: mmap
+huge_pages: try
 {{- else }}
-shared_buffers = {{ div .Values.postgresqlServerMemory 4 }}MB
-huge_pages = off
+shared_buffers: {{ div .Values.postgresqlServerMemory 4 }}MB
+shared_memory_type: mmap
+huge_pages: "off"
+{{- end }}
+checkpoint_timeout: "15min"
+checkpoint_completion_target: "0.9"
+bgwriter_delay: "200ms"
+bgwriter_lru_maxpages: "100"
+bgwriter_lru_multiplier: "2.0"
+bgwriter_flush_after: "0"
+{{- end }}
+{{- end }}
+
+{{- define "postgresql-single.postgresqlConfigurationCnpg" -}}
+{{- $cpu := include "resource-cpu" (default .Values.resources.requests.cpu (get (default (dict) .Values.resources.limits) "cpu")) -}}
+max_connections: {{ .Values.postgresqlMaxConnections | quote }}
+superuser_reserved_connections: "5"
+tcp_keepalives_idle: "600"
+tcp_keepalives_interval: "75"
+tcp_keepalives_count: "10"
+track_io_timing: "on"
+pg_stat_statements.max: "1000"
+pg_stat_statements.track: "all"
+max_worker_processes: {{ $cpu | quote }}
+max_parallel_workers: {{ $cpu | quote }}
+max_parallel_workers_per_gather: {{ max 1 (div $cpu 2) | quote }}
+max_parallel_maintenance_workers: {{ max 1 (div $cpu 2) | quote }}
+parallel_leader_participation: "on"
+enable_partitionwise_join: "on"
+enable_partitionwise_aggregate: "on"
+jit: "on"
+{{- include "postgresql-single.postgresqlConfigurationOptimization" . | nindent 0 }}
+{{- end }}
+
+{{- define "postgresql-single.postgresqlConfigurationExtra" -}}
+{{- if .Values.postgresqlConfigurationExtra }}
+{{- range $key, $value := .Values.postgresqlConfigurationExtra }}
+{{ $key }}: {{ $value | quote }}
+{{- end }}
 {{- end }}
 {{- end }}
 
