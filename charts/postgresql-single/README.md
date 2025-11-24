@@ -1,6 +1,6 @@
 # postgresql-single
 
-![Version: 1.8.10](https://img.shields.io/badge/Version-1.8.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.11](https://img.shields.io/badge/AppVersion-16.11-informational?style=flat-square)
+![Version: 1.9.1](https://img.shields.io/badge/Version-1.9.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.11](https://img.shields.io/badge/AppVersion-16.11-informational?style=flat-square)
 
 Postgres with backup/restore and replication
 
@@ -96,6 +96,7 @@ metrics:
 | initdb.args | string | `"--data-checksums --auth-host=scram-sha-256"` | PostgreSQL initdb parameters ref: https://www.postgresql.org/docs/current/app-initdb.html |
 | initdb.database | string | `"app"` | Create owner and database |
 | initdb.username | string | `"app"` |  |
+| initdb.password | string | `nil` |  |
 | initdb.script | list | `[]` | PostgreSQL initdb scripts ref: https://hub.docker.com/_/postgres |
 | tlsCerts.create | bool | `false` |  |
 | tlsCerts.mode | string | `"require"` |  |
@@ -138,6 +139,7 @@ metrics:
 | updateStrategy.type | string | `"RollingUpdate"` |  |
 | backup.enabled | bool | `false` |  |
 | backup.recovery | bool | `false` |  |
+| backup.recoveryMethod | string | `"backup"` |  |
 | backup.walpush | bool | `false` |  |
 | backup.walg | object | `{}` |  |
 | backup.walgSourceConfig | string | `nil` |  |

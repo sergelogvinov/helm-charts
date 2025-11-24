@@ -175,6 +175,9 @@ data:
     echo "*** Start recovery from basebackup ({{ $connection.host }})"
 
     export PGPASSWORD={{ $connection.password }}
+    unset PGSSLCERT
+    unset PGSSLKEY
+    unset PGSSLROOTCERT
     pg_basebackup -h {{ $connection.host }} -U {{ default .Values.postgresqlUsername $connection.user }} -D {{ .Values.persistence.mountPath }}/data
     {{- else }}
     [ -z "$WALG_BACKUP_VERSION" ] && export WALG_BACKUP_VERSION=LATEST
