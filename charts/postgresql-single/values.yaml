@@ -87,7 +87,7 @@ pooler:
 
   replicaCount: 1
 
-  types: [rw,ro]
+  types: [rw, ro]
   mode: session
 
   parameters: {}
@@ -291,7 +291,7 @@ backup:
   resources:
     limits:
       cpu: 2
-      memory: 2Gi
+      memory: 4Gi
     requests:
       cpu: 1500m
       memory: 768Mi

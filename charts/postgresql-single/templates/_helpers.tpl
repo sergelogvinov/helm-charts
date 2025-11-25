@@ -206,17 +206,12 @@ Create the postgresqlConfiguration
 {{- define "postgresql-single.postgresqlConfiguration" -}}
 {{- if not .Values.postgresqlConfiguration }}
 {{- $size := include "resource-megabytes" (default "10Gi" .Values.persistence.size) }}
-{{- $cpu := include "resource-cpu" (default .Values.resources.requests.cpu (get (default (dict) .Values.resources.limits) "cpu")) }}
 listen_addresses = '*'
 
 lc_messages = 'en_US.UTF-8'
 lc_monetary = 'en_US.UTF-8'
 lc_numeric = 'en_US.UTF-8'
 lc_time = 'en_US.UTF-8'
-
-# Connectivity
-max_connections = {{ .Values.postgresqlMaxConnections }}
-superuser_reserved_connections = 5
 
 ssl = on
 ssl_max_protocol_version = TLSv1.3
@@ -230,10 +225,6 @@ ssl_key_file = '/etc/ssl/tlscerts/tls.key'
 ssl_ca_file = '/etc/ssl/tlscerts/ca.crt'
 {{- end }}
 ssl_crl_file = ''
-
-tcp_keepalives_idle = 600
-tcp_keepalives_interval = 75
-tcp_keepalives_count = 10
 
 shared_preload_libraries = 'pg_stat_statements'
 track_io_timing = on
@@ -266,30 +257,6 @@ min_wal_size = 512MB
 max_slot_wal_keep_size = {{ div $size 10 }}MB
 {{- end }}
 
-# Checkpointing:
-checkpoint_timeout  = 15min
-checkpoint_completion_target = 0.9
-
-# Background writer
-bgwriter_delay = 200ms
-bgwriter_lru_maxpages = 100
-bgwriter_lru_multiplier = 2.0
-bgwriter_flush_after = 0
-
-{{- if ge (int $cpu) 2 }}
-
-# Parallel queries:
-max_worker_processes = {{ $cpu }}
-max_parallel_workers = {{ $cpu }}
-max_parallel_workers_per_gather = {{ max 1 (div $cpu 2) }}
-max_parallel_maintenance_workers = {{ max 1 (div $cpu 2) }}
-parallel_leader_participation = on
-{{- end }}
-
-# Advanced features
-enable_partitionwise_join = on
-enable_partitionwise_aggregate = on
-jit = on
 {{- else }}
 {{ .Values.postgresqlConfiguration }}
 {{- end }}
