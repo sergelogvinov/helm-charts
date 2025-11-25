@@ -11,8 +11,8 @@ data:
     {{- include "postgresql-single.postgresqlConfigurationReplication" . | nindent 4 }}
 
     # auto generated, see https://pgconfigurator.cybertec.at
-    {{- include "postgresql-single.postgresqlConfigurationOptimization" . | nindent 4 }}
-    {{- include "postgresql-single.postgresqlConfigurationExtra" . | nindent 4 }}
+    {{- include "postgresql-single.postgresqlConfigurationOptimization" . | replace ":" "=" | nindent 4 }}
+    {{- include "postgresql-single.postgresqlConfigurationExtra" . | replace ":" "=" | nindent 4 }}
 
     include_if_exists '{{ .Values.persistence.mountPath }}/postgresql-local.conf'
 
