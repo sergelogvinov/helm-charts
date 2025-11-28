@@ -383,22 +383,32 @@ Set DATA_SOURCE_URI environment variable
 {{/*
 Create the walg configuration
 */}}
-{{- define "postgresql-single.walg" -}}
-{{- if not .Values.backup.walg }}
+{{- define "postgresql-single.walgDefault" -}}
 WALG_TAR_DISABLE_FSYNC: true
-WALG_TAR_SIZE_THRESHOLD: 68719476736
+WALG_TAR_SIZE_THRESHOLD: 8589934592
 WALG_PREVENT_WAL_OVERWRITE: true
 WALG_COMPRESSION_METHOD: brotli
-WALG_DELTA_MAX_STEPS: 1
-WALG_DISK_RATE_LIMIT: 536870912 # 512MB/s
-WALG_NETWORK_RATE_LIMIT: 268435456 # 256MB/s
+WALG_DELTA_MAX_STEPS: 0
+WALG_DISK_RATE_LIMIT: 1073741824 # 1GB/s
+WALG_NETWORK_RATE_LIMIT: 536870912 # 512MB/s
+WALG_UPLOAD_CONCURRENCY: 4
+WALG_UPLOAD_DISK_CONCURRENCY: 4
+{{- end }}
+
+{{- define "postgresql-single.walg" -}}
+{{- $walg := deepCopy .Values.backup.walg }}
+{{- if not .Values.backup.walg }}
+{{- include "postgresql-single.walgDefault" . | nindent 0 }}
 WALG_FILE_PREFIX: {{ .Values.persistence.mountPath }}/backup
 {{- else if eq .Values.installationType "cnpg" }}
 {{- $version := semver (default .Chart.AppVersion .Values.image.tag) }}
-{{- $walg := deepCopy .Values.backup.walg }}
 WALG_S3_PREFIX: {{ get .Values.backup.walg "WALG_S3_PREFIX" }}/{{ $version.Major }}
-{{ unset $walg "WALG_S3_PREFIX" | toYaml }}
+{{- with mergeOverwrite (include "postgresql-single.walgDefault" . | fromYaml) (unset $walg "WALG_S3_PREFIX") }}
+{{ . | toYaml }}
+{{- end }}
 {{- else }}
-{{- .Values.backup.walg | toYaml }}
+{{- with mergeOverwrite (include "postgresql-single.walgDefault" . | fromYaml) $walg }}
+{{ . | toYaml }}
+{{- end }}
 {{- end }}
 {{- end }}
