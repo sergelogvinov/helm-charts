@@ -12,7 +12,7 @@ data:
 
     # auto generated, see https://pgconfigurator.cybertec.at
     {{- range $key, $value := mergeOverwrite (include "postgresql-single.postgresqlConfigurationCnpg" . | fromYaml) (include "postgresql-single.postgresqlConfigurationExtra" . | fromYaml) }}
-    {{ $key }} = {{ $value | quote }}
+    {{ $key }} = '{{ $value }}'
     {{- end }}
 
     include_if_exists '{{ .Values.persistence.mountPath }}/postgresql-local.conf'
