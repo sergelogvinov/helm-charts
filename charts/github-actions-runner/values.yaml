@@ -47,7 +47,7 @@ dind:
   image:
     repository: docker
     pullPolicy: IfNotPresent
-    tag: 26.1-dind
+    tag: 29.0-dind
 
   # -- Resource requests and limits.
   # ref: https://kubernetes.io/docs/user-guide/compute-resources/

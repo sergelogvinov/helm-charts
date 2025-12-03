@@ -1,6 +1,6 @@
 # github-actions-runner
 
-![Version: 2.12.0](https://img.shields.io/badge/Version-2.12.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.330.0](https://img.shields.io/badge/AppVersion-2.330.0-informational?style=flat-square)
+![Version: 2.12.1](https://img.shields.io/badge/Version-2.12.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.330.0](https://img.shields.io/badge/AppVersion-2.330.0-informational?style=flat-square)
 
 Github Actions with container registry and mirrors
 
@@ -99,7 +99,7 @@ nodeSelector:
 | controllerServiceAccount.name | string | `"arc"` |  |
 | controllerServiceAccount.namespace | string | `""` |  |
 | dind.enabled | bool | `true` |  |
-| dind.image | object | `{"pullPolicy":"IfNotPresent","repository":"docker","tag":"26.1-dind"}` | Docker in Docker image. ref: https://hub.docker.com/_/docker/tags?page=1&name=dind |
+| dind.image | object | `{"pullPolicy":"IfNotPresent","repository":"docker","tag":"29.0-dind"}` | Docker in Docker image. ref: https://hub.docker.com/_/docker/tags?page=1&name=dind |
 | dind.resources | object | `{"limits":{"cpu":1,"memory":"1Gi"},"requests":{"cpu":"500m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | dind.extraVolumeMounts | list | `[]` | Additional container volume mounts. |
 | dind.extraVolumes | list | `[]` | Additional volumes. |
