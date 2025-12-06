@@ -20,7 +20,7 @@
     <ttl>event_date + INTERVAL 7 DAY DELETE</ttl>
     <flush_interval_milliseconds>7500</flush_interval_milliseconds>
 </query_views_log>
-{{- if le (div $mem 1000000000) 4 }}
+{{- if le (div $mem 1000000000) 8 }}
 <query_metric_log remove="1" />
 <text_log remove="1" />
 <trace_log remove="1" />
@@ -58,7 +58,7 @@
 </merge_tree>
 {{- else if le (div $mem 1000000000) 3 -}}
 <mark_cache_size>1073741824</mark_cache_size>
-<max_server_memory_usage_to_ram_ratio>0.8</max_server_memory_usage_to_ram_ratio>
+<max_server_memory_usage_to_ram_ratio>0.9</max_server_memory_usage_to_ram_ratio>
 <merge_tree>
     <merge_max_block_size>512</merge_max_block_size>
     <max_bytes_to_merge_at_max_space_in_pool>{{ max 1073741824 $memHalf }}</max_bytes_to_merge_at_max_space_in_pool>
@@ -67,7 +67,7 @@
 </merge_tree>
 {{- else if le (div $mem 1000000000) 4 -}}
 <mark_cache_size>1073741824</mark_cache_size>
-<max_server_memory_usage_to_ram_ratio>0.8</max_server_memory_usage_to_ram_ratio>
+<max_server_memory_usage_to_ram_ratio>0.9</max_server_memory_usage_to_ram_ratio>
 <merge_tree>
     <merge_max_block_size>512</merge_max_block_size>
     <max_bytes_to_merge_at_max_space_in_pool>{{ $memHalf }}</max_bytes_to_merge_at_max_space_in_pool>
@@ -76,7 +76,7 @@
 </merge_tree>
 {{- else if lt (div $mem 1000000000) 8 -}}
 <mark_cache_size>1073741824</mark_cache_size>
-<max_server_memory_usage_to_ram_ratio>0.8</max_server_memory_usage_to_ram_ratio>
+<max_server_memory_usage_to_ram_ratio>0.9</max_server_memory_usage_to_ram_ratio>
 <merge_tree>
     <merge_max_block_size>1024</merge_max_block_size>
     <max_bytes_to_merge_at_max_space_in_pool>{{ $memHalf }}</max_bytes_to_merge_at_max_space_in_pool>
