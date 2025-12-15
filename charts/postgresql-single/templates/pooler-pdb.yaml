@@ -8,11 +8,14 @@ metadata:
   name: {{ include "postgresql-single.fullname" $ }}-{{ $name }}
   labels:
     {{- include "postgresql-single.labels" $ | nindent 4 }}
+    {{- with $.Values.podlabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   minAvailable: 1
   selector:
     matchLabels:
-      {{- include "postgresql-single.selectorLabels" $ | nindent 6 }}
+      {{- include "postgresql-single.selectorLabels.cnpg" $ | nindent 6 }}
       app.kubernetes.io/component: {{ $name }}
 {{- end }}
 {{- end }}

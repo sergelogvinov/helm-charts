@@ -31,6 +31,32 @@ spec:
   storage:
     type: s3
     s3:
+      {{- if .Values.backup.walgSecrets }}
+      {{- if not (get .Values.backup.walg "WALG_S3_PREFIX") }}
+      prefixFrom:
+        secretKeyRef:
+          name: {{ .Values.backup.walgSecrets }}
+          key: prefix
+      {{- else }}
+      prefix: {{ get .Values.backup.walg "WALG_S3_PREFIX" }}
+      {{- end }}
+      {{- if not (get .Values.backup.walg "AWS_REGION") }}
+      regionFrom:
+        secretKeyRef:
+          name: {{ .Values.backup.walgSecrets }}
+          key: region
+      {{- else }}
+      region: {{ get .Values.backup.walg "AWS_REGION" }}
+      {{- end }}
+      {{- if not (get .Values.backup.walg "AWS_ENDPOINT") }}
+      endpointUrlFrom:
+        secretKeyRef:
+          name: {{ .Values.backup.walgSecrets }}
+          key: endpointUrl
+      {{- else }}
+      endpointUrl: {{ get .Values.backup.walg "AWS_ENDPOINT" }}
+      {{- end }}
+      {{- else }}
       prefix: {{ get .Values.backup.walg "WALG_S3_PREFIX" }}
       {{- if hasKey .Values.backup.walg "AWS_REGION" }}
       region: {{ get .Values.backup.walg "AWS_REGION" }}
@@ -38,8 +64,6 @@ spec:
       {{- if hasKey .Values.backup.walg "AWS_ENDPOINT" }}
       endpointUrl: {{ get .Values.backup.walg "AWS_ENDPOINT" }}
       {{- end }}
-      {{- if hasKey .Values.backup.walg "AWS_S3_FORCE_PATH_STYLE" }}
-      forcePathStyle: {{ get .Values.backup.walg "AWS_S3_FORCE_PATH_STYLE" | quote }}
       {{- end }}
       {{- if hasKey .Values.backup.walg "WALG_S3_STORAGE_CLASS" }}
       storageClass: {{ get .Values.backup.walg "WALG_S3_STORAGE_CLASS" }}
@@ -50,6 +74,9 @@ spec:
       accessKeySecret:
         name: {{ include "postgresql-single.fullname" . }}
         key: secretKey
+      {{- if hasKey .Values.backup.walg "AWS_S3_FORCE_PATH_STYLE" }}
+      forcePathStyle: {{ eq (get .Values.backup.walg "AWS_S3_FORCE_PATH_STYLE") "true" }}
+      {{- end }}
   {{- if or (hasKey .Values.backup.walg "WALG_LIBSODIUM_KEY")
             (hasKey .Values.backup.walg "WALG_LIBSODIUM_KEY_PATH") }}
   encryption:
