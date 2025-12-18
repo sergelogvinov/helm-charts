@@ -72,7 +72,7 @@ spec:
       {{- end }}
       logger/level: {{ default "information" .Values.clickhouse.logLevel }}
     files:
-      {{- if le (div $mem 1000000000) 4 }}
+      {{- if le (div $mem 1000000000) 8 }}
       logger.xml: |-
         <clickhouse>
             <query_metric_log remove="1" />
