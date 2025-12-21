@@ -1,6 +1,6 @@
 # registry-mirrors
 
-![Version: 2.0.9](https://img.shields.io/badge/Version-2.0.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.1.11](https://img.shields.io/badge/AppVersion-v2.1.11-informational?style=flat-square)
+![Version: 2.0.10](https://img.shields.io/badge/Version-2.0.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.1.12](https://img.shields.io/badge/AppVersion-v2.1.12-informational?style=flat-square)
 
 Container registry mirror
 

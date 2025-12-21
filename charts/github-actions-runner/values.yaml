@@ -132,7 +132,7 @@ mirrors:
   image:
     repository: ghcr.io/project-zot/zot
     pullPolicy: IfNotPresent
-    tag: "v2.1.11"
+    tag: "v2.1.12"
 
   # -- Container registry list.
   # ref: https://docs.docker.com/registry/recipes/mirror/
@@ -210,7 +210,7 @@ registry:
   image:
     repository: ghcr.io/project-zot/zot
     pullPolicy: IfNotPresent
-    tag: "v2.1.11"
+    tag: "v2.1.12"
 
   storage:
     ~
