@@ -11653,6 +11653,25 @@ entries:
     version: 0.1.0
   service-common:
   - apiVersion: v2
+    appVersion: 2.8.17
+    created: "2025-12-21T21:18:09.036268115Z"
+    description: Simple gateway with TLS auth
+    digest: 472aad72682df1c9997bb5fb0adf43d79a4d2e7e5f245730ef99e4f5e196306d
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - haproxy
+    - gateway
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: service-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/service-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/service-common-0.3.5/service-common-0.3.5.tgz
+    version: 0.3.5
+  - apiVersion: v2
     appVersion: 2.8.16
     created: "2025-10-05T14:36:31.350852326Z"
     description: Simple gateway with TLS auth
@@ -14490,4 +14509,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-19T00:34:58.384470486Z"
+generated: "2025-12-21T21:18:09.0387625Z"
