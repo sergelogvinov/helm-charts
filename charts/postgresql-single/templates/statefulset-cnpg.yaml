@@ -161,9 +161,9 @@ spec:
         dbname: {{ default "postgres" $connection.dbname }}
         sslmode: {{ default "require" $connection.sslmode }}
       password:
-        name: {{ include "postgresql-single.fullname" . }}
-        key: postgresqlReplicaPassword
-      {{- end}}
+        name: {{ include "postgresql-single.fullname" . }}-superuser
+        key: password
+      {{- end }}
   {{- if .Values.postgresqlConninfo }}
   replica:
     enabled: true
