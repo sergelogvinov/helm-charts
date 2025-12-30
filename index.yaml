@@ -140,6 +140,27 @@ entries:
     version: 0.1.0
   bitwarden:
   - apiVersion: v2
+    appVersion: 1.35.0
+    created: "2025-12-30T10:29:07.525735087Z"
+    description: A Helm chart to deploy Bitwarden.
+    digest: 72d678569beb2192882fa6f2e61e4ef0675716f512310ac77c997f5d62743805
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/bitwarden/brand/master/icons/icon-square.svg
+    keywords:
+    - vaultwarden
+    - bitwarden
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: bitwarden
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/bitwarden
+    - https://github.com/dani-garcia/vaultwarden
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/bitwarden-0.8.0/bitwarden-0.8.0.tgz
+    version: 0.8.0
+  - apiVersion: v2
     appVersion: 1.34.3
     created: "2025-10-14T05:19:13.782813095Z"
     description: A Helm chart to deploy Bitwarden.
@@ -14635,4 +14656,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-30T09:59:08.856369592Z"
+generated: "2025-12-30T10:29:07.527081918Z"
