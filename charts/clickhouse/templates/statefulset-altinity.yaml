@@ -54,7 +54,7 @@ spec:
         - "0.0.0.0/0"
       {{- end }}
     profiles:
-      {{- if le (div $mem 1000000000) 4 }}
+      {{- if le (div $mem 1000000000) 8 }}
       default/max_download_threads: 1
       readonly/max_download_threads: 1
       reader/max_download_threads: 1
@@ -72,7 +72,7 @@ spec:
       {{- end }}
       logger/level: {{ default "information" .Values.clickhouse.logLevel }}
     files:
-      {{- if le (div $mem 1000000000) 8 }}
+      {{- if lt (div $mem 1000000000) 32 }}
       logger.xml: |-
         <clickhouse>
             <query_metric_log remove="1" />
