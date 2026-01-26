@@ -213,7 +213,7 @@ agent:
   # -- Pod Security Context.
   # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   podSecurityContext:
-    fsGroup: 1000
+    fsGroup: 999
     fsGroupChangePolicy: "OnRootMismatch"
 
   # -- Container Security Context.
@@ -226,8 +226,8 @@ agent:
       drop:
         - ALL
     runAsNonRoot: true
-    runAsUser: 1001
-    runAsGroup: 1001
+    runAsUser: 1000
+    runAsGroup: 999
     # readOnlyRootFilesystem: true
 
   # -- Resource requests and limits.
