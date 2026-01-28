@@ -359,6 +359,24 @@ rules:
   verbs:
   - get
   - list
+#### Karpenter
+- apiGroups:
+  - karpenter.sh
+  resources:
+  - nodepools
+  - nodeclaims
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - karpenter.proxmox.sinextra.dev
+  resources:
+  - '*'
+  verbs:
+  - get
+  - list
+  - watch
 ####
 - apiGroups:
   - cert-manager.io
