@@ -22,6 +22,7 @@ autoscaling:
   scaleUp:
     stabilizationWindowSeconds: 30
 
+runnerRepos: ""
 runnerGroup: "default"
 runnerScaleSetName: ""
 # renovate: datasource=docker depName=ghcr.io/actions/gha-runner-scale-set-controller

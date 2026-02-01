@@ -1,6 +1,23 @@
 {{- if and (not (.Capabilities.APIVersions.Has "actions.github.com/v1alpha1")) .Values.autoscaling.enabled }}
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: {{ include "github-actions-runner.fullname" . }}-github
+  namespace: {{ .Release.Namespace }}
+spec:
+  secretTargetRef:
+    {{- if hasKey .Values.githubConfigSecret  "github_app_id" }}
+    - parameter: appKey
+      name: {{ include "github-actions-runner.fullname" . }}-github
+      key: github_app_private_key
+    {{- else }}
+    - parameter: personalAccessToken
+      name: {{ include "github-actions-runner.fullname" . }}-github
+      key: github_token
+    {{- end }}
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
 metadata:
   name: {{ include "github-actions-runner.fullname" . }}
   namespace: {{ .Release.Namespace }}
@@ -12,33 +29,38 @@ spec:
     apiVersion: apps/v1
     kind: StatefulSet
     name: {{ include "github-actions-runner.fullname" . }}
-  minReplicas: {{ .Values.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
-  behavior:
-    scaleDown:
-      selectPolicy: Min
-      policies:
-        - type: Pods
-          value: 1
-          periodSeconds: 120
-      stabilizationWindowSeconds:  {{ .Values.autoscaling.scaleDown.stabilizationWindowSeconds }}
-    scaleUp:
-      selectPolicy: Min
-      policies:
-        - type: Pods
-          value: 1
-          periodSeconds: 120
-      stabilizationWindowSeconds: {{ .Values.autoscaling.scaleUp.stabilizationWindowSeconds }}
-  metrics:
-    - type: Object
-      object:
-        metric:
-          name: github_actions_worker_usage_ratio
-        describedObject:
-          apiVersion: apps/v1
-          kind: Deployment
-          name: {{ include "github-actions-runner.fullname" . }}
-        target:
-          type: Value
-          value: {{ .Values.autoscaling.targetUtilizationPercentage }}
+  pollingInterval: 240
+  cooldownPeriod: {{ .Values.autoscaling.scaleDown.stabilizationWindowSeconds }}
+  minReplicaCount: {{ max 1 (default 1 .Values.autoscaling.minReplicas) }}
+  maxReplicaCount: {{ max 2 (default 2 .Values.autoscaling.maxReplicas) }}
+  fallback:
+    failureThreshold: 3
+    replicas: {{ max 2 (div (default 1 .Values.autoscaling.minReplicas) 2) }}
+    behavior: currentReplicasIfHigher
+  triggers:
+    - type: github-runner
+      metadata:
+        githubApiURL: "https://api.github.com"
+        {{- $configUrl := trimSuffix "/" .Values.githubConfigUrl }}
+        {{- if eq (len (regexSplit "/" $configUrl -1)) 4 }}
+        owner: {{ regexSplit "/" $configUrl -1 | last | quote }}
+        runnerScope: "org"
+        {{- with .Values.runnerRepos }}
+        repos: {{ . | quote }}
+        {{- end }}
+        enableEtags: "true"
+        {{- else }}
+        owner: "{{ regexSplit "/" $configUrl -1 | last | quote }}"
+        runnerScope: "repo"
+        {{- with .Values.runnerRepos }}
+        repos: {{ . | quote }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey .Values.githubConfigSecret  "github_app_id" }}
+        applicationID:  {{ default "" .Values.githubConfigSecret.github_app_id | quote }}
+        installationID: {{ default "" .Values.githubConfigSecret.github_app_installation_id | quote }}
+        {{- end }}
+        targetWorkflowQueueLength: "1"
+      authenticationRef:
+        name: {{ include "github-actions-runner.fullname" . }}-github
 {{- end }}
