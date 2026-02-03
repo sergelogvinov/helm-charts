@@ -1,6 +1,6 @@
 # clickhouse
 
-![Version: 0.10.12](https://img.shields.io/badge/Version-0.10.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 25.8.13](https://img.shields.io/badge/AppVersion-25.8.13-informational?style=flat-square)
+![Version: 0.10.13](https://img.shields.io/badge/Version-0.10.13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 25.8.13](https://img.shields.io/badge/AppVersion-25.8.13-informational?style=flat-square)
 
 Clickhouse chart for Kubernetes
 
@@ -119,7 +119,7 @@ metrics:
 | backup.enabled | bool | `false` |  |
 | backup.image.repository | string | `"altinity/clickhouse-backup"` |  |
 | backup.image.pullPolicy | string | `"IfNotPresent"` |  |
-| backup.image.tag | string | `"2.6.41"` |  |
+| backup.image.tag | string | `"2.6.42"` |  |
 | backup.schedule | string | `"15 4 * * *"` |  |
 | backup.args | list | `[]` |  |
 | backup.envs | object | `{}` |  |
