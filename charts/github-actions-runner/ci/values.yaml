@@ -2,6 +2,7 @@ installationType: "crd"
 
 githubConfigUrl: "https://github.com/..."
 githubConfigSecret:
+  github_token: sfd
   github_app_id: "fake-app-id"
   github_app_installation_id: "fake-id"
   github_app_private_key: |
