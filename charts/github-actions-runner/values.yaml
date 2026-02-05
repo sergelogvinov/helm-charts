@@ -12,6 +12,10 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# -- Type of installation
+# Can be: statefulset, crd
+installationType: "statefulset"
+
 autoscaling:
   enabled: false
   minReplicas: 1

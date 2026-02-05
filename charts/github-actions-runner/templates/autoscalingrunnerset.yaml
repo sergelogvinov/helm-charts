@@ -1,4 +1,4 @@
-{{- if .Capabilities.APIVersions.Has "actions.github.com/v1alpha1" }}
+{{- if and (eq .Values.installationType "crd") (.Capabilities.APIVersions.Has "actions.github.com/v1alpha1") }}
 {{ $sidecar := semverCompare ">=1.29-0" .Capabilities.KubeVersion.GitVersion }}
 apiVersion: actions.github.com/v1alpha1
 kind: AutoscalingRunnerSet

@@ -1,4 +1,4 @@
-{{- if not (.Capabilities.APIVersions.Has "actions.github.com/v1alpha1") }}
+{{- if and (eq .Values.installationType "crd") (.Capabilities.APIVersions.Has "actions.github.com/v1alpha1") }}
 1. Do not forget to add this rules to prometheus adapter:
     {{- $configUrl := trimSuffix "/" .Values.githubConfigUrl }}
     {{- if eq (len (regexSplit "/" $configUrl -1)) 4 }}

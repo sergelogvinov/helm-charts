@@ -1,3 +1,5 @@
+installationType: "crd"
+
 githubConfigUrl: "https://github.com/..."
 githubConfigSecret:
   github_app_id: "fake-app-id"
