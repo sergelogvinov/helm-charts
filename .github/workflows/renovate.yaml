@@ -26,7 +26,7 @@ jobs:
         with:
           renovate-image: ghcr.io/sergelogvinov/renovate
           renovate-version: 39
-          configurationFile: .github/renovate-global.json
+          configurationFile: .github/renovate-global.json5
           token: ${{ secrets.GITHUB_TOKEN }}
         env:
           LOG_LEVEL: "debug"
