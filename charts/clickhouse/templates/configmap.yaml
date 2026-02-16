@@ -85,16 +85,27 @@ data:
                 </networks>
             </backup>
         {{- end }}
-        {{- range .Values.clickhouse.users }}
-            <{{ .name }}>
-                {{- if .password_plain }}
-                <password>{{ .password_plain }}</password>
+        {{- range $u := .Values.clickhouse.users }}
+            <{{ $u.name }}>
+                {{- if and (hasKey $u "password_plain") (not (empty $u.password_plain)) }}
+                {{- $pp := $u.password_plain -}}
+                {{- if and (kindIs "map" $pp) $pp.secretKeyRef }}
+                <password from_env="{{ include "clickhouse.envVarName" (dict "user" $u.name "field" "PASSWORD_PLAIN") }}" />
+                {{- else }}
+                <password>{{ $pp }}</password>
                 {{- end }}
-                {{- if .password }}
-                <password_sha256_hex>{{ .password }}</password_sha256_hex>
                 {{- end }}
-                <profile>{{ .profile | default "default" }}</profile>
-                <quota>{{ .quota | default "default" }}</quota>
+
+                {{- if and (hasKey $u "password") (not (empty $u.password)) }}
+                {{- $p := $u.password -}}
+                {{- if and (kindIs "map" $p) $p.secretKeyRef }}
+                <password_sha256_hex from_env="{{ include "clickhouse.envVarName" (dict "user" $u.name "field" "PASSWORD_SHA256_HEX") }}" />
+                {{- else }}
+                <password_sha256_hex>{{ $p }}</password_sha256_hex>
+                {{- end }}
+                {{- end }}
+                <profile>{{ $u.profile | default "default" }}</profile>
+                <quota>{{ $u.quota | default "default" }}</quota>
                 <networks>
                     <ip>::/0</ip>
                     <ip>0.0.0.0/0</ip>
@@ -104,7 +115,7 @@ data:
                 <named_collection_control>1</named_collection_control>
                 <show_named_collections>1</show_named_collections>
                 {{- end }}
-            </{{ .name }}>
+            </{{ $u.name }}>
         {{- end }}
         </users>
     </clickhouse>
