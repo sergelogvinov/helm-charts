@@ -109,6 +109,10 @@ spec:
               mountPath: /var/log/clickhouse
             - name: data
               mountPath: /var/lib/clickhouse
+            {{- if .Values.clickhouse.initDB }}
+            - name: initdb
+              mountPath: /docker-entrypoint-initdb.d
+            {{- end }} 
           {{- if .Values.tlsCerts.create }}
             - name: tlscerts
               mountPath: /etc/ssl/tlscerts
@@ -164,6 +168,11 @@ spec:
             {{- end }}
         - name: logs
           emptyDir: {}
+        {{- if .Values.clickhouse.initDB }}
+        - name: initdb
+          configMap: 
+            name: {{ include "clickhouse.fullname" . }}-initdb
+        {{- end }}
       {{- if .Values.tlsCerts.create }}
         - name: tlscerts
           secret:

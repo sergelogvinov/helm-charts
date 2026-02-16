@@ -1,0 +1,15 @@
+{{- if .Values.clickhouse.initDB }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "clickhouse.fullname" . }}-initdb
+  labels:
+    {{- include "clickhouse.labels" . | nindent 4 }}
+data:
+{{- if .Values.clickhouse.initDB }}
+  {{- range $key, $value := .Values.clickhouse.initDB }}
+  {{ $key }}: |-
+    {{- $value | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- end }}
