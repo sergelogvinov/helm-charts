@@ -1,6 +1,6 @@
 # clickhouse
 
-![Version: 0.10.13](https://img.shields.io/badge/Version-0.10.13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 25.8.13](https://img.shields.io/badge/AppVersion-25.8.13-informational?style=flat-square)
+![Version: 0.12.0](https://img.shields.io/badge/Version-0.12.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 25.8.13](https://img.shields.io/badge/AppVersion-25.8.13-informational?style=flat-square)
 
 Clickhouse chart for Kubernetes
 
@@ -146,5 +146,6 @@ metrics:
 | clickhouse.zookeeper | object | `{}` |  |
 | clickhouse.collections | list | `[]` | Clickhouse named collections |
 | clickhouse.envs | object | `{}` |  |
+| clickhouse.envValueFrom | object | `{}` | Clickhouse environment variable references that will be added |
 | clickhouse.customConfig | object | `{}` |  |
 | clickhouse.initDB | object | `{}` | Clickhouse initdb scripts |

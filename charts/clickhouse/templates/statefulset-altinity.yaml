@@ -41,15 +41,37 @@ spec:
       backup/profile: default
       backup/quota: default
       {{- end }}
-      {{- range .Values.clickhouse.users }}
-      {{ .name }}/profile: {{ .profile | default "default" }}
-      {{ .name }}/quota: {{ .quota | default "default" }}
-      {{- if .password_plain }}
-      {{ .name }}/password: {{ .password_plain }}
-      {{- else if .password }}
-      {{ .name }}/password_sha256_hex: {{ .password }}
+      {{- range $u := .Values.clickhouse.users }}
+      {{ $u.name }}/profile: {{ $u.profile | default "default" }}
+      {{ $u.name }}/quota: {{ $u.quota | default "default" }}
+      {{- if and (hasKey $u "password_plain") (not (empty $u.password_plain)) }}
+      {{- $pp := $u.password_plain -}}
+      {{- if and (kindIs "map" $pp) $pp.secretKeyRef }}
+      {{ $u.name }}/password:
+        valueFrom:
+          secretKeyRef:
+            name: {{ $pp.secretKeyRef.name }}
+            key: {{ $pp.secretKeyRef.key }}
+      {{- else }}
+      {{ $u.name }}/password:
+        value: {{ $pp | quote }}
       {{- end }}
-      {{ .name }}/networks/ip:
+      {{- end }}
+
+      {{- if and (hasKey $u "password") (not (empty $u.password)) }}
+      {{- $p := $u.password -}}
+      {{- if and (kindIs "map" $p) $p.secretKeyRef }}
+      {{ $u.name }}/password_sha256_hex:
+        valueFrom:
+          secretKeyRef:
+            name: {{ $p.secretKeyRef.name }}
+            key: {{ $p.secretKeyRef.key }}
+      {{- else }}
+      {{ $u.name }}/password_sha256_hex:
+        value: {{ $p | quote }}
+      {{- end }}
+      {{- end }}
+      {{ $u.name }}/networks/ip:
         - "::/0"
         - "0.0.0.0/0"
       {{- end }}

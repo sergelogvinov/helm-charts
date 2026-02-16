@@ -61,6 +61,29 @@ spec:
           env:
             - name: HOME
               value: /tmp
+            {{- range $key, $value := .Values.clickhouse.envValueFrom }}
+            - name: {{ $key | quote }}
+              valueFrom:
+                {{- tpl (toYaml $value) $ | nindent 16 }}
+            {{- end }}
+            {{- range $u := .Values.clickhouse.users }}
+
+            {{- if and (hasKey $u "password_plain") (kindIs "map" $u.password_plain) $u.password_plain.secretKeyRef }}
+            - name: {{ include "clickhouse.envVarName" (dict "user" $u.name "field" "PASSWORD_PLAIN") }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $u.password_plain.secretKeyRef.name | quote }}
+                  key: {{ $u.password_plain.secretKeyRef.key | quote }}
+              {{- end }}
+
+            {{- if and (hasKey $u "password") (kindIs "map" $u.password) $u.password.secretKeyRef }}
+            - name: {{ include "clickhouse.envVarName" (dict "user" $u.name "field" "PASSWORD_SHA256_HEX") }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $u.password.secretKeyRef.name | quote }}
+                  key: {{ $u.password.secretKeyRef.key | quote }}
+              {{- end }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 8123

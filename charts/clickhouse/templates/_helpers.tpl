@@ -108,3 +108,10 @@ Convert a memory resource like "500Mi" to the number 500000000 (bytes)
 {{- mul (. | trimSuffix "Gi" | int64) 1000000000 -}}
 {{- end }}
 {{- end }}
+
+
+{{- define "clickhouse.envVarName" -}}
+{{- $user := .user | upper -}}
+{{- $field := .field | upper -}}
+{{- printf "CH_%s_%s" $user $field | replace "-" "_" -}}
+{{- end -}}

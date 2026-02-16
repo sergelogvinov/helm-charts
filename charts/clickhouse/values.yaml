@@ -311,13 +311,18 @@ clickhouse:
       profile: default
       quota: default
       password: 2686af9f25e1a64f5e9f7290c7e457aa06b616fb31d2b4331ff6fa0857661cd5 # echo -n "logger" | shasum -a 256
+      # or
+      # password:
+      #   secretKeyRef: { name: clickhouse_secret, key: logger }
     # -- Clickhouse read only user
     - name: reader
       profile: reader
       quota: default
       accessManagement: false # disable access management for this user (default: true)
       password: 3d0941964aa3ebdcb00ccef58b1bb399f9f898465e9886d5aec7f31090a0fb30 # echo -n "reader" | shasum -a 256
-
+      # or
+      # password:
+      #   secretKeyRef: { name: clickhouse_secret, key: reader }
   zookeeper: {}
     # nodes: []
     # root: ~
@@ -336,6 +341,13 @@ clickhouse:
     # AWS_REGION: eu-central-1
     # AWS_ACCESS_KEY_ID: XXXX
     # AWS_SECRET_ACCESS_KEY: YYYY
+
+  # -- Clickhouse environment variable references that will be added
+  envValueFrom: {}
+    # AWS_ACCESS_KEY_ID:
+    #   secretKeyRef:
+    #     name: aws-creds
+    #     key: access-key-id
 
   customConfig: {}
     # background_fetches_pool_size.xml: |-
