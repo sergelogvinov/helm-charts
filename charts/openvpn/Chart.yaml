@@ -16,7 +16,7 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.5.4
+version: 0.5.5
 #
 # renovate: datasource=docker depName=ghcr.io/sergelogvinov/openvpn
-appVersion: "2.6.14"
+appVersion: "2.6.16"
