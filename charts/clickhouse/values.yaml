@@ -343,3 +343,8 @@ clickhouse:
     #   <clickhouse>
     #     <background_fetches_pool_size>32</background_fetches_pool_size>
     #   </clickhouse>
+
+  # -- Clickhouse initdb scripts
+  initDB: {}
+    # test.sql: |-
+    #   CREATE TABLE test;

@@ -147,3 +147,4 @@ metrics:
 | clickhouse.collections | list | `[]` | Clickhouse named collections |
 | clickhouse.envs | object | `{}` |  |
 | clickhouse.customConfig | object | `{}` |  |
+| clickhouse.initDB | object | `{}` | Clickhouse initdb scripts |

@@ -184,6 +184,11 @@ spec:
               {{- end }}
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
+              {{- if .Values.clickhouse.initDB }}
+              volumeMounts:
+                - name: initdb
+                  mountPath: /docker-entrypoint-initdb.d
+              {{- end }} 
           {{- with .Values.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}
@@ -195,6 +200,12 @@ spec:
           {{- with .Values.tolerations }}
           tolerations:
             {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.clickhouse.initDB }}
+          volumes:
+            - name: initdb
+              configMap: 
+                name: {{ include "clickhouse.fullname" . }}-initdb
           {{- end }}
     serviceTemplates:
       - name: {{ include "clickhouse.fullname" . }}
