@@ -103,14 +103,15 @@ data:
     frontend {{ .name }}
       bind *:{{ .port }} mss {{ default 1280 $.Values.ipsecService.MTU }}
       option clitcpka
-      use_backend {{ .name }}
-    backend {{ .name }}
+      use_backend {{ .name }}-backend
+    backend {{ .name }}-backend
       mode tcp
-      # option   tcp-check
+      option   tcp-check
       balance  leastconn
       fullconn 512
 
       default-server check inter 30s fastinter 10s downinter 5s fall 3 rise 8 on-marked-down shutdown-sessions resolve-prefer ipv4
-      server {{ .name }} {{ .backend }}:{{ .port }} {{ if default false .source }}source {{ $.Values.ipsecService.ip }}{{ end }} no-check resolvers clusterdns
+      server {{ .name }} {{ .backend }}:{{ .port }} {{ if default false .source }}source {{ $.Values.ipsecService.ip }}{{ end }} resolvers clusterdns
+      {{ if default false .source }}source {{ $.Values.ipsecService.ip }}{{ end }}
     {{- end }}
     {{- end }}

@@ -52,7 +52,7 @@ ipsecService:
   image:
     repository: ghcr.io/sergelogvinov/haproxy
     pullPolicy: IfNotPresent
-    tag: "2.8.3-alpine3.18"
+    tag: 3.3.3-alpine3.23
 
   ip: 10.10.10.10
   networks: "%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:!172.30.240.0/24"
