@@ -1,6 +1,6 @@
 # clickhouse
 
-![Version: 0.13.0](https://img.shields.io/badge/Version-0.13.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 25.8.13](https://img.shields.io/badge/AppVersion-25.8.13-informational?style=flat-square)
+![Version: 0.14.0](https://img.shields.io/badge/Version-0.14.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 25.8.13](https://img.shields.io/badge/AppVersion-25.8.13-informational?style=flat-square)
 
 Clickhouse chart for Kubernetes
 
@@ -110,6 +110,8 @@ metrics:
 | resources | object | `{"requests":{"cpu":"500m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | extraVolumes | list | `[]` | Additional volume mounts. |
 | extraVolumeMounts | list | `[]` | Additional volumes. |
+| extraInitContainers | object | `{}` | Additional init containers. |
+| extraContainers | object | `{}` | Additional containers. |
 | persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":true,"size":"64Gi"}` | Persistence parameters ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
 | priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
 | updateStrategy | object | `{"type":"RollingUpdate"}` | pod deployment update strategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |

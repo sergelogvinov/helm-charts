@@ -111,6 +111,15 @@ extraVolumeMounts: []
   #   mountPath: /etc/gcp
   #   readOnly: true
 
+# -- Additional init containers.
+extraInitContainers: {}
+  # - name: container-name
+  # - image: ...
+# -- Additional containers.
+extraContainers: {}
+  # - name: container-name
+  # - image: ...
+
 # -- Persistence parameters
 # ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 persistence:
