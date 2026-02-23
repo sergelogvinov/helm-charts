@@ -187,6 +187,10 @@ spec:
           serviceAccountName: {{ include "clickhouse.serviceAccountName" . }}
           securityContext:
             {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          {{- with .Values.extraInitContainers }}
+          initContainers:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
           containers:
             - name: "clickhouse"
               securityContext:
@@ -211,6 +215,9 @@ spec:
                 - name: initdb
                   mountPath: /docker-entrypoint-initdb.d
               {{- end }} 
+          {{- with .Values.extraContainers }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- with .Values.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}
