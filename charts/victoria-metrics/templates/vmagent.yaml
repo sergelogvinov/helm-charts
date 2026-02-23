@@ -5,7 +5,12 @@ metadata:
   labels:
     {{- include "victoria-metrics.labels" . | nindent 4 }}
 spec:
+  {{- if eq .Values.vmAgent.replicaCount 1 }}
   replicaCount: {{ .Values.vmAgent.replicaCount }}
+  {{- else }}
+  shardCount: {{ .Values.vmAgent.replicaCount }}
+  statefulMode: true
+  {{- end }}
   revisionHistoryLimitCount: 2
 
   podMetadata:
