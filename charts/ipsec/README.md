@@ -1,6 +1,6 @@
 # ipsec
 
-![Version: 0.6.2](https://img.shields.io/badge/Version-0.6.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.2](https://img.shields.io/badge/AppVersion-5.2-informational?style=flat-square)
+![Version: 0.6.3](https://img.shields.io/badge/Version-0.6.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.2](https://img.shields.io/badge/AppVersion-5.2-informational?style=flat-square)
 
 IPSec link for Kubernetes
 
@@ -97,7 +97,7 @@ config: |
 | ipsecService.enabled | bool | `false` |  |
 | ipsecService.image.repository | string | `"ghcr.io/sergelogvinov/haproxy"` |  |
 | ipsecService.image.pullPolicy | string | `"IfNotPresent"` |  |
-| ipsecService.image.tag | string | `"3.3.3-alpine3.23"` |  |
+| ipsecService.image.tag | string | `"3.3.4-alpine3.23"` |  |
 | ipsecService.ip | string | `"10.10.10.10"` |  |
 | ipsecService.networks | string | `"%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:!172.30.240.0/24"` |  |
 | ipsecService.ports | list | `[]` |  |
