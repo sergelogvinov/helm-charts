@@ -7,6 +7,8 @@ nameOverride: ""
 fullnameOverride: ""
 
 vmAgent:
+  replicaCount: 1
+
   extraArgs:
     promscrape.maxScrapeSize: "67108864"
     promscrape.maxDroppedTargets: "10000"
