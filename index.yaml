@@ -2632,6 +2632,28 @@ entries:
     version: 0.1.0
   fluentd:
   - apiVersion: v2
+    appVersion: 1.19.2
+    created: "2026-02-23T05:41:15.952496158Z"
+    description: Deploy fluentd as log router
+    digest: 78c5afca051771879c1d3efb712a4f947ff1b4b3b858d48a02180c64818f0325
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/fluent/fluentd-docs/master/public/logo/Fluentd_square.png
+    keywords:
+    - fluentd
+    - logging
+    - logs
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: fluentd
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/fluentd
+    - https://www.fluentd.org
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/fluentd-1.4.2/fluentd-1.4.2.tgz
+    version: 1.4.2
+  - apiVersion: v2
     appVersion: 1.19.1
     created: "2025-11-22T06:19:37.589290686Z"
     description: Deploy fluentd as log router
@@ -15387,4 +15409,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-0.1.0/victoria-metrics-0.1.0.tgz
     version: 0.1.0
-generated: "2026-02-23T05:41:04.050829229Z"
+generated: "2026-02-23T05:41:15.953401988Z"
