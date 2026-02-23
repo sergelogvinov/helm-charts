@@ -2,6 +2,8 @@ fullnameOverride: vm
 priorityClassName: system-cluster-critical
 
 vmAgent:
+  replicaCount: 2
+
   secrets:
     - web-auth-tls
   externalLabels:
