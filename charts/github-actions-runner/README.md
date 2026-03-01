@@ -1,6 +1,6 @@
 # github-actions-runner
 
-![Version: 2.15.1](https://img.shields.io/badge/Version-2.15.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.331.0](https://img.shields.io/badge/AppVersion-2.331.0-informational?style=flat-square)
+![Version: 2.16.0](https://img.shields.io/badge/Version-2.16.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.332.0](https://img.shields.io/badge/AppVersion-2.332.0-informational?style=flat-square)
 
 Github Actions with container registry and mirrors
 
