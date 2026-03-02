@@ -289,6 +289,7 @@ data:
     httpd_suppress_version_string on
     forwarded_for off
     via off
+    dns_v4_first on
 
     http_access deny !Safe_ports
     http_access deny CONNECT !SSL_Ports
