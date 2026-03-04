@@ -25,6 +25,8 @@
 <text_log remove="1" />
 <trace_log remove="1" />
 <metric_log remove="1" />
+<part_log remove="1"/>
+<processors_profile_log remove="1"/>
 <asynchronous_metric_log remove="1" />
 {{- else }}
 <query_metric_log>

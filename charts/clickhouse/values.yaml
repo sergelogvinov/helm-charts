@@ -332,6 +332,7 @@ clickhouse:
       # or
       # password:
       #   secretKeyRef: { name: clickhouse_secret, key: reader }
+
   zookeeper: {}
     # nodes: []
     # root: ~

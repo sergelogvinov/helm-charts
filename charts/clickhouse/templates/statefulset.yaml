@@ -5,9 +5,9 @@ metadata:
   name: {{ include "clickhouse.fullname" . }}
   labels:
     {{- include "clickhouse.labels" . | nindent 4 }}
-    {{- with .Values.podlabels }}
+  {{- with .Values.podlabels }}
     {{- toYaml . | nindent 4 }}
-    {{- end }}
+  {{- end }}
 spec:
   serviceName: {{ include "clickhouse.fullname" . }}-headless
   replicas: {{ .Values.replicaCount }}
@@ -48,7 +48,7 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- with .Values.extraInitContainers }}
       initContainers:
-      {{- toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
@@ -139,7 +139,7 @@ spec:
             {{- if .Values.clickhouse.initDB }}
             - name: initdb
               mountPath: /docker-entrypoint-initdb.d
-            {{- end }} 
+            {{- end }}
           {{- if .Values.tlsCerts.create }}
             - name: tlscerts
               mountPath: /etc/ssl/tlscerts
@@ -147,7 +147,7 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.extraContainers }}
-      {{- toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
@@ -200,7 +200,7 @@ spec:
           emptyDir: {}
         {{- if .Values.clickhouse.initDB }}
         - name: initdb
-          configMap: 
+          configMap:
             name: {{ include "clickhouse.fullname" . }}-initdb
         {{- end }}
       {{- if .Values.tlsCerts.create }}
