@@ -55,6 +55,32 @@ spec:
             value: "3"
       {{- end }}
       initContainers:
+        {{- if .Values.podTailscaleNat.enabled }}
+        - name: {{ .Chart.Name }}-iptables
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_RAW
+              drop:
+                - ALL
+            runAsNonRoot: false
+            runAsUser: 0
+          image: {{ .Values.podTailscaleNat.image.repository }}:{{ .Values.podTailscaleNat.image.tag }}
+          imagePullPolicy: {{ .Values.podTailscaleNat.image.pullPolicy }}
+          command: ["/start/iptables.sh"]
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          volumeMounts:
+            - name: scripts
+              mountPath: /start
+        {{- end }}
         {{- if .Values.podTopology.enabled }}
         - name: {{ .Chart.Name }}-init
           securityContext:
@@ -82,7 +108,7 @@ spec:
       {{- end }}
         {{- if eq .Values.dnsPolicy "Local" }}
         - name: {{ .Chart.Name }}-dns
-          image: registry.k8s.io/coredns/coredns:v1.11.3
+          image: registry.k8s.io/coredns/coredns:v1.13.2
           imagePullPolicy: IfNotPresent
           args: [ "-conf", "/etc/coredns/Corefile" ]
           {{- if $sidecar }}

@@ -48,6 +48,16 @@ podSecurityContext:
 podTopology:
   enabled: false
 
+# -- Add Pod with iptables nat configuration.
+podTailscaleNat:
+  enabled: false
+
+  # -- Container for iptables utils
+  image:
+    repository: ghcr.io/sergelogvinov/iptables
+    pullPolicy: IfNotPresent
+    tag: 1.8.11-nft
+
 # -- Container Security Context.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 securityContext:
