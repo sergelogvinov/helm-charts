@@ -58,6 +58,8 @@ service:
     #   port: 5432
     #   backend: postgres.default.svc.cluster.local:5432
     #   tls: true
+    #   # Set bandwidth limits 10MB/s
+    #   limit: 10
 
 certManager:
   createCerts: false

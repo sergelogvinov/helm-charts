@@ -78,8 +78,10 @@ data:
     frontend {{ .name }}
       bind *:{{ .port }} mss {{ default 1280 (sub $.Values.wireguard.wireguardMTU 120) }}{{ if $value.tls }} ssl verify required crt /run/server.pem ca-file /etc/ssl/tlscerts/ca.crt{{ end }}
       option clitcpka
-      use_backend {{ .name }}
-    backend {{ .name }}
+      use_backend {{ .name }}-backend
+      filter bwlim-in  incoming-limit default-limit {{ .limit | default 1 }}m default-period 1s
+      filter bwlim-out outgoing-limit default-limit {{ .limit | default 1 }}m default-period 1s
+    backend {{ .name }}-backend
       mode tcp
       option   tcp-check
       balance  leastconn
