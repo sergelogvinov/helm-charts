@@ -24,7 +24,7 @@ spec:
       prometheus.io/port: "9187"
     {{- end}}
     labels:
-      {{- include "postgresql-single.labels" . | nindent 6 }}
+      {{- include "postgresql-single.selectorLabels" . | nindent 6 }}
       {{- with .Values.podlabels }}
       {{- toYaml . | nindent 6 }}
       {{- end }}

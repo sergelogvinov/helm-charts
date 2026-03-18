@@ -12,6 +12,7 @@ metadata:
   {{- end }}
   labels:
     {{- include "postgresql-single.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $name }}
     {{- with $.Values.podlabels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -33,7 +34,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "postgresql-single.labels" $ | nindent 8 }}
+        {{- include "postgresql-single.selectorLabels" $ | nindent 8 }}
         app.kubernetes.io/component: {{ $name }}
       annotations:
         prometheus.io/scrape: "true"
@@ -83,7 +84,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "postgresql-single.labels" $ | nindent 8 }}
+        {{- include "postgresql-single.selectorLabels" $ | nindent 8 }}
         app.kubernetes.io/component: {{ $name }}
         {{- with $.Values.pooler.service.podlabels }}
         {{- toYaml . | nindent 8 }}

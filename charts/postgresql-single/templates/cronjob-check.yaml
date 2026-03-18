@@ -27,7 +27,7 @@ spec:
             {{- with .Values.podlabels }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-            {{- include "postgresql-single.crontab.labels" . | nindent 12 }}
+            {{- include "postgresql-single.crontab.selectorLabels" . | nindent 12 }}
             app.kubernetes.io/component: checker
         spec:
           restartPolicy: Never

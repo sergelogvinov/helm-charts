@@ -15,7 +15,13 @@ spec:
   minAvailable: 1
   selector:
     matchLabels:
+      {{- if eq $.Values.installationType "cnpg" }}
       {{- include "postgresql-single.selectorLabels.cnpg" $ | nindent 6 }}
+      cnpg.io/podRole: pooler
+      cnpg.io/poolerName: {{ include "postgresql-single.fullname" $ }}-{{ $name }}
+      {{- else }}
+      {{- include "postgresql-single.selectorLabels" $ | nindent 6 }}
       app.kubernetes.io/component: {{ $name }}
+      {{- end }}
 {{- end }}
 {{- end }}
