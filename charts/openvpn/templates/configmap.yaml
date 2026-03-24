@@ -223,8 +223,8 @@ data:
     frontend {{ .name }}
       bind *:{{ .port }} mss 1160
       option clitcpka
-      use_backend {{ .name }}
-    backend {{ .name }}
+      use_backend {{ .name }}-backend
+    backend {{ .name }}-backend
       mode tcp
       option   tcp-check
       balance  leastconn
@@ -233,6 +233,7 @@ data:
       server {{ .name }} {{ .backend }} resolvers clusterdns
 
     {{- end }}
+    # services
 ---
 apiVersion: v1
 kind: ConfigMap
