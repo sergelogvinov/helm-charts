@@ -1,6 +1,6 @@
 # openvpn
 
-![Version: 0.5.6](https://img.shields.io/badge/Version-0.5.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.6.16](https://img.shields.io/badge/AppVersion-2.6.16-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.6.16](https://img.shields.io/badge/AppVersion-2.6.16-informational?style=flat-square)
 
 OpenVPN in kubernetes
 
@@ -138,7 +138,7 @@ vpn-%: ## create certificate for vpn
 | podAnnotations | object | `{}` | Annotations for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
 | podSecurityContext | object | `{"fsGroup":101,"fsGroupChangePolicy":"OnRootMismatch","runAsGroup":101,"runAsUser":0}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | securityContext | object | `{"capabilities":{"add":["NET_ADMIN","MKNOD","SETUID","SETGID"],"drop":["ALL"]},"runAsGroup":101,"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
-| service | object | `{"annotations":{},"ipFamilies":["IPv4"],"port":1190,"ports":[],"proto":"udp","type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
+| service | object | `{"annotations":{},"image":{"pullPolicy":"IfNotPresent","repository":"ghcr.io/sergelogvinov/haproxy","tag":"3.3.5-alpine3.23"},"ipFamilies":["IPv4"],"port":1190,"ports":[],"proto":"udp","type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
 | service.proto | string | `"udp"` | Protocol for service. Can be TCP, UDP or All. |
 | resources | object | `{"limits":{"cpu":1,"memory":"128Mi"},"requests":{"cpu":"100m","memory":"32Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | useDaemonSet | bool | `false` | Use a daemonset instead of a deployment |

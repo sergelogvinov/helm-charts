@@ -197,6 +197,11 @@ service:
     #   backend: postgres.default.svc.cluster.local:5432
     #   tls: true
 
+  image:
+    repository: ghcr.io/sergelogvinov/haproxy
+    pullPolicy: IfNotPresent
+    tag: 3.3.5-alpine3.23
+
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:

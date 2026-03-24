@@ -145,8 +145,8 @@ spec:
             runAsNonRoot: true
             runAsUser: 99
             runAsGroup: 99
-          image: "ghcr.io/sergelogvinov/haproxy:2.8.6-alpine3.19"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: {{ .Values.service.image.repository }}:{{ .Values.service.image.tag }}
+          imagePullPolicy: {{ .Values.service.image.pullPolicy }}
           command: ["/usr/local/sbin/haproxy","-f","/usr/local/etc/haproxy/haproxy.cfg"]
           ports:
             - name: stats
