@@ -30,6 +30,7 @@ spec:
   duration: 87600h # 10y
   renewBefore: 87000h # ~10y
   privateKey:
+    rotationPolicy: Always
     algorithm: ECDSA
     size: 256
   usages:
