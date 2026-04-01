@@ -1,0 +1,189 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMCluster
+metadata:
+  name: {{ include "victoria-metrics-storage.fullname" . }}
+  labels:
+    {{- include "victoria-metrics-storage.labels" . | nindent 4 }}
+spec:
+  useStrictSecurity: true
+  retentionPeriod: "1"
+  replicationFactor: 1
+
+  vmstorage:
+    disableAutomountServiceAccountToken: true
+    priorityClassName: {{ .Values.priorityClassName | quote }}
+    {{- if not .Values.vmstorage.autoscaling.enabled }}
+    replicaCount: {{ .Values.vmstorage.replicaCount }}
+    {{- end }}
+    {{- with .Values.vmstorage.image }}
+    image:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.vmstorage.extraArgs }}
+    extraArgs:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.vmstorage.resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.vmstorage.nodeSelector }}
+    nodeSelector:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.vmstorage.tolerations }}
+    tolerations:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.vmstorage.affinity }}
+    affinity:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- if or .Values.podAnnotations .Values.podLabels }}
+    podMetadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podLabels }}
+      labels:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- end }}
+    storageDataPath: "/vm-data"
+    {{- if .Values.vmstorage.persistence.enabled }}
+    storage:
+      volumeClaimTemplate:
+        metadata:
+          name: data
+          {{- with .Values.vmstorage.persistence.annotations }}
+          annotations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        spec:
+          accessModes:
+          {{- range .Values.vmstorage.persistence.accessModes }}
+            - {{ . | quote }}
+          {{- end }}
+          resources:
+            requests:
+              storage: {{ .Values.vmstorage.persistence.size | quote }}
+        {{- if .Values.vmstorage.persistence.storageClass }}
+        {{- if (eq "-" .Values.vmstorage.persistence.storageClass) }}
+          storageClassName: ""
+        {{- else }}
+          storageClassName: "{{ .Values.vmstorage.persistence.storageClass }}"
+        {{- end }}
+        {{- end }}
+    {{- end }}
+
+  vmselect:
+    disableAutomountServiceAccountToken: true
+    priorityClassName: {{ .Values.priorityClassName | quote }}
+    {{- if not .Values.vmselect.autoscaling.enabled }}
+    replicaCount: {{ .Values.vmselect.replicaCount }}
+    {{- end }}
+    {{- with .Values.vmselect.image }}
+    image:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.vmselect.extraArgs }}
+    extraArgs:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.vmselect.resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.vmselect.nodeSelector }}
+    nodeSelector:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.vmselect.tolerations }}
+    tolerations:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.vmselect.affinity }}
+    affinity:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- if or .Values.podAnnotations .Values.podLabels }}
+    podMetadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podLabels }}
+      labels:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- end }}
+    cacheMountPath: "/select-cache"
+    {{- if .Values.vmselect.persistence.enabled }}
+    storage:
+      volumeClaimTemplate:
+        metadata:
+          name: data
+          {{- with .Values.vmselect.persistence.annotations }}
+          annotations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        spec:
+          accessModes:
+          {{- range .Values.vmselect.persistence.accessModes }}
+            - {{ . | quote }}
+          {{- end }}
+          resources:
+            requests:
+              storage: {{ .Values.vmselect.persistence.size | quote }}
+        {{- if .Values.vmselect.persistence.storageClass }}
+        {{- if (eq "-" .Values.vmselect.persistence.storageClass) }}
+          storageClassName: ""
+        {{- else }}
+          storageClassName: "{{ .Values.vmselect.persistence.storageClass }}"
+        {{- end }}
+        {{- end }}
+    {{- end }}
+
+  vminsert:
+    disableAutomountServiceAccountToken: true
+    priorityClassName: {{ .Values.priorityClassName | quote }}
+    {{- if not .Values.vminsert.autoscaling.enabled }}
+    replicaCount: {{ .Values.vminsert.replicaCount }}
+    {{- end }}
+    {{- with .Values.vminsert.image }}
+    image:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.vminsert.extraArgs }}
+    extraArgs:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.vminsert.resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.vminsert.nodeSelector }}
+    nodeSelector:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.vminsert.tolerations }}
+    tolerations:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.vminsert.affinity }}
+    affinity:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- if or .Values.podAnnotations .Values.podLabels }}
+    podMetadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podLabels }}
+      labels:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- end }}
