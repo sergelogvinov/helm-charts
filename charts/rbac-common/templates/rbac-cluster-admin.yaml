@@ -433,12 +433,18 @@ rules:
 - apiGroups:
   - operator.victoriametrics.com
   resources:
+  - vmclusters
+  - vmclusters/status
+  - vmagents
+  - vmagents/status
   - vmalerts
   - vmalerts/status
   - vmprobes
   - vmprobes/status
   - vmrules
   - vmrules/status
+  - vmsingle
+  - vmsingle/status
   verbs:
   - get
   - list
