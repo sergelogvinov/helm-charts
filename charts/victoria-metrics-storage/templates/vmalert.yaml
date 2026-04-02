@@ -42,11 +42,11 @@ spec:
   remoteWrite:
     url: "http://vminsert-{{ include "victoria-metrics-storage.fullname" . }}:8480/select/0/prometheus/"
 
-  {{- with .Values.vmstorage.extraArgs }}
+  {{- with .Values.vmalert.extraArgs }}
   extraArgs:
     {{- toYaml . | nindent 6 }}
   {{- end }}
-  {{- with .Values.vmstorage.resources }}
+  {{- with .Values.vmalert.resources }}
   resources:
     {{- toYaml . | nindent 6 }}
   {{- end }}
