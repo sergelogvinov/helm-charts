@@ -27,7 +27,7 @@ spec:
   {{- end }}
 
   useStrictSecurity: true
-  selectAllByDefault: true
+  selectAllByDefault: false
   evaluationInterval: "60s"
 
   secrets:
