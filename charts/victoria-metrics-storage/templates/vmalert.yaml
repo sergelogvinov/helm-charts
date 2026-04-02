@@ -1,0 +1,64 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: vmalert
+metadata:
+  name: {{ include "victoria-metrics-storage.fullname" . }}
+  labels:
+    {{- include "victoria-metrics-storage.labels" . | nindent 4 }}
+spec:
+  disableAutomountServiceAccountToken: true
+  priorityClassName: {{ .Values.priorityClassName | quote }}
+  {{- if not .Values.vmalert.autoscaling.enabled }}
+  replicaCount: {{ .Values.vmalert.replicaCount }}
+  {{- end }}
+  {{- with .Values.vmalert.image }}
+  image:
+    {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{- if or .Values.podAnnotations .Values.podLabels }}
+  podMetadata:
+    {{- with .Values.podAnnotations }}
+    annotations:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.podLabels }}
+    labels:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+  {{- end }}
+
+  useStrictSecurity: true
+  selectAllByDefault: true
+  evaluationInterval: "60s"
+
+  secrets:
+    {{- toYaml .Values.vmalert.secrets | nindent 4 }}
+  configMaps:
+    {{- toYaml .Values.vmalert.configMaps | nindent 4 }}
+  rulePath:
+    {{- toYaml .Values.vmalert.rulePath | nindent 4 }}
+
+  datasource:
+    url: "http://vmselect-{{ include "victoria-metrics-storage.fullname" . }}:8481/select/0/prometheus/"
+  remoteWrite:
+    url: "http://vminsert-{{ include "victoria-metrics-storage.fullname" . }}:8480/select/0/prometheus/"
+
+  {{- with .Values.vmstorage.extraArgs }}
+  extraArgs:
+    {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{- with .Values.vmstorage.resources }}
+  resources:
+    {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{- with .Values.vmalert.nodeSelector }}
+  nodeSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.vmalert.affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.vmalert.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}

@@ -49,7 +49,6 @@ vmstorage:
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
 
-
 vmselect:
   replicaCount: 1
   autoscaling:
@@ -99,6 +98,41 @@ vminsert:
     enabled: false
 
   extraArgs: {}
+
+  # -- Resource requests and limits.
+  # ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  resources:
+    limits:
+      cpu: 1
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+  # -- Node labels for pod assignment.
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+    # node-role.kubernetes.io/control-plane: ""
+
+  # -- Tolerations for pod assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+    # - key: node-role.kubernetes.io/control-plane
+    #   effect: NoSchedule
+
+  # -- Affinity for pod assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+
+vmalert:
+  replicaCount: 1
+  autoscaling:
+    enabled: false
+
+  extraArgs: {}
+
+  configMaps: []
+  rulePath: []
 
   # -- Resource requests and limits.
   # ref: https://kubernetes.io/docs/user-guide/compute-resources/
