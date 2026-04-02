@@ -17,11 +17,11 @@ vmstorage:
   # ref: https://kubernetes.io/docs/user-guide/compute-resources/
   resources:
     limits:
-      cpu: 1
-      memory: 2Gi
+      cpu: 2
+      memory: 4Gi
     requests:
-      cpu: 100m
-      memory: 256Mi
+      cpu: 1
+      memory: 1Gi
 
   persistence:
     enabled: false
@@ -62,10 +62,10 @@ vmselect:
   resources:
     limits:
       cpu: 1
-      memory: 2Gi
+      memory: 1Gi
     requests:
-      cpu: 100m
-      memory: 256Mi
+      cpu: 500m
+      memory: 512Mi
 
   persistence:
     enabled: false
@@ -105,10 +105,10 @@ vminsert:
   resources:
     limits:
       cpu: 1
-      memory: 2Gi
+      memory: 1Gi
     requests:
-      cpu: 100m
-      memory: 256Mi
+      cpu: 500m
+      memory: 512Mi
 
   # -- Node labels for pod assignment.
   # ref: https://kubernetes.io/docs/user-guide/node-selection/

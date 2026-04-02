@@ -1,6 +1,6 @@
 # victoria-metrics-storage
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 Predefined resources for Victoria Metrics Operator
 
@@ -27,7 +27,7 @@ Predefined resources for Victoria Metrics Operator
 | vmstorage.replicaCount | int | `1` |  |
 | vmstorage.autoscaling.enabled | bool | `false` |  |
 | vmstorage.extraArgs | object | `{}` |  |
-| vmstorage.resources | object | `{"limits":{"cpu":1,"memory":"2Gi"},"requests":{"cpu":"100m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| vmstorage.resources | object | `{"limits":{"cpu":2,"memory":"4Gi"},"requests":{"cpu":1,"memory":"1Gi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | vmstorage.persistence.enabled | bool | `false` |  |
 | vmstorage.persistence.accessModes[0] | string | `"ReadWriteOnce"` |  |
 | vmstorage.persistence.size | string | `"10Gi"` |  |
@@ -38,7 +38,7 @@ Predefined resources for Victoria Metrics Operator
 | vmselect.replicaCount | int | `1` |  |
 | vmselect.autoscaling.enabled | bool | `false` |  |
 | vmselect.extraArgs | object | `{}` |  |
-| vmselect.resources | object | `{"limits":{"cpu":1,"memory":"2Gi"},"requests":{"cpu":"100m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| vmselect.resources | object | `{"limits":{"cpu":1,"memory":"1Gi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | vmselect.persistence.enabled | bool | `false` |  |
 | vmselect.persistence.accessModes[0] | string | `"ReadWriteOnce"` |  |
 | vmselect.persistence.size | string | `"10Gi"` |  |
@@ -49,7 +49,7 @@ Predefined resources for Victoria Metrics Operator
 | vminsert.replicaCount | int | `1` |  |
 | vminsert.autoscaling.enabled | bool | `false` |  |
 | vminsert.extraArgs | object | `{}` |  |
-| vminsert.resources | object | `{"limits":{"cpu":1,"memory":"2Gi"},"requests":{"cpu":"100m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| vminsert.resources | object | `{"limits":{"cpu":1,"memory":"1Gi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | vminsert.nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | vminsert.tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | vminsert.affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
