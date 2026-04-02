@@ -40,7 +40,7 @@ spec:
   datasource:
     url: "http://vmselect-{{ include "victoria-metrics-storage.fullname" . }}:8481/select/0/prometheus/"
   remoteWrite:
-    url: "http://vminsert-{{ include "victoria-metrics-storage.fullname" . }}:8480/select/0/prometheus/"
+    url: "http://vminsert-{{ include "victoria-metrics-storage.fullname" . }}:8480/insert/0/prometheus/"
 
   {{- with .Values.vmalert.extraArgs }}
   extraArgs:
