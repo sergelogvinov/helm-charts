@@ -52,7 +52,7 @@ service:
   type: ClusterIP
   ipFamilies: [IPv4]
   # enable headless service too for direct access to pods, e.g. for stateful applications or to access services via VPN
-  enableHeadlessService: true
+  enableHeadlessService: false
   ports:
     []
     # - name: postgres
