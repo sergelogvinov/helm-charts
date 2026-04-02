@@ -16282,6 +16282,30 @@ entries:
   victoria-metrics-storage:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2026-04-02T04:32:50.777772785Z"
+    description: Predefined resources for Victoria Metrics Operator
+    digest: 4bf8baf0fa87f113aa0e1aa71de6b0675e79d3e56cbaba8457d49011dc07e155
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://avatars.githubusercontent.com/u/43720803?s=200&v=4
+    keywords:
+    - prometheus
+    - victoria-metrics
+    - vmcluster
+    - vmalert
+    - metrics
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: victoria-metrics-storage
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/victoria-metrics-storage
+    - https://github.com/VictoriaMetrics
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.4/victoria-metrics-storage-0.0.4.tgz
+    version: 0.0.4
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2026-04-02T04:30:19.063703625Z"
     description: Predefined resources for Victoria Metrics Operator
     digest: 9a571a11c26d25601881ad7c71409be45d405fde5b85463e652c18c342f83f8e
@@ -16352,4 +16376,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-04-02T04:30:19.064793265Z"
+generated: "2026-04-02T04:32:50.778894678Z"
