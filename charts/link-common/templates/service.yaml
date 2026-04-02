@@ -28,3 +28,27 @@ spec:
   selector:
     {{- include "link-common.selectorLabels" . | nindent 4 }}
 {{- end }}
+{{- if and .Values.service.ports .Values.service.enableHeadlessService }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "link-common.fullname" . }}-headless
+  labels:
+    {{- include "link-common.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  clusterIP: None
+  ports:
+    {{- range $key, $value := .Values.service.ports }}
+    - name: {{ .name | trunc 15 }}
+      port: {{ .port }}
+      targetPort: {{ .port }}
+      protocol: TCP
+    {{- end }}
+  selector:
+    {{- include "link-common.selectorLabels" . | nindent 4 }}
+{{- end }}
