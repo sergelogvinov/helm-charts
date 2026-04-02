@@ -6473,6 +6473,26 @@ entries:
   link-common:
   - apiVersion: v2
     appVersion: 2.8.6-alpine3.19
+    created: "2026-04-02T12:11:56.703783497Z"
+    description: Simple vpn-p2p-link service
+    digest: 47e5895d4f04811a2e7f0ff9f0e30793786dd5c4c20eb1ace5ec09584a6ab3c1
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/link-common/icon.png
+    keywords:
+    - networking
+    - vpn
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: link-common
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/link-common
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/link-common-0.4.3/link-common-0.4.3.tgz
+    version: 0.4.3
+  - apiVersion: v2
+    appVersion: 2.8.6-alpine3.19
     created: "2026-03-16T10:21:26.107860173Z"
     description: Simple vpn-p2p-link service
     digest: 1a4eb51cd0f2ceca6667d44b2d34e9b48a8d7f60408485a84d65c96b6fd0d702
@@ -16468,4 +16488,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-04-02T07:23:05.931578834Z"
+generated: "2026-04-02T12:11:56.704900133Z"
