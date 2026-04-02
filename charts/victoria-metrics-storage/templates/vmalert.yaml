@@ -1,5 +1,5 @@
 apiVersion: operator.victoriametrics.com/v1beta1
-kind: vmalert
+kind: VMAlert
 metadata:
   name: {{ include "victoria-metrics-storage.fullname" . }}
   labels:
