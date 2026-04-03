@@ -31,6 +31,15 @@ envs:
   # -- After creation, better to disable admin portal
   DISABLE_ADMIN_TOKEN: "false"
 
+# -- Deployment environment variables
+# example: `- name: DATABASE_URL value: uri`
+env: []
+  # - name: DATABASE_URL
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: postgres-app-secrets
+  #       key: uri
+
 # -- Official documentation
 # https://github.com/dani-garcia/vaultwarden/wiki/Configuration-overview
 config:

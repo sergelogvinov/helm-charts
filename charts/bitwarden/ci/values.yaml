@@ -1,1 +1,7 @@
 envSecretName: bitwarden-secrets-envs
+env:
+  - name: DATABASE_URL
+    valueFrom:
+      secretKeyRef:
+        name: postgres-app-secrets
+        key: uri

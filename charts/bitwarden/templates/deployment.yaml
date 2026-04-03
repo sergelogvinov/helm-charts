@@ -55,6 +55,9 @@ spec:
               value: "https://{{ (index .Values.ingress.hosts 0).host }}"
             - name: CONFIG_FILE
               value: "/etc/bitwarden/config.json"
+          {{- with .Values.env }}
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
           envFrom:
             - secretRef:
                 name: {{ include "bitwarden.secrets" . }}
