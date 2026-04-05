@@ -323,6 +323,7 @@ clickhouse:
       # or
       # password:
       #   secretKeyRef: { name: clickhouse_secret, key: logger }
+
     # -- Clickhouse read only user
     - name: reader
       profile: reader
