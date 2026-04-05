@@ -11,7 +11,8 @@ vmstorage:
   autoscaling:
     enabled: false
 
-  extraArgs: {}
+  extraArgs:
+    enableTCP6: "true"
 
   # -- Resource requests and limits.
   # ref: https://kubernetes.io/docs/user-guide/compute-resources/
@@ -54,7 +55,8 @@ vmselect:
   autoscaling:
     enabled: false
 
-  extraArgs: {}
+  extraArgs:
+    enableTCP6: "true"
 
   # -- Resource requests and limits.
   # ref: https://kubernetes.io/docs/user-guide/compute-resources/
@@ -97,7 +99,8 @@ vminsert:
   autoscaling:
     enabled: false
 
-  extraArgs: {}
+  extraArgs:
+    enableTCP6: "true"
 
   # -- Resource requests and limits.
   # ref: https://kubernetes.io/docs/user-guide/compute-resources/
@@ -129,7 +132,8 @@ vmalert:
   autoscaling:
     enabled: false
 
-  extraArgs: {}
+  extraArgs:
+    enableTCP6: "true"
 
   configMaps: []
   rulePath: []
