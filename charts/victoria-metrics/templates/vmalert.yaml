@@ -24,6 +24,10 @@ spec:
   rulePath:
     {{- toYaml .Values.vmAlert.rulePath | nindent 4 }}
 
+  extraArgs:
+    {{- toYaml .Values.vmAlert.extraArgs | nindent 4 }}
+  logLevel: INFO
+
   datasource:
     url: "http://vmsingle-{{ include "victoria-metrics.fullname" . }}:8429"
   remoteWrite:

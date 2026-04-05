@@ -1,6 +1,6 @@
 # victoria-metrics
 
-![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 Predefined resources for Victoria Metrics Operator
 
@@ -25,6 +25,7 @@ Predefined resources for Victoria Metrics Operator
 | nameOverride | string | `""` |  |
 | fullnameOverride | string | `""` |  |
 | vmAgent.replicaCount | int | `1` |  |
+| vmAgent.extraArgs.enableTCP6 | string | `"true"` |  |
 | vmAgent.extraArgs."promscrape.maxScrapeSize" | string | `"67108864"` |  |
 | vmAgent.extraArgs."promscrape.maxDroppedTargets" | string | `"10000"` |  |
 | vmAgent.extraArgs."promscrape.streamParse" | string | `"true"` |  |
@@ -37,6 +38,7 @@ Predefined resources for Victoria Metrics Operator
 | vmAgent.remoteWrite | list | `[]` |  |
 | vmAgent.resources | object | `{"limits":{"cpu":1,"memory":"2Gi"},"requests":{"cpu":"100m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | vmAgent.affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
+| vmAlert.extraArgs.enableTCP6 | string | `"true"` |  |
 | vmAlert.secrets | list | `[]` |  |
 | vmAlert.configMaps[0] | string | `"prometheus-rules-config"` |  |
 | vmAlert.configMaps[1] | string | `"prometheus-rules"` |  |
@@ -44,6 +46,7 @@ Predefined resources for Victoria Metrics Operator
 | vmAlert.rulePath[1] | string | `"/etc/vm/configs/prometheus-rules/*.yml"` |  |
 | vmAlert.resources | object | `{"limits":{"cpu":"200m","memory":"256Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | vmAlert.affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
+| vmSingle.extraArgs.enableTCP6 | string | `"true"` |  |
 | vmSingle.extraArgs.maxLabelsPerTimeseries | string | `"40"` |  |
 | vmSingle.resources | object | `{"limits":{"cpu":2,"memory":"3Gi"},"requests":{"cpu":"500m","memory":"2Gi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | vmSingle.affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |

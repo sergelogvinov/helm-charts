@@ -10,6 +10,7 @@ vmAgent:
   replicaCount: 1
 
   extraArgs:
+    enableTCP6: "true"
     promscrape.maxScrapeSize: "67108864"
     promscrape.maxDroppedTargets: "10000"
     promscrape.streamParse: "true"
@@ -49,6 +50,9 @@ vmAgent:
   affinity: {}
 
 vmAlert:
+  extraArgs:
+    enableTCP6: "true"
+
   secrets: []
   configMaps:
     - prometheus-rules-config
@@ -73,6 +77,7 @@ vmAlert:
 
 vmSingle:
   extraArgs:
+    enableTCP6: "true"
     maxLabelsPerTimeseries: "40"
 
   # -- Resource requests and limits.
