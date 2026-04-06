@@ -18,7 +18,7 @@ spec:
   secretName: {{ include "openvpn.fullname" . }}-ca
   secretTemplate:
     labels:
-      {{- include "openvpn.labels" . | nindent 6 }}
+      {{- include "openvpn.selectorLabels" . | nindent 6 }}
   issuerRef:
     name: {{ include "openvpn.fullname" . }}
     kind: Issuer
