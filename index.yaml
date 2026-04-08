@@ -5355,6 +5355,29 @@ entries:
   keydb:
   - apiVersion: v2
     appVersion: 6.3.3
+    created: "2026-04-08T14:04:33.465667565Z"
+    description: KeyDB with TLS, backup/restore support
+    digest: 87a1bb167b52ee7502b5a10ef9a9458172197469fba73ef49ee4366c1e610a5e
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/keydb/icon.svg
+    keywords:
+    - keydb
+    - redis
+    - wal-g
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: keydb
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/keydb
+    - https://docs.keydb.dev
+    - https://github.com/wal-g/wal-g
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/keydb-0.24.1/keydb-0.24.1.tgz
+    version: 0.24.1
+  - apiVersion: v2
+    appVersion: 6.3.3
     created: "2026-03-09T07:31:41.342460403Z"
     description: KeyDB with TLS, backup/restore support
     digest: a24449e32f4019f75fcdfa26e67717946cf07b2ee731fbdba68ae1a2b1e91bf5
@@ -16620,4 +16643,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-04-07T05:34:47.57880159Z"
+generated: "2026-04-08T14:04:33.46771046Z"
