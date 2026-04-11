@@ -14564,6 +14564,28 @@ entries:
     version: 0.1.0
   tailscale:
   - apiVersion: v2
+    appVersion: v1.96.5
+    created: "2026-04-11T13:18:21.692055092Z"
+    description: Tailscale mesh network.
+    digest: 067aaece16d6bf2686f47f4e2baf0be364bc9cbaab18d817c4ccadd3ae330281
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/tailscale/icon.png
+    keywords:
+    - tailscale
+    - vpn
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: tailscale
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/tailscale
+    - https://github.com/tailscale/tailscale
+    - https://tailscale.com
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/tailscale-0.15.0/tailscale-0.15.0.tgz
+    version: 0.15.0
+  - apiVersion: v2
     appVersion: v1.94.2
     created: "2026-03-05T11:57:27.690543357Z"
     description: Tailscale mesh network.
@@ -16643,4 +16665,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-04-08T14:04:33.46771046Z"
+generated: "2026-04-11T13:18:21.694045849Z"
