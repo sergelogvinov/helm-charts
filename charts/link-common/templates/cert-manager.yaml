@@ -18,13 +18,13 @@ spec:
   secretName: {{ include "link-common.fullname" . }}-ca
   secretTemplate:
     labels:
-      {{- include "link-common.labels" . | nindent 6 }}
+      {{- include "link-common.selectorLabels" . | nindent 6 }}
   issuerRef:
     name: {{ include "link-common.fullname" . }}
     kind: Issuer
   commonName: {{ include "link-common.fullname" . }}
-  duration: 26280h # 3y
-  renewBefore: 26000h # ~3y
+  duration: 87600h # 10y
+  renewBefore: 2160h # 1m
   privateKey:
     algorithm: ECDSA
     size: 256
@@ -54,10 +54,10 @@ spec:
   secretName: {{ include "link-common.fullname" . }}-server
   secretTemplate:
     labels:
-      {{- include "link-common.labels" . | nindent 6 }}
+      {{- include "link-common.selectorLabels" . | nindent 6 }}
   commonName: {{ include "link-common.fullname" . }}-server
   duration: 26280h # 3y
-  renewBefore: 26000h # ~3y
+  renewBefore: 8760h # 1y
   privateKey:
     rotationPolicy: Always
     algorithm: ECDSA
@@ -86,10 +86,10 @@ spec:
   secretName: {{ include "link-common.fullname" $ }}-client-{{ $client }}
   secretTemplate:
     labels:
-      {{- include "link-common.labels" $ | nindent 6 }}
+      {{- include "link-common.selectorLabels" $ | nindent 6 }}
   commonName: {{ $k | trunc 63 | replace "@" "." }}
   duration: 8760h # 12m
-  renewBefore: 2190h # 3m
+  renewBefore: 4380h # 6m
   privateKey:
     rotationPolicy: Always
     algorithm: ECDSA
@@ -114,10 +114,10 @@ spec:
   secretName: {{ include "link-common.fullname" . }}-client
   secretTemplate:
     labels:
-      {{- include "link-common.labels" . | nindent 6 }}
+      {{- include "link-common.selectorLabels" . | nindent 6 }}
   commonName: client
   duration: 17520h # 24m
-  renewBefore: 2190h # 3m
+  renewBefore: 4380h # 6m
   privateKey:
     rotationPolicy: Always
     algorithm: ECDSA

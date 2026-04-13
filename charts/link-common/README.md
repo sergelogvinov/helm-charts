@@ -1,6 +1,6 @@
 # link-common
 
-![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.6-alpine3.19](https://img.shields.io/badge/AppVersion-2.8.6--alpine3.19-informational?style=flat-square)
+![Version: 0.4.4](https://img.shields.io/badge/Version-0.4.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.6-alpine3.19](https://img.shields.io/badge/AppVersion-2.8.6--alpine3.19-informational?style=flat-square)
 
 Simple vpn-p2p-link service
 
@@ -68,7 +68,7 @@ wireguard:
 | podAnnotations | object | `{}` | Annotations for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
 | podSecurityContext | object | `{"fsGroup":99,"fsGroupChangePolicy":"OnRootMismatch"}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"add":["NET_BIND_SERVICE"],"drop":["ALL"]},"runAsGroup":99,"runAsNonRoot":true,"runAsUser":99,"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
-| service | object | `{"ipFamilies":["IPv4"],"ports":[],"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/concepts/services-networking/service/ |
+| service | object | `{"enableHeadlessService":false,"ipFamilies":["IPv4"],"ports":[],"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/concepts/services-networking/service/ |
 | certManager.createCerts | bool | `false` |  |
 | certManager.dnsName | string | `nil` |  |
 | certManager.clients | list | `[]` |  |
