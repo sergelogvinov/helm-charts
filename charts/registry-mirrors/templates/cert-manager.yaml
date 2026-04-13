@@ -16,9 +16,12 @@ metadata:
     {{- include "registry-mirrors.labels" . | nindent 4 }}
 spec:
   secretName: {{ include "registry-mirrors.fullname" . }}-ca
+  secretTemplate:
+    labels:
+      {{- include "registry-mirrors.selectorLabels" . | nindent 6 }}
   commonName: {{ include "registry-mirrors.fullname" . }}
-  duration: 26280h # 3y
-  renewBefore: 26000h # ~3y
+  duration: 87600h # 10y
+  renewBefore: 2160h # 1m
   privateKey:
     algorithm: ECDSA
     encoding: PKCS1
@@ -46,8 +49,11 @@ metadata:
     {{- include "registry-mirrors.labels" . | nindent 4 }}
 spec:
   secretName: {{ include "registry-mirrors.fullname" . }}-auth-server
+  secretTemplate:
+    labels:
+      {{- include "registry-mirrors.selectorLabels" . | nindent 6 }}
   duration: 26280h # 3y
-  renewBefore: 4380h # 6m
+  renewBefore: 8760h # 1y
   privateKey:
     rotationPolicy: Always
     algorithm: ECDSA
@@ -73,6 +79,9 @@ metadata:
     {{- include "registry-mirrors.labels" . | nindent 4 }}
 spec:
   secretName: {{ include "registry-mirrors.fullname" . }}-auth-containerd
+  secretTemplate:
+    labels:
+      {{- include "registry-mirrors.selectorLabels" . | nindent 6 }}
   commonName: containerd
   duration: 26280h # 3y
   renewBefore: 4380h # 6m
