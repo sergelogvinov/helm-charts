@@ -15,13 +15,13 @@ spec:
   secretName: {{ include "service-common.fullname" . }}-ca
   secretTemplate:
     labels:
-      {{- include "service-common.labels" . | nindent 6 }}
+      {{- include "service-common.selectorLabels" . | nindent 6 }}
   issuerRef:
     name: {{ include "service-common.fullname" . }}
     kind: Issuer
   commonName: {{ include "service-common.fullname" . }}
-  duration: 26280h # 3y
-  renewBefore: 26000h # ~3y
+  duration: 87600h # 10y
+  renewBefore: 2160h # 1m
   privateKey:
     algorithm: ECDSA
     size: 256
@@ -49,7 +49,7 @@ spec:
   secretName: {{ include "service-common.fullname" . }}-server-tls
   secretTemplate:
     labels:
-      {{- include "service-common.labels" . | nindent 6 }}
+      {{- include "service-common.selectorLabels" . | nindent 6 }}
   commonName: {{ include "service-common.fullname" . }}-server
   duration: 26280h # 3y
   renewBefore: 8760h # 1y
@@ -78,10 +78,10 @@ spec:
   secretName: {{ include "service-common.fullname" . }}-client-tls
   secretTemplate:
     labels:
-      {{- include "service-common.labels" . | nindent 6 }}
+      {{- include "service-common.selectorLabels" . | nindent 6 }}
   commonName: {{ include "service-common.fullname" . }}-client
   duration: 8760h # 1y
-  renewBefore: 2190h # 3m
+  renewBefore: 4380h # 6m
   privateKey:
     rotationPolicy: Always
     algorithm: ECDSA
