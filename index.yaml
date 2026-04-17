@@ -5018,6 +5018,29 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/github-actions-runner-1.0.0/github-actions-runner-1.0.0.tgz
     version: 1.0.0
+  infisical:
+  - apiVersion: v2
+    appVersion: v0.159.13
+    created: "2026-04-17T08:29:25.894901795Z"
+    description: nfisical is the open-source platform for secrets, certificates, and
+      privileged access management.
+    digest: 3866cb1bafc96a57827b2fdd2e9bdfac214aba331a510566fadb564c036fc199
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/infisical/icon.svg
+    keywords:
+    - infisical
+    - secrets
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: infisical
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/infisical
+    - https://github.com/Infisical/infisical
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/infisical-0.1.0/infisical-0.1.0.tgz
+    version: 0.1.0
   ipsec:
   - apiVersion: v2
     appVersion: "5.2"
@@ -16920,4 +16943,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-04-15T18:13:57.035005627Z"
+generated: "2026-04-17T08:29:25.896034803Z"
