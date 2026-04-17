@@ -1,0 +1,29 @@
+replicaCount: 1
+
+envSecrets:
+  # openssl rand -base64 32
+  AUTH_SECRET: MHJJxte4n2bB+Qd6WNV6QbkyiNmeKXw1PJ+LYgh7h10=
+  # openssl rand -hex 16
+  ENCRYPTION_KEY: a743e64ddfd0acb656c7db9e6cce0497
+  #
+  REDIS_URL: "redis://:@infisical-redis:6379"
+
+env:
+  - name: TELEMETRY_ENABLED
+    value: "false"
+  - name: SITE_URL
+    value: https://infisical.local
+
+  - name: DB_CONNECTION_URI
+    valueFrom:
+      secretKeyRef:
+        name: infisical-pg-app
+        key: uri
+#   - name: REDIS_URL
+#     valueFrom:
+#       secretKeyRef:
+#         name: infisical-redis-app
+#         key: uri
+
+metrics:
+  enabled: true

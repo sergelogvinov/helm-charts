@@ -1,0 +1,14 @@
+{{- if and .Values.podDisruptionBudget.create (gt (.Values.replicaCount | int) 1) }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "infisical.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "infisical.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "infisical.selectorLabels" . | nindent 6 }}
+  maxUnavailable: {{ default 1 .Values.podDisruptionBudget.maxUnavailable }}
+{{- end }}
