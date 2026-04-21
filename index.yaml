@@ -13532,6 +13532,26 @@ entries:
     version: 0.1.0
   skipper:
   - apiVersion: v2
+    appVersion: v0.24.77
+    created: "2026-04-21T16:01:28.956065292Z"
+    description: Ingress controller for Kubernetes
+    digest: 2046b711a5cc224ee409b511f6ca37fa368e21d9cd15fb5cf057b0d752abd683
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/skipper/icon.png
+    keywords:
+    - ingress-controller
+    - skipper
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: skipper
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/skipper
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/skipper-0.4.13/skipper-0.4.13.tgz
+    version: 0.4.13
+  - apiVersion: v2
     appVersion: v0.24.70
     created: "2026-04-15T18:13:57.033935956Z"
     description: Ingress controller for Kubernetes
@@ -17032,4 +17052,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-04-21T16:00:27.116841069Z"
+generated: "2026-04-21T16:01:28.957141387Z"
