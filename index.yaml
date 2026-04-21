@@ -3246,6 +3246,29 @@ entries:
   github-actions-runner:
   - apiVersion: v2
     appVersion: 2.333.1
+    created: "2026-04-21T16:02:23.170386649Z"
+    description: Github Actions with container registry and mirrors
+    digest: e0019987bd1c313c552c056c9378263deffcdbc6014a860f45d6a0bb878c4bfc
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://avatars.githubusercontent.com/u/44036562
+    keywords:
+    - github-actions
+    - container
+    - docker-registry
+    - docker-mirror
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: github-actions-runner
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/github-actions-runner
+    - https://github.com/actions/actions-runner-controller.git
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/github-actions-runner-2.18.2/github-actions-runner-2.18.2.tgz
+    version: 2.18.2
+  - apiVersion: v2
+    appVersion: 2.333.1
     created: "2026-04-13T08:40:13.809336984Z"
     description: Github Actions with container registry and mirrors
     digest: 0031d3031ba533bb999dc64f34d4a924e8e05a8a588c1a738e0280a0ca8ef2ed
@@ -17072,4 +17095,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-04-21T16:01:46.117287691Z"
+generated: "2026-04-21T16:02:23.171774635Z"
