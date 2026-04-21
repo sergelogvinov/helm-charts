@@ -15,7 +15,7 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.1.2
+version: 1.0.0
 #
 # renovate: datasource=docker depName=infisical/infisical
-appVersion: v0.159.13
+appVersion: 2350219
