@@ -30,7 +30,7 @@ runnerRepos: ""
 runnerGroup: "default"
 runnerScaleSetName: ""
 # renovate: datasource=docker depName=ghcr.io/actions/gha-runner-scale-set-controller
-runnerVersion: "0.14.0"
+runnerVersion: "0.14.1"
 
 githubConfigUrl: "https://github.com/..."
 githubConfigSecret:
