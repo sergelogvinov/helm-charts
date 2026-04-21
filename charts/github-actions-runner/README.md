@@ -1,6 +1,6 @@
 # github-actions-runner
 
-![Version: 2.18.1](https://img.shields.io/badge/Version-2.18.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.333.1](https://img.shields.io/badge/AppVersion-2.333.1-informational?style=flat-square)
+![Version: 2.18.2](https://img.shields.io/badge/Version-2.18.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.333.1](https://img.shields.io/badge/AppVersion-2.333.1-informational?style=flat-square)
 
 Github Actions with container registry and mirrors
 
@@ -95,7 +95,7 @@ nodeSelector:
 | runnerRepos | string | `""` |  |
 | runnerGroup | string | `"default"` |  |
 | runnerScaleSetName | string | `""` |  |
-| runnerVersion | string | `"0.14.0"` |  |
+| runnerVersion | string | `"0.14.1"` |  |
 | githubConfigUrl | string | `"https://github.com/..."` |  |
 | githubConfigSecret | object | `{}` |  |
 | controllerServiceAccount.name | string | `"arc"` |  |
