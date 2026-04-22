@@ -2,7 +2,7 @@
   rules:
   - alert: PodOOMKilled
     expr: kube_pod_container_status_terminated_reason{reason="OOMKilled"} > 0
-    for: 10m
+    for: 2m
     labels:
       severity: warning
     annotations:
