@@ -1,5 +1,14 @@
 - name: kubernetes.rules
   rules:
+  - alert: PodOOMKilled
+    expr: kube_pod_container_status_terminated_reason{reason="OOMKilled"} > 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Pod {{$labels.namespace}}/{{$labels.pod}} OOM Killed
+      summary: Memory requested reached
+
   - alert: PodMemoryLimit
     expr: irate(container_memory_failcnt{container_name!=""}[5m]) > 10
     for: 10m
