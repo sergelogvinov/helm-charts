@@ -1,6 +1,6 @@
 # postgresql-single
 
-![Version: 1.12.3](https://img.shields.io/badge/Version-1.12.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.13](https://img.shields.io/badge/AppVersion-16.13-informational?style=flat-square)
+![Version: 1.12.4](https://img.shields.io/badge/Version-1.12.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.13](https://img.shields.io/badge/AppVersion-16.13-informational?style=flat-square)
 
 Postgres with backup/restore and replication
 

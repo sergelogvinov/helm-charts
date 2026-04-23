@@ -84,10 +84,10 @@ spec:
               {{- end }}
               resources:
                 {{- toYaml .Values.backup.resources | nindent 16 }}
-          {{- with .Values.nodeSelector }}
+          {{- if ne .Values.backup.podAffinityPreset "hard" }}{{- with .Values.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}
-          {{- end }}
+          {{- end }}{{- end }}
           affinity:
             podAffinity:
             {{- if eq .Values.backup.podAffinityPreset "hard" }}
