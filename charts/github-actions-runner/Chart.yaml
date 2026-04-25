@@ -18,7 +18,7 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 2.18.2
+version: 2.19.0
 #
 # renovate: datasource=docker depName=ghcr.io/sergelogvinov/github-actions-runner
-appVersion: 2.333.1
+appVersion: 2.334.0
