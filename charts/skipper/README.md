@@ -1,6 +1,6 @@
 # skipper
 
-![Version: 0.4.13](https://img.shields.io/badge/Version-0.4.13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.24.77](https://img.shields.io/badge/AppVersion-v0.24.77-informational?style=flat-square)
+![Version: 0.4.14](https://img.shields.io/badge/Version-0.4.14-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.24.80](https://img.shields.io/badge/AppVersion-v0.24.80-informational?style=flat-square)
 
 Ingress controller for Kubernetes
 
