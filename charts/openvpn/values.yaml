@@ -200,7 +200,7 @@ service:
   image:
     repository: ghcr.io/sergelogvinov/haproxy
     pullPolicy: IfNotPresent
-    tag: 3.3.5-alpine3.23
+    tag: 3.3.7-alpine3.23
 
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/
