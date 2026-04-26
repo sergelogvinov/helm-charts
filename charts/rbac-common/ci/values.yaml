@@ -1,0 +1,12 @@
+fullnameOverride: cluster
+
+cicd:
+  - name: github-actions-runner
+    namespace: cicd
+
+cicdViewer:
+  - name: github-actions-runner-bot
+    namespace: bot
+
+developers:
+  - myname

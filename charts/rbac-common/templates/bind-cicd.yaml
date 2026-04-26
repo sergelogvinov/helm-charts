@@ -1,4 +1,4 @@
-{{ if .Values.cicd  }}
+{{ if .Values.cicd }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -16,6 +16,35 @@ roleRef:
   name: {{ include "rbac-common.fullname" . }}:cicd
 subjects:
 {{- range .Values.cicd }}
+- kind: ServiceAccount
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+{{- end }}
+{{- end }}
+{{ if or .Values.cicd .Values.cicdViewer }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "rbac-common.fullname" . }}:cicd:ro
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "rbac-common.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  {{- if .Values.rbac.singleNamespace }}
+  kind: Role
+  {{- else }}
+  kind: ClusterRole
+  {{- end }}
+  name: {{ include "rbac-common.fullname" . }}:cicd:ro
+subjects:
+{{- range .Values.cicd }}
+- kind: ServiceAccount
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+{{- end }}
+{{- range .Values.cicdViewer }}
 - kind: ServiceAccount
   name: {{ .name }}
   namespace: {{ .namespace }}

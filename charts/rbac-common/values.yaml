@@ -18,6 +18,10 @@ cicd: []
   # - name: github-actions-runner
   #   namespace: cicd
 
+cicdViewer: []
+  # - name: github-actions-runner
+  #   namespace: cicd
+
 clusterAdmins: []
   # - root1
 
