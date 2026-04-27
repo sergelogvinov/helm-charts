@@ -544,6 +544,19 @@ rules:
   - update
   - create
   - delete
+#### OpenSearch
+- apiGroups:
+  - opensearch.org
+  resources:
+  - opensearchclusters
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+  - update
+  - create
+  - delete
 #### Keda
 - apiGroups:
   - keda.sh
