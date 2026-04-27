@@ -193,6 +193,61 @@ rules:
   - get
   - list
   - watch
+#### Percona Server for MongoDB
+- apiGroups:
+  - psmdb.percona.com
+  resources:
+  - perconaservermongodbs
+  - perconaservermongodbbackups
+  verbs:
+  - get
+  - list
+  - watch
+#### Cloudnative-PG
+- apiGroups:
+  - postgresql.cnpg.io
+  resources:
+  - clusters
+  - clusters/status
+  - poolers
+  - poolers/status
+  - databases
+  - databases/status
+  - backups
+  - backups/status
+  - scheduledbackups
+  - scheduledbackups/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cnpg-extensions.yandex.cloud
+  resources:
+  - backupconfigs
+  verbs:
+  - get
+  - list
+  - watch
+#### Clickhouse altinity
+- apiGroups:
+  - clickhouse.altinity.com
+  resources:
+  - clickhouseinstallations
+  - clickhouseinstallationtemplates
+  verbs:
+  - get
+  - list
+  - watch
+#### OpenSearch
+- apiGroups:
+  - opensearch.org
+  resources:
+  - opensearchclusters
+  verbs:
+  - get
+  - list
+  - watch
 #### Keda
 - apiGroups:
   - keda.sh
