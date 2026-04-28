@@ -1,6 +1,6 @@
 # postgresql-single
 
-![Version: 1.12.4](https://img.shields.io/badge/Version-1.12.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.13](https://img.shields.io/badge/AppVersion-16.13-informational?style=flat-square)
+![Version: 1.13.0](https://img.shields.io/badge/Version-1.13.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.13](https://img.shields.io/badge/AppVersion-16.13-informational?style=flat-square)
 
 Postgres with backup/restore and replication
 
@@ -132,6 +132,12 @@ metrics:
 | service.ipFamilies | list | `["IPv4"]` | IP families for service possible values: IPv4, IPv6 ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/ |
 | postgresqlServerMemory | string | `"128"` | Specifies the expected memory usage |
 | postgresqlServerWalWriterDelay | string | `"200ms"` | Specifies how often the WAL writer flushes WAL (wal_writer_delay) ref: https://www.postgresql.org/docs/current/runtime-config-wal.html |
+| autoscaling | object | `{"controlledResources":["cpu","memory"],"controlledValues":"RequestsOnly","enabled":false,"maxAllowed":{},"minAllowed":{},"updatePolicy":{"updateMode":"InPlaceOrRecreate"}}` | Vertical pod autoscaler |
+| autoscaling.controlledResources | list | `["cpu","memory"]` | Resource to control Possible values are "cpu" and "memory" |
+| autoscaling.controlledValues | string | `"RequestsOnly"` | Controls which resource value should be autoscaled Possible values are "RequestsAndLimits" and "RequestsOnly" |
+| autoscaling.maxAllowed | object | `{}` | Max allowed resources for the pod default is resources.limits |
+| autoscaling.minAllowed | object | `{}` | Min allowed resources for the pod default is resources.requests |
+| autoscaling.updatePolicy | object | `{"updateMode":"InPlaceOrRecreate"}` | Update policy Possible values are "Off", "Initial", "Recreate", "InPlaceOrRecreate" and "Auto" |
 | resources | object | `{"requests":{"cpu":"100m","memory":"128Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"mountPath":"/database","size":"8Gi"}` | Persistence parameters ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
 | priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |

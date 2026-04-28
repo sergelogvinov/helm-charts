@@ -1,0 +1,45 @@
+{{- if and (eq .Values.installationType "standalone") .Values.autoscaling.enabled (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1") }}
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "postgresql-single.fullname" . }}
+  labels:
+    {{- include "postgresql-single.labels" . | nindent 4 }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: {{ include "postgresql-single.fullname" . }}
+  updatePolicy:
+    updateMode: {{ .Values.autoscaling.updatePolicy.updateMode }}
+  resourcePolicy:
+    containerPolicies:
+      - containerName: {{ template "postgresql-single.fullname" . }}
+        {{- with (merge .Values.autoscaling.maxAllowed .Values.resources.limits) }}
+        maxAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with (merge .Values.autoscaling.minAllowed .Values.resources.requests) }}
+        minAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.autoscaling.controlledResources }}
+        controlledResources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.autoscaling.controlledValues }}
+        controlledValues: {{ . }}
+        {{- end }}
+      {{- if .Values.metrics.enabled }}
+      - containerName: metrics
+        {{- with .Values.metrics.resources.limits }}
+        maxAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.metrics.resources.requests }}
+        minAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        controlledValues: RequestsOnly
+      {{- end }}
+{{- end }}
