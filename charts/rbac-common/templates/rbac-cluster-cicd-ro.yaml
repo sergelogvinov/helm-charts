@@ -187,6 +187,12 @@ rules:
   verbs:
   - list
   - watch
+- apiGroups:
+  - external-secrets.io
+  resources:
+  - externalsecrets
+  verbs:
+  - get
 #### Victoria Metrics
 - apiGroups:
   - operator.victoriametrics.com
