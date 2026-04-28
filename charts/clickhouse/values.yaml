@@ -88,6 +88,35 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+# -- Vertical pod autoscaler
+autoscaling:
+  enabled: false
+
+  # -- Resource to control
+  # Possible values are "cpu" and "memory"
+  controlledResources: ["cpu","memory"]
+
+  # -- Controls which resource value should be autoscaled
+  # Possible values are "RequestsAndLimits" and "RequestsOnly"
+  controlledValues: RequestsOnly
+
+  # -- Max allowed resources for the pod
+  # default is resources.limits
+  maxAllowed: {}
+    # cpu: 1
+    # memory: 500Mi
+
+  # -- Min allowed resources for the pod
+  # default is resources.requests
+  minAllowed: {}
+    # cpu: 1
+    # memory: 500Mi
+
+  # -- Update policy
+  # Possible values are "Off", "Initial", "Recreate", "InPlaceOrRecreate" and "Auto"
+  updatePolicy:
+    updateMode: InPlaceOrRecreate
+
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:
