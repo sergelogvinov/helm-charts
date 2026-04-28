@@ -209,15 +209,6 @@ rules:
   - list
   - watch
 - apiGroups:
-  - autoscaling
-  resources:
-  - horizontalpodautoscalers
-  - horizontalpodautoscalers/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
   - batch
   resources:
   - cronjobs
@@ -322,6 +313,25 @@ rules:
   verbs:
   - get
   - list
+  - watch
+- apiGroups:
+  - autoscaling
+  resources:
+  - horizontalpodautoscalers
+  - horizontalpodautoscalers/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - autoscaling.k8s.io
+  resources:
+  - verticalpodautoscalers
+  - verticalpodautoscalers/status
+  verbs:
+  - get
+  - list
+  - watch
 #### Custom resources
 - apiGroups:
   - notification.toolkit.fluxcd.io

@@ -59,16 +59,6 @@ rules:
   - patch
   - update
 - apiGroups:
-  - autoscaling
-  resources:
-  - horizontalpodautoscalers
-  verbs:
-  - create
-  - delete
-  - deletecollection
-  - patch
-  - update
-- apiGroups:
   - batch
   resources:
   - cronjobs
@@ -94,6 +84,26 @@ rules:
   resources:
   - ingresses
   - networkpolicies
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - patch
+  - update
+- apiGroups:
+  - autoscaling
+  resources:
+  - horizontalpodautoscalers
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - patch
+  - update
+- apiGroups:
+  - autoscaling.k8s.io
+  resources:
+  - verticalpodautoscalers
   verbs:
   - create
   - delete
