@@ -12589,6 +12589,26 @@ entries:
   rbac-binding:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2026-04-29T12:22:37.136157378Z"
+    description: Kubernetes RBAC binding
+    digest: 3b48743637061d941aadb1ccb37a54111232afe13a173d348b9e11541ec045fe
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/rbac-binding/icon.png
+    keywords:
+    - rbac
+    - security
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: rbac-binding
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/rbac-binding
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/rbac-binding-0.2.0/rbac-binding-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2026-04-29T11:18:31.261204185Z"
     description: Kubernetes RBAC binding
     digest: 1370b6dcd6e9e990ef51679a293c3e6c27b069165a942b12d73e5f1a253386c5
@@ -17547,4 +17567,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-04-29T11:18:31.263291192Z"
+generated: "2026-04-29T12:22:37.137797442Z"
