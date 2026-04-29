@@ -21,8 +21,11 @@ spec:
         metadata:
           name: {{ include "keydb.fullname" . }}
           labels:
-            {{- include "keydb.crontab.labels" . | nindent 12 }}
+            {{- include "keydb.crontab.selectorLabels" . | nindent 12 }}
             app.kubernetes.io/component: backup
+            {{- with .Values.podLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
         spec:
           restartPolicy: Never
           enableServiceLinks: false
