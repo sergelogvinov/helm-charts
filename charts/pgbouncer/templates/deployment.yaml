@@ -9,10 +9,8 @@ metadata:
   labels:
     {{- include "pgbouncer.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
   {{- if not .Values.useDaemonSet }}
+  replicas: {{ .Values.replicaCount }}
   strategy:
     type: {{ .Values.updateStrategy.type }}
   {{- else }}
@@ -35,6 +33,9 @@ spec:
       {{- end }}
       labels:
         {{- include "pgbouncer.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
@@ -80,7 +81,7 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
         {{- if .Values.metrics.enabled }}
-        - name: metrics
+        - name: {{ .Chart.Name }}-metrics
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}"
