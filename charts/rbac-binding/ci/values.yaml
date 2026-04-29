@@ -1,0 +1,21 @@
+fullnameOverride: cluster
+
+roleBindings:
+  default:
+    developers:
+      roles:
+        - name: cluster:admin
+          kind: ClusterRole
+      users:
+        - name: oauthuser
+        - name: sa-account
+          namespace: default
+    cicd:
+      roles:
+        - name: cluster:cicd
+          kind: ClusterRole
+        - name: cluster:cicd:ro
+          kind: ClusterRole
+      users:
+        - name: sa-account
+          namespace: default

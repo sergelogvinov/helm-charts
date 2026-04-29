@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://json.schemastore.org/chart.json
+apiVersion: v2
+name: rbac-binding
+description: Kubernetes RBAC binding
+type: application
+home: https://github.com/sergelogvinov/helm-charts
+icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/rbac-binding/icon.png
+sources:
+  - https://github.com/sergelogvinov/helm-charts/tree/main/charts/rbac-binding
+keywords:
+  - rbac
+  - security
+maintainers:
+  - name: sergelogvinov
+    url: https://github.com/sergelogvinov
+#
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 0.1.0
+#
+#
+appVersion: "0.1.0"

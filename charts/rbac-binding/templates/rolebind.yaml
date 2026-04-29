@@ -1,0 +1,27 @@
+{{- range $namespace, $val := .Values.roleBindings }}
+{{- range $group, $bindings := $val }}
+{{- range $inx, $role := $bindings.roles }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "rbac-binding.fullname" $ }}-{{ $group }}{{ if ne $inx 0 }}-{{ $inx }}{{ end }}
+  namespace: {{ $namespace | quote }}
+  labels:
+    {{- include "rbac-binding.labels" $ | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  {{- $role | toYaml | nindent 2 }}
+subjects:
+{{- range $inx, $user := $bindings.users }}
+{{- if hasKey $user "namespace" }}
+  - kind: ServiceAccount
+    name: {{ $user.name | quote }}
+    namespace: {{ $user.namespace | quote }}
+{{- else }}
+  - kind: User
+    name: {{ $user.name | quote }}
+{{- end }}{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
