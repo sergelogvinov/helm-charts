@@ -12586,6 +12586,27 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.1.0/prometheus-rules-0.1.0.tgz
     version: 0.1.0
+  rbac-binding:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2026-04-29T11:18:31.261204185Z"
+    description: Kubernetes RBAC binding
+    digest: 1370b6dcd6e9e990ef51679a293c3e6c27b069165a942b12d73e5f1a253386c5
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/rbac-binding/icon.png
+    keywords:
+    - rbac
+    - security
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: rbac-binding
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/rbac-binding
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/rbac-binding-0.1.0/rbac-binding-0.1.0.tgz
+    version: 0.1.0
   rbac-common:
   - apiVersion: v2
     appVersion: 0.1.1
@@ -17526,4 +17547,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-04-29T08:33:33.409319784Z"
+generated: "2026-04-29T11:18:31.263291192Z"
