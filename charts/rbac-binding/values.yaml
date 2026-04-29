@@ -2,6 +2,12 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+groups: {}
+  # group-name:
+  #   - name: oauthuser
+  #   - name: sa-account
+  #     namespace: default
+
 roleBindings: {}
   # # Namespace name
   # default:

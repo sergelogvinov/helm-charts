@@ -1,5 +1,12 @@
 fullnameOverride: cluster
 
+groups:
+  group-name:
+    - name: oauthuser
+    - name: gr-oauthuser
+    - name: gr-sa-account
+      namespace: default
+
 roleBindings:
   default:
     developers:
@@ -10,6 +17,8 @@ roleBindings:
         - name: oauthuser
         - name: sa-account
           namespace: default
+      groups:
+        - group-name
     cicd:
       roles:
         - name: cluster:cicd
