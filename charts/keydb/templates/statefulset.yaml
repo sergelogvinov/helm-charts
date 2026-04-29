@@ -160,12 +160,7 @@ spec:
               containerPort: 9121
               protocol: TCP
           resources:
-            limits:
-              cpu: 100m
-              memory: 32Mi
-            requests:
-              cpu: 10m
-              memory: 16Mi
+            {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

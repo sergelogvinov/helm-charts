@@ -1,0 +1,45 @@
+{{- if and .Values.autoscaling.enabled (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1") }}
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "keydb.fullname" . }}
+  labels:
+    {{- include "keydb.labels" . | nindent 4 }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: {{ include "keydb.fullname" . }}
+  updatePolicy:
+    updateMode: {{ .Values.autoscaling.updatePolicy.updateMode }}
+  resourcePolicy:
+    containerPolicies:
+      - containerName: {{ .Chart.Name }}
+        {{- with (merge .Values.autoscaling.maxAllowed .Values.resources.limits) }}
+        maxAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with (merge .Values.autoscaling.minAllowed .Values.resources.requests) }}
+        minAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.autoscaling.controlledResources }}
+        controlledResources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.autoscaling.controlledValues }}
+        controlledValues: {{ . }}
+        {{- end }}
+      {{- if .Values.metrics.enabled }}
+      - containerName: {{ .Chart.Name }}-metrics
+        {{- with .Values.metrics.resources.limits }}
+        maxAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.metrics.resources.requests }}
+        minAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        controlledValues: RequestsOnly
+      {{- end }}
+{{- end }}
