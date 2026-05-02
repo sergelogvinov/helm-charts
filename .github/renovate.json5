@@ -3,7 +3,6 @@
   "extends": [
     "config:recommended",
     "docker:enableMajor",
-    ":timezone(Europe/Tallinn)",
     ":dependencyDashboard",
     ":disableRateLimiting",
     ":semanticCommits",
@@ -106,6 +105,15 @@
         "ghcr.io/sergelogvinov/keydb"
       ],
       "allowedVersions": "<=6.3.3"
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "infisical/infisical"
+      ],
+      "allowedVersions": "/^v\\d+\\.\\d+\\.\\d+$/"
     }
   ],
   "helm-values": {
