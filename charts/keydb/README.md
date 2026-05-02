@@ -1,6 +1,6 @@
 # keydb
 
-![Version: 0.25.0](https://img.shields.io/badge/Version-0.25.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.3](https://img.shields.io/badge/AppVersion-6.3.3-informational?style=flat-square)
+![Version: 0.26.0](https://img.shields.io/badge/Version-0.26.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.3](https://img.shields.io/badge/AppVersion-6.3.3-informational?style=flat-square)
 
 KeyDB with TLS, backup/restore support
 
@@ -130,7 +130,7 @@ metrics:
 | metrics.enabled | bool | `false` |  |
 | metrics.image.repository | string | `"oliver006/redis_exporter"` |  |
 | metrics.image.pullPolicy | string | `"IfNotPresent"` |  |
-| metrics.image.tag | string | `"v1.82.0"` |  |
+| metrics.image.tag | string | `"v1.83.0"` |  |
 | metrics.resources.limits.cpu | string | `"100m"` |  |
 | metrics.resources.limits.memory | string | `"32Mi"` |  |
 | metrics.resources.requests.cpu | string | `"10m"` |  |
