@@ -1,28 +1,28 @@
 - name: prometheus-static.rules
   rules:
-  - alert: TargetDown
-    expr: 100 * (count(up == 0) BY (cluster, job, kubernetes_namespace, app_kubernetes_io_name) / count(up) BY (cluster, job, kubernetes_namespace, app_kubernetes_io_name)) > 10
-    for: 10m
-    labels:
-      severity: warning
-    annotations:
-      description: '{{ printf "%.4g" $value }}% of the {{ $labels.job }}/{{ $labels.app_kubernetes_io_name }} targets in {{ $labels.kubernetes_namespace }} namespace are down.'
-      summary: One or more targets are unreachable.
+    - alert: TargetDown
+      expr: 100 * (count(up == 0) BY (cluster, job, kubernetes_namespace, app_kubernetes_io_name, topology_kubernetes_io_zone) / count(up) BY (cluster, job, kubernetes_namespace, app_kubernetes_io_name, topology_kubernetes_io_zone)) > 10
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        description: '{{ printf "%.4g" $value }}% of the {{ $labels.job }}/{{ $labels.app_kubernetes_io_name }} targets in {{ $labels.kubernetes_namespace }} namespace are down.'
+        summary: One or more targets are unreachable.
 
-  - alert: PrometheusTSDBWALCorruptions
-    expr: prometheus_tsdb_wal_corruptions_total > 0
-    for: 4h
-    labels:
-      severity: warning
-    annotations:
-      description: Prometheus {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}  has a corrupted write-ahead log.
-      summary: Prometheus write-ahead log is corrupted
+    - alert: PrometheusTSDBWALCorruptions
+      expr: prometheus_tsdb_wal_corruptions_total > 0
+      for: 4h
+      labels:
+        severity: warning
+      annotations:
+        description: Prometheus {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}  has a corrupted write-ahead log.
+        summary: Prometheus write-ahead log is corrupted
 
-  - alert: PrometheusRemoteStorageFailures
-    for: 15m
-    labels:
-      severity: critical
-    expr: rate(prometheus_remote_storage_samples_retried_total[5m]) > 100
-    annotations:
-      description: Prometheus {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} failed to send to {{ $labels.remote_name }}:{{ $labels.url }}
-      summary: Prometheus fails to send samples to remote storage.
+    - alert: PrometheusRemoteStorageFailures
+      for: 15m
+      labels:
+        severity: critical
+      expr: rate(prometheus_remote_storage_samples_retried_total[5m]) > 100
+      annotations:
+        description: Prometheus {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} failed to send to {{ $labels.remote_name }}:{{ $labels.url }}
+        summary: Prometheus fails to send samples to remote storage.
