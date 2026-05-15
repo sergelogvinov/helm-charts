@@ -824,6 +824,30 @@ entries:
     version: 0.1.0
   clickhouse:
   - apiVersion: v2
+    appVersion: 26.3.10
+    created: "2026-05-15T14:44:32.847147647Z"
+    description: Clickhouse chart for Kubernetes
+    digest: 884cec7712bafc2e674625a1418af2b1a17318efeb56739fea0539cb80a22613
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://github.com/ClickHouse/clickhouse-docs/raw/84f38d893eb7e561c7296279d7953b6a508ec413/static/img/clickhouse-logo.svg
+    keywords:
+    - database
+    - clickhouse
+    - clickhouse-backup
+    - altinity
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: clickhouse
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/clickhouse
+    - https://github.com/ClickHouse/ClickHouse
+    - https://hub.docker.com/r/clickhouse/clickhouse-server
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-0.16.0/clickhouse-0.16.0.tgz
+    version: 0.16.0
+  - apiVersion: v2
     appVersion: 25.8.13
     created: "2026-04-28T13:25:40.189110263Z"
     description: Clickhouse chart for Kubernetes
@@ -17795,4 +17819,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-05-15T11:34:27.607988544Z"
+generated: "2026-05-15T14:44:32.848342785Z"
