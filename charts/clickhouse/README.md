@@ -1,6 +1,6 @@
 # clickhouse
 
-![Version: 0.15.0](https://img.shields.io/badge/Version-0.15.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 25.8.13](https://img.shields.io/badge/AppVersion-25.8.13-informational?style=flat-square)
+![Version: 0.16.0](https://img.shields.io/badge/Version-0.16.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 26.3.10](https://img.shields.io/badge/AppVersion-26.3.10-informational?style=flat-square)
 
 Clickhouse chart for Kubernetes
 
@@ -124,6 +124,20 @@ metrics:
 | nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
+| clickhouseKeeper.enabled | bool | `false` |  |
+| clickhouseKeeper.replicaCount | int | `3` |  |
+| clickhouseKeeper.image.repository | string | `"clickhouse/clickhouse-keeper"` |  |
+| clickhouseKeeper.image.pullPolicy | string | `"IfNotPresent"` |  |
+| clickhouseKeeper.image.tag | string | `"26.1.12-alpine"` |  |
+| clickhouseKeeper.resources.limits.cpu | string | `"500m"` |  |
+| clickhouseKeeper.resources.limits.memory | string | `"512Mi"` |  |
+| clickhouseKeeper.resources.requests.cpu | string | `"100m"` |  |
+| clickhouseKeeper.resources.requests.memory | string | `"128Mi"` |  |
+| clickhouseKeeper.persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":true,"size":"5Gi"}` | Persistence parameters ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
+| clickhouseKeeper.priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
+| clickhouseKeeper.nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| clickhouseKeeper.tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| clickhouseKeeper.affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | backup.enabled | bool | `false` |  |
 | backup.image.repository | string | `"altinity/clickhouse-backup"` |  |
 | backup.image.pullPolicy | string | `"IfNotPresent"` |  |
@@ -146,7 +160,7 @@ metrics:
 | tlsCerts.create | bool | `false` |  |
 | metrics.enabled | bool | `false` |  |
 | storage | object | `{}` |  |
-| clickhouse.name | string | `nil` | Clickhouse cluster name Use helm-chart name if empty |
+| clickhouse.name | string | `""` | Clickhouse cluster name Use helm-chart name if empty |
 | clickhouse.logLevel | string | `"information"` | Clickhouse log level ref: https://clickhouse.com/docs/en/operations/server-configuration-parameters/settings#logger trace, debug, information, warning, error |
 | clickhouse.accessManagement | bool | `false` | Clickhouse SQL-driven Access Control refs: https://clickhouse.com/docs/en/operations/access-rights |
 | clickhouse.users[0] | object | `{"name":"logger","password":"2686af9f25e1a64f5e9f7290c7e457aa06b616fb31d2b4331ff6fa0857661cd5","profile":"default","quota":"default"}` | Clickhouse read write user |

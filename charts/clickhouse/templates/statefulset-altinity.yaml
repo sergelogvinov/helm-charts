@@ -117,12 +117,20 @@ spec:
         {{- $value | nindent 8 }}
       {{- end }}
     {{- end }}
-    {{- if ne (len (default (list) .Values.clickhouse.zookeeper.nodes)) 0 }}
+    {{- if or .Values.clickhouseKeeper.enabled (ne (len (default (list) .Values.clickhouse.zookeeper.nodes)) 0) }}
     zookeeper:
+    {{- if .Values.clickhouseKeeper.enabled }}
+      nodes:
+        {{- range $i := until (.Values.clickhouseKeeper.replicaCount | int)  }}
+        - host: {{ printf "chk-%s%s-0-%d" (include "clickhouse.fullname" $) (ternary "" (printf "-%s" $.Values.clickhouse.name) (eq $.Values.clickhouse.name "")) $i }}
+          port: 2181
+        {{- end }}
+    {{- else }}}}
       {{- with .Values.clickhouse.zookeeper.nodes }}
       nodes:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+    {{- end }}
       root: {{ default (printf "/%s/%s" (include "clickhouse.fullname" .) (default (include "clickhouse.fullname" .) .Values.clickhouse.name)) .Values.clickhouse.zookeeper.root }}
       {{- if .Values.clickhouse.zookeeper.identity }}
       identity: {{ .Values.clickhouse.zookeeper.identity }}
@@ -135,13 +143,11 @@ spec:
         metadata:
         {{- with .Values.podlabels }}
           labels:
-            {{ toYaml . | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
         {{- end }}
         {{- with .Values.persistence.annotations }}
           annotations:
-          {{- range $key, $value := . }}
-            {{ $key }}: {{ $value }}
-          {{- end }}
+            {{- toYaml . | nindent 12 }}
         {{- end }}
         spec:
           accessModes:
@@ -163,7 +169,7 @@ spec:
         metadata:
           {{- with .Values.podlabels }}
           labels:
-            {{ toYaml . | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           annotations:
           {{- with .Values.podAnnotations }}

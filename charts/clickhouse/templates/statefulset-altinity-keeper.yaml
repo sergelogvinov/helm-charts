@@ -1,0 +1,125 @@
+{{- if and (eq .Values.installationType "altinity") .Values.clickhouseKeeper.enabled }}
+apiVersion: clickhouse-keeper.altinity.com/v1
+kind: ClickHouseKeeperInstallation
+metadata:
+  name: {{ include "clickhouse.fullname" . }}
+  labels:
+    {{- include "clickhouse.labels" . | nindent 4 }}
+  {{- with .Values.podlabels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  namespaceDomainPattern: "%s.svc.{{ .Values.clusterDomain }}"
+  defaults:
+    templates:
+      volumeClaimTemplate: data
+      podTemplate: {{ include "clickhouse.fullname" . }}
+      serviceTemplate: {{ include "clickhouse.fullname" . }}
+  configuration:
+    clusters:
+      - name: {{ default (include "clickhouse.fullname" .) .Values.clickhouse.name }}
+        layout:
+          replicasCount: {{ .Values.clickhouseKeeper.replicaCount }}
+    settings:
+      {{- if .Values.metrics.enabled }}
+      prometheus/endpoint: /metrics
+      prometheus/port: 9363
+      prometheus/metrics: true
+      prometheus/events: true
+      prometheus/asynchronous_metrics: true
+      prometheus/status_info: true
+      {{- end }}
+      logger/level: {{ default "information" .Values.clickhouse.logLevel }}
+  templates:
+    volumeClaimTemplates:
+      - name: data
+        metadata:
+        {{- with .Values.podlabels }}
+          labels:
+            {{- toYaml . | nindent 12 }}
+        {{- end }}
+        {{- with .Values.clickhouseKeeper.persistence.annotations }}
+          annotations:
+            {{- toYaml . | nindent 12 }}
+        {{- end }}
+        spec:
+          accessModes:
+          {{- range .Values.clickhouseKeeper.persistence.accessModes }}
+            - {{ . | quote }}
+          {{- end }}
+          resources:
+            requests:
+              storage: {{ .Values.clickhouseKeeper.persistence.size | quote }}
+        {{- if or .Values.persistence.storageClass .Values.clickhouseKeeper.persistence.storageClass }}
+        {{- if (eq "-" .Values.clickhouseKeeper.persistence.storageClass) }}
+          storageClassName: ""
+        {{- else }}
+          storageClassName: "{{ default .Values.persistence.storageClass .Values.clickhouseKeeper.persistence.storageClass }}"
+        {{- end }}
+        {{- end }}
+    podTemplates:
+      - name: {{ include "clickhouse.fullname" . }}
+        metadata:
+          {{- with .Values.podlabels }}
+          labels:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          annotations:
+          {{- with .Values.podAnnotations }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.metrics.enabled }}
+            prometheus.io/scrape: "true"
+            prometheus.io/port: "9363"
+          {{- end}}
+        spec:
+          enableServiceLinks: false
+          {{- if or .Values.priorityClassName .Values.clickhouseKeeper.priorityClassName }}
+          priorityClassName: {{ default .Values.priorityClassName .Values.clickhouseKeeper.priorityClassName }}
+          {{- end }}
+          {{- with .Values.clickhouseKeeper.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 16 }}
+          {{- end }}
+          serviceAccountName: {{ include "clickhouse.serviceAccountName" . }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          containers:
+            - name: clickhouse-keeper
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              image: "{{ .Values.clickhouseKeeper.image.repository }}:{{ .Values.clickhouseKeeper.image.tag }}"
+              imagePullPolicy: {{ .Values.clickhouseKeeper.image.pullPolicy }}
+              {{- if .Values.metrics.enabled }}
+              ports:
+                - name: metrics
+                  containerPort: 9363
+                  protocol: TCP
+              {{- end }}
+              resources:
+                {{- toYaml .Values.clickhouseKeeper.resources | nindent 16 }}
+          {{- with (default .Values.nodeSelector .Values.clickhouseKeeper.nodeSelector) }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with (default .Values.affinity .Values.clickhouseKeeper.affinity) }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with (default .Values.tolerations .Values.clickhouseKeeper.tolerations) }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+    serviceTemplates:
+      - name: {{ include "clickhouse.fullname" . }}
+        generateName: {{ include "clickhouse.fullname" . }}{{ ternary "" (printf "-%s" .Values.clickhouse.name) (eq .Values.clickhouse.name "") }}-keeper
+        metadata:
+          labels:
+            {{- include "clickhouse.labels" . | nindent 12 }}
+        spec:
+          ports:
+            - name: zk
+              port: 2181
+            - name: metrics
+              port: 9363
+{{- end -}}

@@ -94,7 +94,7 @@ autoscaling:
 
   # -- Resource to control
   # Possible values are "cpu" and "memory"
-  controlledResources: ["cpu","memory"]
+  controlledResources: ["cpu", "memory"]
 
   # -- Controls which resource value should be autoscaled
   # Possible values are "RequestsAndLimits" and "RequestsOnly"
@@ -179,6 +179,50 @@ tolerations: []
 # -- Affinity for pod assignment.
 # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}
+
+clickhouseKeeper:
+  enabled: false
+
+  replicaCount: 3
+
+  image:
+    repository: clickhouse/clickhouse-keeper
+    pullPolicy: IfNotPresent
+    tag: 26.1.12-alpine
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  # -- Persistence parameters
+  # ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  persistence:
+    enabled: true
+    # storageClass: "-"
+    accessModes:
+      - ReadWriteOnce
+    size: 5Gi
+    annotations: {}
+
+  # -- Priority Class Name
+  # ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ~
+
+  # -- Node labels for pod assignment.
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+
+  # -- Tolerations for pod assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+
+  # -- Affinity for pod assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
 
 backup:
   enabled: false
@@ -332,7 +376,7 @@ storage: {}
 clickhouse:
   # -- Clickhouse cluster name
   # Use helm-chart name if empty
-  name: ~
+  name: ""
 
   # -- Clickhouse log level
   # ref: https://clickhouse.com/docs/en/operations/server-configuration-parameters/settings#logger
