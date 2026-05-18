@@ -1,6 +1,6 @@
 # pgbouncer
 
-![Version: 0.15.0](https://img.shields.io/badge/Version-0.15.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.13](https://img.shields.io/badge/AppVersion-16.13-informational?style=flat-square)
+![Version: 0.16.0](https://img.shields.io/badge/Version-0.16.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.14](https://img.shields.io/badge/AppVersion-16.14-informational?style=flat-square)
 
 Postgres connection poller
 
