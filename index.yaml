@@ -11847,6 +11847,27 @@ entries:
   prometheus-rules:
   - apiVersion: v2
     appVersion: 2.40.0
+    created: "2026-05-18T09:27:41.173207698Z"
+    description: Static prometheus/victoria metrics common rules
+    digest: 51032da0844d055af2f94402993f063945c5c671ada48aeac9ce8b65c449a1a8
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - prometheus
+    - victoria-metrics
+    - metrics
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: prometheus-rules
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/prometheus-rules
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/prometheus-rules-0.2.32/prometheus-rules-0.2.32.tgz
+    version: 0.2.32
+  - apiVersion: v2
+    appVersion: 2.40.0
     created: "2026-05-10T09:46:58.433960825Z"
     description: Static prometheus/victoria metrics common rules
     digest: 2bfe0e2969982c2f775d47cca5ebcd9e25fc9e4fba0e99f5854de515899a20fa
@@ -18012,4 +18033,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-05-18T06:26:47.631674646Z"
+generated: "2026-05-18T09:27:41.174399608Z"
