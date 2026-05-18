@@ -122,7 +122,7 @@ spec:
     {{- if .Values.clickhouseKeeper.enabled }}
       nodes:
         {{- range $i := until (.Values.clickhouseKeeper.replicaCount | int)  }}
-        - host: {{ printf "chk-%s%s-0-%d" (include "clickhouse.fullname" $) (ternary "" (printf "-%s" $.Values.clickhouse.name) (eq $.Values.clickhouse.name "")) $i }}
+        - host: {{ printf "chk-%s%s-0-%d" (include "clickhouse.fullname" $) (ternary "" (printf "-%s" $.Values.clickhouse.name) (eq $.Values.clickhouse.name "")) $i }}.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}
           port: 2181
         {{- end }}
     {{- else }}}}

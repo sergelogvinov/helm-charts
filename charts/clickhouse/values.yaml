@@ -60,10 +60,10 @@ securityContext:
   capabilities:
     drop:
       - ALL
-    add: []
-      # Need PodSecurity policy to `pod-security.kubernetes.io/enforce: privileged`
-      # - SYS_NICE
-      # - IPC_LOCK
+    # add:
+    #   # Need PodSecurity policy to `pod-security.kubernetes.io/enforce: privileged`
+    #   - SYS_NICE
+    #   - IPC_LOCK
   # readOnlyRootFilesystem: true
 
 # -- Service parameters
@@ -219,6 +219,11 @@ clickhouseKeeper:
   # -- Tolerations for pod assignment.
   # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   tolerations: []
+
+  # -- Pod Anti Affinity
+  # soft/hard
+  podAntiAffinityPreset: hard
+  podAntiAffinityPresetKey: kubernetes.io/hostname
 
   # -- Affinity for pod assignment.
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity

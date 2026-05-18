@@ -5,6 +5,7 @@ metadata:
   name: {{ include "clickhouse.fullname" . }}
   labels:
     {{- include "clickhouse.labels" . | nindent 4 }}
+    app.kubernetes.io/component: keeper
   {{- with .Values.podlabels }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -102,8 +103,9 @@ spec:
           nodeSelector:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with (default .Values.affinity .Values.clickhouseKeeper.affinity) }}
           affinity:
+            podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.clickhouseKeeper.podAntiAffinityPreset "topologyKey" $.Values.clickhouseKeeper.podAntiAffinityPresetKey "component" "keeper" "context" $) | nindent 14 }}
+          {{- with (default .Values.affinity .Values.clickhouseKeeper.affinity) }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- with (default .Values.tolerations .Values.clickhouseKeeper.tolerations) }}
@@ -122,4 +124,5 @@ spec:
               port: 2181
             - name: metrics
               port: 9363
+          type: ClusterIP
 {{- end -}}
