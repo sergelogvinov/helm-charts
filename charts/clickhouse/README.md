@@ -1,6 +1,6 @@
 # clickhouse
 
-![Version: 0.16.0](https://img.shields.io/badge/Version-0.16.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 26.3.10](https://img.shields.io/badge/AppVersion-26.3.10-informational?style=flat-square)
+![Version: 0.17.0](https://img.shields.io/badge/Version-0.17.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 26.3.10](https://img.shields.io/badge/AppVersion-26.3.10-informational?style=flat-square)
 
 Clickhouse chart for Kubernetes
 
@@ -128,7 +128,7 @@ metrics:
 | clickhouseKeeper.replicaCount | int | `3` |  |
 | clickhouseKeeper.image.repository | string | `"clickhouse/clickhouse-keeper"` |  |
 | clickhouseKeeper.image.pullPolicy | string | `"IfNotPresent"` |  |
-| clickhouseKeeper.image.tag | string | `"26.1.12-alpine"` |  |
+| clickhouseKeeper.image.tag | string | `"26.4.2-alpine"` |  |
 | clickhouseKeeper.resources.limits.cpu | string | `"500m"` |  |
 | clickhouseKeeper.resources.limits.memory | string | `"512Mi"` |  |
 | clickhouseKeeper.resources.requests.cpu | string | `"100m"` |  |
