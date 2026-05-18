@@ -36,5 +36,5 @@ roleRef:
   name: {{ include "victoria-metrics.fullname" . }}:vmagent
 subjects:
   - kind: ServiceAccount
-    name: vmalert-{{ include "victoria-metrics.fullname" . }}
+    name: vmagent-{{ include "victoria-metrics.fullname" . }}
     namespace: {{ .Release.Namespace }}
