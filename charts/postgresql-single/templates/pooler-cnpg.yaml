@@ -54,7 +54,7 @@ spec:
       {{- end }}
       affinity:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.pooler.podAntiAffinityPreset
-        "topologyKey" $.Values.pooler.podAntiAffinityPresetTopologyKey "component" $name "context" $) | nindent 10 }}
+        "topologyKey" $.Values.pooler.podAntiAffinityPresetKey "component" $name "context" $) | nindent 10 }}
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
