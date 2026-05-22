@@ -1,0 +1,77 @@
+- name: clickhouse-static.rules
+  rules:
+    - alert: ClickHouseAuthenticationFailures
+      expr: increase(ClickHouseErrorMetric_AUTHENTICATION_FAILED[5m]) > 3
+      for: 1m
+      labels:
+        severity: info
+      annotations:
+        summary: ClickHouse Authentication Failures {{ $labels.kubernetes_namespace }}/{{ $labels.app_kubernetes_io_name }} - {{ $value }}
+        description: Authentication failures detected, indicating potential security issues or misconfiguration
+    - alert: ClickHouseAccessDeniedErrors
+      expr: increase(ClickHouseErrorMetric_RESOURCE_ACCESS_DENIED[5m]) > 3
+      for: 1m
+      labels:
+        severity: info
+      annotations:
+        summary: ClickHouse Access Denied Errors {{ $labels.kubernetes_namespace }}/{{ $labels.app_kubernetes_io_name }} - {{ $value }}
+        description: Access denied errors have been logged
+
+    - alert: ClickHouseDelayedInsertQueries
+      expr: increase(ClickHouseProfileEvents_DelayedInserts[5m]) > 10
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        summary: ClickHouse delayed insert queries {{ $labels.kubernetes_namespace }}/{{ $labels.app_kubernetes_io_name }} - {{ $value }}
+        description: Command insert delayed due to high number of active parts
+    - alert: ClickHouseRejectedInsertQueries
+      expr: increase(ClickHouseProfileEvents_RejectedInserts[1m]) > 2
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        summary: ClickHouse rejected insert rejected {{ $labels.kubernetes_namespace }}/{{ $labels.app_kubernetes_io_name }} - {{ $value }}
+        description: Command insert rejected due to too many active data parts
+
+    - alert: ClickHouseZookeeperHardwareException
+      expr: increase(ClickHouseProfileEvents_ZooKeeperHardwareExceptions[1m]) > 1
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: ClickHouse zookeeper hardware exception {{ $labels.kubernetes_namespace }}/{{ $labels.app_kubernetes_io_name }} - {{ $value }}
+        description: ClickHouse network issues communicating with ZooKeeper
+
+    - alert: ClickHouseKeeperHighLatency
+      expr: ClickHouseAsyncMetrics_KeeperMaxLatency{app_kubernetes_io_component="keeper"} > 500
+      for: 15m
+      labels:
+        severity: warning
+      annotations:
+        summary: ClickHouse Keeper requests is high {{ $labels.kubernetes_namespace }}/{{ $labels.app_kubernetes_io_name }}
+        description: Maximum latency for ClickHouse Keeper requests is high
+    - alert: ClickHouseKeeperOutstandingRequests
+      expr: ClickHouseMetrics_KeeperOutstandingRequests{app_kubernetes_io_component="keeper"} > 10
+      for: 10m
+      labels:
+        severity: high
+      annotations:
+        summary: ClickHouse Keeper requests {{ $labels.kubernetes_namespace }}/{{ $labels.app_kubernetes_io_name }} - {{ $value }}
+        description: ClickHouse Keeper receives more requests than it can process
+    - alert: ClickHouseKeeperCommitsFailed
+      expr: increase(ClickHouseProfileEvents_KeeperCommitsFailed{app_kubernetes_io_component="keeper"}[5m]) > 0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: ClickHouse Keeper has failed commits {{ $labels.kubernetes_namespace }}/{{ $labels.app_kubernetes_io_name }} - {{ $value }}
+        description: ClickHouse Keeper has failed commits
+    - alert: ClickHouseKeeperLostQuorum
+      expr: ClickHouseAsyncMetrics_KeeperSyncedFollowers{app_kubernetes_io_component="keeper"} < 1 and ClickHouseAsyncMetrics_KeeperIsLeader{app_kubernetes_io_component="keeper"} == 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: ClickHouse Keeper leader has lost quorum {{ $labels.kubernetes_namespace }}/{{ $labels.app_kubernetes_io_name }} - {{ $value }}
+        description: ClickHouse Keeper leader has lost quorum
