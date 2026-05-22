@@ -1,6 +1,6 @@
 # postgresql-single
 
-![Version: 1.14.1](https://img.shields.io/badge/Version-1.14.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.14](https://img.shields.io/badge/AppVersion-16.14-informational?style=flat-square)
+![Version: 1.14.2](https://img.shields.io/badge/Version-1.14.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.14](https://img.shields.io/badge/AppVersion-16.14-informational?style=flat-square)
 
 Postgres with backup/restore and replication
 
@@ -112,6 +112,12 @@ metrics:
 | pooler.service.externalTrafficPolicy | string | `"Cluster"` | Traffic policies. ref: https://kubernetes.io/docs/reference/networking/virtual-ips/#traffic-policies |
 | pooler.service.internalTrafficPolicy | string | `"Cluster"` |  |
 | pooler.service.ipFamilies | list | `["IPv4"]` | IP families for service possible values: IPv4, IPv6 ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/ |
+| pooler.autoscaling | object | `{"controlledResources":["cpu","memory"],"controlledValues":"RequestsOnly","enabled":false,"maxAllowed":{},"minAllowed":{},"updatePolicy":{"updateMode":"InPlaceOrRecreate"}}` | Vertical pod autoscaler |
+| pooler.autoscaling.controlledResources | list | `["cpu","memory"]` | Resource to control Possible values are "cpu" and "memory" |
+| pooler.autoscaling.controlledValues | string | `"RequestsOnly"` | Controls which resource value should be autoscaled Possible values are "RequestsAndLimits" and "RequestsOnly" |
+| pooler.autoscaling.maxAllowed | object | `{}` | Max allowed resources for the pod default is resources.limits |
+| pooler.autoscaling.minAllowed | object | `{}` | Min allowed resources for the pod default is resources.requests |
+| pooler.autoscaling.updatePolicy | object | `{"updateMode":"InPlaceOrRecreate"}` | Update policy Possible values are "Off", "Initial", "Recreate", "InPlaceOrRecreate" and "Auto" |
 | pooler.resources.limits.cpu | string | `"500m"` |  |
 | pooler.resources.limits.memory | string | `"64Mi"` |  |
 | pooler.resources.requests.cpu | string | `"100m"` |  |

@@ -1,0 +1,37 @@
+{{- if and .Values.pooler.enabled .Values.pooler.autoscaling.enabled (eq .Values.installationType "standalone") (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1") }}
+{{- range $type := .Values.pooler.types }}
+{{ $name := ternary "pooler" (printf "pooler-%s" $type) (eq $type "rw") }}
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "postgresql-single.fullname" $ }}-{{ $name }}
+  labels:
+    {{- include "postgresql-single.labels" $ | nindent 4 }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "postgresql-single.fullname" $ }}-{{ $name }}
+  updatePolicy:
+    updateMode: {{ $.Values.pooler.autoscaling.updatePolicy.updateMode }}
+  resourcePolicy:
+    containerPolicies:
+      - containerName: pgbouncer
+        {{- with (merge $.Values.pooler.autoscaling.maxAllowed $.Values.pooler.resources.limits) }}
+        maxAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with (merge $.Values.pooler.autoscaling.minAllowed $.Values.pooler.resources.requests) }}
+        minAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with $.Values.pooler.autoscaling.controlledResources }}
+        controlledResources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with $.Values.pooler.autoscaling.controlledValues }}
+        controlledValues: {{ . }}
+        {{- end }}
+{{- end }}
+{{- end }}
