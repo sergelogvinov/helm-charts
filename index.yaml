@@ -9710,6 +9710,27 @@ entries:
   plausible:
   - apiVersion: v2
     appVersion: v3.2.1
+    created: "2026-05-23T16:27:35.23102492Z"
+    description: Plausible Analytics
+    digest: 7b816aecb63a518db6732e9e949e23bab14e74d158d26be425be3d90eed1477a
+    home: https://plausible.io/
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/plausible/icon.png
+    keywords:
+    - plausible
+    - analytics
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: plausible
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/plausible
+    - https://github.com/plausible/analytics
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/plausible-1.1.2/plausible-1.1.2.tgz
+    version: 1.1.2
+  - apiVersion: v2
+    appVersion: v3.2.1
     created: "2026-05-18T06:23:12.753400101Z"
     description: Plausible Analytics
     digest: f9d7e8091d76228c2277f8896030875c4119f4c6358d7b5f26eccab3f5398bca
@@ -18262,4 +18283,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-05-23T16:12:57.203308442Z"
+generated: "2026-05-23T16:27:35.232260653Z"
