@@ -41,3 +41,4 @@ docs: $(foreach pkg,$(PACKAGES),docs-$(pkg)) ## Update helm chart readme
 docs-%:
 	@echo Update $* README.md
 	@cd charts/$*; helm-docs --sort-values-order=file
+	@git log --pretty=format:"- %s (%h)" -- charts/$*/ > charts/$*/CHANGELOG.md
