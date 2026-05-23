@@ -15921,6 +15921,26 @@ entries:
   tabix:
   - apiVersion: v2
     appVersion: 22.05.17
+    created: "2026-05-23T15:45:25.411208838Z"
+    description: Clickhouse WebUI
+    digest: 9611835e6c22f5310de5cb129ff645fc31241c0de8f80ed0245b312daa4a1a4a
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - tabix
+    - clickhouse
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: tabix
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/tabix
+    - https://github.com/tabixio/tabix
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/tabix-0.2.2/tabix-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 22.05.17
     created: "2026-05-23T15:16:10.734345334Z"
     description: Clickhouse WebUI
     digest: f4358971012c5aa41cb79856ce3387ed1fa29671dd75364d2ba3ae39e108e50e
@@ -18217,4 +18237,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-05-23T15:16:10.735619682Z"
+generated: "2026-05-23T15:45:25.412368868Z"
