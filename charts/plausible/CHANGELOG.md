@@ -1,12 +1,12 @@
-- feat: vpod-autoscaler (b7e7d41)
-- fix(container): update ghcr.io/plausible/community-edition (v3.2 → v3.2.1) (b780cb7)
-- feat(container): update ghcr.io/plausible/community-edition (v3.0.1 → v3.2) (5a0c8e5)
-- feat(container): update ghcr.io/plausible/community-edition (v2.1.5 → v3.0.1) (d9b1bdc)
-- feat: remove 1.18 compatability (cfb9ba8)
-- fix(container): update ghcr.io/plausible/community-edition (v2.1.4 → v2.1.5) (5f9b4a3)
-- fix(container): update ghcr.io/plausible/community-edition (v2.1.1 → v2.1.4) (f327baa)
-- chore: cosmetic (6013d23)
-- cosmetic (a086eb7)
-- update vesions (81e0a9a)
-- cosmetic (1b38f75)
-- init plausible (530fc16)
+- feat: vpod-autoscaler
+- fix(container): update ghcr.io/plausible/community-edition (v3.2 → v3.2.1)
+- feat(container): update ghcr.io/plausible/community-edition (v3.0.1 → v3.2)
+- feat(container): update ghcr.io/plausible/community-edition (v2.1.5 → v3.0.1)
+- feat: remove 1.18 compatability
+- fix(container): update ghcr.io/plausible/community-edition (v2.1.4 → v2.1.5)
+- fix(container): update ghcr.io/plausible/community-edition (v2.1.1 → v2.1.4)
+- chore: cosmetic
+- cosmetic
+- update vesions
+- cosmetic
+- init plausible
