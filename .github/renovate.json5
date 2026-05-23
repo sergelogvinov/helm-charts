@@ -56,7 +56,7 @@
           "**/CHANGELOG.md"
         ],
         "executionMode": "branch",
-        "dataFileTemplate": "- update {{depName}} ({{currentVersion}} → {{newVersion}})\n"
+        "dataFileTemplate": "- update {{{depName}}} ({{{currentVersion}}} → {{{newVersion}}})\n"
       }
     },
     {
