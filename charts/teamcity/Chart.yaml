@@ -25,7 +25,7 @@ maintainers:
 #     condition: postgresql.enabled
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.10.7
+version: 0.10.8
 #
 # renovate: datasource=docker depName=ghcr.io/sergelogvinov/teamcity
-appVersion: "2025.11.4"
+appVersion: "2025.11.5"
