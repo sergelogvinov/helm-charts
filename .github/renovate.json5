@@ -56,7 +56,7 @@
           "**/CHANGELOG.md"
         ],
         "executionMode": "branch",
-        "dataFileTemplate": "- update {{{depName}}} ({{{currentVersion}}} → {{{newVersion}}})\n"
+        "dataFileTemplate": "[{{#each upgrades}}{\"depName\": \"{{{depName}}}\", \"currentValue\": \"{{{currentValue}}}\", \"newValue\": \"{{{newValue}}}\"}{{#unless @last}},{{\/unless}}{{\/each}}]"
       }
     },
     {
