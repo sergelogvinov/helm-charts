@@ -52,7 +52,8 @@
         "fileFilters": [
           "**/Chart.yaml",
           "**/values.yaml",
-          "**/README.md"
+          "**/README.md",
+          "**/CHANGELOG.md"
         ],
         "executionMode": "branch"
       }
