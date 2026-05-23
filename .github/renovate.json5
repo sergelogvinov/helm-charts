@@ -47,7 +47,7 @@
       "postUpgradeTasks": {
         "commands": [
           "./hack/bump-chart-version.sh '{{{parentDir}}}' '{{{isMajor}}}' '{{{isMinor}}}' '{{{isPatch}}}'",
-          "make docs-{{{parentDir}}}"
+          "make docs-{{{parentDir}}} COMMIT_MESSAGE='- update {{depName}} ({{currentVersion}} → {{newVersion}})'"
         ],
         "fileFilters": [
           "**/Chart.yaml",
@@ -55,8 +55,7 @@
           "**/README.md",
           "**/CHANGELOG.md"
         ],
-        "executionMode": "branch",
-        "dataFileTemplate": "[{{#each upgrades}}{\"depName\": \"{{{depName}}}\", \"currentValue\": \"{{{currentValue}}}\", \"newValue\": \"{{{newValue}}}\"}{{#unless @last}},{{\/unless}}{{\/each}}]"
+        "executionMode": "branch"
       }
     },
     {
