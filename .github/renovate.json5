@@ -55,7 +55,8 @@
           "**/README.md",
           "**/CHANGELOG.md"
         ],
-        "executionMode": "branch"
+        "executionMode": "branch",
+        "dataFileTemplate": "- update {{depName}} ({{currentVersion}} → {{newVersion}})\n"
       }
     },
     {

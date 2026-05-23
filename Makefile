@@ -40,6 +40,10 @@ test-%:
 docs: $(foreach pkg,$(PACKAGES),docs-$(pkg)) ## Update helm chart readme
 docs-%:
 	@echo Update $* CHANGELOG.md
-	@git log --pretty=format:"- %s" -- charts/$*/ > charts/$*/CHANGELOG.md
+	@if [ -n "$$RENOVATE_POST_UPGRADE_COMMAND_DATA_FILE" ] && [ -f "$$RENOVATE_POST_UPGRADE_COMMAND_DATA_FILE" ]; then \
+		cat "$$RENOVATE_POST_UPGRADE_COMMAND_DATA_FILE" > charts/$*/CHANGELOG.md; \
+	else \
+		git log --pretty=format:"- %s" -- charts/$*/ > charts/$*/CHANGELOG.md; \
+	fi
 	@echo Update $* README.md
 	@cd charts/$*; helm-docs --sort-values-order=file
