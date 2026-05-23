@@ -14,10 +14,21 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: KubeScheduler has disappeared from Prometheus target discovery.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeschedulerdown
         summary: Target disappeared from Prometheus target discovery.
-      expr: absent(up{job="kube-scheduler"} == 1)
+      expr: absent(up{job="kube-scheduler"})
       for: 15m
       labels:
         severity: critical
+{{- end }}
+{{- if not (.Values.defaultRules.disabled.KubeSchedulerInstanceUnreachable | default false) }}
+    - alert: KubeSchedulerInstanceUnreachable
+      annotations:
+        description: A KubeScheduler instance has been unreachable for more than 15 minutes.
+        runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeschedulerinstanceunreachable
+        summary: KubeScheduler instance is unreachable.
+      expr: up{job="kube-scheduler"} == 0
+      for: 15m
+      labels:
+        severity: warning
 {{- end }}
 {{- end }}
 {{- end }}

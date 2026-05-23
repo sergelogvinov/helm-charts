@@ -38,12 +38,12 @@ charts = [
         'min_kubernetes': '1.14.0-0'
     },
     {
-        'source': 'https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/kubernetesControlPlane-prometheusRule.yaml',
+        'source': 'https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/kubeStateMetrics-prometheusRule.yaml',
         'destination': '../templates/rules-1.14',
         'min_kubernetes': '1.14.0-0'
     },
     {
-        'source': 'https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/kubeStateMetrics-prometheusRule.yaml',
+        'source': 'https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/kubernetesControlPlane-prometheusRule.yaml',
         'destination': '../templates/rules-1.14',
         'min_kubernetes': '1.14.0-0'
     },

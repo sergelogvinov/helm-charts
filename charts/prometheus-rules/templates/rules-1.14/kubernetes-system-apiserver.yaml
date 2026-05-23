@@ -64,10 +64,21 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         description: KubeAPI has disappeared from Prometheus target discovery.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeapidown
         summary: Target disappeared from Prometheus target discovery.
-      expr: absent(up{job="kubernetes-apiservers"} == 1)
+      expr: absent(up{job="kubernetes-apiservers"})
       for: 15m
       labels:
         severity: critical
+{{- end }}
+{{- if not (.Values.defaultRules.disabled.KubeAPIInstanceUnreachable | default false) }}
+    - alert: KubeAPIInstanceUnreachable
+      annotations:
+        description: A KubeAPI instance has been unreachable for more than 15 minutes.
+        runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubeapiinstanceunreachable
+        summary: KubeAPI instance is unreachable.
+      expr: up{job="kubernetes-apiservers"} == 0
+      for: 15m
+      labels:
+        severity: warning
 {{- end }}
 {{- if not (.Values.defaultRules.disabled.KubeAPITerminatedRequests | default false) }}
     - alert: KubeAPITerminatedRequests

@@ -121,10 +121,16 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubequotaalmostfull
         summary: Namespace quota is going to be full.
       expr: |-
-        kube_resourcequota{job="kubernetes-service-endpoints", type="used"}
-          / ignoring(instance, job, type)
-        (kube_resourcequota{job="kubernetes-service-endpoints", type="hard"} > 0)
-          > 0.9 < 1
+        max without (instance, job, type) (
+          kube_resourcequota{job="kubernetes-service-endpoints", type="used"}
+        )
+        / on (cluster, namespace, resource, resourcequota) group_left()
+        (
+          max without (instance, job, type) (
+            kube_resourcequota{job="kubernetes-service-endpoints", type="hard"}
+          ) > 0
+        )
+        > 0.9 < 1
       for: 15m
       labels:
         severity: info
@@ -136,10 +142,16 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubequotafullyused
         summary: Namespace quota is fully used.
       expr: |-
-        kube_resourcequota{job="kubernetes-service-endpoints", type="used"}
-          / ignoring(instance, job, type)
-        (kube_resourcequota{job="kubernetes-service-endpoints", type="hard"} > 0)
-          == 1
+        max without (instance, job, type) (
+          kube_resourcequota{job="kubernetes-service-endpoints", type="used"}
+        )
+        / on (cluster, namespace, resource, resourcequota) group_left()
+        (
+          max without (instance, job, type) (
+            kube_resourcequota{job="kubernetes-service-endpoints", type="hard"}
+          ) > 0
+        )
+        == 1
       for: 15m
       labels:
         severity: info
@@ -151,10 +163,15 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubequotaexceeded
         summary: Namespace quota has exceeded the limits.
       expr: |-
-        kube_resourcequota{job="kubernetes-service-endpoints", type="used"}
-          / ignoring(instance, job, type)
-        (kube_resourcequota{job="kubernetes-service-endpoints", type="hard"} > 0)
-          > 1
+        max without (instance, job, type) (
+          kube_resourcequota{job="kubernetes-service-endpoints", type="used"}
+        )
+        / on (cluster, namespace, resource, resourcequota) group_left()
+        (
+          max without (instance, job, type) (
+            kube_resourcequota{job="kubernetes-service-endpoints", type="hard"}
+          ) > 0
+        ) > 1
       for: 15m
       labels:
         severity: warning
@@ -166,10 +183,22 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/cputhrottlinghigh
         summary: Processes experience elevated CPU throttling.
       expr: |-
-        sum(increase(container_cpu_cfs_throttled_periods_total{container!="", job="kubelet", metrics_path="/metrics/cadvisor", }[5m])) without (id, metrics_path, name, image, endpoint, job, node)
-          / on (cluster, namespace, pod, container, instance) group_left
-        sum(increase(container_cpu_cfs_periods_total{job="kubelet", metrics_path="/metrics/cadvisor", }[5m])) without (id, metrics_path, name, image, endpoint, job, node)
-          > ( 25 / 100 )
+        sum without (id, metrics_path, name, image, endpoint, job, node) (
+          topk by (cluster, namespace, pod, container, instance) (1,
+            increase(
+              container_cpu_cfs_throttled_periods_total{container!="", job="kubelet", metrics_path="/metrics/cadvisor", }
+            [5m])
+          )
+        )
+        / on (cluster, namespace, pod, container, instance) group_left
+        sum without (id, metrics_path, name, image, endpoint, job, node) (
+          topk by (cluster, namespace, pod, container, instance) (1,
+            increase(
+              container_cpu_cfs_periods_total{job="kubelet", metrics_path="/metrics/cadvisor", }
+            [5m])
+          )
+        )
+        > ( 25 / 100 )
       for: 15m
       labels:
         severity: info

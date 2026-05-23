@@ -23,15 +23,20 @@ helm upgrade -i ${PKG_NAME} --version=${CHART_VERSION} oci://ghcr.io/sergelogvin
 
 ### Common charts
 
-* [bitwarden](charts/bitwarden/) - open source bitwarden (rust)
 * [fluentd](charts/fluentd/) - fluentd log router
 * [overprovisioner](charts/overprovisioner/) - reserve the resources for the deployment
 * [registry-mirrors](charts/registry-mirrors/) - container registry mirrors
 * [skipper](charts/skipper/) - skipper ingress controller
 
+### Secrets management
+
+* [bitwarden](charts/bitwarden/) - open source bitwarden (rust)
+* [infisical](charts/infisical/) - infisical secrets manager
+
 ### Monitoring
 
 * [victoria-metrics](charts/victoria-metrics/) - victoria metrics components (vmagent, vmalert, vmstorage)
+* [victoria-metrics-storage](charts/victoria-metrics-storage/) - victoria metrics storage cluster
 * [prometheus-rules](charts/prometheus-rules/) - prometheus operator replacer
 
 ### Databases
@@ -44,7 +49,7 @@ helm upgrade -i ${PKG_NAME} --version=${CHART_VERSION} oci://ghcr.io/sergelogvin
 * [mongosqld](charts/mongosqld/) - mongo to sql gateway
 * [mongosync](charts/mongosync/) - mongo replication
 * [pgbouncer](charts/pgbouncer/) - postgres connection pooler
-* [postgresql-single](charts/postgresql-single/) - postgres one node with backup/restore checks
+* [postgresql-single](charts/postgresql-single/) - postgres (static or cnpg version) with backup/restore checks
 
 ### CICD
 
@@ -62,9 +67,15 @@ helm upgrade -i ${PKG_NAME} --version=${CHART_VERSION} oci://ghcr.io/sergelogvin
 * [link-common](charts/link-common/) - tool to link kubernetes services to p2p network
 * [service-common](charts/service-common/) - tool to open services with TLS auth
 
+### Talos
+
+* [talos-backup](charts/talos-backup/) - backup and restore etcd from Talos control plane
+* [system-upgrade-controller](charts/system-upgrade-controller/) - system upgrade controller for Talos (rancher/system-upgrade-controller)
+
 ### RnD
 
 * [rbac-common](charts/rbac-common/) - predefined common RBAC policy
+* [rbac-bindings](charts/rbac-bindings/) - RBAC bindings for users and groups
 
 ## Helm Charts best practices
 

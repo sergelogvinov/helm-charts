@@ -57,7 +57,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
           '
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/general/infoinhibitor
         summary: Info-level alert inhibition.
-      expr: ALERTS{severity = "info"} == 1 unless on(namespace) ALERTS{alertname != "InfoInhibitor", severity =~ "warning|critical", alertstate="firing"} == 1
+      expr: group by (namespace) (ALERTS{severity = "info"} == 1) unless on (namespace) group by (namespace) (ALERTS{alertname != "InfoInhibitor", alertstate = "firing", severity =~ "warning|critical"} == 1)
       labels:
         severity: none
 {{- end }}
