@@ -27,7 +27,15 @@ spec:
   staticScrapeNamespaceSelector:
     matchLabels:
       kubernetes.io/metadata.name: {{ .Release.Namespace }}
-
+  staticScrapeSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "victoria-metrics.fullname" . }}
+  scrapeConfigNamespaceSelector:
+    matchLabels:
+      kubernetes.io/metadata.name: {{ .Release.Namespace }}
+  scrapeConfigSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "victoria-metrics.fullname" . }}
   scrapeInterval: 1m
   secrets:
     {{- toYaml .Values.vmAgent.secrets | nindent 4 }}

@@ -1,0 +1,8 @@
+- fix: vmagent rbac
+- fix: vmagent rbac
+- feat: ipv6 by default
+- feat: vmagent sharding
+- feat: vmagent sharding
+- feat: vmagent replicas
+- add affinity
+- feat: add victoria-metrics components
