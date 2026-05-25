@@ -1,3 +1,4 @@
+- fix: template
 - fix: keeper connections
 - fix(container): update altinity/clickhouse-backup (2.6.43 → 2.6.44)
 - feat(container): update clickhouse/clickhouse-keeper (26.1.12 → 26.4.2)

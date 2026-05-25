@@ -10,7 +10,7 @@ spec:
     apiVersion: apps/v1
     kind: StatefulSet
     {{- if eq .Values.installationType "altinity" }}
-    name: chi-clickhouse-{{ include "clickhouse.fullname" . }}-0-0
+    name: chi-{{ include "clickhouse.fullname" . }}-{{ (default (include "clickhouse.fullname" .) .Values.clickhouse.name) }}-0-0
     {{- else }}
     name: {{ include "clickhouse.fullname" . }}
     {{- end }}
