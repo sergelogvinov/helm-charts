@@ -80,20 +80,46 @@ service:
   ipFamilies: [IPv4]
 
 resources:
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
+  limits:
+    cpu: 1
+    memory: 512Mi
   requests:
     cpu: 100m
     memory: 128Mi
 
-# -- Horizontal pod autoscaler.
+# -- Horizontal and Vertical pod autoscaler.
 # ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 autoscaling:
   enabled: false
+
   minReplicas: 1
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
+
+  # -- Resource to control
+  # Possible values are "cpu" and "memory"
+  controlledResources: ["cpu", "memory"]
+
+  # -- Controls which resource value should be autoscaled
+  # Possible values are "RequestsAndLimits" and "RequestsOnly"
+  controlledValues: RequestsOnly
+
+  # -- Max allowed resources for the pod
+  # default is resources.limits
+  maxAllowed: {}
+    # cpu: 1
+    # memory: 500Mi
+
+  # -- Min allowed resources for the pod
+  # default is resources.requests
+  minAllowed: {}
+    # cpu: 1
+    # memory: 500Mi
+
+  # -- Update policy
+  # Possible values are "Off", "Initial", "Recreate", "InPlaceOrRecreate" and "Auto"
+  updatePolicy:
+    updateMode: InPlaceOrRecreate
 
 # -- Use a daemonset instead of a deployment
 useDaemonSet: false

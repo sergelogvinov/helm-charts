@@ -1,0 +1,33 @@
+{{- if and .Values.autoscaling.enabled .Values.useDaemonSet (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1") }}
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "skipper.fullname" . }}
+  labels:
+    {{- include "skipper.labels" . | nindent 4 }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: DaemonSet
+    name: {{ include "skipper.fullname" . }}
+  updatePolicy:
+    updateMode: {{ .Values.autoscaling.updatePolicy.updateMode }}
+  resourcePolicy:
+    containerPolicies:
+      - containerName: {{ .Chart.Name }}
+        {{- with (merge .Values.autoscaling.maxAllowed .Values.resources.limits) }}
+        maxAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with (merge .Values.autoscaling.minAllowed .Values.resources.requests) }}
+        minAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.autoscaling.controlledResources }}
+        controlledResources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.autoscaling.controlledValues }}
+        controlledValues: {{ . }}
+        {{- end }}
+{{- end }}

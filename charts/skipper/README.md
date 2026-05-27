@@ -1,6 +1,6 @@
 # skipper
 
-![Version: 0.6.1](https://img.shields.io/badge/Version-0.6.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.26.6](https://img.shields.io/badge/AppVersion-v0.26.6-informational?style=flat-square)
+![Version: 0.6.2](https://img.shields.io/badge/Version-0.6.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.26.6](https://img.shields.io/badge/AppVersion-v0.26.6-informational?style=flat-square)
 
 Ingress controller for Kubernetes
 
@@ -64,9 +64,16 @@ terminationGracePeriodSeconds: 120
 | service.type | string | `"ClusterIP"` |  |
 | service.annotations | object | `{}` |  |
 | service.ipFamilies[0] | string | `"IPv4"` |  |
+| resources.limits.cpu | int | `1` |  |
+| resources.limits.memory | string | `"512Mi"` |  |
 | resources.requests.cpu | string | `"100m"` |  |
 | resources.requests.memory | string | `"128Mi"` |  |
-| autoscaling | object | `{"enabled":false,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":80}` | Horizontal pod autoscaler. ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/ |
+| autoscaling | object | `{"controlledResources":["cpu","memory"],"controlledValues":"RequestsOnly","enabled":false,"maxAllowed":{},"maxReplicas":10,"minAllowed":{},"minReplicas":1,"targetCPUUtilizationPercentage":80,"updatePolicy":{"updateMode":"InPlaceOrRecreate"}}` | Horizontal and Vertical pod autoscaler. ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/ |
+| autoscaling.controlledResources | list | `["cpu","memory"]` | Resource to control Possible values are "cpu" and "memory" |
+| autoscaling.controlledValues | string | `"RequestsOnly"` | Controls which resource value should be autoscaled Possible values are "RequestsAndLimits" and "RequestsOnly" |
+| autoscaling.maxAllowed | object | `{}` | Max allowed resources for the pod default is resources.limits |
+| autoscaling.minAllowed | object | `{}` | Min allowed resources for the pod default is resources.requests |
+| autoscaling.updatePolicy | object | `{"updateMode":"InPlaceOrRecreate"}` | Update policy Possible values are "Off", "Initial", "Recreate", "InPlaceOrRecreate" and "Auto" |
 | useDaemonSet | bool | `false` | Use a daemonset instead of a deployment |
 | terminationGracePeriodSeconds | int | `120` |  |
 | updateStrategy.type | string | `"RollingUpdate"` |  |
