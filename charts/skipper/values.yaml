@@ -14,6 +14,14 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# -- Environment variables
+env: []
+
+# -- Skipper arguments
+args: []
+  # - -enable-proxy-protocol
+  # - -proxy-allow-cidrs="::0/0,0.0.0.0/0"
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -25,8 +33,7 @@ serviceAccount:
 
 # -- Annotations for pod.
 # ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-podAnnotations:
-  {}
+podAnnotations: {}
   # cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
 
 # -- Extra labels for pod.

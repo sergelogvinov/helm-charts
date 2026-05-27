@@ -1,1 +1,58 @@
-- update ghcr.io/zalando/skipper (v0.25.2 → v0.26.6)
+- feat(container): update ghcr.io/zalando/skipper (v0.25.2 → v0.26.6)
+- feat(container): update ghcr.io/zalando/skipper (v0.24.87 → v0.25.2)
+- fix(container): update ghcr.io/zalando/skipper (v0.24.82 → v0.24.87)
+- fix(container): update ghcr.io/zalando/skipper (v0.24.80 → v0.24.82)
+- fix(container): update ghcr.io/zalando/skipper (v0.24.77 → v0.24.80)
+- fix(container): update ghcr.io/zalando/skipper (v0.24.70 → v0.24.77)
+- fix(container): update ghcr.io/zalando/skipper (v0.24.64 → v0.24.70)
+- fix(container): update ghcr.io/zalando/skipper (v0.24.61 → v0.24.64)
+- fix(container): update ghcr.io/zalando/skipper (v0.24.60 → v0.24.61)
+- fix(container): update ghcr.io/zalando/skipper (v0.24.55 → v0.24.60)
+- fix(container): update ghcr.io/zalando/skipper (v0.24.52 → v0.24.55)
+- fix(container): update ghcr.io/zalando/skipper (v0.24.47 → v0.24.52)
+- fix(container): update ghcr.io/zalando/skipper (v0.24.41 → v0.24.47)
+- fix(container): update ghcr.io/zalando/skipper (v0.24.35 → v0.24.41)
+- fix(container): update ghcr.io/zalando/skipper (v0.24.27 → v0.24.35)
+- fix(container): update ghcr.io/zalando/skipper (v0.24.22 → v0.24.27)
+- fix(container): update ghcr.io/zalando/skipper (v0.24.12 → v0.24.22)
+- fix(container): update ghcr.io/zalando/skipper (v0.24 → v0.24.12)
+- feat(container): update ghcr.io/zalando/skipper (v0.23.1 → v0.24)
+- feat(container): update ghcr.io/zalando/skipper (v0.22.215 → v0.23.1)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.205 → v0.22.215)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.202 → v0.22.205)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.192 → v0.22.202)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.182 → v0.22.192)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.170 → v0.22.182)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.149 → v0.22.170)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.142 → v0.22.149)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.129 → v0.22.142)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.117 → v0.22.129)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.115 → v0.22.117)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.102 → v0.22.115)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.88 → v0.22.102)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.79 → v0.22.88)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.75 → v0.22.79)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.70 → v0.22.75)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.67 → v0.22.70)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.57 → v0.22.67)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.55 → v0.22.57)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.49 → v0.22.55)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.45 → v0.22.49)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.44 → v0.22.45)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.38 → v0.22.44)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.36 → v0.22.38)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.35 → v0.22.36)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.29 → v0.22.35)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.23 → v0.22.29)
+- fix(container): update ghcr.io/zalando/skipper (v0.22.21 → v0.22.23)
+- feat: use official image
+- add tests
+- chore: cosmetic
+- update vesions
+- cosmetic
+- cosmetic
+- cosmetic
+- add ingress class
+- save
+- skipper ingress fixes
+- skipper ingress controller

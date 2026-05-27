@@ -102,7 +102,13 @@ spec:
             - "-wait-first-route-load"
             - "-experimental-upgrade"
             - "-default-filters-prepend=enableAccessLog(2,4,5)->flowId()->xforward()"
-            # - "-insecure"
+            {{- range $value := .Values.args }}
+            - {{ $value }}
+            {{- end }}
+          {{- with .Values.env }}
+          env:
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
           ports:
             {{- if .Values.hostPort.ports.http }}
             - name: http
