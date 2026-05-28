@@ -66,42 +66,48 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["skipper"]
           args:
+            - -config-file=/etc/skipper/skipper.yaml
             {{- if .Values.hostPort.ports.https }}
-            - "-address=:{{ .Values.hostPort.ports.https }}"
+            - -address=:{{ .Values.hostPort.ports.https }}
             {{- end }}
             {{- if .Values.hostPort.ports.http }}
-            - "-insecure-address=:{{ .Values.hostPort.ports.http }}"
+            - -insecure-address=:{{ .Values.hostPort.ports.http }}
             {{- end }}
-            - "-tls-cert=/etc/ssl/tlscerts/tls.crt"
-            - "-tls-key=/etc/ssl/tlscerts/tls.key"
-            - "-kubernetes"
-            - "-kubernetes-in-cluster"
-            - "-kubernetes-path-mode=path-prefix"
-            - "-kubernetes-ingress-class={{ .Values.ingressClass }}"
-            - "-kubernetes-enable-tls"
-            - "-kubernetes-https-redirect"
-            - "-proxy-preserve-host"
-            # - "-passive-health-check=period=5s"
-            - "-application-log-level=WARN"
-            - "-application-log-json-enabled"
-            - "-access-log-json-enabled"
-            - "-runtime-metrics=false"
-            - "-disable-metrics-compat"
-            - "-metrics-flavour=prometheus"
-            - "-metrics-exp-decay-sample"
-            - "-enable-connection-metrics"
-            - "-enable-route-lifo-metrics"
-            - "-enable-route-fifo-metrics"
-            - "-keepalive-backend=30s"
-            - "-expect-continue-timeout-backend=30s"
-            - "-response-header-timeout-backend=1m"
-            - "-idle-timeout-server=62s"
-            - "-read-timeout-server=5m"
-            - "-write-timeout-server=60s"
-            - "-max-audit-body=0"
-            - "-wait-first-route-load"
-            - "-experimental-upgrade"
-            - "-default-filters-prepend=enableAccessLog(2,4,5)->flowId()->xforward()"
+            - -tls-cert=/etc/ssl/tlscerts/tls.crt
+            - -tls-key=/etc/ssl/tlscerts/tls.key
+            - -kubernetes
+            - -kubernetes-in-cluster
+            - -kubernetes-path-mode=path-prefix
+            - -kubernetes-ingress-class={{ .Values.ingressClass }}
+            - -kubernetes-enable-tls
+            - -kubernetes-https-redirect
+            - -kubernetes-https-redirect-code=301
+            - -source-poll-timeout=30000
+            #
+            - -proxy-preserve-host
+            - -wait-first-route-load
+            - -experimental-upgrade
+            #
+            - -keepalive-backend=30s
+            - -expect-continue-timeout-backend=30s
+            - -response-header-timeout-backend=1m
+            - -idle-timeout-server=62s
+            - -read-timeout-server=5m
+            - -write-timeout-server=60s
+            #
+            - -metrics-flavour=prometheus
+            - -support-listener=:9911
+            #
+            - -application-log-level=WARN
+            - -application-log-json-enabled
+            - -access-log-json-enabled
+            #
+            - -runtime-metrics=false
+            - -disable-metrics-compat
+            - -metrics-exp-decay-sample
+            - -enable-connection-metrics
+            - -enable-route-lifo-metrics
+            - -enable-route-fifo-metrics
             {{- range $value := .Values.args }}
             - {{ $value }}
             {{- end }}
@@ -132,12 +138,17 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
+            - name: config
+              mountPath: /etc/skipper
             - name: tlscerts
               mountPath: /etc/ssl/tlscerts
           {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
       volumes:
+        - name: config
+          configMap:
+            name: {{ include "skipper.fullname" . }}
         - name: tlscerts
           secret:
             secretName: {{ include "skipper.fullname" . }}-tls

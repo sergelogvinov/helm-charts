@@ -22,6 +22,17 @@ args: []
   # - -enable-proxy-protocol
   # - -proxy-allow-cidrs="::0/0,0.0.0.0/0"
 
+# -- Skipper config file body
+# refs: https://opensource.zalando.com/skipper/tutorials/basics/#yaml-configuration
+config:
+  default-filters-prepend: enableAccessLog(2,4,5)->flowId()->xforward()
+
+  # enable-kubernetes-external-names: true
+  # kubernetes-only-allowed-external-names: true
+  # kubernetes-allowed-external-names:
+  #   - ^one[.]example[.]org$
+  #   - ^two[.]example[.]org$
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -59,7 +70,12 @@ securityContext:
     drop:
       - ALL
 
+# -- Pod host network
+# Use it only for performance reason
 hostNetwork: false
+
+# -- Service node port
+# refs: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
 hostPort:
   enabled: false
   ports:

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "skipper.fullname" . }}
+  labels:
+    {{- include "skipper.labels" . | nindent 4 }}
+data:
+  {{- if .Values.config }}
+  skipper.yaml: |-
+    {{- toYaml .Values.config | nindent 4 }}
+  {{- end }}

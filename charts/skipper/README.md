@@ -1,6 +1,6 @@
 # skipper
 
-![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.26.6](https://img.shields.io/badge/AppVersion-v0.26.6-informational?style=flat-square)
+![Version: 0.7.1](https://img.shields.io/badge/Version-0.7.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.26.8](https://img.shields.io/badge/AppVersion-v0.26.8-informational?style=flat-square)
 
 Ingress controller for Kubernetes
 
@@ -47,6 +47,7 @@ terminationGracePeriodSeconds: 120
 | fullnameOverride | string | `""` |  |
 | env | list | `[]` | Environment variables |
 | args | list | `[]` | Skipper arguments |
+| config | object | `{"default-filters-prepend":"enableAccessLog(2,4,5)->flowId()->xforward()"}` | Skipper config file body refs: https://opensource.zalando.com/skipper/tutorials/basics/#yaml-configuration |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.name | string | `""` |  |
@@ -54,10 +55,8 @@ terminationGracePeriodSeconds: 120
 | podLabels | object | `{}` | Extra labels for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ |
 | podSecurityContext | object | `{"fsGroup":9999,"fsGroupChangePolicy":"OnRootMismatch","runAsGroup":9999,"runAsNonRoot":true,"runAsUser":9999}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
-| hostNetwork | bool | `false` |  |
-| hostPort.enabled | bool | `false` |  |
-| hostPort.ports.http | int | `8080` |  |
-| hostPort.ports.https | int | `8443` |  |
+| hostNetwork | bool | `false` | Pod host network Use it only for performance reason |
+| hostPort | object | `{"enabled":false,"ports":{"http":8080,"https":8443}}` | Service node port refs: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport |
 | ingressClass | string | `"skipper"` |  |
 | ingressClassResource.enabled | bool | `false` |  |
 | ingressClassResource.controllerValue | string | `"k8s.io/ingress-skipper"` |  |

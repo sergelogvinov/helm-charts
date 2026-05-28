@@ -1,3 +1,4 @@
+- feat: add crd
 - feat: vpa autoscaling
 - feat: add custom envs and args
 - feat(container): update ghcr.io/zalando/skipper (v0.25.2 → v0.26.6)
