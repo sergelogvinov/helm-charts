@@ -1,0 +1,95 @@
+- feat: autoscaling
+- fix: podAntiAffinity
+- feat(container): update ghcr.io/sergelogvinov/postgresql (16.13 → 16.14)
+- feat: vpa in-place
+- fix: node selector
+- fix: certs labels
+- fix: connection string
+- fix: labels
+- feat(container): update ghcr.io/sergelogvinov/postgresql (16.12 → 16.13)
+- feat(container): update ghcr.io/sergelogvinov/postgresql (16.11 → 16.12)
+- fix: cnpg 1.28.0
+- fix: pdb selector
+- wal-g config merge
+- fix: quote
+- fix: postgresql config issue in configmap
+- fix: extra config
+- fix: recovery by pg_basebackup
+- feat: recovery by pg_basebackup
+- fix: recovery from cnpg backup
+- feat: adjust backup concurrency
+- feat: update cnpg-extensions params
+- fix: pg-hba
+- fix: base image
+- feat: cosmetic
+- feat: wal-g options
+- feat: dynamic wal keep size
+- fix: create database
+- fix: resources
+- feat: can deploy ro,rw pollers
+- feat: cnpg pg-pool
+- feat: pod disruption budget
+- feat: can use predefined backup config
+- feat: support replication from other cluster
+- feat: support recovery from backup
+- fix: s3 prefix
+- fix: backup check
+- fix: backup config
+- feat: wal-g plugin integration
+- feat(container): update ghcr.io/sergelogvinov/postgresql (16.9 → 16.10)
+- feat: postgresql-single with cloudnative-pg
+- feat: slow queries is optional
+- feat: memory and cpu optimization
+- feat: deploy zero size cluster
+- feat(container): update ghcr.io/sergelogvinov/postgresql (16.8 → 16.9)
+- feat: pg metrics
+- feat(container): update ghcr.io/sergelogvinov/postgresql (16.7 → 16.8)
+- feat(container): update ghcr.io/sergelogvinov/postgresql (16.6 → 16.7)
+- fix: pg metrics query
+- fix: pg metrics
+- fix: replica recovery
+- feat(container): update ghcr.io/sergelogvinov/postgresql (15.8 → 16.6)
+- chore: cosmetic
+- update vesions
+- cosmetic
+- cosmetic
+- cosmetic
+- add replica service
+- feat: define primary node
+- pgbouncer and postgres pool size
+- postgres connection option
+- set archive_mode
+- cosmetic
+- restore proccess fix
+- recovery snapshot version
+- update images
+- cosmetic
+- add initContainers and initdb stript
+- Semver fix
+- add cronjob priority
+- fixes
+- fix and updates
+- ipv6 service support
+- fixes
+- small fixes
+- certs improve
+- can suspend cronjobs
+- change config format
+- service anotations
+- fix: recovery test memory resource
+- add amcheck
+- migrate-recovery helpers
+- small fixes
+- update docs by helm-docs
+- redefine command
+- second replicas use first pod
+- postgres huge-pages prediction
+- update postgres
+- add check example
+- update readme
+- add readme
+- add readme
+- fixes
+- add compatability
+- change dafault resource req
+- cosmetic
