@@ -1,3 +1,4 @@
+- feat: add config
 - feat: add crd
 - feat: vpa autoscaling
 - feat: add custom envs and args

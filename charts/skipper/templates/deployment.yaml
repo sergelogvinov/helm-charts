@@ -33,8 +33,11 @@ spec:
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if .Values.metrics.enabled }}
       annotations:
+      {{- if .Values.config }}
+        checksum/config: {{ toJson .Values.config | sha256sum }}
+      {{- end }}
+      {{- if .Values.metrics.enabled }}
         prometheus.io/scrape: "true"
         prometheus.io/port: "9911"
         prometheus.io/path: /metrics
