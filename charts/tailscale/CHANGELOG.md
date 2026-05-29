@@ -1,1 +1,1 @@
-- update tailscale/tailscale (v1.96.5 → v1.98.3)
+- update tailscale/tailscale (v1.98.3 → v1.98.4)
