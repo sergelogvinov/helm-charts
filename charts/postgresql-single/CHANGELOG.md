@@ -1,3 +1,4 @@
+- feat: vpa for jobs
 - feat: autoscaling
 - fix: podAntiAffinity
 - feat(container): update ghcr.io/sergelogvinov/postgresql (16.13 → 16.14)

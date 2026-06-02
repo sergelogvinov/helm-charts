@@ -7,8 +7,13 @@ metadata:
     {{- include "postgresql-single.labels" . | nindent 4 }}
 spec:
   targetRef:
+{{- if eq .Values.installationType "standalone" }}
     apiVersion: apps/v1
     kind: StatefulSet
+{{- else }}
+    apiVersion: postgresql.cnpg.io/v1
+    kind: Cluster
+{{- end }}
     name: {{ include "postgresql-single.fullname" . }}
   updatePolicy:
     updateMode: {{ .Values.autoscaling.updatePolicy.updateMode }}

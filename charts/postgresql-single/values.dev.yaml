@@ -1,0 +1,41 @@
+---
+replicaCount: 2
+
+installationType: "cnpg"
+priorityClassName: production-db
+
+autoscaling:
+  enabled: true
+resources:
+  limits:
+    cpu: 2
+    memory: 8Gi
+  requests:
+    cpu: 1
+    memory: 4Gi
+
+persistence:
+  enabled: true
+  annotations:
+    resize.topolvm.io/increase: 10Gi
+    resize.topolvm.io/storage_limit: 500Gi
+    resize.topolvm.io/threshold: 15%
+  size: 50Gi
+
+pooler:
+  enabled: false
+
+backup:
+  enabled: false
+
+backupCheck:
+  enabled: false
+
+metrics:
+  enabled: false
+
+podAntiAffinityPreset: soft
+podAntiAffinityPresetKey: kubernetes.io/hostname
+
+nodeSelector:
+  node-role.kubernetes.io/db: ""
