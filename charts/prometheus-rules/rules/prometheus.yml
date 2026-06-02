@@ -1,3 +1,4 @@
+# yaml-language-server:
 - name: prometheus-static.rules
   rules:
     - alert: TargetDown

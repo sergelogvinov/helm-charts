@@ -1,99 +1,99 @@
 - name: rabbitmq-static.rules
   rules:
-  - alert: RabbitmqInstancesDifferentVersions
-    expr: count(count(rabbitmq_build_info) by (rabbitmq_version,kubernetes_namespace,app_kubernetes_io_name)) by (kubernetes_namespace,app_kubernetes_io_name) > 1
-    for: 1h
-    labels:
-      severity: warning
-    annotations:
-      summary: RabbitMQ instances different versions {{ $labels.kubernetes_namespace }}/{{ $labels.app_kubernetes_io_name }}
-      description: Running different version of RabbitMQ in the same cluster, can lead to failure
+    - alert: RabbitmqInstancesDifferentVersions
+      expr: count(count(rabbitmq_build_info) by (rabbitmq_version,kubernetes_namespace,app_kubernetes_io_name)) by (kubernetes_namespace,app_kubernetes_io_name) > 1
+      for: 1h
+      labels:
+        severity: warning
+      annotations:
+        summary: RabbitMQ instances different versions {{ $labels.kubernetes_namespace }}/{{ $labels.app_kubernetes_io_name }}
+        description: Running different version of RabbitMQ in the same cluster, can lead to failure
 
-  - alert: RabbitmqDead
-    expr: rabbitmq_up == 0
-    for: 1m
-    labels:
-      severity: critical
-    annotations:
-      description: RabbitMQ server {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} is dead
-      summary: RabbitMQ is dead
-  # - alert: RabbitmqNodeDead
-  #   expr: rabbitmq_running == 0
-  #   for: 1m
-  #   labels:
-  #     severity: critical
-  #   annotations:
-  #     description: RabbitMQ node {{ $labels.node }} on cluster {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_name}} is dead
-  #     summary: RabbitMQ node is dead
-  # - alert: RabbitmqPartitionsDetected
-  #   expr: rabbitmq_partitions > 0
-  #   for: 1m
-  #   labels:
-  #     severity: critical
-  #   annotations:
-  #     description: RabbitMQ partitions detected {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
-  #     summary: RabbitMQ split brain
+    - alert: RabbitmqDead
+      expr: rabbitmq_up == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        description: RabbitMQ server {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} is dead
+        summary: RabbitMQ is dead
+    # - alert: RabbitmqNodeDead
+    #   expr: rabbitmq_running == 0
+    #   for: 1m
+    #   labels:
+    #     severity: critical
+    #   annotations:
+    #     description: RabbitMQ node {{ $labels.node }} on cluster {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_name}} is dead
+    #     summary: RabbitMQ node is dead
+    # - alert: RabbitmqPartitionsDetected
+    #   expr: rabbitmq_partitions > 0
+    #   for: 1m
+    #   labels:
+    #     severity: critical
+    #   annotations:
+    #     description: RabbitMQ partitions detected {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
+    #     summary: RabbitMQ split brain
 
-  - alert: RabbitmqFileDescriptorsUsage
-    expr: rabbitmq_process_open_fds / rabbitmq_process_max_fds * 100 > 90
-    for: 2m
-    labels:
-      severity: warning
-    annotations:
-      summary: RabbitMQ file descriptors usage {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
-      description: A node use more than 90% of file descriptors
-  - alert: RabbitmqDiskFree
-    expr: rabbitmq_alarms_free_disk_space_watermark > 0
-    for: 1m
-    labels:
-      severity: critical
-    annotations:
-      description: RabbitMQ low disk space detected {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
-      summary: RabbitMQ disk free space is full
-  - alert: RabbitmqMemoryFree
-    expr: rabbitmq_alarms_memory_used_watermark > 0
-    for: 1m
-    labels:
-      severity: critical
-    annotations:
-      description: RabbitMQ low memory detected {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
-      summary: RabbitMQ memory free is not enough
-  - alert: RabbitmqMemoryLow
-    expr: sum by (source, node) ((rabbitmq_node_mem_limit-rabbitmq_node_mem_used)*100/rabbitmq_node_mem_limit) < 10
-    for: 1m
-    labels:
-      severity: critical
-    annotations:
-      description: Memory less than 10% on {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}.
-      summary: Free memory for Rabbitmq less than 10% on {{ $labels.node }}. Publishers will be blocked.
-  - alert: RabbitmqMemoryHighWatermarkReached
-    expr: sum by (source, node) ((rabbitmq_node_mem_limit-rabbitmq_node_mem_used)*100/rabbitmq_node_mem_limit) <= 0
-    for: 1m
-    labels:
-      severity: critical
-    annotations:
-      description: rabbitmq_node_mem_limit reached on {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}.
-      summary: rabbitmq_node_mem_limit reached on {{ $labels.node }}. Publishers are blocked.
+    - alert: RabbitmqFileDescriptorsUsage
+      expr: rabbitmq_process_open_fds / rabbitmq_process_max_fds * 100 > 90
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        summary: RabbitMQ file descriptors usage {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
+        description: A node use more than 90% of file descriptors
+    - alert: RabbitmqDiskFree
+      expr: rabbitmq_alarms_free_disk_space_watermark > 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        description: RabbitMQ low disk space detected {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
+        summary: RabbitMQ disk free space is full
+    - alert: RabbitmqMemoryFree
+      expr: rabbitmq_alarms_memory_used_watermark > 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        description: RabbitMQ low memory detected {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
+        summary: RabbitMQ memory free is not enough
+    - alert: RabbitmqMemoryLow
+      expr: sum by (source, node) ((rabbitmq_node_mem_limit-rabbitmq_node_mem_used)*100/rabbitmq_node_mem_limit) < 10
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        description: Memory less than 10% on {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}.
+        summary: Free memory for Rabbitmq less than 10% on {{ $labels.node }}. Publishers will be blocked.
+    - alert: RabbitmqMemoryHighWatermarkReached
+      expr: sum by (source, node) ((rabbitmq_node_mem_limit-rabbitmq_node_mem_used)*100/rabbitmq_node_mem_limit) <= 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        description: rabbitmq_node_mem_limit reached on {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}.
+        summary: rabbitmq_node_mem_limit reached on {{ $labels.node }}. Publishers are blocked.
 
-  - alert: RabbitmqAuthError
-    expr: increase(rabbitmq_auth_attempts_failed_total[10m]) > 5
-    for: 1m
-    labels:
-      severity: warning
-    annotations:
-      description: RabbitMQ auth error detected {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
-      summary: RabbitMQ auth error
+    - alert: RabbitmqAuthError
+      expr: increase(rabbitmq_auth_attempts_failed_total[10m]) > 5
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        description: RabbitMQ auth error detected {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }}
+        summary: RabbitMQ auth error
 
-  - alert: RabbitmqUnroutableMessages
-    expr: |
-      sum by(kubernetes_namespace, rabbitmq_cluster) (delta(rabbitmq_channel_messages_unroutable_dropped_total[5m]) * on(instance)
-      group_left(rabbitmq_cluster) rabbitmq_identity_info) >= 2000
-      or
-      sum by(kubernetes_namespace, rabbitmq_cluster) (delta(rabbitmq_channel_messages_unroutable_returned_total[5m]) * on(instance)
-      group_left(rabbitmq_cluster) rabbitmq_identity_info) >= 2000
-    for: 2m
-    labels:
-      severity: warning
-    annotations:
-      description: RabbitMQ unroutable messages detected {{ $labels.kubernetes_namespace }}/{{ $labels.rabbitmq_cluster }}
-      summary: RabbitMQ unroutable messages
+    - alert: RabbitmqUnroutableMessages
+      expr: |
+        sum by(kubernetes_namespace, rabbitmq_cluster) (delta(rabbitmq_channel_messages_unroutable_dropped_total[5m]) * on(instance)
+        group_left(rabbitmq_cluster) rabbitmq_identity_info) >= 2000
+        or
+        sum by(kubernetes_namespace, rabbitmq_cluster) (delta(rabbitmq_channel_messages_unroutable_returned_total[5m]) * on(instance)
+        group_left(rabbitmq_cluster) rabbitmq_identity_info) >= 2000
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        description: RabbitMQ unroutable messages detected {{ $labels.kubernetes_namespace }}/{{ $labels.rabbitmq_cluster }}
+        summary: RabbitMQ unroutable messages

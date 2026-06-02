@@ -1,0 +1,83 @@
+- fix: fluentd alert
+- feat: sync prometheus rules
+- feat: clickhouse alerts
+- feat: add fluxcd
+- chore: update dependency requests to v2.34.2
+- fix: alerts
+- feat: add oom alert
+- feat: add oom alert
+- chore: update dependency requests to v2.33.1
+- chore: bump requests
+- feat: deployment replicas
+- fix: adjust timeout
+- fix: yaml
+- feat: rabbitmq alerts
+- feat: cloudnative-pg
+- feat: mongo operator backup error
+- feat: sync rules
+- chore: update dependency pyyaml to v6.0.3
+- chore: update dependency requests to v2.32.5
+- fix: proxmox api
+- chore: update dependency requests to v2.32.4
+- chore: update vesion
+- 239937 Added some mongodb related alerts
+- fix: scrap interval
+- fix: scrap interval
+- fix: alert message
+- feat: add port2 to scrape
+- chore: cosmetic
+- chore: update dependency pyyaml to v6.0.2
+- chore: update dependency requests to v2.32.3
+- node exporter
+- update rules
+- cosmetic
+- cosmetic
+- cosmetic
+- cosmetic
+- add proxmox csi alerts
+- build fix
+- --- updated-dependencies: - dependency-name: requests   dependency-type: direct:production ...
+- resource request alerts
+- fix build
+- for: 1s -> for: 1m to decrease false positives/negatives (#11)
+- fix rules
+- add for X minutes to NodeUptime alerts to avoid false positives/negatives (#10)
+- update rules
+- update rules
+- cosmetic
+- vm better support
+- update rules
+- victoria metrics scrape support
+- wireguard fixes
+- check positive value
+- switch to tls by default
+- fixes
+- redis fixes
+- keydb lb refactoring
+- fixes and updates
+- save changes
+- node checks
+- some addons
+- update rules
+- prometheus rules
+- update docs by helm-docs
+- feat: add redis alerts
+- fix: chear releaser
+- chore: update charts
+- fixes
+- update
+- update rules
+- fixes
+- registry mirrors
+- update rules
+- fix ipv6
+- add openvpn
+- add tailscale deploy
+- fit rules
+- extraScrape
+- cosmetic
+- add prometheus app rules
+- add prometheus config
+- add static rules
+- fix labels
+- create static prometheus configmap

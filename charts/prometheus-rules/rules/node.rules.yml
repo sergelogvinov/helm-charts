@@ -1,63 +1,66 @@
 - name: node-static.rules
   rules:
-  - record: fd_utilization
-    expr: process_open_fds / process_max_fds
+    - record: fd_utilization
+      expr: process_open_fds / process_max_fds
 
-  - alert: FdExhaustionClose
-    expr: predict_linear(fd_utilization[1h], 3600 * 4) > 1
-    for: 10m
-    labels:
-      severity: warning
-    annotations:
-      description: '{{ $labels.job }}: {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} instance
-        will exhaust in file/socket descriptors within the next 4 hours'
-      summary: file descriptors soon exhausted
-  - alert: FdExhaustionClose
-    expr: predict_linear(fd_utilization[10m], 3600) > 1
-    for: 10m
-    labels:
-      severity: critical
-    annotations:
-      description: '{{ $labels.job }}: {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} instance
-        will exhaust in file/socket descriptors within the next hour'
-      summary: file descriptors soon exhausted
+    - alert: FdExhaustionClose
+      expr: predict_linear(fd_utilization[1h], 3600 * 4) > 1
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        description:
+          "{{ $labels.job }}: {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} instance
+          will exhaust in file/socket descriptors within the next 4 hours"
+        summary: file descriptors soon exhausted
+    - alert: FdExhaustionClose
+      expr: predict_linear(fd_utilization[10m], 3600) > 1
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        description:
+          "{{ $labels.job }}: {{ $labels.kubernetes_namespace }}/{{ $labels.kubernetes_pod_name }} instance
+          will exhaust in file/socket descriptors within the next hour"
+        summary: file descriptors soon exhausted
 
-  - alert: NodeNotReady
-    expr: kube_node_status_condition{job="kubernetes-service-endpoints",condition="Ready",status="true"} == 0
-    for: 60m
-    labels:
-      infrastructure: true
-      severity: critical
-    annotations:
-      description: '{{ $labels.node }} has been unready for more than 60 minutes'
-      summary: Node is not ready.
-  - alert: NodeDiskPressure
-    expr: kube_node_status_condition{condition="DiskPressure",status="true"} == 1
-    for: 1m
-    labels:
-      infrastructure: true
-      severity: warning
-    annotations:
-      description: '{{ $labels.node }} has DiskPressure status'
-      summary: Node is not ready.
+    - alert: NodeNotReady
+      expr: kube_node_status_condition{job="kubernetes-service-endpoints",condition="Ready",status="true"} == 0
+      for: 60m
+      labels:
+        infrastructure: true
+        severity: critical
+      annotations:
+        description: "{{ $labels.node }} has been unready for more than 60 minutes"
+        summary: Node is not ready.
+    - alert: NodeDiskPressure
+      expr: kube_node_status_condition{condition="DiskPressure",status="true"} == 1
+      for: 1m
+      labels:
+        infrastructure: true
+        severity: warning
+      annotations:
+        description: "{{ $labels.node }} has DiskPressure status"
+        summary: Node is not ready.
 
-  - alert: NodeDiskIOSaturation
-    expr: rate(node_disk_io_time_weighted_seconds_total{job="prometheus-node-exporter", device=~"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)"}[5m]) > 10
-    for: 30m
-    labels:
-      infrastructure: true
-      severity: warning
-    annotations:
-      description: 'Disk IO queue (aqu-sq) is high on {{ $labels.device }} at {{ $labels.kubernetes_node_name }}, has been above 10 for the last 15 minutes,
-        is currently at {{ printf "%.2f" $value }}.
-        This symptom might indicate disk saturation.'
-      summary: Disk IO queue is high.
+    - alert: NodeDiskIOSaturation
+      expr: rate(node_disk_io_time_weighted_seconds_total{job="prometheus-node-exporter", device=~"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)"}[5m]) > 10
+      for: 30m
+      labels:
+        infrastructure: true
+        severity: warning
+      annotations:
+        description:
+          'Disk IO queue (aqu-sq) is high on {{ $labels.device }} at {{ $labels.kubernetes_node_name }}, has been above 10 for the last 15 minutes,
+          is currently at {{ printf "%.2f" $value }}.
+          This symptom might indicate disk saturation.'
+        summary: Disk IO queue is high.
 
-  - alert: NodeMemoryHighUtilization
-    expr: 100 - (node_memory_MemAvailable_bytes{job="prometheus-node-exporter"} / node_memory_MemTotal_bytes{job="prometheus-node-exporter"} * 100) > 95
-    for: 1m
-    labels:
-      severity: critical
-    annotations:
-      description: Memory is filling up at {{ $labels.kubernetes_node_name }}, has been above 95% for the last 1 minutes, is currently at {{ $value | humanizePercentage }}
-      summary: Host is running out of memory.
+    - alert: NodeMemoryHighUtilization
+      expr: 100 - (node_memory_MemAvailable_bytes{job="prometheus-node-exporter"} / node_memory_MemTotal_bytes{job="prometheus-node-exporter"} * 100) > 95
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        description: Memory is filling up at {{ $labels.kubernetes_node_name }}, has been above 95% for the last 1 minutes, is currently at {{ $value | humanizePercentage }}
+        summary: Host is running out of memory.
