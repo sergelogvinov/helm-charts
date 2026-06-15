@@ -22,11 +22,11 @@ spec:
       - containerName: {{ template "postgresql-single.fullname" . }}
         {{- with (merge (deepCopy .Values.autoscaling.maxAllowed) .Values.resources.limits) }}
         maxAllowed:
-          {{- toYaml . | nindent 10 }}
+          {{- toYaml (unset (unset . "hugepages-1Gi") "hugepages-2Mi") | nindent 10 }}
         {{- end }}
         {{- with (merge (deepCopy .Values.autoscaling.minAllowed) .Values.resources.requests) }}
         minAllowed:
-          {{- toYaml . | nindent 10 }}
+          {{- toYaml (unset (unset . "hugepages-1Gi") "hugepages-2Mi")  | nindent 10 }}
         {{- end }}
         {{- with .Values.autoscaling.controlledResources }}
         controlledResources:
