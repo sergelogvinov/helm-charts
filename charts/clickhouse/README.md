@@ -172,4 +172,5 @@ metrics:
 | clickhouse.envs | object | `{}` |  |
 | clickhouse.envValueFrom | object | `{}` | Clickhouse environment variable references that will be added |
 | clickhouse.customConfig | object | `{}` |  |
+| clickhouse.customUsersConfig | object | `{}` | Clickhouse custom user-level config files mounted into `/etc/clickhouse-server/users.d/`. Use this for settings that belong to a profile/user (e.g. `async_insert_busy_timeout_ms`, `max_memory_usage`), which `customConfig` (mounted into `config.d/`) cannot override. Each key becomes a file in `users.d/`. Keys must not collide with `customConfig` keys. |
 | clickhouse.initDB | object | `{}` | Clickhouse initdb scripts |

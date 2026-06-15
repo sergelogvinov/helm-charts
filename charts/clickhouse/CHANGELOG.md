@@ -1,1 +1,1 @@
-- update altinity/clickhouse-backup (2.6.44 → 2.7.1)
+- add clickhouse.customUsersConfig to mount user-level config into users.d/
