@@ -139,6 +139,9 @@ data:
     #!/bin/sh
     set -e
 
+    touch {{ .Values.persistence.mountPath }}/data/standby.signal
+    touch {{ .Values.persistence.mountPath }}/data/recovery.signal
+
     pg_rewind -D {{ .Values.persistence.mountPath }}/data --source-server="host={{ include "postgresql-single.fullname" . }}-0.{{ include "postgresql-single.fullname" . }}-headless sslmode=require user={{ .Values.postgresqlUsername }} password=$POSTGRES_PASSWORD"
 
   backup.sh: |

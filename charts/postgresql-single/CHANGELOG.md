@@ -1,3 +1,4 @@
+- chore: cosmetic
 - feat: vpa for jobs
 - feat: autoscaling
 - fix: podAntiAffinity

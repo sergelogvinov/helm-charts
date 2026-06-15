@@ -28,6 +28,8 @@ spec:
       max_client_conn: {{ $.Values.postgresqlMaxConnections | quote }}
       default_pool_size: "100"
     {{- end }}
+      log_connections: "0"
+      log_disconnections: "0"
     {{- with $.Values.pooler.parameters }}
       {{- toYaml . | nindent 6 }}
     {{- end }}
