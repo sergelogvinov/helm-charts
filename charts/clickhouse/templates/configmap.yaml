@@ -294,3 +294,10 @@ data:
     {{- $value | nindent 4 }}
   {{- end }}
 {{- end }}
+
+{{- if .Values.clickhouse.customUsersConfig }}
+  {{- range $key, $value := .Values.clickhouse.customUsersConfig }}
+  {{ $key }}: |-
+    {{- $value | nindent 4 }}
+  {{- end }}
+{{- end }}

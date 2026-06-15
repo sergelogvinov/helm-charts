@@ -1,0 +1,12 @@
+clickhouse:
+  customUsersConfig:
+    async_insert_profile.xml: |-
+      <?xml version="1.0"?>
+      <clickhouse>
+        <profiles>
+          <default>
+            <async_insert_busy_timeout_ms>5000</async_insert_busy_timeout_ms>
+            <async_insert_max_data_size>10485760</async_insert_max_data_size>
+          </default>
+        </profiles>
+      </clickhouse>
