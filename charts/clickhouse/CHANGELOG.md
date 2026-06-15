@@ -1,1 +1,1 @@
-feat: disable tables in low-memory deployment
+- update altinity/clickhouse-backup (2.7.1 → 2.7.2)
