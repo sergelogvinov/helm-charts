@@ -1,1 +1,1 @@
-- add clickhouse.customUsersConfig to mount user-level config into users.d/
+feat: disable tables in low-memory deployment
