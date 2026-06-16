@@ -1,0 +1,53 @@
+{{- if and .Values.backupCheck.enabled .Values.autoscaling.enabled (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1") }}
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "clickhouse.fullname" . }}-backup-check
+  labels:
+    {{- with .Values.podlabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- include "clickhouse.crontab.labels" . | nindent 4 }}
+    app.kubernetes.io/component: checker
+spec:
+  targetRef:
+    apiVersion: batch/v1
+    kind: CronJob
+    name: {{ include "clickhouse.fullname" . }}-backup-check
+  updatePolicy:
+    updateMode: {{ .Values.autoscaling.updatePolicy.updateMode }}
+  resourcePolicy:
+    containerPolicies:
+      - containerName: {{ .Chart.Name }}-backup-check
+        {{- with .Values.backup.resources.limits }}
+        maxAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.backup.resources.requests }}
+        minAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.autoscaling.controlledResources }}
+        controlledResources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.autoscaling.controlledValues }}
+        controlledValues: {{ . }}
+        {{- end }}
+      - containerName: {{ .Chart.Name }}
+        {{- with .Values.backupCheck.resources.limits }}
+        maxAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.backupCheck.resources.requests }}
+        minAllowed:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.autoscaling.controlledResources }}
+        controlledResources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.autoscaling.controlledValues }}
+        controlledValues: {{ . }}
+        {{- end }}
+{{- end }}
