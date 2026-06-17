@@ -47,3 +47,7 @@ docs-%:
 	fi
 	@echo Update $* README.md
 	@cd charts/$*; helm-docs --sort-values-order=file
+
+generate: $(foreach pkg,$(PACKAGES),generate-$(pkg)) ## Generate helm chart schema
+generate-%:
+	@helm schema --chart-search-root charts/$* --skip-auto-generation required,additionalProperties --append-newline

@@ -1,3 +1,4 @@
+- chore: cosmetic
 - fix: fluentd alert
 - feat: sync prometheus rules
 - feat: clickhouse alerts
