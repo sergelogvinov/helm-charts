@@ -63,17 +63,16 @@ spec:
             - name: scripts
               mountPath: /entrypoint
       containers:
-        {{- range (eq .Values.service.proto "All" | ternary (list "tcp" "udp") (list .Values.service.proto)) }}
-        - name: {{ $.Chart.Name }}-{{ . }}
+        - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml $.Values.securityContext | nindent 12 }}
-          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
-          imagePullPolicy: {{ $.Values.image.pullPolicy }}
-          command: ["/entrypoint/start.sh","--proto", "{{ . }}6"]
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/entrypoint/start.sh"]
           ports:
-            {{- if $.Values.service.port }}
+            {{- range (eq .Values.service.proto "All" | ternary (list "tcp" "udp") (list .Values.service.proto)) }}
             - name: openvpn-{{ . }}
-              containerPort: {{ $.Values.service.port }}
+              containerPort: {{ default 1194 $.Values.service.port }}
               protocol: {{ . | upper }}
             {{- end }}
           volumeMounts:
@@ -90,8 +89,7 @@ spec:
             - name: tmp
               mountPath: /tmp
           resources:
-            {{- toYaml $.Values.resources | nindent 12 }}
-        {{- end }}
+            {{- toYaml .Values.resources | nindent 12 }}
         {{- if .Values.dns.enabled }}
         - name: {{ .Chart.Name }}-dns
           image: registry.k8s.io/coredns/coredns:v1.12.4

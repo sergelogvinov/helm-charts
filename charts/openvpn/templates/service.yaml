@@ -21,17 +21,13 @@ spec:
   ipFamilyPolicy: {{ if eq (len .Values.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
   ports:
     {{- range (eq .Values.service.proto "All" | ternary (list "tcp" "udp") (list .Values.service.proto)) }}
-    - port: {{ $.Values.service.port }}
+    - name: openvpn-{{ . }}-port
+      port: {{ default 1194 $.Values.service.port }}
       targetPort: openvpn-{{ . }}
-      protocol: {{ . | upper }}
-      name: openvpn-{{ . }}
       {{- if eq "NodePort" $.Values.service.type }}
       nodePort: {{ default "30190" $.Values.service.nodePort }}
       {{- end }}
+      protocol: {{ . | upper }}
     {{- end }}
-{{- with .Values.service.externalIPs  }}
-  externalIPs:
-{{ toYaml . | indent 4 }}
-{{- end }}
   selector:
     {{- include "openvpn.selectorLabels" . | nindent 4 }}
