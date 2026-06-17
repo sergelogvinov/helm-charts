@@ -1,7 +1,6 @@
-# yaml-language-server:
 - name: prometheus-static.rules
   rules:
-    - alert:
+    - alert: TargetDown
       expr: 100 * (count(up == 0) BY (cluster, job, kubernetes_namespace, app_kubernetes_io_name,app_kubernetes_io_instance, topology_kubernetes_io_zone) / count(up) BY (cluster, job, kubernetes_namespace, app_kubernetes_io_name,app_kubernetes_io_instance, topology_kubernetes_io_zone)) > 10
       for: 10m
       labels:
