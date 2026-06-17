@@ -1,0 +1,1015 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "affinity": {
+      "description": "Affinity for pod assignment.\nref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity",
+      "required": [],
+      "title": "affinity",
+      "type": "object"
+    },
+    "autoscaling": {
+      "description": "Vertical pod autoscaler",
+      "properties": {
+        "controlledResources": {
+          "description": "Resource to control\nPossible values are \"cpu\" and \"memory\"",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "required": []
+          },
+          "title": "controlledResources",
+          "type": "array"
+        },
+        "controlledValues": {
+          "default": "RequestsOnly",
+          "description": "Controls which resource value should be autoscaled\nPossible values are \"RequestsAndLimits\" and \"RequestsOnly\"",
+          "title": "controlledValues",
+          "type": "string"
+        },
+        "enabled": {
+          "default": false,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "maxAllowed": {
+          "description": "Max allowed resources for the pod\ndefault is resources.limits",
+          "required": [],
+          "title": "maxAllowed",
+          "type": "object"
+        },
+        "minAllowed": {
+          "description": "Min allowed resources for the pod\ndefault is resources.requests",
+          "required": [],
+          "title": "minAllowed",
+          "type": "object"
+        },
+        "updatePolicy": {
+          "description": "Update policy\nPossible values are \"Off\", \"Initial\", \"Recreate\", \"InPlaceOrRecreate\" and \"Auto\"",
+          "properties": {
+            "updateMode": {
+              "default": "InPlaceOrRecreate",
+              "title": "updateMode",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "updatePolicy",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "autoscaling",
+      "type": "object"
+    },
+    "backup": {
+      "properties": {
+        "args": {
+          "items": {
+            "required": []
+          },
+          "title": "args",
+          "type": "array"
+        },
+        "config": {
+          "required": [],
+          "title": "config",
+          "type": "object"
+        },
+        "enabled": {
+          "default": false,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "envs": {
+          "required": [],
+          "title": "envs",
+          "type": "object"
+        },
+        "image": {
+          "properties": {
+            "pullPolicy": {
+              "default": "IfNotPresent",
+              "title": "pullPolicy",
+              "type": "string"
+            },
+            "repository": {
+              "default": "altinity/clickhouse-backup",
+              "title": "repository",
+              "type": "string"
+            },
+            "tag": {
+              "default": "2.7.2",
+              "title": "tag",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "image",
+          "type": "object"
+        },
+        "priorityClassName": {
+          "default": "~",
+          "description": "Priority Class Name\nref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass",
+          "title": "priorityClassName",
+          "type": "null"
+        },
+        "resources": {
+          "description": "Resource requests and limits.\nref: https://kubernetes.io/docs/user-guide/compute-resources/",
+          "properties": {
+            "limits": {
+              "properties": {
+                "cpu": {
+                  "default": 4,
+                  "title": "cpu",
+                  "type": "integer"
+                },
+                "memory": {
+                  "default": "512Mi",
+                  "title": "memory",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "limits",
+              "type": "object"
+            },
+            "requests": {
+              "properties": {
+                "cpu": {
+                  "default": "500m",
+                  "title": "cpu",
+                  "type": "string"
+                },
+                "memory": {
+                  "default": "256Mi",
+                  "title": "memory",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "requests",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "resources",
+          "type": "object"
+        },
+        "schedule": {
+          "default": "15 4 * * *",
+          "description": "set value \"\" to disable cron backup\n          ┌───────────── minute (0 - 59)\n          │ ┌───────────── hour (0 - 23)\n          │ │ ┌───────────── day of the month (1 - 31)\n          │ │ │ ┌───────────── month (1 - 12)\n          │ │ │ │ ┌───────────── day of the week (0 - 6)\n          │ │ │ │ │\n          * * * * *",
+          "title": "schedule",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "backup",
+      "type": "object"
+    },
+    "backupCheck": {
+      "properties": {
+        "affinity": {
+          "description": "Affinity for pod assignment.\nref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity",
+          "required": [],
+          "title": "affinity",
+          "type": "object"
+        },
+        "enabled": {
+          "default": false,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "envs": {
+          "required": [],
+          "title": "envs",
+          "type": "object"
+        },
+        "nodeSelector": {
+          "description": "Node labels for pod assignment.\nref: https://kubernetes.io/docs/user-guide/node-selection/",
+          "required": [],
+          "title": "nodeSelector",
+          "type": "object"
+        },
+        "persistence": {
+          "description": "Persistence parameters\nref: https://kubernetes.io/docs/user-guide/persistent-volumes/",
+          "properties": {
+            "accessModes": {
+              "description": "# A manually managed Persistent Volume and Claim\nexistingClaim:\n\nstorageClass: \"-\"",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "required": []
+              },
+              "title": "accessModes",
+              "type": "array"
+            },
+            "annotations": {
+              "required": [],
+              "title": "annotations",
+              "type": "object"
+            },
+            "size": {
+              "default": "8Gi",
+              "title": "size",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "persistence",
+          "type": "object"
+        },
+        "resources": {
+          "description": "Resource requests and limits.\nref: https://kubernetes.io/docs/user-guide/compute-resources/",
+          "properties": {
+            "limits": {
+              "properties": {
+                "cpu": {
+                  "default": 1,
+                  "title": "cpu",
+                  "type": "integer"
+                },
+                "memory": {
+                  "default": "4Gi",
+                  "title": "memory",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "limits",
+              "type": "object"
+            },
+            "requests": {
+              "properties": {
+                "cpu": {
+                  "default": "100m",
+                  "title": "cpu",
+                  "type": "string"
+                },
+                "memory": {
+                  "default": "512Mi",
+                  "title": "memory",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "requests",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "resources",
+          "type": "object"
+        },
+        "schedule": {
+          "default": "15 8 * * *",
+          "description": "          ┌───────────── minute (0 - 59)\n          │ ┌───────────── hour (0 - 23)\n          │ │ ┌───────────── day of the month (1 - 31)\n          │ │ │ ┌───────────── month (1 - 12)\n          │ │ │ │ ┌───────────── day of the week (0 - 6)\n          │ │ │ │ │\n          * * * * *",
+          "title": "schedule",
+          "type": "string"
+        },
+        "tolerations": {
+          "description": "Tolerations for pod assignment.\nref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/",
+          "items": {
+            "required": []
+          },
+          "title": "tolerations",
+          "type": "array"
+        }
+      },
+      "required": [],
+      "title": "backupCheck",
+      "type": "object"
+    },
+    "clickhouse": {
+      "properties": {
+        "accessManagement": {
+          "default": false,
+          "description": "Clickhouse SQL-driven Access Control\nrefs: https://clickhouse.com/docs/en/operations/access-rights",
+          "title": "accessManagement",
+          "type": "boolean"
+        },
+        "collections": {
+          "description": "Clickhouse named collections",
+          "items": {
+            "required": []
+          },
+          "title": "collections",
+          "type": "array"
+        },
+        "customConfig": {
+          "required": [],
+          "title": "customConfig",
+          "type": "object"
+        },
+        "customUsersConfig": {
+          "description": "Clickhouse custom user-level config files mounted into `/etc/clickhouse-server/users.d/`.\nUse this for settings that belong to a profile/user (e.g. `async_insert_busy_timeout_ms`,\n`max_memory_usage`), which `customConfig` (mounted into `config.d/`) cannot override.\nEach key becomes a file in `users.d/`. Keys must not collide with `customConfig` keys.",
+          "required": [],
+          "title": "customUsersConfig",
+          "type": "object"
+        },
+        "envValueFrom": {
+          "description": "Clickhouse environment variable references that will be added",
+          "required": [],
+          "title": "envValueFrom",
+          "type": "object"
+        },
+        "envs": {
+          "required": [],
+          "title": "envs",
+          "type": "object"
+        },
+        "initDB": {
+          "description": "Clickhouse initdb scripts",
+          "required": [],
+          "title": "initDB",
+          "type": "object"
+        },
+        "logLevel": {
+          "default": "information",
+          "description": "Clickhouse log level\nref: https://clickhouse.com/docs/en/operations/server-configuration-parameters/settings#logger\ntrace, debug, information, warning, error",
+          "title": "logLevel",
+          "type": "string"
+        },
+        "name": {
+          "default": "",
+          "description": "Clickhouse cluster name\nUse helm-chart name if empty",
+          "title": "name",
+          "type": "string"
+        },
+        "users": {
+          "items": {
+            "anyOf": [
+              {
+                "properties": {
+                  "name": {
+                    "default": "logger",
+                    "title": "name",
+                    "type": "string"
+                  },
+                  "password": {
+                    "default": "2686af9f25e1a64f5e9f7290c7e457aa06b616fb31d2b4331ff6fa0857661cd5",
+                    "title": "password",
+                    "type": "string"
+                  },
+                  "profile": {
+                    "default": "default",
+                    "title": "profile",
+                    "type": "string"
+                  },
+                  "quota": {
+                    "default": "default",
+                    "title": "quota",
+                    "type": "string"
+                  }
+                },
+                "required": [],
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "accessManagement": {
+                    "default": false,
+                    "title": "accessManagement",
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "default": "reader",
+                    "title": "name",
+                    "type": "string"
+                  },
+                  "password": {
+                    "default": "3d0941964aa3ebdcb00ccef58b1bb399f9f898465e9886d5aec7f31090a0fb30",
+                    "title": "password",
+                    "type": "string"
+                  },
+                  "profile": {
+                    "default": "reader",
+                    "title": "profile",
+                    "type": "string"
+                  },
+                  "quota": {
+                    "default": "default",
+                    "title": "quota",
+                    "type": "string"
+                  }
+                },
+                "required": [],
+                "type": "object"
+              }
+            ],
+            "required": []
+          },
+          "title": "users",
+          "type": "array"
+        },
+        "zookeeper": {
+          "required": [],
+          "title": "zookeeper",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "clickhouse",
+      "type": "object"
+    },
+    "clickhouseKeeper": {
+      "properties": {
+        "affinity": {
+          "description": "Affinity for pod assignment.\nref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity",
+          "required": [],
+          "title": "affinity",
+          "type": "object"
+        },
+        "enabled": {
+          "default": false,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "image": {
+          "properties": {
+            "pullPolicy": {
+              "default": "IfNotPresent",
+              "title": "pullPolicy",
+              "type": "string"
+            },
+            "repository": {
+              "default": "clickhouse/clickhouse-keeper",
+              "title": "repository",
+              "type": "string"
+            },
+            "tag": {
+              "default": "26.5.1-alpine",
+              "title": "tag",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "image",
+          "type": "object"
+        },
+        "nodeSelector": {
+          "description": "Node labels for pod assignment.\nref: https://kubernetes.io/docs/user-guide/node-selection/",
+          "required": [],
+          "title": "nodeSelector",
+          "type": "object"
+        },
+        "persistence": {
+          "description": "Persistence parameters\nref: https://kubernetes.io/docs/user-guide/persistent-volumes/",
+          "properties": {
+            "accessModes": {
+              "description": "storageClass: \"-\"",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "required": []
+              },
+              "title": "accessModes",
+              "type": "array"
+            },
+            "annotations": {
+              "required": [],
+              "title": "annotations",
+              "type": "object"
+            },
+            "enabled": {
+              "default": true,
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "size": {
+              "default": "5Gi",
+              "title": "size",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "persistence",
+          "type": "object"
+        },
+        "podAntiAffinityPreset": {
+          "default": "hard",
+          "description": "Pod Anti Affinity\nsoft/hard",
+          "title": "podAntiAffinityPreset",
+          "type": "string"
+        },
+        "podAntiAffinityPresetKey": {
+          "default": "kubernetes.io/hostname",
+          "title": "podAntiAffinityPresetKey",
+          "type": "string"
+        },
+        "priorityClassName": {
+          "default": "~",
+          "description": "Priority Class Name\nref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass",
+          "title": "priorityClassName",
+          "type": "null"
+        },
+        "replicaCount": {
+          "default": 3,
+          "title": "replicaCount",
+          "type": "integer"
+        },
+        "resources": {
+          "properties": {
+            "limits": {
+              "properties": {
+                "cpu": {
+                  "default": "500m",
+                  "title": "cpu",
+                  "type": "string"
+                },
+                "memory": {
+                  "default": "512Mi",
+                  "title": "memory",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "limits",
+              "type": "object"
+            },
+            "requests": {
+              "properties": {
+                "cpu": {
+                  "default": "100m",
+                  "title": "cpu",
+                  "type": "string"
+                },
+                "memory": {
+                  "default": "128Mi",
+                  "title": "memory",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "requests",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "resources",
+          "type": "object"
+        },
+        "tolerations": {
+          "description": "Tolerations for pod assignment.\nref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/",
+          "items": {
+            "required": []
+          },
+          "title": "tolerations",
+          "type": "array"
+        }
+      },
+      "required": [],
+      "title": "clickhouseKeeper",
+      "type": "object"
+    },
+    "clusterDomain": {
+      "default": "cluster.local",
+      "description": "Cluster domain\nrefs: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/",
+      "title": "clusterDomain",
+      "type": "string"
+    },
+    "cronjobs": {
+      "required": [],
+      "title": "cronjobs",
+      "type": "object"
+    },
+    "extraContainers": {
+      "description": "- name: container-name\n- image: ...\nAdditional containers.",
+      "required": [],
+      "title": "extraContainers",
+      "type": "object"
+    },
+    "extraInitContainers": {
+      "description": "Additional init containers.",
+      "required": [],
+      "title": "extraInitContainers",
+      "type": "object"
+    },
+    "extraVolumeMounts": {
+      "description": "Additional volumes.",
+      "items": {
+        "required": []
+      },
+      "title": "extraVolumeMounts",
+      "type": "array"
+    },
+    "extraVolumes": {
+      "description": "Additional volume mounts.",
+      "items": {
+        "required": []
+      },
+      "title": "extraVolumes",
+      "type": "array"
+    },
+    "fullnameOverride": {
+      "default": "",
+      "title": "fullnameOverride",
+      "type": "string"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "image": {
+      "properties": {
+        "pullPolicy": {
+          "default": "IfNotPresent",
+          "title": "pullPolicy",
+          "type": "string"
+        },
+        "repository": {
+          "default": "clickhouse/clickhouse-server",
+          "title": "repository",
+          "type": "string"
+        },
+        "tag": {
+          "default": "",
+          "description": "Overrides the image tag whose default is the chart appVersion.",
+          "title": "tag",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "image",
+      "type": "object"
+    },
+    "imagePullSecrets": {
+      "items": {
+        "required": []
+      },
+      "title": "imagePullSecrets",
+      "type": "array"
+    },
+    "ingress": {
+      "description": "Clickhouse ingress parameters\nref: http://kubernetes.io/docs/user-guide/ingress/",
+      "properties": {
+        "annotations": {
+          "required": [],
+          "title": "annotations",
+          "type": "object"
+        },
+        "className": {
+          "default": "",
+          "title": "className",
+          "type": "string"
+        },
+        "enabled": {
+          "default": false,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "hosts": {
+          "description": "nginx.ingress.kubernetes.io/rewrite-target: \"/$1\"",
+          "items": {
+            "anyOf": [
+              {
+                "properties": {
+                  "host": {
+                    "default": "chart-example.local",
+                    "title": "host",
+                    "type": "string"
+                  },
+                  "paths": {
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "required": []
+                    },
+                    "title": "paths",
+                    "type": "array"
+                  }
+                },
+                "required": [],
+                "type": "object"
+              }
+            ],
+            "required": []
+          },
+          "title": "hosts",
+          "type": "array"
+        },
+        "tls": {
+          "items": {
+            "required": []
+          },
+          "title": "tls",
+          "type": "array"
+        }
+      },
+      "required": [],
+      "title": "ingress",
+      "type": "object"
+    },
+    "installationType": {
+      "default": "standalone",
+      "description": "Installation type\ncan be \"altinity\" or \"standalone\"",
+      "title": "installationType",
+      "type": "string"
+    },
+    "metrics": {
+      "properties": {
+        "enabled": {
+          "default": false,
+          "title": "enabled",
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "title": "metrics",
+      "type": "object"
+    },
+    "nameOverride": {
+      "default": "",
+      "title": "nameOverride",
+      "type": "string"
+    },
+    "nodeSelector": {
+      "description": "Node labels for pod assignment.\nref: https://kubernetes.io/docs/user-guide/node-selection/",
+      "required": [],
+      "title": "nodeSelector",
+      "type": "object"
+    },
+    "persistence": {
+      "description": "Persistence parameters\nref: https://kubernetes.io/docs/user-guide/persistent-volumes/",
+      "properties": {
+        "accessModes": {
+          "description": "storageClass: \"-\"",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              }
+            ],
+            "required": []
+          },
+          "title": "accessModes",
+          "type": "array"
+        },
+        "annotations": {
+          "required": [],
+          "title": "annotations",
+          "type": "object"
+        },
+        "enabled": {
+          "default": true,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "size": {
+          "default": "64Gi",
+          "title": "size",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "persistence",
+      "type": "object"
+    },
+    "podAnnotations": {
+      "description": "Annotations for pod.\nref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/",
+      "required": [],
+      "title": "podAnnotations",
+      "type": "object"
+    },
+    "podSecurityContext": {
+      "description": "Pod Security Context.\nref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod",
+      "properties": {
+        "fsGroup": {
+          "default": 101,
+          "title": "fsGroup",
+          "type": "integer"
+        },
+        "fsGroupChangePolicy": {
+          "default": "OnRootMismatch",
+          "title": "fsGroupChangePolicy",
+          "type": "string"
+        },
+        "runAsGroup": {
+          "default": 101,
+          "title": "runAsGroup",
+          "type": "integer"
+        },
+        "runAsNonRoot": {
+          "default": true,
+          "title": "runAsNonRoot",
+          "type": "boolean"
+        },
+        "runAsUser": {
+          "default": 101,
+          "title": "runAsUser",
+          "type": "integer"
+        }
+      },
+      "required": [],
+      "title": "podSecurityContext",
+      "type": "object"
+    },
+    "podlabels": {
+      "description": "Extra labels for pod.\nref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/",
+      "required": [],
+      "title": "podlabels",
+      "type": "object"
+    },
+    "priorityClassName": {
+      "default": "~",
+      "description": "Priority Class Name\nref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass",
+      "title": "priorityClassName",
+      "type": "null"
+    },
+    "replicaCount": {
+      "default": 1,
+      "title": "replicaCount",
+      "type": "integer"
+    },
+    "resources": {
+      "description": "Resource requests and limits.\nref: https://kubernetes.io/docs/user-guide/compute-resources/",
+      "properties": {
+        "requests": {
+          "description": "limits:\n  cpu: 100m\n  memory: 128Mi",
+          "properties": {
+            "cpu": {
+              "default": "500m",
+              "title": "cpu",
+              "type": "string"
+            },
+            "memory": {
+              "default": "512Mi",
+              "title": "memory",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "requests",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "resources",
+      "type": "object"
+    },
+    "securityContext": {
+      "description": "Container Security Context.\nref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod",
+      "properties": {
+        "allowPrivilegeEscalation": {
+          "default": false,
+          "title": "allowPrivilegeEscalation",
+          "type": "boolean"
+        },
+        "capabilities": {
+          "properties": {
+            "add": {
+              "items": {
+                "required": []
+              },
+              "title": "add",
+              "type": "array"
+            },
+            "drop": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "required": []
+              },
+              "title": "drop",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "capabilities",
+          "type": "object"
+        },
+        "readOnlyRootFilesystem": {
+          "default": false,
+          "title": "readOnlyRootFilesystem",
+          "type": "boolean"
+        },
+        "seccompProfile": {
+          "properties": {
+            "type": {
+              "default": "RuntimeDefault",
+              "title": "type",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "seccompProfile",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "securityContext",
+      "type": "object"
+    },
+    "service": {
+      "description": "Service parameters\nref: https://kubernetes.io/docs/user-guide/services/",
+      "properties": {
+        "ipFamilies": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              }
+            ],
+            "required": []
+          },
+          "title": "ipFamilies",
+          "type": "array"
+        },
+        "type": {
+          "default": "ClusterIP",
+          "title": "type",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "service",
+      "type": "object"
+    },
+    "serviceAccount": {
+      "description": "Pods Service Account.\nref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/",
+      "properties": {
+        "annotations": {
+          "description": "Annotations to add to the service account",
+          "required": [],
+          "title": "annotations",
+          "type": "object"
+        },
+        "create": {
+          "default": true,
+          "description": "Specifies whether a service account should be created",
+          "title": "create",
+          "type": "boolean"
+        },
+        "name": {
+          "default": "",
+          "description": "The name of the service account to use.\nIf not set and create is true, a name is generated using the fullname template",
+          "title": "name",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "serviceAccount",
+      "type": "object"
+    },
+    "storage": {
+      "description": "\nclickhouse specific\n",
+      "required": [],
+      "title": "storage",
+      "type": "object"
+    },
+    "tlsCerts": {
+      "properties": {
+        "create": {
+          "default": false,
+          "title": "create",
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "title": "tlsCerts",
+      "type": "object"
+    },
+    "tolerations": {
+      "description": "Tolerations for pod assignment.\nref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/",
+      "items": {
+        "required": []
+      },
+      "title": "tolerations",
+      "type": "array"
+    },
+    "updateStrategy": {
+      "description": "pod deployment update strategy type.\nref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment",
+      "properties": {
+        "type": {
+          "default": "RollingUpdate",
+          "title": "type",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "updateStrategy",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

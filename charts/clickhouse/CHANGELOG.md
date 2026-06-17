@@ -1,1 +1,1 @@
-- update altinity/clickhouse-backup (2.7.1 → 2.7.2)
+- feat: add values.schema

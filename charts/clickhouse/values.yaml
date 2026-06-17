@@ -60,11 +60,11 @@ securityContext:
   capabilities:
     drop:
       - ALL
-    # add:
-    #   # Need PodSecurity policy to `pod-security.kubernetes.io/enforce: privileged`
-    #   - SYS_NICE
-    #   - IPC_LOCK
-  # readOnlyRootFilesystem: true
+    add: []
+      # # Need PodSecurity policy to `pod-security.kubernetes.io/enforce: privileged`
+      # - SYS_NICE
+      # - IPC_LOCK
+  readOnlyRootFilesystem: false
 
 # -- Service parameters
 # ref: https://kubernetes.io/docs/user-guide/services/
