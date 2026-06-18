@@ -4,7 +4,8 @@
         "values.yaml": "yaml",
         "*.json5": "jsonc",
         "*.tpl": "go-template",
-        "**/templates/*.yaml": "go-template"
+        "**/templates/*.yaml": "go-template",
+        "**/prometheus-rules/templates/rules-1.14/*.yaml": "go-template"
     },
     "yaml.schemas": {
         "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.{yml,yaml}",
