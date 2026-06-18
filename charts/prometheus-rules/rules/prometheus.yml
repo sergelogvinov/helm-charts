@@ -6,7 +6,7 @@
       labels:
         severity: warning
       annotations:
-        description: {{ printf "%.4g" $value }}% of the {{ $labels.job }}/{{ $labels.app_kubernetes_io_name }}/{{ $labels.app_kubernetes_io_instance }} targets in {{ $labels.kubernetes_namespace }} namespace are down.
+        description: "{{ printf "%.4g" $value }}% of the {{ $labels.job }}/{{ $labels.app_kubernetes_io_name }}/{{ $labels.app_kubernetes_io_instance }} targets in {{ $labels.kubernetes_namespace }} namespace are down."
         summary: One or more targets are unreachable.
 
     - alert: PrometheusTSDBWALCorruptions
