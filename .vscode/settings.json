@@ -5,12 +5,14 @@
         "*.json5": "jsonc",
         "*.tpl": "go-template",
         "**/templates/*.yaml": "go-template",
-        "**/prometheus-rules/templates/rules-1.14/*.yaml": "go-template"
+        "**/prometheus-rules/rules/*.{yml,yaml}": "go-template",
+        "**/prometheus-rules/templates/rules-1.14/*.{yml,yaml}": "go-template"
     },
     "yaml.schemas": {
         "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.{yml,yaml}",
         "http://json.schemastore.org/chart.json": "Chart.yaml",
-        "kubernetes": "templates/**"
+        "kubernetes": "templates/**",
+        "https://github.com/helmwave/helmwave/releases/latest/download/schema.json": "file:///Users/serge/work/sergelogvinov/helm-charts/vars/rbac.yaml"
     },
     "git.rebaseWhenSync": true,
     "github.copilot.enable": {
