@@ -8,7 +8,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
     {{- include "clickhouse.crontab.labels" . | nindent 4 }}
-    app.kubernetes.io/component: checker
+    app.kubernetes.io/component: backup-check
 spec:
   targetRef:
     apiVersion: batch/v1

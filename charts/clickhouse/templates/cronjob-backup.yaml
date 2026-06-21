@@ -28,7 +28,7 @@ spec:
             {{- with .Values.podlabels }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-            {{- include "clickhouse.crontab.labels" . | nindent 12 }}
+            {{- include "clickhouse.crontab.selectorLabels" . | nindent 12 }}
             app.kubernetes.io/component: backup
         spec:
           restartPolicy: Never
@@ -69,7 +69,7 @@ spec:
                       key: backupPassword
                 - name: CLICKHOUSE_HOST
                   {{- if eq .Values.installationType "altinity" }}
-                  value: "chi-clickhouse-{{ include "clickhouse.fullname" . }}-0-0-0.chi-clickhouse-{{ include "clickhouse.fullname" . }}-0-0"
+                  value: "chi-{{ include "clickhouse.fullname" . }}-{{ (default (include "clickhouse.fullname" .) .Values.clickhouse.name) }}-0-0-0.chi-{{ include "clickhouse.fullname" . }}-{{ (default (include "clickhouse.fullname" .) .Values.clickhouse.name) }}-0-0"
                   {{- else }}
                   value: "{{ include "clickhouse.fullname" . }}-{{ $instance }}.{{ include "clickhouse.fullname" . }}-headless"
                   {{- end }}
@@ -96,7 +96,7 @@ spec:
                     matchLabels:
                       {{- include "clickhouse.selectorLabels" . | nindent 22 }}
                       {{- if eq .Values.installationType "altinity" }}
-                      statefulset.kubernetes.io/pod-name: chi-clickhouse-{{ include "clickhouse.fullname" . }}-0-0-0
+                      statefulset.kubernetes.io/pod-name: chi-{{ include "clickhouse.fullname" . }}-{{ (default (include "clickhouse.fullname" .) .Values.clickhouse.name) }}-0-0-0
                       {{- else }}
                       statefulset.kubernetes.io/pod-name: {{ include "clickhouse.fullname" . }}-{{ $instance }}
                       {{- end }}
@@ -115,7 +115,7 @@ spec:
             - name: data
               persistentVolumeClaim:
                 {{- if eq .Values.installationType "altinity" }}
-                claimName: data-chi-clickhouse-{{ include "clickhouse.fullname" . }}-0-0-0
+                claimName: data-chi-{{ include "clickhouse.fullname" . }}-{{ (default (include "clickhouse.fullname" .) .Values.clickhouse.name) }}-0-0-0
                 {{- else }}
                 claimName: data-{{ include "clickhouse.fullname" . }}-{{ $instance }}
                 {{- end }}

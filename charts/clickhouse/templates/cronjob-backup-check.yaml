@@ -8,7 +8,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
     {{- include "clickhouse.crontab.labels" . | nindent 4 }}
-    app.kubernetes.io/component: checker
+    app.kubernetes.io/component: backup-check
 spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: {{ default 1 .Values.backupCheck.history }}
@@ -29,8 +29,8 @@ spec:
             {{- with .Values.podlabels }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-            {{- include "clickhouse.crontab.labels" . | nindent 12 }}
-            app.kubernetes.io/component: checker
+            {{- include "clickhouse.crontab.selectorLabels" . | nindent 12 }}
+            app.kubernetes.io/component: backup-check
         spec:
           restartPolicy: Never
           enableServiceLinks: false

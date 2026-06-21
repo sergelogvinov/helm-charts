@@ -82,17 +82,57 @@ helm upgrade -i ${PKG_NAME} --version=${CHART_VERSION} oci://ghcr.io/sergelogvin
 
 ## Values structure of the chart
 
+Common values and structures:
+
+```yaml
+# Key-Value format for environment variables:
+envs:
+  ENV_NAME: ENV_VALUE
+
+# Key-Value format for environment variables from ConfigMap or Secret:
+envsValueFrom:
+  ENV_NAME:
+    secretKeyRef:
+      name: secret-name
+      key: secret-key
+  POD_ENDPOINT:
+    fieldRef:
+      fieldPath: status.podIP
+
+# Common kubernetes environment variables format:
+env:
+  - name: ENV_NAME
+    value: ENV_VALUE
+
+envFrom:
+  - configMapRef:
+      name: configmap-name
+  - secretRef:
+      name: secret-name
+```
+
+### Sub components
+
 The Deployment, DaemonSet, or StatefulSet usually has the same name as the chart.
 Most parameters are defined at the root of `values.yaml`, similar to the output from `helm create`.
 
 If a chart has multiple components, place each component in its own subtree.
 Components can reuse common values from the root level.
-Each component has an additional `app.kubernetes.io/component` label with the component name.
+The name should be unique within the camel case naming convention.
+Each component has an additional `app.kubernetes.io/component` label with the component name in camel case or kebab case.
 
 Example: in the PostgreSQL chart, `backup` and `backupCheck` can share the same `nodeSelector` from the root, or override it in their own subtree.
 
 ```yaml
+# Additional components can be defined in their own subtree.
 backup:
+  # In case then the component uses a different image than the main chart, define it here.
+  image:
+    repository: ghcr.io/sergelogvinov/backup
+    pullPolicy: IfNotPresent
+    tag: "v1.0.0"
+
+  # Component-specific values can be defined as well.
   schedule: "0 0 * * *"
   retention: 7d
 
