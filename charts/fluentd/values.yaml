@@ -95,7 +95,10 @@ env: []
   # - name: AWS_ACCESS_KEY_ID
   #   value: ABC
 
+# -- Fluentd system.logLevel
 logLevel: warn
+# -- Fluentd system.workers
+workers: 1
 
 # -- Use tls connection for input port
 # ref: https://docs.fluentd.org/input/forward
@@ -137,14 +140,12 @@ updateStrategy:
   rollingUpdate:
     maxUnavailable: 1
 
-extraVolumes:
-  []
+extraVolumes: []
   # - name: fluent-tls
   #   secret:
   #     secretName: fluent-client-tls
 
-extraVolumeMounts:
-  []
+extraVolumeMounts: []
   # - name: fluent-tls
   #   mountPath: /etc/ssl/fluent-bit
 
@@ -158,8 +159,7 @@ nodeSelector: {}
 
 # -- Tolerations for pod assignment.
 # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-tolerations:
-  []
+tolerations: []
   # - operator: Exists
   #   effect: NoSchedule
 
