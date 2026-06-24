@@ -1,5 +1,4 @@
 {{- define "clickhouse.logger" -}}
-{{- $mem := include "resource-bytes" (default (default (dict) .Values.resources.limits ).memory .Values.resources.requests.memory) -}}
 <logger>
     <level>{{ .Values.clickhouse.logLevel }}</level>
     <console>1</console>
@@ -8,18 +7,16 @@
     <log>/var/log/clickhouse/clickhouse-server.log</log>
     <errorlog>/var/log/clickhouse/clickhouse-server.err.log</errorlog>
 </logger>
-<query_log>
+{{- end }}
+
+{{- define "clickhouse.logger-tables" -}}
+{{- $mem := include "resource-bytes" (default (default (dict) .Values.resources.limits ).memory .Values.resources.requests.memory) -}}
+<error_log>
     <database>system</database>
-    <table>query_log</table>
-    <ttl>event_date + INTERVAL 7 DAY DELETE</ttl>
+    <table>error_log</table>
+    <ttl>event_date + INTERVAL 5 DAY DELETE</ttl>
     <flush_interval_milliseconds>7500</flush_interval_milliseconds>
-</query_log>
-<query_views_log>
-    <database>system</database>
-    <table>query_views_log</table>
-    <ttl>event_date + INTERVAL 7 DAY DELETE</ttl>
-    <flush_interval_milliseconds>7500</flush_interval_milliseconds>
-</query_views_log>
+</error_log>
 {{- if le (div $mem 1000000000) 16 }}
 <query_log remove="1"/>
 <query_metric_log remove="1" />
@@ -32,12 +29,24 @@
 <asynchronous_metric_log remove="1" />
 <opentelemetry_span_log remove="1"/>
 {{- else }}
+<query_log>
+    <database>system</database>
+    <table>query_log</table>
+    <ttl>event_date + INTERVAL 7 DAY DELETE</ttl>
+    <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+</query_log>
 <query_metric_log>
     <database>system</database>
     <table>query_metric_log</table>
     <ttl>event_date + INTERVAL 7 DAY DELETE</ttl>
     <flush_interval_milliseconds>7500</flush_interval_milliseconds>
 </query_metric_log>
+<query_views_log>
+    <database>system</database>
+    <table>query_views_log</table>
+    <ttl>event_date + INTERVAL 7 DAY DELETE</ttl>
+    <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+</query_views_log>
 {{- end }}
 {{- end }}
 

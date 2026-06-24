@@ -185,6 +185,7 @@ data:
   logger.xml: |-
     <clickhouse>
         {{- include "clickhouse.logger" . | nindent 8 }}
+        {{- include "clickhouse.logger-tables" . | nindent 8 }}
     </clickhouse>
 
   optimization.xml: |-

@@ -93,16 +93,10 @@ spec:
       {{- end }}
       logger/level: {{ default "information" .Values.clickhouse.logLevel }}
     files:
-      {{- if lt (div $mem 1000000000) 32 }}
       logger.xml: |-
         <clickhouse>
-            <query_metric_log remove="1" />
-            <text_log remove="1" />
-            <trace_log remove="1" />
-            <metric_log remove="1" />
-            <asynchronous_metric_log remove="1" />
+            {{- include "clickhouse.logger-tables" . | nindent 12 }}
         </clickhouse>
-      {{- end }}
       optimization.xml: |-
         <clickhouse>
             {{- include "clickhouse.optimization" . | nindent 12 }}
