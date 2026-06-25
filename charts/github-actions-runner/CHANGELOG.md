@@ -1,1 +1,1 @@
-- update ghcr.io/actions/gha-runner-scale-set-controller (0.14.1 → 0.14.2)
+- update ghcr.io/sergelogvinov/github-actions-runner (2.334.0 → 2.335.1)
