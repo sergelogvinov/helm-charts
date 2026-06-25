@@ -1,0 +1,1 @@
+- update ghcr.io/sergelogvinov/teamcity (2025.11.5 → 2026.1.1)
