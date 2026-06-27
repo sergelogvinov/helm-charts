@@ -85,6 +85,7 @@ spec:
             - -kubernetes-enable-tls
             - -kubernetes-https-redirect
             - -kubernetes-https-redirect-code=301
+            - -enable-kubernetes-endpointslices=true
             - -source-poll-timeout=30000
             #
             - -proxy-preserve-host

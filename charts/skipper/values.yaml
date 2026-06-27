@@ -151,7 +151,7 @@ updateStrategy:
 
 # -- Priority Class Name
 # ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
-priorityClassName: ~
+priorityClassName: ""
 
 # Additional volumes on the output Deployment definition.
 volumes: []

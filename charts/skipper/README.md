@@ -1,6 +1,6 @@
 # skipper
 
-![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.27.1](https://img.shields.io/badge/AppVersion-v0.27.1-informational?style=flat-square)
+![Version: 0.8.1](https://img.shields.io/badge/Version-0.8.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.27.15](https://img.shields.io/badge/AppVersion-v0.27.15-informational?style=flat-square)
 
 Ingress controller for Kubernetes
 
@@ -77,7 +77,7 @@ terminationGracePeriodSeconds: 120
 | terminationGracePeriodSeconds | int | `120` |  |
 | updateStrategy.type | string | `"RollingUpdate"` |  |
 | updateStrategy.rollingUpdate.maxUnavailable | int | `1` |  |
-| priorityClassName | string | `nil` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
+| priorityClassName | string | `""` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |
 | volumes | list | `[]` |  |
 | volumeMounts | list | `[]` |  |
 | nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
