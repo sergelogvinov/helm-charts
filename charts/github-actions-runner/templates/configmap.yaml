@@ -45,9 +45,10 @@ data:
               "urls": ["https://{{ $val.host }}"],
               "tlsVerify": true,
               "onDemand": true,
-              "maxRetries": 3,
-              "retryDelay": "15s",
+              "maxRetries": 2,
+              "retryDelay": "5s",
               "onlySigned": false,
+              "syncTimeout": "1m",
               "content": [
                 {
                   "prefix": "**",
@@ -61,10 +62,10 @@ data:
               "tlsVerify": true,
               "onDemand": true,
               "maxRetries": 3,
-              "retryDelay": "15s",
+              "retryDelay": "5s",
               "preserveDigest": true,
               "onlySigned": false,
-              "syncTimeout": "10m",
+              "syncTimeout": "5m",
               "content": [
                 {
                   "prefix": "library/**",
