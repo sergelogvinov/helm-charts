@@ -33,8 +33,7 @@ runnerScaleSetName: ""
 runnerVersion: "0.14.2"
 
 githubConfigUrl: "https://github.com/..."
-githubConfigSecret:
-  {}
+githubConfigSecret: {}
   # github_token: "ghp_123"
   # github_app_id: ""
   # github_app_installation_id: ""
@@ -137,7 +136,7 @@ mirrors:
   image:
     repository: ghcr.io/project-zot/zot
     pullPolicy: IfNotPresent
-    tag: "v2.1.17"
+    tag: "v2.1.18"
 
   # -- Container registry list.
   # ref: https://docs.docker.com/registry/recipes/mirror/
@@ -215,7 +214,7 @@ registry:
   image:
     repository: ghcr.io/project-zot/zot
     pullPolicy: IfNotPresent
-    tag: "v2.1.17"
+    tag: "v2.1.18"
 
   storage:
     ~
@@ -234,8 +233,7 @@ registry:
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: 0
 
-    hosts:
-      []
+    hosts: []
       # - host: chart-example.local
 
     tls:
@@ -243,8 +241,7 @@ registry:
       #   hosts:
       #     - chart-example.local
 
-    auth:
-      {}
+    auth: {}
       # username: ""
       # password: ""
       # cert: ""
@@ -360,8 +357,7 @@ podAnnotations: {}
 
 # -- Pod Security Context.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-podSecurityContext:
-  {}
+podSecurityContext: {}
   # fsGroup: 0
   # fsGroupChangePolicy: "OnRootMismatch"
 
