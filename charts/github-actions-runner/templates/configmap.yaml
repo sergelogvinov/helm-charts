@@ -164,11 +164,16 @@ data:
       uid = 0
       gid = 0
 
+    [history]
+      maxAge = 0
+      maxEntries = 0
+
     [worker.containerd]
       enabled = false
 
     [worker.oci]
       enabled = true
+      max-parallelism = 8
       gc = true
       gckeepstorage = "{{ int64 (divf $size 2) }}MB"
     [[worker.oci.gcpolicy]]
