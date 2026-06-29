@@ -1,6 +1,6 @@
 # prometheus-rules
 
-![Version: 0.3.7](https://img.shields.io/badge/Version-0.3.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.40.0](https://img.shields.io/badge/AppVersion-2.40.0-informational?style=flat-square)
+![Version: 0.3.11](https://img.shields.io/badge/Version-0.3.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.40.0](https://img.shields.io/badge/AppVersion-2.40.0-informational?style=flat-square)
 
 Static prometheus/victoria metrics common rules
 
