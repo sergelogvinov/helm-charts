@@ -1,6 +1,6 @@
 # service-common
 
-![Version: 0.3.13](https://img.shields.io/badge/Version-0.3.13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.24](https://img.shields.io/badge/AppVersion-2.8.24-informational?style=flat-square)
+![Version: 0.3.14](https://img.shields.io/badge/Version-0.3.14-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.25](https://img.shields.io/badge/AppVersion-2.8.25-informational?style=flat-square)
 
 Simple gateway with TLS auth
 
