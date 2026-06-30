@@ -188,7 +188,7 @@ clickhouseKeeper:
   image:
     repository: clickhouse/clickhouse-keeper
     pullPolicy: IfNotPresent
-    tag: 26.5.3-alpine
+    tag: 26.5.4-alpine
 
   resources:
     limits:
