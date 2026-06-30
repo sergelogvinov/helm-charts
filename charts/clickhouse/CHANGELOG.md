@@ -1,1 +1,1 @@
-- update clickhouse/clickhouse-keeper (26.5.1 → 26.5.3)
+- update clickhouse/clickhouse-keeper (26.5.3 → 26.5.4)
