@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "headscale.fullname" . }}
+  labels:
+    {{- include "headscale.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    disable_check_updates: true
+    server_url: "https://{{ (index .Values.ingress.hosts 0).host }}"
+    listen_addr: ":{{ .Values.service.port.http }}"
+    metrics_listen_addr: ":{{ .Values.service.port.metrics }}"
+    grpc_listen_addr: ":{{ .Values.service.port.grpc }}"
+
+    unix_socket: /var/run/headscale/headscale.sock
+    unix_socket_permission: "0770"
+
+    trusted_proxies:
+      - 10.0.0.0/8
+      - 172.16.0.0/12
+      - 192.168.0.0/16
+
+    log:
+      level: info
+      format: text
+
+    prefixes:
+      allocation: sequential
+      v4: 100.64.0.0/10
+      v6: fd7a:115c:a1e0::/48
+
+    database:
+      type: sqlite
+      sqlite:
+        path: /var/lib/headscale/db.sqlite
+
+    noise:
+      private_key_path: /etc/headscale-secrets/noise.key
+
+    derp:
+      server:
+        enabled: false
+
+      urls:
+        - https://controlplane.tailscale.com/derpmap/default
+      paths: []
+
+      auto_update_enabled: false
+      update_frequency: 24h
+
+    dns:
+      magic_dns: false
+      override_local_dns: false
+
+    taildrop:
+      enabled: false
+
+    {{ with .Values.headscale.oidc }}
+    oidc:
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
+
+    policy:
+      mode: file
+      path: /etc/headscale/policy.json
+
+  policy.json: |
+    {{- .Values.headscale.policy | nindent 4 }}

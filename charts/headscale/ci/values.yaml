@@ -1,0 +1,13 @@
+ingress:
+  enabled: true
+
+  hosts:
+    - host: headscale.dev
+      paths: ["/"]
+  tls:
+    - secretName: headscale.dev-tls
+      hosts:
+        - headscale.dev
+
+nodeSelector:
+  node-role.kubernetes.io/vpn: ""

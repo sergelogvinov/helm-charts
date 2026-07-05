@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "headscale.fullname" . }}
+  labels:
+    {{- include "headscale.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  {{- with .Values.service.ipFamilies }}
+  ipFamilies:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  ipFamilyPolicy: {{ if eq (len .Values.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
+  ports:
+    - port: {{ .Values.service.port.http }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: {{ .Values.service.port.metrics }}
+      name: metrics
+      targetPort: metrics
+      protocol: TCP
+    - port: {{ .Values.service.port.grpc }}
+      name: grpc
+      targetPort: grpc
+      protocol: TCP
+  selector:
+    {{- include "headscale.selectorLabels" . | nindent 4 }}
