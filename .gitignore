@@ -2,3 +2,4 @@ vars/
 output.txt
 age.key.txt
 kubeconfig
+**/*.save

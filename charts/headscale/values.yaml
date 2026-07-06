@@ -10,7 +10,8 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
-# This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+# -- This is for the secrets for pulling an image from a private repository
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
 # This is to override the chart name.
 nameOverride: ""
@@ -35,6 +36,32 @@ headscale:
   # -- Headscale policy
   # ref: https://headscale.net/stable/ref/policy/
   policy: ""
+
+  # -- MagicDNS
+  # ref: https://headscale.net/stable/ref/dns/
+  dns:
+    magic_dns: false
+    override_local_dns: false
+
+    nameservers:
+      global: []
+        # - 1.1.1.1
+        # - 1.0.0.1
+        # - 2606:4700:4700::1111
+        # - 2606:4700:4700::1001
+      split: {}
+        # "*.svc.cluster.local":
+        #   - 100.64.0.2
+        #   - 100.64.0.3
+
+    base_domain: tailscale.cluster.local
+
+    # -- Set custom DNS search domains
+    search_domains: []
+
+    # -- Extra DNS records
+    extra_records: []
+      # - { name: "prometheus.myvpn.example.com", type: "A", value: "100.64.0.3" }
 
 # This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
 serviceAccount:
@@ -81,7 +108,7 @@ service:
   ipFamilies: [IPv4]
 
   port:
-    http: 8080
+    http: 80
     metrics: 9090
     grpc: 50443
 

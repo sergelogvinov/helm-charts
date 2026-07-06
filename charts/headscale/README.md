@@ -1,8 +1,21 @@
 # headscale
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.29.2](https://img.shields.io/badge/AppVersion-v0.29.2-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.29.2](https://img.shields.io/badge/AppVersion-v0.29.2-informational?style=flat-square)
 
 A Helm chart
+
+Generate a private key for headscale:
+
+```shell
+headscale generate private-key
+```
+
+List of registered users/nodes:
+
+```shell
+headscale users list
+headscale nodes list
+```
 
 **Homepage:** <https://github.com/sergelogvinov/helm-charts>
 
@@ -25,13 +38,16 @@ A Helm chart
 | image.repository | string | `"ghcr.io/juanfont/headscale"` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.tag | string | `""` |  |
-| imagePullSecrets | list | `[]` |  |
+| imagePullSecrets | list | `[]` | This is for the secrets for pulling an image from a private repository ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
 | nameOverride | string | `""` |  |
 | fullnameOverride | string | `""` |  |
 | headscale.secrets.noise | string | `""` |  |
 | headscale.secrets.derp | string | `""` |  |
 | headscale.oidc | object | `{}` | OpenID Connect ref: https://headscale.net/stable/ref/oidc/ |
 | headscale.policy | string | `""` | Headscale policy ref: https://headscale.net/stable/ref/policy/ |
+| headscale.dns | object | `{"base_domain":"tailscale.cluster.local","extra_records":[],"magic_dns":false,"nameservers":{"global":[],"split":{}},"override_local_dns":false,"search_domains":[]}` | MagicDNS ref: https://headscale.net/stable/ref/dns/ |
+| headscale.dns.search_domains | list | `[]` | Set custom DNS search domains |
+| headscale.dns.extra_records | list | `[]` | Extra DNS records |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.automount | bool | `true` |  |
 | serviceAccount.annotations | object | `{}` |  |
@@ -40,9 +56,9 @@ A Helm chart
 | podLabels | object | `{}` | This is for setting Kubernetes Labels to a Pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ |
 | podSecurityContext | object | `{"fsGroup":65532,"fsGroupChangePolicy":"OnRootMismatch","runAsGroup":65532,"runAsUser":0}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | securityContext | object | `{"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true,"runAsUser":65532}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
-| service | object | `{"ipFamilies":["IPv4"],"port":{"grpc":50443,"http":8080,"metrics":9090},"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
+| service | object | `{"ipFamilies":["IPv4"],"port":{"grpc":50443,"http":80,"metrics":9090},"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
 | ingress | object | `{"annotations":{},"className":"","enabled":false,"hosts":[{"host":"chart-example.local","paths":["/"]}],"tls":[]}` | Clickhouse ingress parameters ref: http://kubernetes.io/docs/user-guide/ingress/ |
-| resources | object | `{"requests":{"cpu":"100m","memory":"128Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| resources | object | `{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | networkPolicy | object | `{"enabled":false}` | Network policy |
 | persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"1Gi"}` | Persistence parameters ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |
 | priorityClassName | string | `""` | Priority Class Name ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass |

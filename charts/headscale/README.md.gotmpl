@@ -6,6 +6,19 @@
 
 {{ template "chart.description" . }}
 
+Generate a private key for headscale:
+
+```shell
+headscale generate private-key
+```
+
+List of registered users/nodes:
+
+```shell
+headscale users list
+headscale nodes list
+```
+
 {{ template "chart.homepageLine" . }}
 
 {{ template "chart.maintainersSection" . }}

@@ -26,7 +26,7 @@ data:
 
     prefixes:
       allocation: sequential
-      v4: 100.64.0.0/10
+      v4: 100.64.0.0/24
       v6: fd7a:115c:a1e0::/48
 
     database:
@@ -48,14 +48,15 @@ data:
       auto_update_enabled: false
       update_frequency: 24h
 
+    {{ with .Values.headscale.dns -}}
     dns:
-      magic_dns: false
-      override_local_dns: false
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
 
     taildrop:
       enabled: false
 
-    {{ with .Values.headscale.oidc }}
+    {{ with .Values.headscale.oidc -}}
     oidc:
       {{- . | toYaml | nindent 6 }}
     {{- end }}

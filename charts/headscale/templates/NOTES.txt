@@ -1,0 +1,13 @@
+1. Get the application join command by running this command:
+{{- if .Values.ingress.enabled }}
+{{ range $host := .Values.ingress.hosts }}
+  tailscale up --login-server http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}
+{{- end }}
+{{- end }}
+
+2. Get the application node list by running these commands:
+
+  export POD_NAME=$(kubectl -n {{ .Release.Namespace }} get pods -l "app.kubernetes.io/name={{ include "headscale.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  kubectl -n {{ .Release.Namespace }} exec - $POD_NAME -- headscale nodes list
+  kubectl -n {{ .Release.Namespace }} exec - $POD_NAME -- headscale preauthkeys create --user <username> --reusable
+  kubectl -n {{ .Release.Namespace }} exec - $POD_NAME -- headscale node tag -i 1 --tags tag:vpn
