@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: tailscale/tailscale
+  repository: ghcr.io/sergelogvinov/tailscale
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -14,10 +14,16 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+debug:
+  enabled: false
+
 tailscale: {}
   # TS_AUTH_KEY: tskey-auth-
   # TS_TAGS: tag:exitnode
   # TS_EXTRA_ARGS: --login-server=https://example.com
+
+tailscaleDNS:
+  bind: 127.0.0.1 ::1
 
 # -- Pods Service Account.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -57,6 +63,10 @@ podTailscaleNat:
     pullPolicy: IfNotPresent
     tag: 1.8.11-nft
 
+# -- The time in seconds that is allowed for a tailscale node to gracefully shutdown
+# ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks
+terminationGracePeriodSeconds: 5
+
 # -- Container Security Context.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 securityContext:
@@ -66,10 +76,13 @@ securityContext:
     add:
       - NET_ADMIN
       - NET_RAW
+      - MKNOD
+      - SETUID
+      - SETGID
     drop:
       - ALL
-  # privileged: true
-  # readOnlyRootFilesystem: true
+  privileged: false
+  readOnlyRootFilesystem: true
   runAsNonRoot: false
   runAsUser: 0
 
@@ -88,11 +101,9 @@ resources:
   limits:
     cpu: 500m
     memory: 512Mi
-    # squat.ai/tun: "1"
   requests:
     cpu: 100m
     memory: 256Mi
-    # squat.ai/tun: "1"
 
 # -- DNS Policy for pod
 # ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/

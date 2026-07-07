@@ -43,7 +43,7 @@ docs-%:
 	@if [ -n "$$COMMIT_MESSAGE" ]; then \
 		echo "$$COMMIT_MESSAGE" > charts/$*/CHANGELOG.md; \
 	else \
-		git log --pretty=format:"- %s" -- charts/$*/ > charts/$*/CHANGELOG.md; \
+		git log --pretty=format:"- %s" -- charts/$*/ | head -n 1 > charts/$*/CHANGELOG.md; \
 	fi
 	@echo Update $* README.md
 	@cd charts/$*; helm-docs --sort-values-order=file

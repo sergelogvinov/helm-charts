@@ -5,13 +5,21 @@ metadata:
   labels:
     {{- include "tailscale.labels" . | nindent 4 }}
 data:
-  Corefile: |
+  corefile: |
     .:53 {
         errors
-        bind 127.0.0.1 ::1
+        {{- if .Values.tailscaleDNS.bind }}
+        bind {{ .Values.tailscaleDNS.bind }}
+        {{- end }}
 
         health :8080 {
           lameduck 5s
+        }
+
+        acl {
+            allow net 127.0.0.1/32 ::1/128
+            allow net 100.64.0.0/10 fd7a:115c:a1e0::/48
+            block
         }
 
         kubernetes cluster.local in-addr.arpa ip6.arpa {

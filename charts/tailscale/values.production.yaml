@@ -1,0 +1,25 @@
+#
+# Node specs:
+#   allowed-unsafe-sysctls: net.ipv6.conf.all.forwarding
+#
+
+tailscale:
+  TS_AUTH_KEY: tskey-auth-
+  TS_TAGS: tag:exitnode
+
+resources:
+  limits:
+    cpu: 2
+    memory: 512Mi
+  requests:
+    cpu: 500m
+    memory: 256Mi
+
+podSecurityContext:
+  sysctls:
+    - name: net.ipv6.conf.all.forwarding
+      value: "1"
+
+useDaemonSet: true
+nodeSelector:
+  node-role.kubernetes.io/exitnode: ""

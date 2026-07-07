@@ -7,7 +7,11 @@ metadata:
     {{- include "tailscale.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
+  {{- if eq .Values.service.type "ClusterIP" }}
+  clusterIP: None
+  {{- end }}
   sessionAffinity: None
+  internalTrafficPolicy: Local
   externalTrafficPolicy: Local
   ipFamilyPolicy: {{ if eq (len .Values.service.ipFamilies) 2 }}PreferDualStack{{ else }}SingleStack{{ end }}
   {{- with .Values.service.ipFamilies }}

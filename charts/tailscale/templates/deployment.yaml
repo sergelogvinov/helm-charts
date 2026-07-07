@@ -28,6 +28,9 @@ spec:
   template:
     metadata:
       annotations:
+      {{- if .Values.tailscale }}
+        checksum/config: {{ mergeOverwrite .Values.tailscale (dict "TS_AUTH_KEY" "") | toJson | sha256sum }}
+      {{- end }}
         kubectl.kubernetes.io/default-container: {{ .Chart.Name }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
@@ -43,6 +46,9 @@ spec:
       serviceAccountName: {{ include "tailscale.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if eq .Values.dnsPolicy "Local" }}
       dnsPolicy: "None"
       dnsConfig:
@@ -100,7 +106,7 @@ spec:
           volumeMounts:
             - name: scripts
               mountPath: /start
-            - name: state
+            - name: tmp
               mountPath: /tmp
         {{- end }}
       {{- if not $sidecar }}
@@ -110,7 +116,12 @@ spec:
         - name: {{ .Chart.Name }}-dns
           image: registry.k8s.io/coredns/coredns:v1.13.2
           imagePullPolicy: IfNotPresent
-          args: [ "-conf", "/etc/coredns/Corefile" ]
+          args: [ "-conf", "/etc/coredns/corefile" ]
+          env:
+            - name: GOMEMLIMIT
+              value: 161MiB
+            - name: GOMAXPROCS
+              value: "1"
           {{- if $sidecar }}
           restartPolicy: Always
           {{- end }}
@@ -122,7 +133,7 @@ spec:
             limits:
               memory: 170Mi
             requests:
-              cpu: 100m
+              cpu: 50m
               memory: 70Mi
           livenessProbe:
             httpGet:
@@ -157,6 +168,10 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/start/entrypoint.sh"]
           env:
+            - name: HOME
+              value: /tmp
+            - name: TS_SOCKET
+              value: /tmp/tailscaled.sock
             - name: TS_USERSPACE
               value: "false"
             {{- if .Values.service.port }}
@@ -174,7 +189,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-            {{ if semverCompare ">=1.35-0" .Capabilities.KubeVersion.GitVersion }}
+            {{- if semverCompare ">=1.35-0" .Capabilities.KubeVersion.GitVersion }}
             - name: REGION
               valueFrom:
                 fieldRef:
@@ -194,11 +209,37 @@ spec:
           volumeMounts:
             - name: scripts
               mountPath: /start
-            - name: state
+            - name: tmp
               mountPath: /tmp
           {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
           {{- end }}
+        {{- if .Values.debug.enabled }}
+        - name: {{ .Chart.Name }}-shell
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_RAW
+              drop:
+                - ALL
+            runAsNonRoot: false
+            runAsUser: 0
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["sleep", "infinity"]
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          volumeMounts:
+            - name: scripts
+              mountPath: /start
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -229,9 +270,9 @@ spec:
           configMap:
             name: {{ include "tailscale.fullname" . }}
             items:
-              - key: Corefile
-                path: Corefile
-        - name: state
+              - key: corefile
+                path: corefile
+        - name: tmp
           emptyDir: {}
       {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}

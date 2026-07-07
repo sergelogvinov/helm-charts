@@ -1,6 +1,6 @@
 # tailscale
 
-![Version: 0.16.2](https://img.shields.io/badge/Version-0.16.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.98.4](https://img.shields.io/badge/AppVersion-v1.98.4-informational?style=flat-square)
+![Version: 0.17.0](https://img.shields.io/badge/Version-0.17.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.98.8](https://img.shields.io/badge/AppVersion-v1.98.8-informational?style=flat-square)
 
 Tailscale mesh network.
 
@@ -105,20 +105,23 @@ and should not be used for commercial purposes or to violate the terms of servic
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | replicaCount | int | `1` |  |
-| image.repository | string | `"tailscale/tailscale"` |  |
+| image.repository | string | `"ghcr.io/sergelogvinov/tailscale"` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.tag | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
 | nameOverride | string | `""` |  |
 | fullnameOverride | string | `""` |  |
+| debug.enabled | bool | `false` |  |
 | tailscale | object | `{}` |  |
+| tailscaleDNS.bind | string | `"127.0.0.1 ::1"` |  |
 | serviceAccount | object | `{"annotations":{},"create":true,"name":""}` | Pods Service Account. ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
 | podAnnotations | object | `{}` | Annotations for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
 | podSecurityContext | object | `{}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | podTopology | object | `{"enabled":false}` | Add Pod Topology to the pod's hostname. |
 | podTailscaleNat | object | `{"enabled":false,"image":{"pullPolicy":"IfNotPresent","repository":"ghcr.io/sergelogvinov/iptables","tag":"1.8.11-nft"}}` | Add Pod with iptables nat configuration. |
 | podTailscaleNat.image | object | `{"pullPolicy":"IfNotPresent","repository":"ghcr.io/sergelogvinov/iptables","tag":"1.8.11-nft"}` | Container for iptables utils |
-| securityContext | object | `{"capabilities":{"add":["NET_ADMIN","NET_RAW"],"drop":["ALL"]},"runAsNonRoot":false,"runAsUser":0,"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
+| terminationGracePeriodSeconds | int | `5` | The time in seconds that is allowed for a tailscale node to gracefully shutdown ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks |
+| securityContext | object | `{"capabilities":{"add":["NET_ADMIN","NET_RAW","MKNOD","SETUID","SETGID"],"drop":["ALL"]},"privileged":false,"readOnlyRootFilesystem":true,"runAsNonRoot":false,"runAsUser":0,"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | service | object | `{"ipFamilies":["IPv4","IPv6"],"port":30025,"type":"NodePort"}` | Service parameters ref: https://kubernetes.io/docs/concepts/services-networking/service/ |
 | service.port | int | `30025` | P2P endpoints port |
 | service.ipFamilies | list | `["IPv4","IPv6"]` | P2P network family |

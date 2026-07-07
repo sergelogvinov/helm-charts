@@ -1,1 +1,1 @@
-- update tailscale/tailscale (v1.98.3 → v1.98.4)
+- feat: tailscale nftables support
