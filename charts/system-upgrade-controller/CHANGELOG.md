@@ -1,0 +1,1 @@
+- update rancher/system-upgrade-controller (v0.19.2 → v0.20.1)
