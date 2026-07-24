@@ -5814,6 +5814,28 @@ entries:
     version: 0.0.1
   infisical:
   - apiVersion: v2
+    appVersion: v0.162.13
+    created: "2026-07-24T16:21:59.582120175Z"
+    description: nfisical is the open-source platform for secrets, certificates, and
+      privileged access management.
+    digest: cecf6b88d3a0d3c655aeaa4d3eac326586ae3ae6187e74c51d3b3090be60c248
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/infisical/icon.png
+    keywords:
+    - infisical
+    - secrets
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: infisical
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/infisical
+    - https://github.com/Infisical/infisical
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/infisical-0.4.1/infisical-0.4.1.tgz
+    version: 0.4.1
+  - apiVersion: v2
     appVersion: v0.162.9
     created: "2026-07-18T09:38:21.060686523Z"
     description: nfisical is the open-source platform for secrets, certificates, and
@@ -15779,6 +15801,26 @@ entries:
     version: 0.1.0
   skipper:
   - apiVersion: v2
+    appVersion: v0.27.39
+    created: "2026-07-24T16:22:00.269407311Z"
+    description: Ingress controller for Kubernetes
+    digest: 477476b3e1463c0e87909ac229a634c41b02a4ff69e6ecdd26475d8fba3ad468
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/skipper/icon.png
+    keywords:
+    - ingress-controller
+    - skipper
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: skipper
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/main/charts/skipper
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/skipper-0.8.5/skipper-0.8.5.tgz
+    version: 0.8.5
+  - apiVersion: v2
     appVersion: v0.27.37
     created: "2026-07-23T08:25:10.868929612Z"
     description: Ingress controller for Kubernetes
@@ -19900,4 +19942,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-07-23T08:25:10.870600778Z"
+generated: "2026-07-24T16:22:00.271476717Z"
