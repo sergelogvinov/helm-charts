@@ -1,1 +1,1 @@
-- feat: tailscale nftables support
+- update ghcr.io/sergelogvinov/tailscale (v1.98.8 → 1.98.10)
