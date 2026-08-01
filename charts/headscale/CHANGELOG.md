@@ -1,1 +1,1 @@
-- feat: magic dns
+- update ghcr.io/juanfont/headscale (v0.29.2 → v0.29.3)
