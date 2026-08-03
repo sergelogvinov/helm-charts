@@ -1,1 +1,1 @@
-- feat: disable connection logs
+- fix: cnpg vpa

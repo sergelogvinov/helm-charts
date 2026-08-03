@@ -10,8 +10,13 @@ metadata:
     {{- include "postgresql-single.labels" $ | nindent 4 }}
 spec:
   targetRef:
+{{- if eq $.Values.installationType "standalone" }}
     apiVersion: apps/v1
     kind: Deployment
+{{- else }}
+    apiVersion: postgresql.cnpg.io/v1
+    kind: Pooler
+{{- end }}
     name: {{ include "postgresql-single.fullname" $ }}-{{ $name }}
   updatePolicy:
     updateMode: {{ $.Values.pooler.autoscaling.updatePolicy.updateMode }}

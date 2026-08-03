@@ -1,4 +1,4 @@
-{{- if and (eq .Values.installationType "standalone") .Values.autoscaling.enabled (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1") }}
+{{- if and .Values.autoscaling.enabled (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1") }}
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
