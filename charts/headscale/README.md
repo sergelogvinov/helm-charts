@@ -1,6 +1,6 @@
 # headscale
 
-![Version: 0.0.3](https://img.shields.io/badge/Version-0.0.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.29.3](https://img.shields.io/badge/AppVersion-v0.29.3-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.29.3](https://img.shields.io/badge/AppVersion-v0.29.3-informational?style=flat-square)
 
 A Helm chart
 
@@ -44,6 +44,8 @@ headscale nodes list
 | headscale.secrets.noise | string | `""` |  |
 | headscale.secrets.derp | string | `""` |  |
 | headscale.oidc | object | `{}` | OpenID Connect ref: https://headscale.net/stable/ref/oidc/ |
+| headscale.derp.urls[0] | string | `"https://controlplane.tailscale.com/derpmap/default"` |  |
+| headscale.derp.regions | object | `{}` |  |
 | headscale.policy | string | `""` | Headscale policy ref: https://headscale.net/stable/ref/policy/ |
 | headscale.dns | object | `{"base_domain":"tailscale.cluster.local","extra_records":[],"magic_dns":false,"nameservers":{"global":[],"split":{}},"override_local_dns":false,"search_domains":[]}` | MagicDNS ref: https://headscale.net/stable/ref/dns/ |
 | headscale.dns.search_domains | list | `[]` | Set custom DNS search domains |
@@ -57,7 +59,12 @@ headscale nodes list
 | podSecurityContext | object | `{"fsGroup":65532,"fsGroupChangePolicy":"OnRootMismatch","runAsGroup":65532,"runAsUser":0}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | securityContext | object | `{"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true,"runAsUser":65532}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | service | object | `{"ipFamilies":["IPv4"],"port":{"grpc":50443,"http":80,"metrics":9090},"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
-| ingress | object | `{"annotations":{},"className":"","enabled":false,"hosts":[{"host":"chart-example.local","paths":["/"]}],"tls":[]}` | Clickhouse ingress parameters ref: http://kubernetes.io/docs/user-guide/ingress/ |
+| derp | object | `{"affinity":{},"enabled":false,"image":{"pullPolicy":"IfNotPresent","repository":"ghcr.io/sergelogvinov/tailscale","tag":"1.102.2-derp"},"nodeSelector":{},"ports":{"https":443,"stun":3478},"resources":{},"tls":{"host":"chart-example.local","secretName":"chart-example-tls"},"tolerations":[]}` | ref: https://headscale.net/stable/ref/derp/ |
+| derp.resources | object | `{}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| derp.nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| derp.tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| derp.affinity | object | `{}` | Affinity for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
+| ingress | object | `{"annotations":{},"className":"","enabled":false,"hosts":[{"host":"chart-example.local","paths":["/"]}],"tls":[]}` | Headscale ingress parameters ref: http://kubernetes.io/docs/user-guide/ingress/ |
 | resources | object | `{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | networkPolicy | object | `{"enabled":false}` | Network policy |
 | persistence | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"1Gi"}` | Persistence parameters ref: https://kubernetes.io/docs/user-guide/persistent-volumes/ |

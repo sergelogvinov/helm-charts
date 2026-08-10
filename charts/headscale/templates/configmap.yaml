@@ -41,11 +41,14 @@ data:
       server:
         enabled: false
 
+      {{ with .Values.headscale.derp.urls -}}
       urls:
-        - https://controlplane.tailscale.com/derpmap/default
-      paths: []
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
+      paths:
+        - /etc/headscale/derp.yaml
 
-      auto_update_enabled: false
+      auto_update_enabled: true
       update_frequency: 24h
 
     {{ with .Values.headscale.dns -}}
@@ -67,3 +70,11 @@ data:
 
   policy.json: |
     {{- .Values.headscale.policy | nindent 4 }}
+
+  derp.yaml: |
+    {{- if .Values.headscale.derp.regions }}
+    regions:
+      {{- range $key, $value := .Values.headscale.derp.regions }}
+      {{ $key }}: {{- $value | toYaml | nindent 8 }}
+      {{- end }}
+    {{- end }}

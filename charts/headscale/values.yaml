@@ -33,6 +33,23 @@ headscale:
   #   email_verified_required: true
   #   allowed_domains: []
 
+  derp:
+    urls:
+      - https://controlplane.tailscale.com/derpmap/default
+
+    regions: {}
+      # 900:
+      #   regionid: 900
+      #   regioncode: test
+      #   regionname: Test
+      #   nodes:
+      #     - name: 900a
+      #       regionid: 900
+      #       hostname: test.domain.com
+      #       ipv4: ipv4
+      #       ipv6: ipv6
+      #       canport80: false
+
   # -- Headscale policy
   # ref: https://headscale.net/stable/ref/policy/
   policy: ""
@@ -112,7 +129,42 @@ service:
     metrics: 9090
     grpc: 50443
 
-# -- Clickhouse ingress parameters
+# -- Headscale derp network
+# -- ref: https://headscale.net/stable/ref/derp/
+derp:
+  enabled: false
+
+  image:
+    repository: ghcr.io/sergelogvinov/tailscale
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 1.102.2-derp
+
+  ports:
+    https: 443
+    stun: 3478
+
+  tls:
+    secretName: chart-example-tls
+    host: chart-example.local
+
+  # -- Resource requests and limits.
+  # ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  resources: {}
+
+  # -- Node labels for pod assignment.
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+
+  # -- Tolerations for pod assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+
+  # -- Affinity for pod assignment.
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+
+# -- Headscale ingress parameters
 # ref: http://kubernetes.io/docs/user-guide/ingress/
 ingress:
   enabled: false
