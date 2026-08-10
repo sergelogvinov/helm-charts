@@ -5837,6 +5837,27 @@ entries:
   headscale:
   - apiVersion: v2
     appVersion: v0.29.3
+    created: "2026-08-10T16:06:07.131228281Z"
+    description: A Helm chart
+    digest: b694909ecdf0802aafe44ceb9288adb6037add91903b4ec62d494b1da92258da
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/headscale/icon.png
+    keywords:
+    - headscale
+    - vpn
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: headscale
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/headscale
+    - https://github.com/juanfont/headscale
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/headscale-0.1.0/headscale-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v2
+    appVersion: v0.29.3
     created: "2026-08-01T13:32:52.221516632Z"
     description: A Helm chart
     digest: ce5bc2346d3fc32c09f4a86607f80d445ba4bda09679fb011c2c1a67f9ba5d44
@@ -20160,4 +20181,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-08-03T12:50:12.891721745Z"
+generated: "2026-08-10T16:06:07.1324374Z"
