@@ -1,6 +1,6 @@
 # infisical
 
-![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.162.15](https://img.shields.io/badge/AppVersion-v0.162.15-informational?style=flat-square)
+![Version: 0.4.3](https://img.shields.io/badge/Version-0.4.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.162.19](https://img.shields.io/badge/AppVersion-v0.162.19-informational?style=flat-square)
 
 nfisical is the open-source platform for secrets, certificates, and privileged access management.
 
