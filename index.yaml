@@ -5921,6 +5921,28 @@ entries:
     version: 0.0.1
   infisical:
   - apiVersion: v2
+    appVersion: v0.162.19
+    created: "2026-08-13T18:00:38.995900116Z"
+    description: nfisical is the open-source platform for secrets, certificates, and
+      privileged access management.
+    digest: 434be920d667eea20de117b4c0a9501d077b27859788a4daa3fce761e61fb53c
+    home: https://github.com/sergelogvinov/helm-charts
+    icon: https://raw.githubusercontent.com/sergelogvinov/helm-charts/main/charts/infisical/icon.png
+    keywords:
+    - infisical
+    - secrets
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: infisical
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/infisical
+    - https://github.com/Infisical/infisical
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/infisical-0.4.3/infisical-0.4.3.tgz
+    version: 0.4.3
+  - apiVersion: v2
     appVersion: v0.162.15
     created: "2026-08-01T13:34:17.075379404Z"
     description: nfisical is the open-source platform for secrets, certificates, and
@@ -20303,4 +20325,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-08-13T18:00:06.918570098Z"
+generated: "2026-08-13T18:00:38.997270718Z"
