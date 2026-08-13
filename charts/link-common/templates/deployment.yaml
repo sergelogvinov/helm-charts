@@ -155,15 +155,13 @@ spec:
               value: "true"
             - name: TS_LOCAL_ADDR_PORT
               value: "0.0.0.0:9586"
-            - name: TS_KUBE_SECRET
-              value: {{ include "link-common.fullname" . }}-state
             - name: TS_SOCKET
-              value: /tmp/tailscaled.sock
+              value: "/tmp/tailscaled.sock"
             - name: TS_USERSPACE
               value: "false"
             {{- range $name, $value := .Values.tailscale.envs }}
             - name: {{ $name }}
-              value: {{ $value | quote }}
+              value: {{ tpl $value $ | quote }}
             {{- end }}
             - name: POD_NAME
               valueFrom:
@@ -173,6 +171,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.uid
+          {{- if .Values.tailscale.envsSecrets }}
+          envFrom:
+            - secretRef:
+                name: {{ include "link-common.fullname" . }}-envs
+          {{- end }}
           ports:
             {{- if .Values.tailscale.tailscalePort }}
             - name: tailscale

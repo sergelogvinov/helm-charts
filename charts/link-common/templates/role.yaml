@@ -13,4 +13,7 @@ rules:
     # resourceNames: ["{{ include "link-common.fullname" . }}-state"]
     resources: ["secrets"]
     verbs: ["get", "create", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["get", "create", "patch"]
 {{- end }}

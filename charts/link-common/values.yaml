@@ -115,13 +115,25 @@ tailscale:
     pullPolicy: IfNotPresent
     tag: "1.102.2"
 
+  # Tailscale containerboot environment variables
+  # refs: https://pkg.go.dev/tailscale.com/cmd/containerboot
+  envsSecrets: {}
+    # TS_AUTH_ONCE: true
+    # TS_AUTHKEY: ""
+    # TS_KUBE_SECRET: '{{ include "link-common.fullname" . }}-state'
+
+  # Tailscale containerboot environment variables
+  # refs: https://pkg.go.dev/tailscale.com/cmd/containerboot
   envs: {}
     # TS_EXTRA_ARGS: "--advertise-tags=tag:link --accept-dns=false --accept-routes=false"
+    # TS_ROUTES: "192.168.1.0/24"
 
   # -- Tailscale incoming port.
   # uses as container hostPort.
   tailscalePort: ~ # 57039
 
+  # -- Container Security Context.
+  # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   securityContext:
     seccompProfile:
       type: RuntimeDefault

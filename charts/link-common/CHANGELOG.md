@@ -1,1 +1,1 @@
-- feat: add tailscale
+- fix: add tailscale secrets
