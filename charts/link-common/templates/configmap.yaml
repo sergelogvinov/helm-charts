@@ -91,6 +91,8 @@ data:
       server {{ .name }} {{ .backend }} resolvers clusterdns
     {{- end }}
 
+  {{- if .Values.wireguard.enabled }}
   wireguard.sh: |
     #!/bin/sh
     wg-quick up /etc/wireguard/wg0.conf
+  {{- end }}

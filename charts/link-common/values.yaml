@@ -53,8 +53,9 @@ service:
   ipFamilies: [IPv4]
   # enable headless service too for direct access to pods, e.g. for stateful applications or to access services via VPN
   enableHeadlessService: false
-  ports:
-    []
+
+  # Expose services local or external
+  ports: []
     # - name: postgres
     #   port: 5432
     #   backend: postgres.default.svc.cluster.local:5432
@@ -67,8 +68,7 @@ certManager:
 
   dnsName: ~
 
-  clients:
-    []
+  clients: []
     # - user1
     # - user2
 
@@ -92,8 +92,7 @@ wireguard:
   #   wg genkey | tee privatekey | wg pubkey > publickey
   wireguardKey: ""
 
-  peers:
-    {}
+  peers: {}
     # peer-1:
     #   endpoint: 1.2.3.4:51820
     #   publicKey: Dpj+rWfq5zVNr7vlREef2Ug5Y8w4gDSPF/da4tZj0T0=
@@ -107,6 +106,48 @@ wireguard:
       repository: mindflavor/prometheus-wireguard-exporter
       pullPolicy: IfNotPresent
       tag: 3.6.6
+
+tailscale:
+  enabled: false
+
+  image:
+    repository: ghcr.io/sergelogvinov/tailscale
+    pullPolicy: IfNotPresent
+    tag: "1.102.2"
+
+  envs: {}
+    # TS_EXTRA_ARGS: "--advertise-tags=tag:link --accept-dns=false --accept-routes=false"
+
+  # -- Tailscale incoming port.
+  # uses as container hostPort.
+  tailscalePort: ~ # 57039
+
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      add:
+        - NET_ADMIN
+        - NET_RAW
+        - MKNOD
+        - SETUID
+        - SETGID
+      drop:
+        - ALL
+    privileged: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: false
+    runAsUser: 0
+
+  # -- Resource requests and limits.
+  # ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  resources:
+    limits:
+      cpu: 1
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/

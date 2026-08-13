@@ -32,7 +32,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      automountServiceAccountToken: false
+      automountServiceAccountToken: {{.Values.tailscale.enabled }}
       enableServiceLinks: false
       serviceAccountName: {{ include "link-common.serviceAccountName" . }}
       securityContext:
@@ -130,6 +130,72 @@ spec:
               mountPath: /etc/wireguard
               readOnly: true
         {{- end }}
+        {{- if .Values.tailscale.enabled }}
+        - name: tailscale
+          securityContext:
+            {{- toYaml .Values.tailscale.securityContext | nindent 12 }}
+          image: "{{ .Values.tailscale.image.repository }}:{{ .Values.tailscale.image.tag }}"
+          imagePullPolicy: {{ .Values.tailscale.image.pullPolicy }}
+          command: ["/usr/local/bin/containerboot"]
+          env:
+            - name: HOME
+              value: /tmp
+            - name: TS_HOSTNAME
+              value: {{ include "link-common.fullname" . }}
+            {{- if .Values.tailscale.tailscalePort}}
+            - name: TS_TAILSCALED_EXTRA_ARGS
+              value: "--no-logs-no-support --port={{ .Values.tailscale.tailscalePort | int }}"
+            {{- else}}
+            - name: TS_TAILSCALED_EXTRA_ARGS
+              value: "--no-logs-no-support"
+            {{- end }}
+            - name: TS_ENABLE_HEALTH_CHECK
+              value: "true"
+            - name: TS_ENABLE_METRICS
+              value: "true"
+            - name: TS_LOCAL_ADDR_PORT
+              value: "0.0.0.0:9586"
+            - name: TS_KUBE_SECRET
+              value: {{ include "link-common.fullname" . }}-state
+            - name: TS_SOCKET
+              value: /tmp/tailscaled.sock
+            - name: TS_USERSPACE
+              value: "false"
+            {{- range $name, $value := .Values.tailscale.envs }}
+            - name: {{ $name }}
+              value: {{ $value | quote }}
+            {{- end }}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_UID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.uid
+          ports:
+            {{- if .Values.tailscale.tailscalePort }}
+            - name: tailscale
+              containerPort: {{ .Values.tailscale.tailscalePort | int }}
+              hostPort: {{ .Values.tailscale.tailscalePort | int }}
+              protocol: UDP
+            {{- end }}
+            - name: metrics
+              containerPort: 9586
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: metrics
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 600
+            periodSeconds: 10
+          volumeMounts:
+            - name: run
+              mountPath: /tmp
+        {{- end }}
       volumes:
         - name: command
           configMap:
@@ -138,8 +204,10 @@ spec:
             items:
               - key: haproxy.sh
                 path: haproxy.sh
+              {{- if .Values.wireguard.enabled }}
               - key: wireguard.sh
                 path: wireguard.sh
+              {{- end }}
         - name: config
           configMap:
             name: {{ include "link-common.fullname" . }}

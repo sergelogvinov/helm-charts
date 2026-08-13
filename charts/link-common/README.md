@@ -1,6 +1,6 @@
 # link-common
 
-![Version: 0.4.4](https://img.shields.io/badge/Version-0.4.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.6-alpine3.19](https://img.shields.io/badge/AppVersion-2.8.6--alpine3.19-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.6-alpine3.19](https://img.shields.io/badge/AppVersion-2.8.6--alpine3.19-informational?style=flat-square)
 
 Simple vpn-p2p-link service
 
@@ -85,6 +85,24 @@ wireguard:
 | wireguard.metrics.image.repository | string | `"mindflavor/prometheus-wireguard-exporter"` |  |
 | wireguard.metrics.image.pullPolicy | string | `"IfNotPresent"` |  |
 | wireguard.metrics.image.tag | string | `"3.6.6"` |  |
+| tailscale.enabled | bool | `false` |  |
+| tailscale.image.repository | string | `"ghcr.io/sergelogvinov/tailscale"` |  |
+| tailscale.image.pullPolicy | string | `"IfNotPresent"` |  |
+| tailscale.image.tag | string | `"1.102.2"` |  |
+| tailscale.envs | object | `{}` |  |
+| tailscale.tailscalePort | string | `nil` | Tailscale incoming port. uses as container hostPort. |
+| tailscale.securityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
+| tailscale.securityContext.capabilities.add[0] | string | `"NET_ADMIN"` |  |
+| tailscale.securityContext.capabilities.add[1] | string | `"NET_RAW"` |  |
+| tailscale.securityContext.capabilities.add[2] | string | `"MKNOD"` |  |
+| tailscale.securityContext.capabilities.add[3] | string | `"SETUID"` |  |
+| tailscale.securityContext.capabilities.add[4] | string | `"SETGID"` |  |
+| tailscale.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| tailscale.securityContext.privileged | bool | `false` |  |
+| tailscale.securityContext.readOnlyRootFilesystem | bool | `true` |  |
+| tailscale.securityContext.runAsNonRoot | bool | `false` |  |
+| tailscale.securityContext.runAsUser | int | `0` |  |
+| tailscale.resources | object | `{"limits":{"cpu":1,"memory":"512Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | resources | object | `{"limits":{"cpu":"100m","memory":"64Mi"},"requests":{"cpu":"50m","memory":"32Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | networkPolicy.enabled | bool | `false` | Enable creation of NetworkPolicy resources ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/ |
 | networkPolicy.allowExternal | bool | `false` | Allow traffic from outside |

@@ -18,6 +18,11 @@ spec:
         - port: 51820
           protocol: UDP
     {{- end }}
+    {{- if and .Values.tailscale.enabled .Values.tailscale.tailscalePort }}
+    - ports:
+        - port: {{ .Values.tailscale.tailscalePort | int }}
+          protocol: UDP
+    {{- end }}
     {{- if .Values.service.ports }}
     - ports:
         {{- range $key, $value := .Values.service.ports }}
@@ -41,7 +46,7 @@ spec:
         {{- end }}
       {{- end }}
     {{- end }}
-    {{- if .Values.wireguard.metrics.enabled }}
+    {{- if or .Values.wireguard.metrics.enabled .Values.tailscale.enabled }}
     # Allow scrapes for metrics
     - ports:
         - port: 9586
