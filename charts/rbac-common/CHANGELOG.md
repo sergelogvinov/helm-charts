@@ -1,0 +1,1 @@
+- Added permissions to be able to add clickhouse instances from cicd
