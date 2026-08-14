@@ -86,7 +86,6 @@ spec:
             - -kubernetes-https-redirect
             - -kubernetes-https-redirect-code=301
             - -enable-kubernetes-endpointslices=true
-            - -source-poll-timeout=30000
             #
             - -proxy-preserve-host
             - -wait-first-route-load
@@ -115,10 +114,14 @@ spec:
             {{- range $value := .Values.args }}
             - {{ $value }}
             {{- end }}
-          {{- with .Values.env }}
           env:
+          {{- with .Values.env }}
             {{- . | toYaml | nindent 12 }}
           {{- end }}
+            - name: TOPOLOGY_ZONE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['topology.kubernetes.io/zone']
           ports:
             {{- if .Values.hostPort.ports.http }}
             - name: http

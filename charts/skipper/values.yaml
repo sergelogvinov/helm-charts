@@ -19,6 +19,7 @@ env: []
 
 # -- Skipper arguments
 args: []
+  # - -kubernetes-topology-zone=$(TOPOLOGY_ZONE)
   # - -enable-proxy-protocol
   # - -proxy-allow-cidrs="::0/0,0.0.0.0/0"
 

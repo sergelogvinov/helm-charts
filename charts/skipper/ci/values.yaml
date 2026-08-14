@@ -10,5 +10,14 @@ ingressClassResource:
 
 priorityClassName: system-cluster-critical
 
+env:
+  - name: KEY
+    value: VAL
+
+args:
+  - -kubernetes-topology-zone=$(TOPOLOGY_ZONE)
+  - -enable-proxy-protocol
+  - -proxy-allow-cidrs="::0/0,0.0.0.0/0"
+
 useDaemonSet: true
 terminationGracePeriodSeconds: 120
