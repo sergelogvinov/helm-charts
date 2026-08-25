@@ -1,1 +1,1 @@
-- fix: cnpg vpa
+- update ghcr.io/sergelogvinov/postgresql (16.14 → 16.15)
