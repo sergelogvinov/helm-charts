@@ -1,0 +1,1 @@
+- update ghcr.io/sergelogvinov/pgbouncer (16.14 → 16.15)
