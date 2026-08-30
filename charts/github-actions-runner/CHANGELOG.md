@@ -1,1 +1,1 @@
-- update ghcr.io/sergelogvinov/github-actions-runner (2.335.1 → 2.336.0)
+- update ghcr.io/sergelogvinov/github-actions-runner (2.336.0 → 2.337.0)
