@@ -113,7 +113,7 @@ tailscale:
   image:
     repository: ghcr.io/sergelogvinov/tailscale
     pullPolicy: IfNotPresent
-    tag: "1.102.2"
+    tag: "1.102.3"
 
   # Tailscale containerboot environment variables
   # refs: https://pkg.go.dev/tailscale.com/cmd/containerboot

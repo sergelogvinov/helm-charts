@@ -1,1 +1,1 @@
-- update ghcr.io/sergelogvinov/tailscale (1.98.10 → 1.102.2)
+- update ghcr.io/sergelogvinov/tailscale ghcr.io/sergelogvinov/tailscale (1.102.2 → 1.102.3)
