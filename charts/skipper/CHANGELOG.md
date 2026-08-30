@@ -1,1 +1,1 @@
-- update ghcr.io/zalando/skipper (v0.27.54 → v0.27.65)
+- update ghcr.io/zalando/skipper (v0.27.65 → v0.27.78)
