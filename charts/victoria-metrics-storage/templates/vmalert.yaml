@@ -7,10 +7,10 @@ metadata:
 spec:
   disableAutomountServiceAccountToken: true
   priorityClassName: {{ .Values.priorityClassName | quote }}
-  {{- if not .Values.vmalert.autoscaling.enabled }}
-  replicaCount: {{ .Values.vmalert.replicaCount }}
+  {{- if not .Values.vmAlert.autoscaling.enabled }}
+  replicaCount: {{ .Values.vmAlert.replicaCount }}
   {{- end }}
-  {{- with .Values.vmalert.image }}
+  {{- with .Values.vmAlert.image }}
   image:
     {{- toYaml . | nindent 6 }}
   {{- end }}
@@ -31,34 +31,38 @@ spec:
   evaluationInterval: "60s"
 
   secrets:
-    {{- toYaml .Values.vmalert.secrets | nindent 4 }}
+    {{- toYaml .Values.vmAlert.secrets | nindent 4 }}
   configMaps:
-    {{- toYaml .Values.vmalert.configMaps | nindent 4 }}
+    {{- toYaml .Values.vmAlert.configMaps | nindent 4 }}
   rulePath:
-    {{- toYaml .Values.vmalert.rulePath | nindent 4 }}
+    {{- toYaml .Values.vmAlert.rulePath | nindent 4 }}
+
+  extraArgs:
+    {{- toYaml .Values.vmAlert.extraArgs | nindent 4 }}
+  logLevel: INFO
 
   datasource:
     url: "http://vmselect-{{ include "victoria-metrics-storage.fullname" . }}:8481/select/0/prometheus/"
   remoteWrite:
     url: "http://vminsert-{{ include "victoria-metrics-storage.fullname" . }}:8480/insert/0/prometheus/"
+  remoteRead:
+    url: "http://vmselect-{{ include "victoria-metrics-storage.fullname" . }}:8480/insert/0/prometheus/"
+  notifier:
+    url: "http://prometheus-alertmanager:9093"
 
-  {{- with .Values.vmalert.extraArgs }}
-  extraArgs:
-    {{- toYaml . | nindent 6 }}
-  {{- end }}
-  {{- with .Values.vmalert.resources }}
+  {{- with .Values.vmAlert.resources }}
   resources:
-    {{- toYaml . | nindent 6 }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- with .Values.vmalert.nodeSelector }}
+  {{- with .Values.vmAlert.nodeSelector }}
   nodeSelector:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- with .Values.vmalert.affinity }}
+  {{- with .Values.vmAlert.affinity }}
   affinity:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- with .Values.vmalert.tolerations }}
+  {{- with .Values.vmAlert.tolerations }}
   tolerations:
     {{- toYaml . | nindent 4 }}
   {{- end }}

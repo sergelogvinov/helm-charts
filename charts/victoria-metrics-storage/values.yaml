@@ -6,7 +6,7 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-vmstorage:
+vmStorage:
   replicaCount: 1
   autoscaling:
     enabled: false
@@ -50,7 +50,7 @@ vmstorage:
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
 
-vmselect:
+vmSelect:
   replicaCount: 1
   autoscaling:
     enabled: false
@@ -94,7 +94,7 @@ vmselect:
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
 
-vminsert:
+vmInsert:
   replicaCount: 1
   autoscaling:
     enabled: false
@@ -127,7 +127,7 @@ vminsert:
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
 
-vmalert:
+vmAlert:
   replicaCount: 1
   autoscaling:
     enabled: false
@@ -135,6 +135,7 @@ vmalert:
   extraArgs:
     enableTCP6: "true"
 
+  secrets: []
   configMaps: []
   rulePath: []
 

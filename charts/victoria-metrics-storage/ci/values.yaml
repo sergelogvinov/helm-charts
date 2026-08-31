@@ -1,7 +1,7 @@
 fullnameOverride: vmcluster
 priorityClassName: system-cluster-critical
 
-vmstorage:
+vmStorage:
   resources:
     limits:
       cpu: "4"
@@ -21,7 +21,7 @@ vmstorage:
     storageClass: proxmox
     size: 10Gi
 
-vmselect:
+vmSelect:
   resources:
     limits:
       cpu: "2"
@@ -30,7 +30,7 @@ vmselect:
       cpu: "500m"
       memory: "500Mi"
 
-vminsert:
+vmInsert:
   resources:
     limits:
       cpu: "2"
