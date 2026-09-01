@@ -22,7 +22,7 @@ jobs:
 
       # Everything runs in container, use docker-cmd-file to add packages
       - name: Renovate
-        uses: renovatebot/github-action@1a96852b0384df1837619d04c60b2d10d1f9ff08 # v46.1.21
+        uses: renovatebot/github-action@5402b206248e5a8c8427a15102702eb9c1793efc # v46.2.4
         with:
           renovate-image: ghcr.io/sergelogvinov/renovate
           renovate-version: 40
