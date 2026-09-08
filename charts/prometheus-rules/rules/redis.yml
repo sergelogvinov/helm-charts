@@ -52,7 +52,7 @@
           }} {{ $labels.kubernetes_pod_name }} - {{ $value | humanize }}
         summary: Free redis memory less then 10%
     - alert: RedisMissingBackup
-      expr: time() - redis_rdb_last_save_timestamp_seconds > 60 * 60 * 24 * 7
+      expr: (time() - redis_rdb_last_save_timestamp_seconds > 60 * 60 * 24 * 7) and ((redis_rdb_changes_since_last_save != 0) or (redis_aof_enabled != 0))
       for: 5m
       labels:
         severity: warning
