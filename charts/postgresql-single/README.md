@@ -1,6 +1,6 @@
 # postgresql-single
 
-![Version: 1.15.0](https://img.shields.io/badge/Version-1.15.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.15](https://img.shields.io/badge/AppVersion-16.15-informational?style=flat-square)
+![Version: 1.15.1](https://img.shields.io/badge/Version-1.15.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 16.15](https://img.shields.io/badge/AppVersion-16.15-informational?style=flat-square)
 
 Postgres with backup/restore and replication
 
@@ -153,9 +153,9 @@ metrics:
 | backup.recovery | bool | `false` |  |
 | backup.recoveryMethod | string | `"backup"` |  |
 | backup.walpush | bool | `false` |  |
+| backup.walgSecrets | string | `""` |  |
 | backup.walg | object | `{}` |  |
 | backup.walgSourceConfig | string | `nil` |  |
-| backup.walgSecrets | string | `nil` |  |
 | backup.cleanPolicy | string | `"retain FULL 3"` |  |
 | backup.schedule | string | `"15 4 * * *"` | Backup schedule. set value "" to disable cron backup refs: https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/ |
 | backup.resources | object | `{"limits":{"cpu":2,"memory":"4Gi"},"requests":{"cpu":"1500m","memory":"768Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |

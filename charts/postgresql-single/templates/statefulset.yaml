@@ -192,7 +192,11 @@ spec:
       {{- if or .Values.backup.enabled .Values.backup.recovery }}
         - name: config
           secret:
-            secretName:  {{ include "postgresql-single.fullname" . }}
+          {{- if .Values.backup.walgSecrets }}
+            secretName: {{ .Values.backup.walgSecrets }}
+          {{- else }}
+            secretName: {{ include "postgresql-single.fullname" . }}
+          {{- end }}
             defaultMode: 256
             items:
               - key: walg.yaml

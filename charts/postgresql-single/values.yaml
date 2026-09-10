@@ -326,6 +326,11 @@ backup:
   recoveryMethod: backup
 
   walpush: false
+
+  ## -- Walg config file in kubernetes secrets with key walg.yaml
+  ## It contains `yaml` format values
+  walgSecrets: ""
+
   walg: {}
     # WALG_TAR_DISABLE_FSYNC: true
     # WALG_COMPRESSION_METHOD: brotli
@@ -335,7 +340,6 @@ backup:
     # AWS_ACCESS_KEY_ID: aaaa
     # AWS_SECRET_ACCESS_KEY: bbbb
   walgSourceConfig: ~
-  walgSecrets: ~
 
   cleanPolicy: "retain FULL 3"
 
