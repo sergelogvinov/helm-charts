@@ -502,6 +502,27 @@ metrics:
         - local_blks_hit:
             usage: "COUNTER"
             description: "Total number of local block cache hits by the statement"
+        - local_blks_read:
+            usage: "COUNTER"
+            description: "Total number of local blocks read by the statement"
+        - local_blks_dirtied:
+            usage: "COUNTER"
+            description: "Total number of local blocks dirtied by the statement"
+        - local_blks_written:
+            usage: "COUNTER"
+            description: "Total number of local blocks written by the statement"
+        - temp_blks_read:
+            usage: "COUNTER"
+            description: "Total number of temporary blocks read by the statement"
+        - temp_blks_written:
+            usage: "COUNTER"
+            description: "Total number of temporary blocks written by the statement"
+        - blk_read_time:
+            usage: "COUNTER"
+            description: "Total time spent reading blocks by the statement, in milliseconds"
+        - blk_write_time:
+            usage: "COUNTER"
+            description: "Total time spent writing blocks by the statement, in milliseconds"
     {{- end }}
     pg_stat_activity_idle:
       query: |
