@@ -1,1 +1,1 @@
-- update altinity/clickhouse-backup (2.7.4 → 2.8.0)
+- update altinity/clickhouse-backup (2.8.0 → 2.8.1)
