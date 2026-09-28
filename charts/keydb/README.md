@@ -1,6 +1,6 @@
 # keydb
 
-![Version: 0.31.0](https://img.shields.io/badge/Version-0.31.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.3](https://img.shields.io/badge/AppVersion-6.3.3-informational?style=flat-square)
+![Version: 0.31.1](https://img.shields.io/badge/Version-0.31.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.3](https://img.shields.io/badge/AppVersion-6.3.3-informational?style=flat-square)
 
 KeyDB with TLS, backup/restore support
 
@@ -104,6 +104,12 @@ metrics:
 | loadbalancer.resources.limits.memory | string | `"64Mi"` |  |
 | loadbalancer.resources.requests.cpu | string | `"100m"` |  |
 | loadbalancer.resources.requests.memory | string | `"32Mi"` |  |
+| loadbalancer.autoscaling | object | `{"controlledResources":["cpu","memory"],"controlledValues":"RequestsOnly","enabled":false,"maxAllowed":{},"minAllowed":{},"updatePolicy":{"updateMode":"InPlaceOrRecreate"}}` | Vertical pod autoscaler ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/vertical-pod-autoscale/ |
+| loadbalancer.autoscaling.controlledResources | list | `["cpu","memory"]` | Resource to control Possible values are "cpu" and "memory" |
+| loadbalancer.autoscaling.controlledValues | string | `"RequestsOnly"` | Controls which resource value should be autoscaled Possible values are "RequestsAndLimits" and "RequestsOnly" |
+| loadbalancer.autoscaling.maxAllowed | object | `{}` | Max allowed resources for the pod default is resources.limits |
+| loadbalancer.autoscaling.minAllowed | object | `{}` | Min allowed resources for the pod default is resources.requests |
+| loadbalancer.autoscaling.updatePolicy | object | `{"updateMode":"InPlaceOrRecreate"}` | Update policy Possible values are "Off", "Initial", "Recreate", "InPlaceOrRecreate" and "Auto" |
 | loadbalancer.livenessProbe.initialDelaySeconds | int | `10` |  |
 | loadbalancer.livenessProbe.timeoutSeconds | int | `1` |  |
 | loadbalancer.livenessProbe.successThreshold | int | `1` |  |
