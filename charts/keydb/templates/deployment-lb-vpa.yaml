@@ -14,7 +14,7 @@ spec:
     updateMode: {{ .Values.loadbalancer.autoscaling.updatePolicy.updateMode }}
   resourcePolicy:
     containerPolicies:
-      - containerName: {{ .Chart.Name }}
+      - containerName: {{ .Chart.Name }}-loadbalancer
         {{- with (merge .Values.loadbalancer.autoscaling.maxAllowed .Values.loadbalancer.resources.limits) }}
         maxAllowed:
           {{- toYaml . | nindent 10 }}

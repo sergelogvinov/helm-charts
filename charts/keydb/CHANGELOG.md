@@ -1,1 +1,1 @@
-- feat(container): update oliver006/redis_exporter (v1.89.0 → v1.90.0)
+- feat: lb vpa
