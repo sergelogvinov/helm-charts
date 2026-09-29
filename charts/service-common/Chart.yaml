@@ -14,7 +14,7 @@ maintainers:
     url: https://github.com/sergelogvinov
 #
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.3.16
+version: 0.3.17
 #
 # renovate: datasource=docker depName=haproxy
-appVersion: 2.8.28
+appVersion: 2.8.30
