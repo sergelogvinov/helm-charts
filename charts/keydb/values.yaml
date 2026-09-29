@@ -176,7 +176,7 @@ metrics:
   image:
     repository: oliver006/redis_exporter
     pullPolicy: IfNotPresent
-    tag: v1.90.0
+    tag: v1.92.1
 
   resources:
     limits:
