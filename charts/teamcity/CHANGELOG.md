@@ -1,1 +1,1 @@
-- update ghcr.io/sergelogvinov/teamcity (2026.1.2 → 2026.1.3)
+- update ghcr.io/sergelogvinov/teamcity (2026.1.3 → 2026.2.1)
