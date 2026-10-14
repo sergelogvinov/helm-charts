@@ -1,6 +1,6 @@
 # bitwarden
 
-![Version: 0.10.3](https://img.shields.io/badge/Version-0.10.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.37.3](https://img.shields.io/badge/AppVersion-1.37.3-informational?style=flat-square)
+![Version: 0.10.4](https://img.shields.io/badge/Version-0.10.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.37.4](https://img.shields.io/badge/AppVersion-1.37.4-informational?style=flat-square)
 
 A Helm chart to deploy Bitwarden.
 
