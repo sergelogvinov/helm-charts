@@ -138,7 +138,7 @@ derp:
     repository: ghcr.io/sergelogvinov/tailscale
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: 1.102.2-derp
+    tag: 1.102.5-derp
 
   ports:
     https: 443
