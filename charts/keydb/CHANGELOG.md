@@ -1,1 +1,1 @@
-- feat: lb vpa
+- update oliver006/redis_exporter (v1.90.0 → v1.93.0)
