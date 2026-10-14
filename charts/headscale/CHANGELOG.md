@@ -1,1 +1,1 @@
-- update ghcr.io/juanfont/headscale (v0.29.3 → v0.29.4)
+- update ghcr.io/juanfont/headscale (v0.29.4 → v0.29.5)
