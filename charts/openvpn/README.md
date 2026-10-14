@@ -1,6 +1,6 @@
 # openvpn
 
-![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.7.3](https://img.shields.io/badge/AppVersion-2.7.3-informational?style=flat-square)
+![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.7.3](https://img.shields.io/badge/AppVersion-2.7.3-informational?style=flat-square)
 
 OpenVPN in kubernetes
 
@@ -101,6 +101,47 @@ vpn-%: ## create certificate for vpn
 	kubectl --namespace vpn get configmap openvpn -o jsonpath="{.data.client\.conf}" > client.ovpn
 ```
 
+## Network policy
+
+The chart enables an egress NetworkPolicy by default. It allows cluster DNS on
+TCP/UDP port 53 and IPv4 destinations outside `10.0.0.0/8`, `172.16.0.0/12`, and
+`192.168.0.0/16` (RFC1918). IPv6 egress is allowed. Ingress is unaffected.
+Cluster DNS is selected using `k8s-app: kube-dns` in the `kube-system` namespace;
+customize the DNS selectors if your cluster uses different labels.
+
+For NodeLocal DNS or a CNI that filters DNS traffic using the DNS service IP,
+add the resolver address as a CIDR in `networkPolicy.dns.ipBlocks`:
+
+```yaml
+networkPolicy:
+  dns:
+    ipBlocks:
+      - 169.254.20.10/32
+```
+
+Private service backends configured in `service.ports` require an explicit
+exception in `networkPolicy.extraEgress`, for example:
+
+```yaml
+networkPolicy:
+  extraEgress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: default
+          podSelector:
+            matchLabels:
+              app: postgres
+      ports:
+        - port: 5432
+          protocol: TCP
+```
+
+Set `networkPolicy.enabled: false` to disable the chart's policy. Enforcement
+requires a CNI that supports NetworkPolicy. Other policies selecting these pods
+can allow additional traffic because Kubernetes NetworkPolicies are additive.
+See the [Kubernetes NetworkPolicy documentation](https://kubernetes.io/docs/concepts/services-networking/network-policies/).
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -140,6 +181,12 @@ vpn-%: ## create certificate for vpn
 | securityContext | object | `{"capabilities":{"add":["NET_ADMIN","MKNOD","SETUID","SETGID"],"drop":["ALL"]},"runAsGroup":101,"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | service | object | `{"annotations":{},"image":{"pullPolicy":"IfNotPresent","repository":"ghcr.io/sergelogvinov/haproxy","tag":"3.3.10-alpine3.23"},"ipFamilies":["IPv4"],"port":1190,"ports":[],"proto":"udp","type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
 | service.proto | string | `"udp"` | Protocol for service. Can be TCP, UDP or All. |
+| networkPolicy | object | `{"dns":{"ipBlocks":[],"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"kube-system"}},"podSelector":{"matchLabels":{"k8s-app":"kube-dns"}}},"enabled":false,"extraEgress":[]}` | Netwok policy ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/ |
+| networkPolicy.enabled | bool | `false` | Enable egress filtering: allow cluster DNS and non-RFC1918 destinations. |
+| networkPolicy.dns.namespaceSelector | object | `{"matchLabels":{"kubernetes.io/metadata.name":"kube-system"}}` | Namespace selector for cluster DNS pods. |
+| networkPolicy.dns.podSelector | object | `{"matchLabels":{"k8s-app":"kube-dns"}}` | Pod selector for cluster DNS (CoreDNS and kube-dns). |
+| networkPolicy.dns.ipBlocks | list | `[]` | Additional DNS resolver CIDRs allowed on TCP/UDP port 53, for example a DNS service IP or NodeLocal DNS address. |
+| networkPolicy.extraEgress | list | `[]` | Additional egress rules, for example to allow private service backends. |
 | resources | object | `{"limits":{"cpu":1,"memory":"128Mi"},"requests":{"cpu":"100m","memory":"32Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | useDaemonSet | bool | `false` | Use a daemonset instead of a deployment |
 | updateStrategy | object | `{"rollingUpdate":{"maxUnavailable":1},"type":"RollingUpdate"}` | pod deployment update strategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |

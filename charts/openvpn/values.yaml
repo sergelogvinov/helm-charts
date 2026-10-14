@@ -202,6 +202,27 @@ service:
     pullPolicy: IfNotPresent
     tag: 3.3.10-alpine3.23
 
+# -- Netwok policy
+# ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+networkPolicy:
+  # -- Enable egress filtering: allow cluster DNS and non-RFC1918 destinations.
+  enabled: false
+
+  dns:
+    # -- Namespace selector for cluster DNS pods.
+    namespaceSelector:
+      matchLabels:
+        kubernetes.io/metadata.name: kube-system
+    # -- Pod selector for cluster DNS (CoreDNS and kube-dns).
+    podSelector:
+      matchLabels:
+        k8s-app: kube-dns
+    # -- Additional DNS resolver CIDRs allowed on TCP/UDP port 53, for example a DNS service IP or NodeLocal DNS address.
+    ipBlocks: []
+
+  # -- Additional egress rules, for example to allow private service backends.
+  extraEgress: []
+
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:

@@ -1,1 +1,1 @@
-- feat: multi-socket support
+- feat: egress network policy
