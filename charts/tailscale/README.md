@@ -1,6 +1,6 @@
 # tailscale
 
-![Version: 0.18.2](https://img.shields.io/badge/Version-0.18.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.102.5](https://img.shields.io/badge/AppVersion-1.102.5-informational?style=flat-square)
+![Version: 0.19.1](https://img.shields.io/badge/Version-0.19.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.102.5](https://img.shields.io/badge/AppVersion-1.102.5-informational?style=flat-square)
 
 Tailscale mesh network.
 
@@ -100,6 +100,47 @@ Tailscale acls https://login.tailscale.com/admin/acls
 It's important to note that Tailscale exit nodes are intended for personal use only,
 and should not be used for commercial purposes or to violate the terms of service of any websites or services you are accessing through the exit node.
 
+## Network policy
+
+The chart enables an egress NetworkPolicy by default. It allows cluster DNS on
+TCP/UDP port 53 and IPv4 destinations outside `10.0.0.0/8`, `172.16.0.0/12`, and
+`192.168.0.0/16` (RFC1918). IPv6 egress is allowed. Ingress is unaffected.
+Cluster DNS is selected using `k8s-app: kube-dns` in the `kube-system` namespace;
+customize the DNS selectors if your cluster uses different labels.
+
+For NodeLocal DNS or a CNI that filters DNS traffic using the DNS service IP,
+add the resolver address as a CIDR in `networkPolicy.dns.ipBlocks`:
+
+```yaml
+networkPolicy:
+  dns:
+    ipBlocks:
+      - 169.254.20.10/32
+```
+
+Private service backends configured in `service.ports` require an explicit
+exception in `networkPolicy.extraEgress`, for example:
+
+```yaml
+networkPolicy:
+  extraEgress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: default
+          podSelector:
+            matchLabels:
+              app: postgres
+      ports:
+        - port: 5432
+          protocol: TCP
+```
+
+Set `networkPolicy.enabled: false` to disable the chart's policy. Enforcement
+requires a CNI that supports NetworkPolicy. Other policies selecting these pods
+can allow additional traffic because Kubernetes NetworkPolicies are additive.
+See the [Kubernetes NetworkPolicy documentation](https://kubernetes.io/docs/concepts/services-networking/network-policies/).
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -127,7 +168,12 @@ and should not be used for commercial purposes or to violate the terms of servic
 | service.ipFamilies | list | `["IPv4","IPv6"]` | P2P network family |
 | resources | object | `{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | dnsPolicy | string | `"Local"` | DNS Policy for pod ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/ ClusterFirst or Local |
-| networkPolicy | object | `{"enabled":false}` | Network Policy parameters. ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/ |
+| networkPolicy | object | `{"dns":{"ipBlocks":[],"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"kube-system"}},"podSelector":{"matchLabels":{"k8s-app":"kube-dns"}}},"enabled":false,"extraEgress":[]}` | Network Policy parameters. ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/ |
+| networkPolicy.enabled | bool | `false` | Enable egress filtering: allow cluster DNS, the Kubernetes API, and non-RFC1918 destinations. |
+| networkPolicy.dns.namespaceSelector | object | `{"matchLabels":{"kubernetes.io/metadata.name":"kube-system"}}` | Namespace selector for cluster DNS pods. |
+| networkPolicy.dns.podSelector | object | `{"matchLabels":{"k8s-app":"kube-dns"}}` | Pod selector for cluster DNS (CoreDNS and kube-dns). |
+| networkPolicy.dns.ipBlocks | list | `[]` | Additional DNS resolver CIDRs allowed on TCP/UDP port 53, for example a DNS service IP or NodeLocal DNS address. |
+| networkPolicy.extraEgress | list | `[]` | Additional egress rules, for example to allow private peers or subnet destinations. |
 | useDaemonSet | bool | `false` | Use a daemonset instead of a deployment |
 | updateStrategy | object | `{"rollingUpdate":{"maxUnavailable":1},"type":"RollingUpdate"}` | pod deployment update strategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |
 | extraVolumeMounts | list | `[]` | Additional container volume mounts. |

@@ -113,7 +113,23 @@ dnsPolicy: Local
 # -- Network Policy parameters.
 # ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 networkPolicy:
+  # -- Enable egress filtering: allow cluster DNS, the Kubernetes API, and non-RFC1918 destinations.
   enabled: false
+
+  dns:
+    # -- Namespace selector for cluster DNS pods.
+    namespaceSelector:
+      matchLabels:
+        kubernetes.io/metadata.name: kube-system
+    # -- Pod selector for cluster DNS (CoreDNS and kube-dns).
+    podSelector:
+      matchLabels:
+        k8s-app: kube-dns
+    # -- Additional DNS resolver CIDRs allowed on TCP/UDP port 53, for example a DNS service IP or NodeLocal DNS address.
+    ipBlocks: []
+
+  # -- Additional egress rules, for example to allow private peers or subnet destinations.
+  extraEgress: []
 
 # -- Use a daemonset instead of a deployment
 useDaemonSet: false

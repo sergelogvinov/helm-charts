@@ -1,1 +1,1 @@
-- update ghcr.io/sergelogvinov/tailscale ghcr.io/sergelogvinov/tailscale ghcr.io/sergelogvinov/tailscale (1.102.3 → 1.102.5)
+- fix(container): update ghcr.io/sergelogvinov/tailscale to v1.102.5
