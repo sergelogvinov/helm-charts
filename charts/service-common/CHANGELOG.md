@@ -1,1 +1,1 @@
-- update haproxy (2.8.28 → 2.8.30)
+- update haproxy (2.8.30 → 2.8.31)
