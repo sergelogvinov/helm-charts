@@ -1,1 +1,1 @@
-- update ghcr.io/sergelogvinov/fluentd (1.19.3 → 1.19.4)
+- fix: metrics bind address

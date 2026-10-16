@@ -69,6 +69,7 @@ data:
     <source>
       @type prometheus
       port 24231
+      bind 0.0.0.0
     </source>
 
     <source>
