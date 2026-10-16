@@ -92,8 +92,8 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
         {{- if .Values.dns.enabled }}
         - name: {{ .Chart.Name }}-dns
-          image: registry.k8s.io/coredns/coredns:v1.12.4
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.dns.image.repository }}:{{ .Values.dns.image.tag }}"
+          imagePullPolicy: {{ .Values.dns.image.pullPolicy }}
           args: [ "-conf", "/etc/coredns/Corefile" ]
           env:
             - name: GOMAXPROCS

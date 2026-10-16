@@ -22,8 +22,7 @@ certManager:
   commonName: ~
 
   # -- Subject for the certificate.
-  subject:
-    {}
+  subject: {}
     # countries:
     #   - US
     # organizations:
@@ -32,8 +31,7 @@ certManager:
   # -- If clientConfigRBAC = true, clients list is kubernetes username.
   clientConfigRBAC: false
   # -- List of clients.
-  clients:
-    []
+  clients: []
     # - user1@dmain.com
     # - user2
 
@@ -43,6 +41,11 @@ clusterDomain: ~
 dns:
   # -- Create a DNS server in the pod.
   enabled: false
+
+  image:
+    repository: registry.k8s.io/coredns/coredns
+    pullPolicy: IfNotPresent
+    tag: v1.14.7
 
   forward: |
     forward . tls://1.1.1.1 tls://1.0.0.1 {
@@ -126,8 +129,7 @@ openvpn:
     #
 
   # -- TLS version and ciphers.
-  tlsversion:
-    {}
+  tlsversion: {}
     # tls-version-min: 1.2
     ## openvpn --show-tls
     # tls-cipher: TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256
@@ -190,8 +192,7 @@ service:
 
   annotations: {}
 
-  ports:
-    []
+  ports: []
     # - name: postgres
     #   port: 5432
     #   backend: postgres.default.svc.cluster.local:5432
