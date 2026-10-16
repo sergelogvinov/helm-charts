@@ -1,1 +1,1 @@
-- fix(container): update ghcr.io/sergelogvinov/tailscale to v1.102.5
+- fix: tailscale firewall

@@ -110,10 +110,16 @@ resources:
 # ClusterFirst or Local
 dnsPolicy: Local
 
+dns:
+  image:
+    repository: registry.k8s.io/coredns/coredns
+    pullPolicy: IfNotPresent
+    tag: v1.14.7
+
 # -- Network Policy parameters.
 # ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 networkPolicy:
-  # -- Enable egress filtering: allow cluster DNS, the Kubernetes API, and non-RFC1918 destinations.
+  # -- Enable egress filtering: allow cluster DNS and non-RFC1918 destinations.
   enabled: false
 
   dns:

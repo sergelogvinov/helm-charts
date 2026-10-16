@@ -1,6 +1,6 @@
 # tailscale
 
-![Version: 0.19.1](https://img.shields.io/badge/Version-0.19.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.102.5](https://img.shields.io/badge/AppVersion-1.102.5-informational?style=flat-square)
+![Version: 0.19.2](https://img.shields.io/badge/Version-0.19.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.102.5](https://img.shields.io/badge/AppVersion-1.102.5-informational?style=flat-square)
 
 Tailscale mesh network.
 
@@ -168,8 +168,11 @@ See the [Kubernetes NetworkPolicy documentation](https://kubernetes.io/docs/conc
 | service.ipFamilies | list | `["IPv4","IPv6"]` | P2P network family |
 | resources | object | `{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"256Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | dnsPolicy | string | `"Local"` | DNS Policy for pod ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/ ClusterFirst or Local |
+| dns.image.repository | string | `"registry.k8s.io/coredns/coredns"` |  |
+| dns.image.pullPolicy | string | `"IfNotPresent"` |  |
+| dns.image.tag | string | `"v1.14.7"` |  |
 | networkPolicy | object | `{"dns":{"ipBlocks":[],"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"kube-system"}},"podSelector":{"matchLabels":{"k8s-app":"kube-dns"}}},"enabled":false,"extraEgress":[]}` | Network Policy parameters. ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/ |
-| networkPolicy.enabled | bool | `false` | Enable egress filtering: allow cluster DNS, the Kubernetes API, and non-RFC1918 destinations. |
+| networkPolicy.enabled | bool | `false` | Enable egress filtering: allow cluster DNS and non-RFC1918 destinations. |
 | networkPolicy.dns.namespaceSelector | object | `{"matchLabels":{"kubernetes.io/metadata.name":"kube-system"}}` | Namespace selector for cluster DNS pods. |
 | networkPolicy.dns.podSelector | object | `{"matchLabels":{"k8s-app":"kube-dns"}}` | Pod selector for cluster DNS (CoreDNS and kube-dns). |
 | networkPolicy.dns.ipBlocks | list | `[]` | Additional DNS resolver CIDRs allowed on TCP/UDP port 53, for example a DNS service IP or NodeLocal DNS address. |

@@ -12,19 +12,14 @@ spec:
   policyTypes:
     - Egress
   egress:
-    - to:
-        - namespaceSelector:
-            {{- toYaml .Values.networkPolicy.dns.namespaceSelector | nindent 12 }}
-          podSelector:
-            {{- toYaml .Values.networkPolicy.dns.podSelector | nindent 12 }}
-        {{- range .Values.networkPolicy.dns.ipBlocks }}
-        - ipBlock:
-            cidr: {{ . | quote }}
-        {{- end }}
-      ports:
+    - ports:
         - port: 53
           protocol: UDP
         - port: 53
+          protocol: TCP
+        - port: 443
+          protocol: TCP
+        - port: 6443
           protocol: TCP
     - to:
         - ipBlock:
@@ -35,6 +30,8 @@ spec:
               - 192.168.0.0/16
         - ipBlock:
             cidr: ::/0
+      ports:
+        - protocol: TCP
     {{- with .Values.networkPolicy.extraEgress }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

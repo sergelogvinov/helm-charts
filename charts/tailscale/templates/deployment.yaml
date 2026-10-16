@@ -114,8 +114,8 @@ spec:
       {{- end }}
         {{- if eq .Values.dnsPolicy "Local" }}
         - name: {{ .Chart.Name }}-dns
-          image: registry.k8s.io/coredns/coredns:v1.13.2
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.dns.image.repository }}:{{ .Values.dns.image.tag }}"
+          imagePullPolicy: {{ .Values.dns.image.pullPolicy }}
           args: [ "-conf", "/etc/coredns/corefile" ]
           env:
             - name: GOMEMLIMIT
@@ -185,6 +185,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: POD_UID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.uid
             - name: NODE
               valueFrom:
                 fieldRef:
