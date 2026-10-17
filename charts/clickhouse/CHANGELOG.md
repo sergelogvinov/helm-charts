@@ -1,1 +1,1 @@
-- update altinity/clickhouse-backup (2.8.0 → 2.8.1)
+- update clickhouse/clickhouse-keeper (26.5.5 → 26.9.20)
