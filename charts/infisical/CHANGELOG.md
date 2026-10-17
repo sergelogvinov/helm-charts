@@ -1,1 +1,1 @@
-- update infisical/infisical (v0.166.6 → v0.166.7)
+- update infisical/infisical (v0.166.7 → v0.166.8)
