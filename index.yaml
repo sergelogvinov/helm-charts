@@ -3488,6 +3488,27 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/clickhouse-keeper-0.1.0/clickhouse-keeper-0.1.0.tgz
     version: 0.1.0
+  cloudflare-tunnel:
+  - apiVersion: v2
+    appVersion: 2024.8.3
+    created: "2026-10-25T15:51:45.895951198Z"
+    description: Cloudflared tunnel deployment
+    digest: 9dd2baa7d491dd2503ab4a6ff2fa36764b36cbdb53ffb7e4bc89d50fc1a59481
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - cloudflare
+    - cloudflare-tunnel
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: cloudflare-tunnel
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/cloudflare-tunnel
+    - https://github.com/cloudflare/cloudflared
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/cloudflare-tunnel-0.0.1/cloudflare-tunnel-0.0.1.tgz
+    version: 0.0.1
   fluentd:
   - apiVersion: v2
     appVersion: 1.19.4
@@ -21583,4 +21604,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-10-25T14:53:25.368046026Z"
+generated: "2026-10-25T15:51:45.899398757Z"
