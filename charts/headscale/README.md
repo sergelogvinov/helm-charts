@@ -1,6 +1,6 @@
 # headscale
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.29.5](https://img.shields.io/badge/AppVersion-v0.29.5-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.29.6](https://img.shields.io/badge/AppVersion-v0.29.6-informational?style=flat-square)
 
 A Helm chart
 
@@ -59,7 +59,7 @@ headscale nodes list
 | podSecurityContext | object | `{"fsGroup":65532,"fsGroupChangePolicy":"OnRootMismatch","runAsGroup":65532,"runAsUser":0}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | securityContext | object | `{"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true,"runAsUser":65532}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | service | object | `{"ipFamilies":["IPv4"],"port":{"grpc":50443,"http":80,"metrics":9090},"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
-| derp | object | `{"affinity":{},"enabled":false,"image":{"pullPolicy":"IfNotPresent","repository":"ghcr.io/sergelogvinov/tailscale","tag":"1.102.2-derp"},"nodeSelector":{},"ports":{"https":443,"stun":3478},"resources":{},"tls":{"host":"chart-example.local","secretName":"chart-example-tls"},"tolerations":[]}` | ref: https://headscale.net/stable/ref/derp/ |
+| derp | object | `{"affinity":{},"enabled":false,"image":{"pullPolicy":"IfNotPresent","repository":"ghcr.io/sergelogvinov/tailscale","tag":"1.102.5-derp"},"nodeSelector":{},"ports":{"https":443,"stun":3478},"resources":{},"tls":{"host":"chart-example.local","secretName":"chart-example-tls"},"tolerations":[]}` | ref: https://headscale.net/stable/ref/derp/ |
 | derp.resources | object | `{}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
 | derp.nodeSelector | object | `{}` | Node labels for pod assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | derp.tolerations | list | `[]` | Tolerations for pod assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
