@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://json.schemastore.org/chart.json
+apiVersion: v2
+name: cloudflare-tunnel
+description: Cloudflared tunnel deployment
+type: application
+home: https://github.com/sergelogvinov/helm-charts
+sources:
+  - https://github.com/sergelogvinov/helm-charts/tree/master/charts/cloudflare-tunnel
+  - https://github.com/cloudflare/cloudflared
+keywords:
+  - cloudflare
+  - cloudflare-tunnel
+maintainers:
+  - name: sergelogvinov
+    url: https://github.com/sergelogvinov
+#
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 0.0.1
+#
+# renovate: datasource=docker depName=cloudflare/cloudflared
+appVersion: "2024.8.3"
