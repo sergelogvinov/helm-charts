@@ -1,6 +1,6 @@
 # cloudflare-tunnel
 
-![Version: 0.0.3](https://img.shields.io/badge/Version-0.0.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2026.10.3](https://img.shields.io/badge/AppVersion-2026.10.3-informational?style=flat-square)
+![Version: 0.0.4](https://img.shields.io/badge/Version-0.0.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2026.10.3](https://img.shields.io/badge/AppVersion-2026.10.3-informational?style=flat-square)
 
 Cloudflared tunnel deployment
 
@@ -70,6 +70,9 @@ additive. The policy is disabled by default.
 | networkPolicy.dns.ipBlocks | list | `[]` | Additional DNS resolver CIDRs allowed on TCP/UDP port 53, for example a DNS service IP or NodeLocal DNS address. |
 | networkPolicy.extraEgress | list | `[]` | Additional egress rules for origin services or other destinations. |
 | resources | object | `{"limits":{"cpu":"500m","memory":"256Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}` | Resource requests and limits. ref: https://kubernetes.io/docs/user-guide/compute-resources/ |
+| startupProbe | object | `{"failureThreshold":60,"httpGet":{"path":"/ready","port":"metrics","scheme":"HTTP"},"initialDelaySeconds":5,"periodSeconds":5,"successThreshold":1,"timeoutSeconds":1}` | This is to setup the startup probes refs: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/ |
+| livenessProbe | object | `{}` | This is to setup the liveness probes refs: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/ |
+| readinessProbe | object | `{}` | This is to setup the readiness probes refs: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/ |
 | updateStrategy | object | `{"rollingUpdate":{"maxUnavailable":1},"type":"RollingUpdate"}` | Controller deployment update strategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |
 | nodeSelector | object | `{}` | Node labels for controller assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | tolerations | list | `[]` | Tolerations for controller assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |

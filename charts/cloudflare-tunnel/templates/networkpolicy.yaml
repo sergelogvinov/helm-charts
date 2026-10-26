@@ -12,7 +12,13 @@ spec:
   policyTypes:
     - Egress
   egress:
-    - to:
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+      {{- if and .Values.networkPolicy.dns .Values.networkPolicy.dns.namespaceSelector }}
+      to:
         - namespaceSelector:
             {{- toYaml .Values.networkPolicy.dns.namespaceSelector | nindent 12 }}
           podSelector:
@@ -21,11 +27,7 @@ spec:
         - ipBlock:
             cidr: {{ . | quote }}
         {{- end }}
-      ports:
-        - port: 53
-          protocol: UDP
-        - port: 53
-          protocol: TCP
+      {{- end }}
     - to:
         - ipBlock:
             cidr: 0.0.0.0/0

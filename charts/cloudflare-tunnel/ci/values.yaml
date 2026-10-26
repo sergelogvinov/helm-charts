@@ -6,9 +6,7 @@ envs:
 
 networkPolicy:
   enabled: true
-  dns:
-    ipBlocks:
-      - 169.254.20.10/32
+
   extraEgress:
     - to:
         - namespaceSelector:
