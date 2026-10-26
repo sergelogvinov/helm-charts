@@ -1,6 +1,6 @@
 # cloudflare-tunnel
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2026.10.3](https://img.shields.io/badge/AppVersion-2026.10.3-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2026.10.4](https://img.shields.io/badge/AppVersion-2026.10.4-informational?style=flat-square)
 
 Cloudflared tunnel deployment
 
@@ -79,3 +79,4 @@ additive. The policy is disabled by default.
 | podAntiAffinityPreset | string | `"soft"` | Pod Anti Affinity soft/hard |
 | podAntiAffinityPresetKey | string | `"kubernetes.io/hostname"` |  |
 | affinity | object | `{}` | Affinity for controller assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
+| metrics.enabled | bool | `false` |  |
