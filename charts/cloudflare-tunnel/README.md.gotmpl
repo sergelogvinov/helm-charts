@@ -14,4 +14,32 @@
 
 {{ template "chart.requirementsSection" . }}
 
+## Network policy
+
+Set `networkPolicy.enabled: true` to create an egress NetworkPolicy. It allows
+cluster DNS on TCP/UDP port 53, tunnel connections on TCP/UDP port 7844, and HTTPS
+on TCP port 443. Tunnel and HTTPS traffic can reach IPv4 destinations outside
+`10.0.0.0/8`, `172.16.0.0/12`, and `192.168.0.0/16` (RFC1918), and any IPv6
+destination on these ports.
+
+```yaml
+networkPolicy:
+  enabled: true
+  extraEgress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: default
+          podSelector:
+            matchLabels:
+              app: origin
+      ports:
+        - port: 8080
+          protocol: TCP
+```
+
+Enforcement requires a CNI that supports NetworkPolicy. Other policies selecting
+these pods can allow additional traffic because Kubernetes NetworkPolicies are
+additive. The policy is disabled by default.
+
 {{ template "chart.valuesSection" . }}

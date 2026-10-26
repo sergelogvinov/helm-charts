@@ -62,6 +62,27 @@ securityContext:
   runAsGroup: 65532
   readOnlyRootFilesystem: true
 
+# -- Network Policy parameters.
+# ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+networkPolicy:
+  # -- Enable egress filtering: allow cluster DNS, tunnel connections, and HTTPS. Add rules for origin services using extraEgress.
+  enabled: false
+
+  dns:
+    # -- Namespace selector for cluster DNS pods.
+    namespaceSelector:
+      matchLabels:
+        kubernetes.io/metadata.name: kube-system
+    # -- Pod selector for cluster DNS (CoreDNS and kube-dns).
+    podSelector:
+      matchLabels:
+        k8s-app: kube-dns
+    # -- Additional DNS resolver CIDRs allowed on TCP/UDP port 53, for example a DNS service IP or NodeLocal DNS address.
+    ipBlocks: []
+
+  # -- Additional egress rules for origin services or other destinations.
+  extraEgress: []
+
 # -- Resource requests and limits.
 # ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources:
@@ -71,6 +92,45 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
+
+# -- This is to setup the startup probes
+# refs: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+startupProbe:
+  httpGet:
+    scheme: HTTP
+    path: /ready
+    port: metrics
+  initialDelaySeconds: 5
+  timeoutSeconds: 1
+  failureThreshold: 60
+  successThreshold: 1
+  periodSeconds: 5
+
+# -- This is to setup the liveness probes
+# refs: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+livenessProbe: {}
+  # httpGet:
+  #   scheme: HTTP
+  #   path: /ready
+  #   port: metrics
+  # initialDelaySeconds: 120
+  # timeoutSeconds: 1
+  # failureThreshold: 3
+  # successThreshold: 1
+  # periodSeconds: 60
+
+# -- This is to setup the readiness probes
+# refs: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+readinessProbe: {}
+  # httpGet:
+  #   scheme: HTTP
+  #   path: /ready
+  #   port: metrics
+  # initialDelaySeconds: 5
+  # timeoutSeconds: 2
+  # failureThreshold: 3
+  # successThreshold: 1
+  # periodSeconds: 60
 
 # -- Controller deployment update strategy type.
 # ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment

@@ -3,3 +3,20 @@ args:
 
 envs:
   TUNNEL_TOKEN: "124123123"
+
+networkPolicy:
+  enabled: true
+  dns:
+    ipBlocks:
+      - 169.254.20.10/32
+  extraEgress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: default
+          podSelector:
+            matchLabels:
+              app: origin
+      ports:
+        - port: 8080
+          protocol: TCP
