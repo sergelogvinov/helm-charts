@@ -1,1 +1,1 @@
-- feat: add pod anti-affinity support
+- update cloudflare/cloudflared (2026.10.3 → 2026.10.4)
