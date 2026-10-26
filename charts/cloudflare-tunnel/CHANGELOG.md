@@ -1,1 +1,1 @@
-- feat: networkpolicy
+- feat: add pod anti-affinity support

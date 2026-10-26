@@ -1,6 +1,6 @@
 # cloudflare-tunnel
 
-![Version: 0.0.4](https://img.shields.io/badge/Version-0.0.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2026.10.3](https://img.shields.io/badge/AppVersion-2026.10.3-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2026.10.3](https://img.shields.io/badge/AppVersion-2026.10.3-informational?style=flat-square)
 
 Cloudflared tunnel deployment
 
@@ -76,4 +76,6 @@ additive. The policy is disabled by default.
 | updateStrategy | object | `{"rollingUpdate":{"maxUnavailable":1},"type":"RollingUpdate"}` | Controller deployment update strategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |
 | nodeSelector | object | `{}` | Node labels for controller assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | tolerations | list | `[]` | Tolerations for controller assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| podAntiAffinityPreset | string | `"soft"` | Pod Anti Affinity soft/hard |
+| podAntiAffinityPresetKey | string | `"kubernetes.io/hostname"` |  |
 | affinity | object | `{}` | Affinity for controller assignment. ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
