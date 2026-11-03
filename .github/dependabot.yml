@@ -15,3 +15,12 @@ updates:
       default-days: 5
     labels:
       - "dependencies"
+    groups:
+      actions:
+        patterns:
+          - "actions/*"
+          - "azure/*"
+          - "docker/*"
+      helm:
+        patterns:
+          - "helm/*"
