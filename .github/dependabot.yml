@@ -21,6 +21,7 @@ updates:
           - "actions/*"
           - "azure/*"
           - "docker/*"
+          - "sigstore/*"
       helm:
         patterns:
           - "helm/*"
