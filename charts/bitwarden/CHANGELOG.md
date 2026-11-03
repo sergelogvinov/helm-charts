@@ -1,1 +1,1 @@
-- update vaultwarden/server (1.37.3 → 1.37.4)
+- update vaultwarden/server (1.37.4 → 1.37.5)
