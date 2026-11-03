@@ -1,1 +1,1 @@
-- update ghcr.io/project-zot/zot ghcr.io/project-zot/zot ghcr.io/project-zot/zot (v2.1.21 → v2.1.22)
+- update ghcr.io/project-zot/zot ghcr.io/project-zot/zot ghcr.io/project-zot/zot (v2.1.22 → v2.1.23)
