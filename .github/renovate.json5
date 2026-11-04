@@ -1,30 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
-    "helpers:pinGitHubActionDigests",
-    "docker:enableMajor",
-    ":dependencyDashboard",
-    ":disableRateLimiting",
-    ":semanticCommits",
-    ":semanticCommitScopeDisabled",
+    "local>sergelogvinov/renovate",
     "github>sergelogvinov/helm-charts//.github/renovate/customManagers.json5",
     "github>sergelogvinov/helm-charts//.github/renovate/semanticCommits.json5",
     "github>sergelogvinov/helm-charts//.github/renovate/groups.json5"
   ],
-  "dependencyDashboard": true,
-  "dependencyDashboardTitle": "Renovate Dashboard",
-  "prHeader": "Update Request | Renovate Bot",
-  "suppressNotifications": [
-    "prEditedNotification",
-    "prIgnoreNotification"
-  ],
-  "github-actions": {
-    "enabled": true,
-    "pinDigests": true
-  },
-  "separateMajorMinor": true,
-  "separateMultipleMajor": true,
   "rebaseWhen": "behind-base-branch",
   "ignorePaths": [
     "/hack/.*"
