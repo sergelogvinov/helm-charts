@@ -26,6 +26,12 @@ env: []
   # - name: TUNNEL_REGION
   #   value: edge
 
+# -- Cloudflare ingress rules.
+# refs: https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/local-management/configuration-file/#how-traffic-is-matched
+ingress: []
+  # - hostname: example.com
+  #   service: http://ingress-nginx.ingress-nginx.svc:80
+
 # -- Pods Service Account.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
@@ -132,11 +138,19 @@ readinessProbe: {}
   # successThreshold: 1
   # periodSeconds: 60
 
+# -- The time in seconds that is allowed for a tailscale node to gracefully shutdown
+# ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks
+terminationGracePeriodSeconds: 30
+
+# -- Use a daemonset instead of a deployment
+useDaemonSet: false
+
 # -- Controller deployment update strategy type.
 # ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 updateStrategy:
   type: RollingUpdate
   rollingUpdate:
+    maxSurge: 1
     maxUnavailable: 1
 
 # -- Node labels for controller assignment.

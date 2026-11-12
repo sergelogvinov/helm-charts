@@ -1,6 +1,6 @@
 # cloudflare-tunnel
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2026.10.7](https://img.shields.io/badge/AppVersion-2026.10.7-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2026.10.7](https://img.shields.io/badge/AppVersion-2026.10.7-informational?style=flat-square)
 
 Cloudflared tunnel deployment
 
@@ -59,6 +59,7 @@ additive. The policy is disabled by default.
 | args | list | `[]` | Args for the container entrypoint |
 | envs | object | `{}` | Secret environment variables. Uses if not set the envSecretName |
 | env | list | `[]` | Deployment environment variables |
+| ingress | list | `[]` | Cloudflare ingress rules. refs: https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/local-management/configuration-file/#how-traffic-is-matched |
 | serviceAccount | object | `{"annotations":{},"create":false,"name":""}` | Pods Service Account. ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
 | podAnnotations | object | `{}` | Annotations for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
 | podSecurityContext | object | `{"fsGroup":65532,"fsGroupChangePolicy":"OnRootMismatch","runAsGroup":65532,"runAsNonRoot":true,"runAsUser":65532}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
@@ -73,7 +74,9 @@ additive. The policy is disabled by default.
 | startupProbe | object | `{"failureThreshold":60,"httpGet":{"path":"/ready","port":"metrics","scheme":"HTTP"},"initialDelaySeconds":5,"periodSeconds":5,"successThreshold":1,"timeoutSeconds":1}` | This is to setup the startup probes refs: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/ |
 | livenessProbe | object | `{}` | This is to setup the liveness probes refs: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/ |
 | readinessProbe | object | `{}` | This is to setup the readiness probes refs: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/ |
-| updateStrategy | object | `{"rollingUpdate":{"maxUnavailable":1},"type":"RollingUpdate"}` | Controller deployment update strategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |
+| terminationGracePeriodSeconds | int | `30` | The time in seconds that is allowed for a tailscale node to gracefully shutdown ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks |
+| useDaemonSet | bool | `false` | Use a daemonset instead of a deployment |
+| updateStrategy | object | `{"rollingUpdate":{"maxSurge":1,"maxUnavailable":1},"type":"RollingUpdate"}` | Controller deployment update strategy type. ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment |
 | nodeSelector | object | `{}` | Node labels for controller assignment. ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | tolerations | list | `[]` | Tolerations for controller assignment. ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | podAntiAffinityPreset | string | `"soft"` | Pod Anti Affinity soft/hard |

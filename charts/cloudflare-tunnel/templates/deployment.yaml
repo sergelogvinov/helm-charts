@@ -1,16 +1,24 @@
 apiVersion: apps/v1
+{{- if .Values.useDaemonSet }}
+kind: DaemonSet
+{{- else }}
 kind: Deployment
+{{- end }}
 metadata:
   name: {{ include "cloudflare-tunnel.fullname" . }}
   labels:
     {{- include "cloudflare-tunnel.labels" . | nindent 4 }}
 spec:
+  {{- if not .Values.useDaemonSet }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  {{- if not .Values.useDaemonSet }}
   strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-    type: RollingUpdate
+    {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- else }}
+  updateStrategy:
+    {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "cloudflare-tunnel.selectorLabels" . | nindent 6 }}
@@ -33,6 +41,9 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
       enableServiceLinks: false
       {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ template "cloudflare-tunnel.serviceAccountName" . }}
@@ -50,6 +61,8 @@ spec:
           command:
             - cloudflared
             - tunnel
+            - --config
+            - /etc/cloudflared/config.yaml
             - --no-autoupdate
             - --metrics=:2000
           args:
@@ -81,6 +94,13 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/cloudflared
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "cloudflare-tunnel.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
