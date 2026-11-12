@@ -26,6 +26,7 @@ spec:
     metadata:
       annotations:
         checksum/envs: {{ toJson .Values.envs | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       {{- if .Values.metrics.enabled }}
         prometheus.io/scrape: "true"
         prometheus.io/port: "2000"
