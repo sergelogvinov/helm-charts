@@ -6,4 +6,5 @@ metadata:
     {{- include "cloudflare-tunnel.labels" . | nindent 4 }}
 data:
   config.yaml: |
-    ingress: {{ toYaml .Values.ingress | nindent 6 }}
+    ingress:
+      {{- toYaml .Values.ingress | nindent 6 }}

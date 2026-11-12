@@ -1,3 +1,7 @@
+ingress:
+  - hostname: example.com
+    service: http://ingress-nginx.ingress-nginx.svc:80
+
 args:
   - --hello-world
 
