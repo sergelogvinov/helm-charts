@@ -115,6 +115,11 @@ tailscale:
     pullPolicy: IfNotPresent
     tag: "1.102.5"
 
+  # Tailscale virtual IP
+  # example: 172.30.1.1
+  tailscaleIP: ~
+  tailscaleMTU: 1500
+
   # Tailscale containerboot environment variables
   # refs: https://pkg.go.dev/tailscale.com/cmd/containerboot
   envsSecrets: {}

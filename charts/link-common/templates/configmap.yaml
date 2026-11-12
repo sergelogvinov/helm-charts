@@ -5,6 +5,17 @@ metadata:
   labels:
     {{- include "link-common.labels" . | nindent 4 }}
 data:
+  entrypoint.sh: |
+    #!/bin/sh
+
+    {{- if and .Values.tailscale.enabled .Values.tailscale.tailscaleIP }}
+    # Create service interface
+    ip link add dummy0 type dummy
+    ip link set dummy0 mtu {{ default 1280 .Values.tailscale.tailscaleMTU }}
+    ip address add {{ .Values.tailscale.tailscaleIP }}/32 dev dummy0
+    ip link set dummy0 up
+    {{- end }}
+
   haproxy.sh: |
     #!/bin/sh
     set -e

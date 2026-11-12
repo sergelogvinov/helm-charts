@@ -39,7 +39,7 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
         {{- if .Values.wireguard.enabled }}
-        - name: wireguard
+        - name: wireguard-init
           securityContext:
             runAsUser: 0
             runAsGroup: 0
@@ -58,6 +58,25 @@ spec:
               readOnly: true
             - name: wireguard
               mountPath: /etc/wireguard
+              readOnly: true
+        {{- end }}
+        {{- if and .Values.tailscale.enabled .Values.tailscale.tailscaleIP }}
+        - name: tailscale-init
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN"]
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
+          image: "{{ .Values.tailscale.image.repository }}:{{ .Values.tailscale.image.tag }}"
+          imagePullPolicy: {{ .Values.tailscale.image.pullPolicy }}
+          command: ["/entrypoint.d/entrypoint.sh"]
+          volumeMounts:
+            - name: command
+              mountPath: /entrypoint.d
               readOnly: true
         {{- end }}
       containers:
@@ -207,6 +226,10 @@ spec:
             items:
               - key: haproxy.sh
                 path: haproxy.sh
+              {{- if .Values.tailscale.enabled }}
+              - key: entrypoint.sh
+                path: entrypoint.sh
+              {{- end }}
               {{- if .Values.wireguard.enabled }}
               - key: wireguard.sh
                 path: wireguard.sh
