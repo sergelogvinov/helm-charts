@@ -16,4 +16,4 @@ maintainers:
 version: 0.6.1
 #
 # renovate: datasource=docker depName=rancher/system-upgrade-controller
-appVersion: "v0.19.2"
+appVersion: "v0.21.0"
