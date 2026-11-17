@@ -1,1 +1,1 @@
-- feat: cloudflare ingress configuration
+- update cloudflare/cloudflared (2026.10.7 → 2026.11.0)
