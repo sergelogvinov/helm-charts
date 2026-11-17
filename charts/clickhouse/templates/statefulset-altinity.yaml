@@ -80,8 +80,11 @@ spec:
       readonly/max_download_threads: 1
       reader/max_download_threads: 1
       {{- end }}
+      default/s3_allow_server_credentials_in_user_queries: 1
       readonly/readonly: 2
+      readonly/s3_allow_server_credentials_in_user_queries: 1
       reader/readonly: 2
+      reader/s3_allow_server_credentials_in_user_queries: 1
     settings:
       {{- if .Values.metrics.enabled }}
       prometheus/endpoint: /metrics

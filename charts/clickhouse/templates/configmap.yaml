@@ -26,6 +26,7 @@ data:
                 {{- if le (div $mem 1000000000) 4 }}
                 <max_download_threads>1</max_download_threads>
                 {{- end }}
+                <s3_allow_server_credentials_in_user_queries>1</s3_allow_server_credentials_in_user_queries>
             </default>
             <reader>
                 <max_memory_usage>10000000000</max_memory_usage>
@@ -44,6 +45,7 @@ data:
                 <max_download_threads>1</max_download_threads>
                 {{- end }}
                 <readonly>2</readonly>
+                <s3_allow_server_credentials_in_user_queries>1</s3_allow_server_credentials_in_user_queries>
             </reader>
         </profiles>
         <quotas>
