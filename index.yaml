@@ -3535,6 +3535,26 @@ entries:
     version: 0.1.0
   cloudflare-tunnel:
   - apiVersion: v2
+    appVersion: 2026.11.0
+    created: "2026-11-17T09:22:08.570140978Z"
+    description: Cloudflared tunnel deployment
+    digest: f05a26c9e76b83e75582e4c17d15fcda4cdf892180e3c39b9fa9f1d582679ae6
+    home: https://github.com/sergelogvinov/helm-charts
+    keywords:
+    - cloudflare
+    - cloudflare-tunnel
+    maintainers:
+    - name: sergelogvinov
+      url: https://github.com/sergelogvinov
+    name: cloudflare-tunnel
+    sources:
+    - https://github.com/sergelogvinov/helm-charts/tree/master/charts/cloudflare-tunnel
+    - https://github.com/cloudflare/cloudflared
+    type: application
+    urls:
+    - https://github.com/sergelogvinov/helm-charts/releases/download/cloudflare-tunnel-0.3.0/cloudflare-tunnel-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: 2026.10.7
     created: "2026-11-12T17:28:31.513376006Z"
     description: Cloudflared tunnel deployment
@@ -22127,4 +22147,4 @@ entries:
     urls:
     - https://github.com/sergelogvinov/helm-charts/releases/download/victoria-metrics-storage-0.0.1/victoria-metrics-storage-0.0.1.tgz
     version: 0.0.1
-generated: "2026-11-17T08:47:54.055421768Z"
+generated: "2026-11-17T09:22:08.570782952Z"
