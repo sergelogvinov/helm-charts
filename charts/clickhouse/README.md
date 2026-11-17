@@ -1,6 +1,6 @@
 # clickhouse
 
-![Version: 0.22.3](https://img.shields.io/badge/Version-0.22.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 26.3.10](https://img.shields.io/badge/AppVersion-26.3.10-informational?style=flat-square)
+![Version: 0.22.4](https://img.shields.io/badge/Version-0.22.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 26.10.5](https://img.shields.io/badge/AppVersion-26.10.5-informational?style=flat-square)
 
 Clickhouse chart for Kubernetes
 
@@ -104,7 +104,7 @@ metrics:
 | podlabels | object | `{}` | Extra labels for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ |
 | podAnnotations | object | `{}` | Annotations for pod. ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
 | podSecurityContext | object | `{"fsGroup":101,"fsGroupChangePolicy":"OnRootMismatch","runAsGroup":101,"runAsNonRoot":true,"runAsUser":101}` | Pod Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
-| securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"add":[],"drop":["ALL"]},"readOnlyRootFilesystem":false,"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
+| securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":false,"seccompProfile":{"type":"RuntimeDefault"}}` | Container Security Context. ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod |
 | service | object | `{"ipFamilies":["IPv4"],"type":"ClusterIP"}` | Service parameters ref: https://kubernetes.io/docs/user-guide/services/ |
 | ingress | object | `{"annotations":{},"className":"","enabled":false,"hosts":[{"host":"chart-example.local","paths":["/clickhouse"]}],"tls":[]}` | Clickhouse ingress parameters ref: http://kubernetes.io/docs/user-guide/ingress/ |
 | autoscaling | object | `{"controlledResources":["cpu","memory"],"controlledValues":"RequestsOnly","enabled":false,"maxAllowed":{},"minAllowed":{},"updatePolicy":{"updateMode":"InPlaceOrRecreate"}}` | Vertical pod autoscaler |
@@ -128,7 +128,7 @@ metrics:
 | clickhouseKeeper.replicaCount | int | `3` |  |
 | clickhouseKeeper.image.repository | string | `"clickhouse/clickhouse-keeper"` |  |
 | clickhouseKeeper.image.pullPolicy | string | `"IfNotPresent"` |  |
-| clickhouseKeeper.image.tag | string | `"26.5.5-alpine"` |  |
+| clickhouseKeeper.image.tag | string | `""` |  |
 | clickhouseKeeper.resources.limits.cpu | string | `"500m"` |  |
 | clickhouseKeeper.resources.limits.memory | string | `"512Mi"` |  |
 | clickhouseKeeper.resources.requests.cpu | string | `"100m"` |  |

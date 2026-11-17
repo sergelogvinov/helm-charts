@@ -89,7 +89,7 @@ spec:
             - name: clickhouse-keeper
               securityContext:
                 {{- toYaml .Values.securityContext | nindent 16 }}
-              image: "{{ .Values.clickhouseKeeper.image.repository }}:{{ .Values.clickhouseKeeper.image.tag }}"
+              image: "{{ .Values.clickhouseKeeper.image.repository }}:{{ .Values.clickhouseKeeper.image.tag | default .Chart.AppVersion }}"
               imagePullPolicy: {{ .Values.clickhouseKeeper.image.pullPolicy }}
               {{- if .Values.metrics.enabled }}
               ports:

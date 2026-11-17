@@ -1,1 +1,1 @@
-- update altinity/clickhouse-backup (2.8.2 → 2.8.3)
+- fix(container): empty securityContext
