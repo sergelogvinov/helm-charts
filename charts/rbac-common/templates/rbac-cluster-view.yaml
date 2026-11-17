@@ -149,6 +149,13 @@ rules:
   - list
   - watch
 - apiGroups:
+  - custom.metrics.k8s.io
+  resources:
+  - pods
+  verbs:
+  - get
+  - list
+- apiGroups:
   - metrics.k8s.io
   resources:
   - pods

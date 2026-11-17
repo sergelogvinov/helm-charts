@@ -287,6 +287,16 @@ rules:
   verbs:
   - get
   - list
+- apiGroups:
+  - custom.metrics.k8s.io
+  resources:
+  - pods
+  {{- if not .Values.rbac.singleNamespace }}
+  - nodes
+  {{- end }}
+  verbs:
+  - get
+  - list
 ####
 - apiGroups:
   - cert-manager.io

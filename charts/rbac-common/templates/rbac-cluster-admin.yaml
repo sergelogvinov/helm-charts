@@ -380,6 +380,12 @@ rules:
   - list
   - watch
 - apiGroups:
+  - karpenter.sh
+  resources:
+  - nodeclaims
+  verbs:
+  - delete
+- apiGroups:
   - karpenter.proxmox.sinextra.dev
   resources:
   - '*'
