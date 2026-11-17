@@ -1,1 +1,1 @@
-- update cloudflare/cloudflared (2026.10.7 → 2026.11.0)
+- update cloudflare/cloudflared (2026.11.0 → 2026.11.1)
