@@ -1,1 +1,1 @@
-- feat(container): update ghcr.io/sergelogvinov/postgresql (16.14 → 16.15)
+- update ghcr.io/sergelogvinov/postgresql (16.15 → 16.16)
