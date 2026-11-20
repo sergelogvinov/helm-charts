@@ -1,1 +1,1 @@
-- fix: tailscale firewall
+- update ghcr.io/sergelogvinov/tailscale ghcr.io/sergelogvinov/tailscale (1.102.5 → 1.104.7)
