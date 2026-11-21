@@ -51,6 +51,8 @@ spec:
     - ports:
         - port: 9586
           protocol: TCP
+        - port: 8404
+          protocol: TCP
       {{- if or .Values.networkPolicy.metrics.ingressNSMatchLabels .Values.networkPolicy.metrics.ingressNSPodMatchLabels }}
       from:
         - namespaceSelector:

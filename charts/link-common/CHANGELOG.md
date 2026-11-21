@@ -1,1 +1,1 @@
-- fix: dual stack
+- fix: metrics endpoint
