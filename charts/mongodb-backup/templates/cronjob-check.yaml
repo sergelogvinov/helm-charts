@@ -4,9 +4,6 @@ kind: CronJob
 metadata:
   name: {{ include "mongodb-backup.fullname" . }}-check
   labels:
-    {{- with .Values.podlabels }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
     {{- include "mongodb-backup.labels" . | nindent 4 }}
     app.kubernetes.io/component: checker
 spec:
@@ -24,7 +21,7 @@ spec:
         metadata:
           name: {{ include "mongodb-backup.fullname" . }}
           labels:
-            {{- with .Values.podlabels }}
+            {{- with .Values.podLabels }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
             {{- include "mongodb-backup.selectorLabels" . | nindent 12 }}
@@ -150,9 +147,6 @@ spec:
                 volumeClaimTemplate:
                   metadata:
                     labels:
-                      {{- with .Values.podlabels }}
-                      {{- toYaml . | nindent 22 }}
-                      {{- end }}
                       {{- include "mongodb-backup.labels" . | nindent 22 }}
                       app.kubernetes.io/component: checker
                   {{- with .Values.backupCheck.persistence.annotations }}
