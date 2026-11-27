@@ -17,6 +17,10 @@ fullnameOverride: ""
 debug:
   enabled: false
 
+# -- Fix TCP MSS on forwarded Tailscale traffic.
+# Use 1100 for a path with a low MTU.
+mss: ~
+
 tailscale: {}
   # TS_AUTH_KEY: tskey-auth-
   # TS_TAGS: tag:exitnode
