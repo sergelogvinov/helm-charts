@@ -1,6 +1,6 @@
 # tailscale
 
-![Version: 0.20.0](https://img.shields.io/badge/Version-0.20.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.104.7](https://img.shields.io/badge/AppVersion-1.104.7-informational?style=flat-square)
+![Version: 0.21.0](https://img.shields.io/badge/Version-0.21.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.104.7](https://img.shields.io/badge/AppVersion-1.104.7-informational?style=flat-square)
 
 Tailscale mesh network.
 
@@ -153,6 +153,7 @@ See the [Kubernetes NetworkPolicy documentation](https://kubernetes.io/docs/conc
 | nameOverride | string | `""` |  |
 | fullnameOverride | string | `""` |  |
 | debug.enabled | bool | `false` |  |
+| mss | string | `nil` | Fix TCP MSS on forwarded Tailscale traffic. Use 1100 for a path with a low MTU. |
 | tailscale | object | `{}` |  |
 | tailscaleDNS.bind | string | `"127.0.0.1 ::1"` |  |
 | serviceAccount | object | `{"annotations":{},"create":true,"name":""}` | Pods Service Account. ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |

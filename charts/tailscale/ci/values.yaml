@@ -1,3 +1,5 @@
+mss: 1300
+
 useDaemonSet: true
 nodeSelector:
   node-role.kubernetes.io/vpn: ""

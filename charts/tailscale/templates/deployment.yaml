@@ -31,6 +31,9 @@ spec:
       {{- if .Values.tailscale }}
         checksum/config: {{ mergeOverwrite .Values.tailscale (dict "TS_AUTH_KEY" "") | toJson | sha256sum }}
       {{- end }}
+      {{- if .Values.mss }}
+        checksum/scripts: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- end }}
         kubectl.kubernetes.io/default-container: {{ .Chart.Name }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
