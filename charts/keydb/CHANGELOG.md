@@ -1,1 +1,1 @@
-- update oliver006/redis_exporter (v1.96.0 → v1.97.0)
+- update oliver006/redis_exporter (v1.97.0 → v1.99.0)
