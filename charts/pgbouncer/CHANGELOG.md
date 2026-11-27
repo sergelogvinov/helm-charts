@@ -1,1 +1,1 @@
-- update jbub/pgbouncer_exporter (v0.21.0 → v0.22.0)
+- update ghcr.io/sergelogvinov/pgbouncer (16.15 → 16.16)
