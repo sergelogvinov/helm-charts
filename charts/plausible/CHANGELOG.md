@@ -1,12 +1,1 @@
-- feat: vpod-autoscaler
-- fix(container): update ghcr.io/plausible/community-edition (v3.2 → v3.2.1)
-- feat(container): update ghcr.io/plausible/community-edition (v3.0.1 → v3.2)
-- feat(container): update ghcr.io/plausible/community-edition (v2.1.5 → v3.0.1)
-- feat: remove 1.18 compatability
-- fix(container): update ghcr.io/plausible/community-edition (v2.1.4 → v2.1.5)
-- fix(container): update ghcr.io/plausible/community-edition (v2.1.1 → v2.1.4)
-- chore: cosmetic
-- cosmetic
-- update vesions
-- cosmetic
-- init plausible
+- update ghcr.io/plausible/community-edition (v3.2.1 → v3.2.2)
