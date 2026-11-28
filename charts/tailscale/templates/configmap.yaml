@@ -51,8 +51,8 @@ data:
 
     {{ with .Values.mss }}
     {{- $mss := int . }}
-    {{- if or (not (regexMatch "^[1-9][0-9]*$" (toString .))) (lt $mss 1100) (gt $mss 65534) }}
-    {{- fail "mss must be an integer between 1100 and 65534" }}
+    {{- if or (not (regexMatch "^[1-9][0-9]*$" (toString .))) (lt $mss 1240) (gt $mss 65534) }}
+    {{- fail "mss must be an integer between 1240 and 65534" }}
     {{- end }}
     iptables  -t mangle -A FORWARD -o eth0 -p tcp --tcp-flags SYN,RST SYN \
       -m tcpmss --mss {{ add $mss 1 }}:65535 \
@@ -60,13 +60,6 @@ data:
     ip6tables -t mangle -A FORWARD -o eth0 -p tcp --tcp-flags SYN,RST SYN \
       -m tcpmss --mss {{ add $mss 1 }}:65535 \
       -j TCPMSS --set-mss {{ $mss }}
-    {{- else }}
-    iptables  -t mangle -A FORWARD -o eth0 -p tcp --tcp-flags SYN,RST SYN \
-      -m tcpmss --mss 1400:65535 \
-      -j TCPMSS --clamp-mss-to-pmtu
-    ip6tables -t mangle -A FORWARD -o eth0 -p tcp --tcp-flags SYN,RST SYN \
-      -m tcpmss --mss 1400:65535 \
-      -j TCPMSS --clamp-mss-to-pmtu
     {{- end }}
 
     /bin/sleep 5

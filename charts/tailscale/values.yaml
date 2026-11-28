@@ -19,7 +19,7 @@ debug:
 
 # -- Fix TCP MSS on forwarded Tailscale traffic.
 # Use 1100 for a path with a low MTU.
-mss: ~
+mss: 1240
 
 tailscale: {}
   # TS_AUTH_KEY: tskey-auth-
